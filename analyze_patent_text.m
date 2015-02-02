@@ -39,6 +39,12 @@ search_corpus = file_str;
 [ix_PATN_find, nr_PATN_week] = count_nr_string_appearance(file_str, ...
     'PATN');
 
+% Delete entry 257 from our hits. It finds a term "PATNO" which is wrong.
+% file_str(ix_PATN_find(257):ix_PATN_find(257)+20) % uncomment to display
+ix_PATN_find(257) = [];
+nr_PATN_week = nr_PATN_week - 1;
+
+
 
 % Pre-define empty cell array to store patent WKU numbers (based on finding) PATN
 patent_number_PATN = repmat({''}, nr_PATN_week, 1);
@@ -79,7 +85,7 @@ end
 
 notequal_patn_wku = find(~check_equal_patn_wku)';
 
-if sum(check_equal_patn_wku) > 0
+if not(isempty(notequal_patn_wku))
     warning('We are finding different number of PATN and WKU numbers.')
 end
 
@@ -123,18 +129,6 @@ nr_find = length(ix_find);
 % ========================================================================
 fprintf('Number of times appearance of string: %d.\n', nr_find)
 disp('---------------------------------------------------------------')
-
-
-
-%% Find number of patent belonging to each hit
-% ========================================================================
-% 
-% ix_matches = 1
-% 
-% match_position = ix_find(ix_matches)
-
-
-
 
 
 
