@@ -170,17 +170,39 @@ nonzero_count(nr_keyword_per_patent==0) = [];
 color1_pick = [0.7900, 0.3800, 0.500];
 
 
-figure
+figureHandle = figure;
 hist(nonzero_count, max(nr_keyword_per_patent))
 set(gca,'FontSize',12) % change default font size of axis labels
-title('Number of appearances of keyword in patent (zero matches ommited)', ...
-    'FontSize', 14)
-xlabel('Number of keyword appearances')
-ylabel('Number of patents')
+title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
+    'in US patents, 1982 week 42']);
+title(title_phrase, 'FontSize', 14)
+xlabel('Number of patents')
+ylabel_phrase = sprintf(['Number of keyword appearances \n'...
+    '(zero matches ommited)']);
+ylabel(ylabel_phrase)
 set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
 set(gcf, 'Color', 'w');
 box off
 
 
+% Reposition the figure
+% ======================================================================
+set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
+
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% ======================================================================
+print(figureHandle, 'nr_keyword_patent', '-dpdf', '-r0')
+
+
+
+%% End
+% ======================================================================
 toc
 disp('*** end ***')
