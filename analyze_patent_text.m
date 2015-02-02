@@ -11,8 +11,8 @@ tic
 %% Define keyword to look for
 % ========================================================================
 % find_str = 'automatization';
-find_str = 'automated';
-% find_str = 'automat.'; % use a dot as a place holder
+% find_str = 'automated';
+find_str = 'automat.'; % use a dot as a place holder
 % find_str = 'autoMATEd';
 % find_str = '4354706'
 
@@ -108,7 +108,15 @@ end
 
 %% Extract patent text
 % ========================================================================
+
+nr_keyword_appear = patent_number_WKU;
+% Get empty cells next to the WKU patent numbers.
+nr_keyword_appear{1,2} = []; 
+
 for ix_patent=1:nr_PATN_week
+    
+    % Get start and end of patent text
+    % -------------------------------------------------------------------
     start_text_corpus = ix_PATN_find(ix_patent);
 
     if ix_patent < nr_PATN_week
@@ -116,20 +124,20 @@ for ix_patent=1:nr_PATN_week
     else
         end_text_corpus = length(file_str);
     end
-
+  
     patent_text_corpus = file_str(start_text_corpus : end_text_corpus);
-
+        
+    % Search
+    % -------------------------------------------------------------------
+    ix_find = regexpi(patent_text_corpus, find_str);
+    nr_find = length(ix_find);
+    
+    % Save
+    % -------------------------------------------------------------------
+    nr_keyword_appear{ix_patent, 2} = nr_find;
 end
 
-
-
-
-%% Search
-% ========================================================================
-ix_find = regexpi(search_corpus, find_str);
-nr_find = length(ix_find);
-
-
+nr_keyword_per_patent = cell2mat(nr_keyword_appear(:, 2));
 
 %% Display some of the found matches
 % ========================================================================
@@ -145,9 +153,33 @@ nr_find = length(ix_find);
 
 %% Display findings
 % ========================================================================
-fprintf('Number of times appearance of string: %d.\n', nr_find)
+
+% Show total number of matches in this week
+% -------------------------------------------------------------------
+fprintf('Number of times appearance of string: %d.\n', ...
+    sum(nr_keyword_per_patent))
 disp('---------------------------------------------------------------')
 
+
+% Make histogram
+% -------------------------------------------------------------------
+nonzero_count = nr_keyword_per_patent;
+nonzero_count(nr_keyword_per_patent==0) = [];
+
+
+color1_pick = [0.7900, 0.3800, 0.500];
+
+
+figure
+hist(nonzero_count, max(nr_keyword_per_patent))
+set(gca,'FontSize',12) % change default font size of axis labels
+title('Number of appearances of keyword in patent (zero matches ommited)', ...
+    'FontSize', 14)
+xlabel('Number of keyword appearances')
+ylabel('Number of patents')
+set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
+set(gcf, 'Color', 'w');
+box off
 
 
 toc
