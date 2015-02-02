@@ -106,6 +106,24 @@ if min(test_is9long == test_vector_nines) < 1
 end
 
 
+%% Extract patent text
+% ========================================================================
+for ix_patent=1:nr_PATN_week
+    start_text_corpus = ix_PATN_find(ix_patent);
+
+    if ix_patent < nr_PATN_week
+        end_text_corpus = ix_PATN_find(ix_patent+1)-1;
+    else
+        end_text_corpus = length(file_str);
+    end
+
+    patent_text_corpus = file_str(start_text_corpus : end_text_corpus);
+
+end
+
+
+
+
 %% Search
 % ========================================================================
 ix_find = regexpi(search_corpus, find_str);
@@ -132,20 +150,5 @@ disp('---------------------------------------------------------------')
 
 
 
-
 toc
 disp('*** end ***')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
