@@ -154,19 +154,34 @@ nr_keyword_per_patent = cell2mat(nr_keyword_appear(:, 2));
 %% Display findings
 % ========================================================================
 
-% Show total number of matches in this week
-% -------------------------------------------------------------------
-fprintf('Number of times appearance of string: %d.\n', ...
-    sum(nr_keyword_per_patent))
+% Calculate summary statistics
+
+total_keywords_found = sum(nr_keyword_per_patent);
+fprintf('Number appearances of keystring: %d.\n', total_keywords_found)
 disp('---------------------------------------------------------------')
+
+sorted_summ_list = sort(nr_keyword_per_patent);
+sum(nr_keyword_per_patent == 1);
+sum(nr_keyword_per_patent == 2);
+sum(nr_keyword_per_patent == 3);
+sum(nr_keyword_per_patent == 4);
+sum(nr_keyword_per_patent == 5);
+sum(nr_keyword_per_patent == 37);
+sum(nr_keyword_per_patent == 82);
+sum(nr_keyword_per_patent == 180);
+
+nonzero_count = nr_keyword_per_patent;
+nonzero_count(nr_keyword_per_patent==0) = [];
+
+nr_distinct_patents_hits = length(nonzero_count);
+fprintf(sprintf(['Number of distinct patents that have at least one \n', ...
+    'case of matching keywords: %d.\n'], nr_distinct_patents_hits))
+disp('---------------------------------------------------------------')
+
 
 
 % Make histogram
 % -------------------------------------------------------------------
-nonzero_count = nr_keyword_per_patent;
-nonzero_count(nr_keyword_per_patent==0) = [];
-
-
 color1_pick = [0.7900, 0.3800, 0.500];
 
 
@@ -183,6 +198,45 @@ ylabel(ylabel_phrase)
 set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
 set(gcf, 'Color', 'w');
 box off
+
+
+% Add text arrows to the plot
+arrowannotation = sprintf(['Total patents: 1233\n' ...
+    'Distinct patents with at least one match: 286']);
+annotation('textbox', [0.5 0.6 0.40 0.1], 'String', arrowannotation, ...
+    'FontSize', 12, 'HorizontalAlignment', 'left', ...
+    'EdgeColor', 'black'); % [x y w h]
+
+
+arrowannotation = sprintf(['1']);
+annotation('textbox', [0.78 0.15 0.25 0.08], 'String', arrowannotation, ...
+    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold', ...
+    'HorizontalAlignment', 'center', 'EdgeColor', 'none'); % [x y w h]
+
+arrowannotation = sprintf(['1']);
+annotation('textbox', [0.361 0.15 0.25 0.08], 'String', arrowannotation, ...
+    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold', ...
+    'HorizontalAlignment', 'center', 'EdgeColor', 'none'); % [x y w h];
+
+arrow_x = [0.32, 0.29];
+arrow_y = [0.18, 0.115];
+arrowannotation = sprintf(['2']);
+annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
+    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
+
+arrow_x = [0.175, 0.141];
+arrow_y = [0.5, 0.44];
+arrowannotation = sprintf(['49']);
+annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
+    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
+
+arrow_x = [0.175, 0.1385];
+arrow_y = [0.8, 0.818];
+arrowannotation = sprintf(['104']);
+annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
+    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
+
+
 
 
 % Reposition the figure
