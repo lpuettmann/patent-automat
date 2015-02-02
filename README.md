@@ -1,5 +1,7 @@
 Automization and Reshoring
 ===========================================================
+Katja Mann, Lukas Püttmann (2015)
+
 
 1. Do a text search through the corpus of United States patent texts. Look for words with "autom*" in them.
 

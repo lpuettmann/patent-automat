@@ -39,6 +39,39 @@ fprintf('Number of patents in week: %d.\n', nr_patents_week)
 disp('---------------------------------------------------------------')
 
 
+% 
+% choose_patn_ix = 1234;
+% 
+% patent_number_patn = file_str(ix_find(choose_patn_ix) + 11 : ...
+%     ix_find(choose_patn_ix) + 19)
+
+% last one: 043554237
+
+[ix_find, nr_patents_week] = count_nr_string_appearance(file_str, ...
+    'WKU');
+
+
+% Pre-define empty cell array to store patent WKU numbers
+patent_number_WKU = repmat({''}, nr_patents_week, 1);
+
+for ix_choose_wku=1:nr_patents_week
+    patent_number_WKU{ix_choose_wku} = file_str(ix_find(ix_choose_wku) + 5 : ...
+        ix_find(ix_choose_wku) + 13);
+end
+
+
+% Plausibility check: test if there are any spaces in WKU numbers
+test_contains_space = strfind(patent_number_WKU, ' ');
+show_ix_contains_space = find(~cellfun(@isempty,test_contains_space));
+if not(isempty(show_ix_contains_space))
+    warning('There is a space in the patent WKU numbers')
+end
+
+
+
+break
+
+
 
 %% Search
 % ========================================================================
@@ -49,15 +82,13 @@ nr_find = length(ix_find);
 
 %% Display some of the found matches
 % ========================================================================
-nr_show_matches = 10; 
-show_char = 70;
-explore_ix_found = 1300; % choose starting position
-match_disp_choice = 2; % 1 - choose position, 2 - random pick
-
-display_matches_text(search_corpus, ix_find, nr_find, ...
-    explore_ix_found, show_char, nr_show_matches, match_disp_choice)
-
-
+% nr_show_matches = 10; 
+% show_char = 70;
+% explore_ix_found = 1300; % choose starting position
+% match_disp_choice = 2; % 1 - choose position, 2 - random pick
+% 
+% display_matches_text(search_corpus, ix_find, nr_find, ...
+%     explore_ix_found, show_char, nr_show_matches, match_disp_choice)
 
 
 %% Display findings
