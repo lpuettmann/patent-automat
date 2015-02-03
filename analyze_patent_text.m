@@ -6,17 +6,18 @@ close all
 tic
 
 
-%% Choose year
+%% Choose time period to analyze
 % ========================================================================
-year = 1982;
+% year = 1982;
+year = 1993;
 % year = 2001;
 week_start = 1; % default: 42
-week_end = 1; % this can be the same as week_start
+week_end = 52; % this can be the same as week_start
 
 
 addpath('functions');
 addpath('data');
-
+addpath('data\1982');
 
 
 %% Define keyword to look for
@@ -27,7 +28,7 @@ find_str = 'automat';
 
 %% Get names of files
 % ========================================================================
-liststruct = dir(horzcat('D:\US_PatentsData\analyzing_PatentText\data\', ...
+liststruct = dir(horzcat('.\data\', ...
     num2str(year)));
 filenames = {liststruct.name};
 filenames = filenames(3:end)'; % truncate first elements . and ..
@@ -36,24 +37,29 @@ filenames = filenames(3:end)'; % truncate first elements . and ..
 
 %% ITERATE THROUGH WEEKS
 % ========================================================================
-
+disp('enter loop:')
 for ix_week = week_start:week_end
     choose_file_open = filenames{ix_week};
 
     % Load the patent text
-    % ========================================================================
-    open_file_aux = textscan(fopen(choose_file_open, 'r'), '%s', ...
+    % --------------------------------------------------------------------
+    unique_file_identifier = fopen(choose_file_open, 'r');   
+    
+    if unique_file_identifier == -1
+        warning('Matlab cannot open the file')
+    end
+        
+    open_file_aux = textscan(unique_file_identifier, '%s', ...
         'delimiter', '\n');
     file_str = open_file_aux{1,1};
 
-
+    
     % Define new search corpus as we might change some things about this
     search_corpus = file_str; 
 
 
-
     % Eliminate the name section from the search corpus
-    % ========================================================================
+    % --------------------------------------------------------------------
     ix_find_NAM = strfind(file_str,'NAM');
     show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
 
@@ -66,12 +72,8 @@ for ix_week = week_start:week_end
     end
 
 
-
     % Count number of patents in a given week
-    % ========================================================================
-
-    % Count number of appearances of 'PATN'
-    % ------------------------------------------------------------------------
+    % --------------------------------------------------------------------
     [indic_find, nr_patents, ix_find] = count_nr_patents(search_corpus, 'PATN');
 
 
@@ -86,8 +88,8 @@ for ix_week = week_start:week_end
 
 
 
-    % Run plausibility check
-    % ========================================================================
+    % Run plausibility checks
+    % --------------------------------------------------------------------
 
     % Test if there are any spaces in WKU numbers
     test_contains_space = strfind(patent_number, ' ');
@@ -106,7 +108,7 @@ for ix_week = week_start:week_end
 
 
     % Extract patent text
-    % ========================================================================
+    % --------------------------------------------------------------------
 
     nr_keyword_appear = patent_number;
     
@@ -126,7 +128,7 @@ for ix_week = week_start:week_end
     for ix_patent=1:nr_patents
 
         % Get start and end of patent text
-        % -------------------------------------------------------------------
+        % ----------------------------------------------------------------
         start_text_corpus = ix_find(ix_patent);
 
         if ix_patent < nr_patents
@@ -139,16 +141,16 @@ for ix_week = week_start:week_end
             end_text_corpus, :);
 
         % Search
-        % -------------------------------------------------------------------
+        % ----------------------------------------------------------------
         ix_keyword_find = regexpi(patent_text_corpus, find_str);
-        ix_keyword_find = ix_keyword_find(~cellfun('isempty',ix_keyword_find));
+        ix_keyword_find = ix_keyword_find(~cellfun('isempty', ...
+            ix_keyword_find));
         nr_keyword_find = length(ix_keyword_find);
 
         % Save
-        % -------------------------------------------------------------------
+        % ----------------------------------------------------------------
         nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
     end
-
     
     % Save information for all weeks
     % -------------------------------------------------------------------
@@ -162,16 +164,16 @@ for ix_week = week_start:week_end
     
     if ix_week == week_end % last iteration: delete first row
         patent_keyword_appear(1,:) = [];
-    end               
+    end 
+    
+    disp('Week completed:'); disp(ix_week); disp('------------------')
 end
 
 
 
 %% Display findings
 % ========================================================================
-
 nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
-
 
 % Calculate summary statistics
 total_keywords_found = sum(nr_keyword_per_patent);
@@ -210,7 +212,7 @@ color1_pick = [0.7900, 0.3800, 0.500];
 figureHandle = figure;
 hist(nonzero_count, max(nr_keyword_per_patent))
 set(gca,'FontSize',12) % change default font size of axis labels
-title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
+title_phrase = sprintf(['Number of appearances of keyword "automat" ', ...
     'in US patents, %d'], year);
 title(title_phrase, 'FontSize', 14)
 xlabel('Number of patents')
@@ -233,7 +235,7 @@ annotation('textbox', [0.5 0.6 0.44 0.15], 'String', arrowannotation, ...
 
 
 % Reposition the figure
-% ======================================================================
+% -----------------------------------------------------------------------
 set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
@@ -244,12 +246,9 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 
 % Export to pdf
-% ======================================================================
+% -----------------------------------------------------------------------
 print_pdf_name = horzcat('nr_keyword_patent_', '1982', '.pdf');
-
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
 
 
 
