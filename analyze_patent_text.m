@@ -5,6 +5,7 @@ close all
 
 addpath('functions');
 addpath('data');
+addpath('data\1982');
 
 tic
 
@@ -16,7 +17,22 @@ find_str = 'automat';
 
 %% Load the patent text
 % ========================================================================
-open_file_aux = textscan(fopen('pftaps19821019_wk42.txt', 'r'), '%s','delimiter', '\n');
+% choose_file_open = 'pftaps19820105_wk01.txt';
+% choose_file_open = 'pftaps19820112_wk02.txt';
+% choose_file_open = 'pftaps19820119_wk03.txt';
+% choose_file_open = 'pftaps19820126_wk04.txt';
+% choose_file_open = 'pftaps19820202_wk05.txt';
+choose_file_open = 'pftaps19820209_wk06.txt';
+% choose_file_open = 'pftaps19820216_wk07.txt';
+% choose_file_open = 'pftaps19820223_wk08.txt';
+% choose_file_open = 'pftaps19821019_wk42.txt'; % my default case
+
+
+
+
+
+open_file_aux = textscan(fopen(choose_file_open, 'r'), '%s', ...
+    'delimiter', '\n');
 file_str = open_file_aux{1,1};
 
 
@@ -31,11 +47,11 @@ ix_find_NAM = strfind(file_str,'NAM');
 show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
 
 
-for i=1:200
-    choose_ix_pos = randsample((1:length(show_row_NAM)),1)
-    search_corpus(show_row_NAM(choose_ix_pos) - 1:...
-        show_row_NAM(choose_ix_pos) + 1,:)
-end
+% for i=1:200
+%     choose_ix_pos = randsample((1:length(show_row_NAM)),1)
+%     search_corpus(show_row_NAM(choose_ix_pos) - 1:...
+%         show_row_NAM(choose_ix_pos) + 1,:)
+% end
 
 search_corpus(show_row_NAM) = []; % delete rows with NAN
 
@@ -52,14 +68,14 @@ end
 
 % Count number of appearances of 'PATN'
 % ------------------------------------------------------------------------
-[indic_find, nr_patents, ix_find] = count_nr_patents(file_str, 'PATN');
+[indic_find, nr_patents, ix_find] = count_nr_patents(search_corpus, 'PATN');
 
 
 % Pre-define empty cell array to store patent WKU numbers (based on finding) PATN
 patent_number = repmat({''}, nr_patents, 1);
 
 for i=1:nr_patents
-     wku_line = file_str(ix_find(i)+1, :);
+     wku_line = search_corpus(ix_find(i)+1, :);
      wku_line = wku_line{1};
      patent_number{i} = wku_line(6:14);
 end
@@ -122,19 +138,7 @@ end
 nr_keyword_per_patent = cell2mat(nr_keyword_appear(:, 2));
 
 
-%% Display some of the found matches
-% ========================================================================
-% nr_show_matches = 10; 
-% show_char = 70;
-% explore_ix_found = 1300; % choose starting position
-% match_disp_choice = 2; % 1 - choose position, 2 - random pick
-% 
-% display_matches_text(search_corpus, ix_find, nr_find, ...
-%     explore_ix_found, show_char, nr_show_matches, match_disp_choice)
-
-
-
-%% Display findings
+% Display findings
 % ========================================================================
 
 % Calculate summary statistics
@@ -148,9 +152,6 @@ else
     fprintf('Number appearances of keystring: %d.\n', total_keywords_found)
     disp('---------------------------------------------------------------')
 end
-
-
-
 
 
 
@@ -168,9 +169,6 @@ nonzero_count = nr_keyword_per_patent;
 nonzero_count(nr_keyword_per_patent==0) = [];
 
 nr_distinct_patents_hits = length(nonzero_count);
-fprintf(sprintf(['Number of distinct patents that have at least one \n', ...
-    'case of matching keywords: %d.\n'], nr_distinct_patents_hits))
-disp('---------------------------------------------------------------')
 
 
 
@@ -183,7 +181,7 @@ figureHandle = figure;
 hist(nonzero_count, max(nr_keyword_per_patent))
 set(gca,'FontSize',12) % change default font size of axis labels
 title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
-    'in US patents, 1982 week 42']);
+    'in US patents, 1982 week %s'], choose_file_open(end-5:end-4));
 title(title_phrase, 'FontSize', 14)
 xlabel('Number of patents')
 ylabel_phrase = sprintf(['Number of keyword appearances \n'...
@@ -204,33 +202,33 @@ annotation('textbox', [0.5 0.6 0.41 0.14], 'String', arrowannotation, ...
     'EdgeColor', 'black'); % [x y w h]
 
 
-arrowannotation = sprintf(['1']);
-annotation('textbox', [0.73 0.15 0.25 0.08], 'String', arrowannotation, ...
-    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold', ...
-    'HorizontalAlignment', 'center', 'EdgeColor', 'none'); % [x y w h]
-
-arrowannotation = sprintf(['1']);
-annotation('textbox', [0.361 0.15 0.25 0.08], 'String', arrowannotation, ...
-    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold', ...
-    'HorizontalAlignment', 'center', 'EdgeColor', 'none'); % [x y w h];
-
-arrow_x = [0.32, 0.29];
-arrow_y = [0.18, 0.115];
-arrowannotation = sprintf(['2']);
-annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
-    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
-
-arrow_x = [0.175, 0.141];
-arrow_y = [0.5, 0.44];
-arrowannotation = sprintf(['49']);
-annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
-    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
-
-arrow_x = [0.175, 0.1385];
-arrow_y = [0.8, 0.818];
-arrowannotation = sprintf(['104']);
-annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
-    'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
+% arrowannotation = sprintf(['1']);
+% annotation('textbox', [0.73 0.15 0.25 0.08], 'String', arrowannotation, ...
+%     'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold', ...
+%     'HorizontalAlignment', 'center', 'EdgeColor', 'none'); % [x y w h]
+% 
+% arrowannotation = sprintf(['1']);
+% annotation('textbox', [0.361 0.15 0.25 0.08], 'String', arrowannotation, ...
+%     'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold', ...
+%     'HorizontalAlignment', 'center', 'EdgeColor', 'none'); % [x y w h];
+% 
+% arrow_x = [0.32, 0.29];
+% arrow_y = [0.18, 0.115];
+% arrowannotation = sprintf(['2']);
+% annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
+%     'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
+% 
+% arrow_x = [0.175, 0.141];
+% arrow_y = [0.5, 0.44];
+% arrowannotation = sprintf(['49']);
+% annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
+%     'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
+% 
+% arrow_x = [0.175, 0.1385];
+% arrow_y = [0.8, 0.818];
+% arrowannotation = sprintf(['104']);
+% annotation('textarrow', arrow_x, arrow_y, 'String', arrowannotation, ...
+%     'Color', color1_pick, 'FontSize', 14, 'Fontweight', 'bold');
 
 
 
