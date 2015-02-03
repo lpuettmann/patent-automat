@@ -17,7 +17,7 @@ tic
 % ========================================================================
 year = 1982;
 week_start = 1; % default: 42
-week_end = 2; % this can be the same as week_start
+week_end = 52; % this can be the same as week_start
 
 %% Define keyword to look for
 % ========================================================================
@@ -166,93 +166,98 @@ for ix_week = week_start:week_end
     if pick_week == week_end % last iteration: delete first row
         patent_keyword_appear(1,:) = [];
     end               
-                         
-                            
-    nr_keyword_per_patent = cell2mat(nr_keyword_appear(:, 2));
-
-    
-    % Display findings
-    % ========================================================================
-
-    % Calculate summary statistics
-    total_keywords_found = sum(nr_keyword_per_patent);
-
-    if length(find_str) < 20 % only display if not too long
-        fprintf('Number appearances of keystring >>%s<<: %d.\n', find_str, ...
-            total_keywords_found)
-        disp('---------------------------------------------------------------')
-    else
-        fprintf('Number appearances of keystring: %d.\n', total_keywords_found)
-        disp('---------------------------------------------------------------')
-    end
-
-
-
-    sorted_summ_list = sort(nr_keyword_per_patent);
-    nr_patents_1match = sum(nr_keyword_per_patent == 1);
-    nr_patents_2match = sum(nr_keyword_per_patent == 2);
-    nr_patents_3match = sum(nr_keyword_per_patent == 3);
-    nr_patents_4match = sum(nr_keyword_per_patent == 4);
-    nr_patents_5match = sum(nr_keyword_per_patent == 5);
-    nr_patents_37match = sum(nr_keyword_per_patent == 37);
-    nr_patents_82match = sum(nr_keyword_per_patent == 82);
-    nr_patents_180match = sum(nr_keyword_per_patent == 180);
-
-    nonzero_count = nr_keyword_per_patent;
-    nonzero_count(nr_keyword_per_patent==0) = [];
-
-    nr_distinct_patents_hits = length(nonzero_count);
-
-
-
-%     % Make histogram
-%     % -------------------------------------------------------------------
-%     color1_pick = [0.7900, 0.3800, 0.500];
-% 
-% 
-%     figureHandle = figure;
-%     hist(nonzero_count, max(nr_keyword_per_patent))
-%     set(gca,'FontSize',12) % change default font size of axis labels
-%     title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
-%         'in US patents, 1982 week %s'], choose_file_open(end-5:end-4));
-%     title(title_phrase, 'FontSize', 14)
-%     xlabel('Number of patents')
-%     ylabel_phrase = sprintf(['Number of keyword appearances \n'...
-%         '(zero matches ommited)']);
-%     ylabel(ylabel_phrase)
-%     set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
-%     set(gcf, 'Color', 'w');
-%     box off
-% 
-% 
-%     % Add text arrows to the plot
-%     arrowannotation = sprintf(['Total patents: %d\n' ...
-%         'Total number of keyword matches: %d\n' ...
-%         'Distinct patents with at least one match: %d'], ...
-%         nr_patents, total_keywords_found, nr_distinct_patents_hits);
-%     annotation('textbox', [0.5 0.6 0.41 0.14], 'String', arrowannotation, ...
-%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
-%         'EdgeColor', 'black'); % [x y w h]
-% 
-% 
-%     % Reposition the figure
-%     % ======================================================================
-%     set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
-% 
-%     set(figureHandle, 'Units', 'Inches');
-%     pos = get(figureHandle, 'Position');
-% 
-%     set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-%         'Inches', 'PaperSize', [pos(3), pos(4)])
-% 
-% 
-%     % Export to pdf
-%     % ======================================================================
-%     print_pdf_name = horzcat('nr_keyword_patent_', '1982-', 'week', ...
-%         num2str(pick_week,'%02d'), '.pdf');
-% 
-%     print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 end
+
+
+
+%% Display findings
+% ========================================================================
+
+nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
+
+
+% Calculate summary statistics
+total_keywords_found = sum(nr_keyword_per_patent);
+
+if length(find_str) < 20 % only display if not too long
+    fprintf('Number appearances of keystring >>%s<<: %d.\n', find_str, ...
+        total_keywords_found)
+    disp('---------------------------------------------------------------')
+else
+    fprintf('Number appearances of keystring: %d.\n', total_keywords_found)
+    disp('---------------------------------------------------------------')
+end
+
+
+sorted_summ_list = sort(nr_keyword_per_patent);
+nr_patents_1match = sum(nr_keyword_per_patent == 1);
+nr_patents_2match = sum(nr_keyword_per_patent == 2);
+nr_patents_3match = sum(nr_keyword_per_patent == 3);
+nr_patents_4match = sum(nr_keyword_per_patent == 4);
+nr_patents_5match = sum(nr_keyword_per_patent == 5);
+nr_patents_37match = sum(nr_keyword_per_patent == 37);
+nr_patents_82match = sum(nr_keyword_per_patent == 82);
+nr_patents_180match = sum(nr_keyword_per_patent == 180);
+
+nonzero_count = nr_keyword_per_patent;
+nonzero_count(nr_keyword_per_patent==0) = [];
+
+nr_distinct_patents_hits = length(nonzero_count);
+
+
+% Make histogram
+% -------------------------------------------------------------------
+color1_pick = [0.7900, 0.3800, 0.500];
+
+
+figureHandle = figure;
+hist(nonzero_count, max(nr_keyword_per_patent))
+set(gca,'FontSize',12) % change default font size of axis labels
+title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
+    'in US patents, 1982']);
+title(title_phrase, 'FontSize', 14)
+xlabel('Number of patents')
+ylabel_phrase = sprintf(['Number of keyword appearances \n'...
+    '(zero matches ommited)']);
+ylabel(ylabel_phrase)
+set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
+set(gcf, 'Color', 'w');
+box off
+
+
+% Add text arrows to the plot
+arrowannotation = sprintf(['Total patents: %d\n' ...
+    'Total number of keyword matches: %d\n' ...
+    'Distinct patents with at least one match: %d'], ...
+    size(patent_keyword_appear,1), total_keywords_found, nr_distinct_patents_hits);
+annotation('textbox', [0.5 0.6 0.41 0.14], 'String', arrowannotation, ...
+    'FontSize', 12, 'HorizontalAlignment', 'left', ...
+    'EdgeColor', 'black'); % [x y w h]
+
+
+% Reposition the figure
+% ======================================================================
+set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
+
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% ======================================================================
+print_pdf_name = horzcat('nr_keyword_patent_', '1982', '.pdf');
+
+print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+
+
+
+
+
+
+
 
 
 %% End
