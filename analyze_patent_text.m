@@ -3,21 +3,21 @@ clear all
 close all
 
 
-addpath('functions');
-addpath('data');
-addpath('data\1982');
-
 tic
-
-
-% patent_keyword_appear(1243,:)
 
 
 %% Choose year
 % ========================================================================
 year = 1982;
+% year = 2001;
 week_start = 1; % default: 42
-week_end = 52; % this can be the same as week_start
+week_end = 1; % this can be the same as week_start
+
+
+addpath('functions');
+addpath('data');
+
+
 
 %% Define keyword to look for
 % ========================================================================
@@ -25,13 +25,12 @@ week_end = 52; % this can be the same as week_start
 find_str = 'automat'; 
 
 
-
 %% Get names of files
 % ========================================================================
-liststruct = dir('D:\US_PatentsData\analyzing_PatentText\data\1982');
+liststruct = dir(horzcat('D:\US_PatentsData\analyzing_PatentText\data\', ...
+    num2str(year)));
 filenames = {liststruct.name};
 filenames = filenames(3:end)'; % truncate first elements . and ..
-
 
 
 
@@ -39,9 +38,7 @@ filenames = filenames(3:end)'; % truncate first elements . and ..
 % ========================================================================
 
 for ix_week = week_start:week_end
-    pick_week = ix_week; 
-    choose_file_open = filenames{pick_week};
-
+    choose_file_open = filenames{ix_week};
 
     % Load the patent text
     % ========================================================================
@@ -56,7 +53,7 @@ for ix_week = week_start:week_end
 
 
     % Eliminate the name section from the search corpus
-    % % ========================================================================
+    % ========================================================================
     ix_find_NAM = strfind(file_str,'NAM');
     show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
 
@@ -123,7 +120,7 @@ for ix_week = week_start:week_end
     
     % Insert the current week for later reference
     nr_keyword_appear = [nr_keyword_appear, ...
-        num2cell(repmat(pick_week, nr_patents, 1))];
+        num2cell(repmat(ix_week, nr_patents, 1))];
     
     
     for ix_patent=1:nr_patents
@@ -155,7 +152,7 @@ for ix_week = week_start:week_end
     
     % Save information for all weeks
     % -------------------------------------------------------------------
-    if pick_week == week_start % first iteration: have to newly define this variable
+    if ix_week == week_start % first iteration: have to newly define this variable
         patent_keyword_appear = repmat({''}, 1, ...
             size(nr_keyword_appear, 2));
     end        
@@ -163,7 +160,7 @@ for ix_week = week_start:week_end
     patent_keyword_appear = [patent_keyword_appear;
                              nr_keyword_appear];
     
-    if pick_week == week_end % last iteration: delete first row
+    if ix_week == week_end % last iteration: delete first row
         patent_keyword_appear(1,:) = [];
     end               
 end
@@ -214,7 +211,7 @@ figureHandle = figure;
 hist(nonzero_count, max(nr_keyword_per_patent))
 set(gca,'FontSize',12) % change default font size of axis labels
 title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
-    'in US patents, 1982']);
+    'in US patents, %d'], year);
 title(title_phrase, 'FontSize', 14)
 xlabel('Number of patents')
 ylabel_phrase = sprintf(['Number of keyword appearances \n'...
@@ -230,7 +227,7 @@ arrowannotation = sprintf(['Total patents: %d\n' ...
     'Total number of keyword matches: %d\n' ...
     'Distinct patents with at least one match: %d'], ...
     size(patent_keyword_appear,1), total_keywords_found, nr_distinct_patents_hits);
-annotation('textbox', [0.5 0.6 0.41 0.14], 'String', arrowannotation, ...
+annotation('textbox', [0.5 0.6 0.44 0.15], 'String', arrowannotation, ...
     'FontSize', 12, 'HorizontalAlignment', 'left', ...
     'EdgeColor', 'black'); % [x y w h]
 
@@ -251,9 +248,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 print_pdf_name = horzcat('nr_keyword_patent_', '1982', '.pdf');
 
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
-
 
 
 
