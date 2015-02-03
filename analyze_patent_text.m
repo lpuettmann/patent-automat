@@ -18,6 +18,8 @@ week_end = 52; % this can be the same as week_start
 addpath('functions');
 addpath('data');
 addpath('data\1982');
+addpath('data\1993');
+% addpath('data\2001');
 
 
 %% Define keyword to look for
@@ -37,7 +39,10 @@ filenames = filenames(3:end)'; % truncate first elements . and ..
 
 %% ITERATE THROUGH WEEKS
 % ========================================================================
-disp('enter loop:')
+disp('~~~ enter loop: ~~~')
+
+print_index = 0; % initiate print out index
+
 for ix_week = week_start:week_end
     choose_file_open = filenames{ix_week};
 
@@ -166,8 +171,22 @@ for ix_week = week_start:week_end
         patent_keyword_appear(1,:) = [];
     end 
     
-    disp('Week completed:'); disp(ix_week); disp('------------------')
+    % Show a message that shows progress of outer loop
+%     msg = sprintf(['Completed inner loop for week: %d/%d.\n'], ix_week, ...
+%         week_end); 
+%     fprintf(repmat('\b', 1, print_index));
+%     fprintf(msg);
+%     print_index = numel(msg);
+    disp(ix_week)
 end
+disp('---------------------------------------------------------------')
+disp('+++ ...FINISHED LOOP! +++')
+
+
+%% Save
+% ========================================================================
+save_name = horzcat('patent_keyword_appear_', num2str(year), '.mat');
+save(save_name, 'patent_keyword_appear')
 
 
 
@@ -247,7 +266,7 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('nr_keyword_patent_', '1982', '.pdf');
+print_pdf_name = horzcat('nr_keyword_patent_', num2str(year), '.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
 
