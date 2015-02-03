@@ -10,11 +10,8 @@ tic
 
 %% Define keyword to look for
 % ========================================================================
-% find_str = 'automatization';
-% find_str = 'automated';
-find_str = 'automat.'; % use a dot as a place holder
-% find_str = 'autoMATEd';
-% find_str = '4354706'
+% use a dot as a place holder (probably not necessary at the moment)
+find_str = 'automat'; 
 
 
 if length(find_str) < 20 % only display if not too long
