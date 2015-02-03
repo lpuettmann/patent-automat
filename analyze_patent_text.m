@@ -24,6 +24,29 @@ file_str = open_file_aux{1,1};
 search_corpus = file_str; 
 
 
+
+%% Eliminate the name section from the search corpus
+% % ========================================================================
+ix_find_NAM = strfind(file_str,'NAM');
+show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
+
+
+for i=1:200
+    choose_ix_pos = randsample((1:length(show_row_NAM)),1)
+    search_corpus(show_row_NAM(choose_ix_pos) - 1:...
+        show_row_NAM(choose_ix_pos) + 1,:)
+end
+
+search_corpus(show_row_NAM) = []; % delete rows with NAN
+
+% Test if we get the right number of rows
+if length(file_str)-length(search_corpus) ~= length(show_row_NAM)
+    warning(['Are you sure you deleted the right columns with ', ...
+        'NAM in them?'])
+end
+
+
+
 %% Count number of patents in a given week
 % ========================================================================
 
