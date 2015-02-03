@@ -10,11 +10,14 @@ addpath('data\1982');
 tic
 
 
+% patent_keyword_appear(1243,:)
+
+
 %% Choose year
 % ========================================================================
 year = 1982;
 week_start = 1; % default: 42
-week_end = 52; % this can be the same as week_start
+week_end = 2; % this can be the same as week_start
 
 %% Define keyword to look for
 % ========================================================================
@@ -34,6 +37,7 @@ filenames = filenames(3:end)'; % truncate first elements . and ..
 
 %% ITERATE THROUGH WEEKS
 % ========================================================================
+
 for ix_week = week_start:week_end
     pick_week = ix_week; 
     choose_file_open = filenames{pick_week};
@@ -108,9 +112,20 @@ for ix_week = week_start:week_end
     % ========================================================================
 
     nr_keyword_appear = patent_number;
-    % Get empty cells next to the WKU patent numbers.
+    
+    % Get empty cells next to the WKU patent numbers. This will be filled
+    % up with the number of matches for each patent
     nr_keyword_appear{1,2} = []; 
 
+    % Insert the current year for later reference
+    nr_keyword_appear = [nr_keyword_appear, ...
+        num2cell(repmat(year, nr_patents, 1))];
+    
+    % Insert the current week for later reference
+    nr_keyword_appear = [nr_keyword_appear, ...
+        num2cell(repmat(pick_week, nr_patents, 1))];
+    
+    
     for ix_patent=1:nr_patents
 
         % Get start and end of patent text
@@ -137,10 +152,25 @@ for ix_week = week_start:week_end
         nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
     end
 
-
+    
+    % Save information for all weeks
+    % -------------------------------------------------------------------
+    if pick_week == week_start % first iteration: have to newly define this variable
+        patent_keyword_appear = repmat({''}, 1, ...
+            size(nr_keyword_appear, 2));
+    end        
+        
+    patent_keyword_appear = [patent_keyword_appear;
+                             nr_keyword_appear];
+    
+    if pick_week == week_end % last iteration: delete first row
+        patent_keyword_appear(1,:) = [];
+    end               
+                         
+                            
     nr_keyword_per_patent = cell2mat(nr_keyword_appear(:, 2));
 
-
+    
     % Display findings
     % ========================================================================
 
@@ -175,53 +205,53 @@ for ix_week = week_start:week_end
 
 
 
-    % Make histogram
-    % -------------------------------------------------------------------
-    color1_pick = [0.7900, 0.3800, 0.500];
-
-
-    figureHandle = figure;
-    hist(nonzero_count, max(nr_keyword_per_patent))
-    set(gca,'FontSize',12) % change default font size of axis labels
-    title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
-        'in US patents, 1982 week %s'], choose_file_open(end-5:end-4));
-    title(title_phrase, 'FontSize', 14)
-    xlabel('Number of patents')
-    ylabel_phrase = sprintf(['Number of keyword appearances \n'...
-        '(zero matches ommited)']);
-    ylabel(ylabel_phrase)
-    set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
-    set(gcf, 'Color', 'w');
-    box off
-
-
-    % Add text arrows to the plot
-    arrowannotation = sprintf(['Total patents: %d\n' ...
-        'Total number of keyword matches: %d\n' ...
-        'Distinct patents with at least one match: %d'], ...
-        nr_patents, total_keywords_found, nr_distinct_patents_hits);
-    annotation('textbox', [0.5 0.6 0.41 0.14], 'String', arrowannotation, ...
-        'FontSize', 12, 'HorizontalAlignment', 'left', ...
-        'EdgeColor', 'black'); % [x y w h]
-
-
-    % Reposition the figure
-    % ======================================================================
-    set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
-
-    set(figureHandle, 'Units', 'Inches');
-    pos = get(figureHandle, 'Position');
-
-    set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-        'Inches', 'PaperSize', [pos(3), pos(4)])
-
-
-    % Export to pdf
-    % ======================================================================
-    print_pdf_name = horzcat('nr_keyword_patent_', '1982-', 'week', ...
-        num2str(pick_week,'%02d'), '.pdf');
-
-    print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+%     % Make histogram
+%     % -------------------------------------------------------------------
+%     color1_pick = [0.7900, 0.3800, 0.500];
+% 
+% 
+%     figureHandle = figure;
+%     hist(nonzero_count, max(nr_keyword_per_patent))
+%     set(gca,'FontSize',12) % change default font size of axis labels
+%     title_phrase = sprintf(['Number of appearances of keyword "automat*" ', ...
+%         'in US patents, 1982 week %s'], choose_file_open(end-5:end-4));
+%     title(title_phrase, 'FontSize', 14)
+%     xlabel('Number of patents')
+%     ylabel_phrase = sprintf(['Number of keyword appearances \n'...
+%         '(zero matches ommited)']);
+%     ylabel(ylabel_phrase)
+%     set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
+%     set(gcf, 'Color', 'w');
+%     box off
+% 
+% 
+%     % Add text arrows to the plot
+%     arrowannotation = sprintf(['Total patents: %d\n' ...
+%         'Total number of keyword matches: %d\n' ...
+%         'Distinct patents with at least one match: %d'], ...
+%         nr_patents, total_keywords_found, nr_distinct_patents_hits);
+%     annotation('textbox', [0.5 0.6 0.41 0.14], 'String', arrowannotation, ...
+%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
+%         'EdgeColor', 'black'); % [x y w h]
+% 
+% 
+%     % Reposition the figure
+%     % ======================================================================
+%     set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
+% 
+%     set(figureHandle, 'Units', 'Inches');
+%     pos = get(figureHandle, 'Position');
+% 
+%     set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+%         'Inches', 'PaperSize', [pos(3), pos(4)])
+% 
+% 
+%     % Export to pdf
+%     % ======================================================================
+%     print_pdf_name = horzcat('nr_keyword_patent_', '1982-', 'week', ...
+%         num2str(pick_week,'%02d'), '.pdf');
+% 
+%     print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 end
 
 
