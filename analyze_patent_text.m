@@ -14,12 +14,12 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1982:1982
+for ix_year = 1978:1989
     tic
     
     year = ix_year;
-    week_start = 39;
-    week_end = 42; % this can be the same as week_start
+    week_start = 1;
+    week_end = 52; % this can be the same as week_start
 
     % 53 weeks: 1980, 1985, 1991, 1996
     if year == 1980 | year == 1985 | year == 1991 | year == 1996
@@ -49,7 +49,7 @@ for ix_year = 1982:1982
         choose_file_open = filenames{ix_week};
 
         % Load the patent text
-        % --------------------------------------------------------------------
+        % -------------------------------------------------------------------
         unique_file_identifier = fopen(choose_file_open, 'r');   
 
         if unique_file_identifier == -1
@@ -91,9 +91,22 @@ for ix_year = 1982:1982
                     search_corpus_trunc4{i} = row_shorten(1:4);
                 end
             end
-
             [indic_find, nr_patents, ix_find] = count_nr_patents(...
                 search_corpus_trunc4, 'PATN');
+        
+        % Something is wrong in year 1978
+        elseif year == 1978 && (ix_week == 25 | ix_week == 26)  
+            search_corpus_trunc4 = search_corpus;
+            disp('Year 1978, week 25 and 26, special cases')
+            for i=1:length(search_corpus_trunc4)
+                if numel(search_corpus_trunc4{i}) > 4
+                    row_shorten = search_corpus_trunc4{i};
+                    search_corpus_trunc4{i} = row_shorten(1:4);
+                end
+            end
+            [indic_find, nr_patents, ix_find] = count_nr_patents(...
+                search_corpus_trunc4, 'PATN');
+            
         else
             [indic_find, nr_patents, ix_find] = count_nr_patents(...
                 search_corpus, 'PATN'); 
