@@ -15,7 +15,7 @@ find_str = 'automat';
 % ========================================================================
 year = 2001;
 week_start = 1; % default: 42
-week_end = 1; % this can be the same as week_start
+week_end = 2; % this can be the same as week_start
 % 53 weeks: 1980, 1985, 1991, 1996
 
 build_data_path = horzcat('.\data\', num2str(year));
@@ -70,10 +70,20 @@ for ix_week = week_start:week_end
     end
 
 
-    % Count number of patents in a given week
+    %% Count number of patents in a given week
     % --------------------------------------------------------------------
-    [indic_find, nr_patents, ix_find] = count_nr_patents(search_corpus, 'PATN');
+    patentsearch_corpus = search_corpus;
 
+    for i=1:length(patentsearch_corpus)
+        if numel(patentsearch_corpus{i}) > 4
+            patentsearch_corpus{i} = shorten_to4(patentsearch_corpus{i});
+        end
+    end
+   
+    [indic_find, nr_patents, ix_find] = count_nr_patents(...
+        patentsearch_corpus, 'PATN');
+
+    % Test: did not find patents
     if nr_patents < 100
         warning(['The number of patents (= %d) is implausibly small'], ...
             nr_patents)
@@ -88,10 +98,7 @@ for ix_week = week_start:week_end
          patent_number{i} = wku_line(6:14);
     end
     
-
-    % Run plausibility checks
-    % --------------------------------------------------------------------
-
+    
     % Test if there are any spaces in WKU numbers
     test_contains_space = strfind(patent_number, ' ');
     show_ix_contains_space = find(~cellfun(@isempty,test_contains_space));
@@ -110,7 +117,6 @@ for ix_week = week_start:week_end
 
     % Extract patent text
     % --------------------------------------------------------------------
-
     nr_keyword_appear = patent_number;
     
     % Get empty cells next to the WKU patent numbers. This will be filled
