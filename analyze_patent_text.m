@@ -9,7 +9,9 @@ tic
 %% Choose time period to analyze
 % ========================================================================
 % year = 1982;
-year = 1993;
+year = 1983;
+% year = 1993;
+% year = 2000;
 % year = 2001;
 week_start = 1; % default: 42
 week_end = 52; % this can be the same as week_start
@@ -18,8 +20,25 @@ week_end = 52; % this can be the same as week_start
 addpath('functions');
 addpath('data');
 addpath('data\1982');
+addpath('data\1983');
+addpath('data\1984');
+addpath('data\1985');
+addpath('data\1986');
+addpath('data\1987');
+addpath('data\1988');
+addpath('data\1989');
+addpath('data\1990');
+addpath('data\1991');
+addpath('data\1992');
 addpath('data\1993');
-% addpath('data\2001');
+addpath('data\1994');
+addpath('data\1995');
+addpath('data\1996');
+addpath('data\1997');
+addpath('data\1998');
+addpath('data\1999');
+addpath('data\2000');
+addpath('data\2001');
 
 
 %% Define keyword to look for
@@ -40,8 +59,6 @@ filenames = filenames(3:end)'; % truncate first elements . and ..
 %% ITERATE THROUGH WEEKS
 % ========================================================================
 disp('~~~ enter loop: ~~~')
-
-print_index = 0; % initiate print out index
 
 for ix_week = week_start:week_end
     choose_file_open = filenames{ix_week};
@@ -171,12 +188,6 @@ for ix_week = week_start:week_end
         patent_keyword_appear(1,:) = [];
     end 
     
-    % Show a message that shows progress of outer loop
-%     msg = sprintf(['Completed inner loop for week: %d/%d.\n'], ix_week, ...
-%         week_end); 
-%     fprintf(repmat('\b', 1, print_index));
-%     fprintf(msg);
-%     print_index = numel(msg);
     disp(ix_week)
 end
 disp('---------------------------------------------------------------')
