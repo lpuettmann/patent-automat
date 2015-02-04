@@ -13,9 +13,10 @@ find_str = 'automat';
 
 %% Choose time period to analyze
 % ========================================================================
-year = 1976;
-week_start = 1; % default: 42
-week_end = 52; % this can be the same as week_start
+year = 1999;
+week_start = 14; % default: 42
+week_end = 14; % this can be the same as week_start
+% 53 weeks: 1980, 1985, 1991, 1996
 
 build_data_path = horzcat('.\data\', num2str(year));
 
@@ -82,8 +83,7 @@ for ix_week = week_start:week_end
          wku_line = wku_line{1};
          patent_number{i} = wku_line(6:14);
     end
-
-
+    
 
     % Run plausibility checks
     % --------------------------------------------------------------------
@@ -175,7 +175,6 @@ save_name = horzcat('patent_keyword_appear_', num2str(year), '.mat');
 save(save_name, 'patent_keyword_appear')
 
 
-
 %% Display findings
 % ========================================================================
 nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
@@ -227,7 +226,7 @@ xlabel('Number of patents')
 ylabel_phrase = sprintf(['Number of keyword appearances \n'...
     '(zero matches ommited)']);
 ylabel(ylabel_phrase)
-set(get(gca,'child'), 'FaceColor', color1_pick, 'EdgeColor', color1_pick);
+set(get(gca,'child'), 'FaceColor', 'none', 'EdgeColor', color1_pick);
 set(gcf, 'Color', 'w');
 box off
 
@@ -261,8 +260,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % -----------------------------------------------------------------------
 print_pdf_name = horzcat('nr_keyword_patent_', num2str(year), '.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
 
 
 %% End
