@@ -14,7 +14,7 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1978:1989
+for ix_year = 1984:1989
     tic
     
     year = ix_year;
@@ -84,7 +84,7 @@ for ix_year = 1978:1989
 
         if year == 2001 % special case: problem with 80 numel text file
             search_corpus_trunc4 = search_corpus;
-            disp('Year 2001, special case')
+            disp('*** Year 2001, special case')
             for i=1:length(search_corpus_trunc4)
                 if numel(search_corpus_trunc4{i}) > 4
                     row_shorten = search_corpus_trunc4{i};
@@ -97,7 +97,33 @@ for ix_year = 1978:1989
         % Something is wrong in year 1978
         elseif year == 1978 && (ix_week == 25 | ix_week == 26)  
             search_corpus_trunc4 = search_corpus;
-            disp('Year 1978, week 25 and 26, special cases')
+            disp('*** Year 1978, week 25 and 26, special cases')
+            for i=1:length(search_corpus_trunc4)
+                if numel(search_corpus_trunc4{i}) > 4
+                    row_shorten = search_corpus_trunc4{i};
+                    search_corpus_trunc4{i} = row_shorten(1:4);
+                end
+            end
+            [indic_find, nr_patents, ix_find] = count_nr_patents(...
+                search_corpus_trunc4, 'PATN');
+            
+          elseif year == 1979 && (ix_week == 11 | ix_week == 12)
+            search_corpus_trunc4 = search_corpus;
+            disp('*** Year 1979, special cases')
+            for i=1:length(search_corpus_trunc4)
+                if numel(search_corpus_trunc4{i}) > 4
+                    row_shorten = search_corpus_trunc4{i};
+                    search_corpus_trunc4{i} = row_shorten(1:4);
+                end
+            end
+            [indic_find, nr_patents, ix_find] = count_nr_patents(...
+                search_corpus_trunc4, 'PATN');
+          
+          % I can probably delete the following special case: 
+          % The problem was with the empty lines in week 50
+          elseif year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
+            search_corpus_trunc4 = search_corpus;
+            disp('Year 1984, special cases')
             for i=1:length(search_corpus_trunc4)
                 if numel(search_corpus_trunc4{i}) > 4
                     row_shorten = search_corpus_trunc4{i};
@@ -124,10 +150,24 @@ for ix_year = 1978:1989
         for i=1:nr_patents
              wku_line = search_corpus(ix_find(i)+1, :);
              wku_line = wku_line{1};
-             patent_number{i} = wku_line(6:14);
+             
+             if numel(wku_line) < 2
+                 fprintf('~~~ Empty string after patent number %d/%d\n', ...
+                     i, nr_patents)
+                 wku_line = search_corpus(ix_find(i)+2, :); % jump over empty line
+                 wku_line = wku_line{1};
+                 patent_number{i} = wku_line(6:14);
+                 
+                 if numel(wku_line) < 2 % check if problem still there
+                     warning('Something is fishy.')
+                 end
+                 
+             else % default standard case, no line between PATN and WKU
+                 patent_number{i} = wku_line(6:14);
+             end
         end
-
-
+ 
+        
         % Test if there are any spaces in WKU numbers
         test_contains_space = strfind(patent_number, ' ');
         show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
@@ -138,7 +178,7 @@ for ix_year = 1978:1989
 
         % Test if all WKU numbers are 9 digits long
         test_is9long = cellfun(@length, patent_number);
-        test_vector_nines = repmat(9, nr_patents, 1);
+        test_vector_nines = repmat(9, nr_patents, 1); % don't do this every time
         if min(test_is9long == test_vector_nines) < 1
             warning('Not all patent WKU numbers are 9 characters long')
         end
@@ -210,7 +250,7 @@ for ix_year = 1978:1989
             patent_keyword_appear(1,:) = [];
         end 
 
-        fprintf('Week finished: %d/%d\n', ix_week, week_end)
+        fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
 
     

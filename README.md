@@ -18,5 +18,6 @@ Current plan:
 Current known issues:
 ---------------------------
 1. Year 1982, week 52, the word “PATNO” shows up in the text. I managed to circumvent this problem by using “strcomp” which compares strings for exact equality.
-2. Year 1999, week 14, “PATN” shows up (when it’s not supposed to) on line number 2281359 in a table. This puts the WKU to “mum or ma”. My test found the white-space in that. 
-3. Year 2001, week 52, "PATNOS" shows up on line 1300139. Year 2001 at the moment gets a special treatment that truncates all lines to the first 4 characters. This means PATNOS is shortened to PATN and looks like a new patent. The WKU that is given to that then spells "C. Piguet" which raises a white-space warning.
+2. Year 1984, week 50, at line 377322, hit PATN 866/1516 the format changes. There is an empty line between PATN and WKU.
+3. Year 1999, week 14, “PATN” shows up (when it’s not supposed to) on line number 2281359 in a table. This puts the WKU to “mum or ma”. My test found the white-space in that. 
+4. Year 2001, week 52, "PATNOS" shows up on line 1300139. Year 2001 at the moment gets a special treatment that truncates all lines to the first 4 characters. This means PATNOS is shortened to PATN and looks like a new patent. The WKU that is given to that then spells "C. Piguet" which raises a white-space warning.
