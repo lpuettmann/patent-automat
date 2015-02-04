@@ -12,11 +12,11 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1999:1999
+for ix_year = 2001:2001
     tic
     
     year = ix_year;
-    week_start = 1;
+    week_start = 8;
 
     % 53 weeks: 1980, 1985, 1991, 1996
     if year == 1980 | year == 1985 | year == 1991 | year == 1996
@@ -160,6 +160,12 @@ for ix_year = 1999:1999
         
         % 'PATN' shows up in a table header, delete this entry
         if year == 1999 && ix_week == 14
+            fprintf('Delete patent number %d.\n', ...
+                show_ix_contains_space)
+            patent_number(show_ix_contains_space) = [];
+            ix_find(show_ix_contains_space) = [];
+            nr_patents = nr_patents - 1;
+        elseif year == 2001 && ix_week == 10
             fprintf('Delete patent number %d.\n', ...
                 show_ix_contains_space)
             patent_number(show_ix_contains_space) = [];
