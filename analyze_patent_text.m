@@ -14,16 +14,17 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1984:1989
+for ix_year = 1988:1989
     tic
     
     year = ix_year;
     week_start = 1;
-    week_end = 52; % this can be the same as week_start
 
     % 53 weeks: 1980, 1985, 1991, 1996
     if year == 1980 | year == 1985 | year == 1991 | year == 1996
         week_end = 53;
+    else
+        week_end = 52; 
     end
 
 
