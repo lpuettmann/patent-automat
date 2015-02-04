@@ -71,7 +71,7 @@ allyear_total_matches_week = allyear_total_matches_week(2:end);
 
 %% Save
 % ========================================================================
-save_name = horzcat('allyear_total_matches_week_', num2str(year_start), '-',  num2str(year_end), '.mat');
+save_name = horzcat('total_matches_week_', num2str(year_start), '-',  num2str(year_end), '.mat');
 save(save_name, 'allyear_total_matches_week')
 
 

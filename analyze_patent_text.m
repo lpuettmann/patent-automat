@@ -14,11 +14,11 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1988:1989
+for ix_year = 1997:1997
     tic
     
     year = ix_year;
-    week_start = 1;
+    week_start = 40;
 
     % 53 weeks: 1980, 1985, 1991, 1996
     if year == 1980 | year == 1985 | year == 1991 | year == 1996
@@ -124,7 +124,7 @@ for ix_year = 1988:1989
           % The problem was with the empty lines in week 50
           elseif year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
             search_corpus_trunc4 = search_corpus;
-            disp('Year 1984, special cases')
+            disp('*** Year 1984, special cases')
             for i=1:length(search_corpus_trunc4)
                 if numel(search_corpus_trunc4{i}) > 4
                     row_shorten = search_corpus_trunc4{i};
@@ -133,6 +133,11 @@ for ix_year = 1988:1989
             end
             [indic_find, nr_patents, ix_find] = count_nr_patents(...
                 search_corpus_trunc4, 'PATN');
+            
+        elseif year == 1997 && (ix_week >= 38) 
+            fprintf('*** Enter special case, year: %d, week: %d.', ...
+                year, ix_week)
+            trunc4_corpus
             
         else
             [indic_find, nr_patents, ix_find] = count_nr_patents(...

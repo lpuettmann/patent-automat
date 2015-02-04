@@ -9,7 +9,7 @@ year_end = 1996;
 
 
 %% Make time series plot of matches per week
-load('allyear_total_matches_week_1976-1996')
+load('total_matches_week_1976-1996')
 
 color1_pick = [0.7900, 0.3800, 0.500];
 

@@ -15,6 +15,13 @@ Current plan:
 	1. other indices for automatization
 	2. offshoring indices
 
+
+To run:
+---------------------------
+1. Main analysis file is analyze_patent_text.m. This searches the patent text files for a specified keyword.
+
+
+
 Current known issues:
 ---------------------------
 1. Year 1982, week 52, the word “PATNO” shows up in the text. I managed to circumvent this problem by using “strcomp” which compares strings for exact equality.
