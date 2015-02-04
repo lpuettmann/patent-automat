@@ -3,7 +3,7 @@ clear all
 close all
 
 
-tic
+
 
 
 %% Define keyword to look for
@@ -14,13 +14,15 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1980:1980
+for ix_year = 1982:1982
+    tic
+    
     year = ix_year;
-    week_start = 52;
-    week_end = 52; % this can be the same as week_start
+    week_start = 39;
+    week_end = 42; % this can be the same as week_start
 
     % 53 weeks: 1980, 1985, 1991, 1996
-    if year == 1980 | year == 1985 | ear == 1991 | year == 1996
+    if year == 1980 | year == 1985 | year == 1991 | year == 1996
         week_end = 53;
     end
 
@@ -133,9 +135,9 @@ for ix_year = 1980:1980
         % --------------------------------------------------------------------
         nr_keyword_appear = patent_number;
 
-        % Get empty cells next to the WKU patent numbers. This will be filled
-        % up with the number of matches for each patent
-        nr_keyword_appear{1,2} = []; 
+        % Get empty cells next to the WKU patent numbers. 
+        nr_keyword_appear{1,2} = []; % column for keyword matches
+        nr_keyword_appear{1,3} = []; % column for OCL classifications
 
         % Insert the current year for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
@@ -161,16 +163,24 @@ for ix_year = 1980:1980
             patent_text_corpus = search_corpus(start_text_corpus:...
                 end_text_corpus, :);
 
-            % Search
+            % Search for keyword
             % ----------------------------------------------------------------
             ix_keyword_find = regexpi(patent_text_corpus, find_str);
             ix_keyword_find = ix_keyword_find(~cellfun('isempty', ...
                 ix_keyword_find));
             nr_keyword_find = length(ix_keyword_find);
-
-            % Save
+            
+            % Look up OCL (tech classification)
+            % ----------------------------------------------------------------
+            ix_find_OCL = strfind(patent_text_corpus, 'OCL');
+            all_OCL_matches = find(~cellfun(@isempty,ix_find_OCL));
+            row_OCL_class = patent_text_corpus{all_OCL_matches(1)};
+            patent_OCL_class = row_OCL_class(5:numel(row_OCL_class));
+            
+            % Stack weekly information underneath
             % ----------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
+            nr_keyword_appear{ix_patent, 3} = patent_OCL_class;
         end
 
         % Save information for all weeks
