@@ -14,8 +14,8 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 year = 2001;
-week_start = 1; % default: 42
-week_end = 2; % this can be the same as week_start
+week_start = 52; % default: 42
+week_end = 52; % this can be the same as week_start
 % 53 weeks: 1980, 1985, 1991, 1996
 
 build_data_path = horzcat('.\data\', num2str(year));
@@ -72,16 +72,23 @@ for ix_week = week_start:week_end
 
     %% Count number of patents in a given week
     % --------------------------------------------------------------------
-    patentsearch_corpus = search_corpus;
-
-    for i=1:length(patentsearch_corpus)
-        if numel(patentsearch_corpus{i}) > 4
-            patentsearch_corpus{i} = shorten_to4(patentsearch_corpus{i});
+    
+    if year == 2001 % special case: problem with 80 numel text file
+        search_corpus_trunc4 = search_corpus;
+        disp('Year 2001, special case')
+        for i=1:length(search_corpus_trunc4)
+            if numel(search_corpus_trunc4{i}) > 4
+                row_shorten = search_corpus_trunc4{i};
+                search_corpus_trunc4{i} = row_shorten(1:4);
+            end
         end
+
+        [indic_find, nr_patents, ix_find] = count_nr_patents(...
+            search_corpus_trunc4, 'PATN');
+    else
+        [indic_find, nr_patents, ix_find] = count_nr_patents(...
+            search_corpus, 'PATN'); 
     end
-   
-    [indic_find, nr_patents, ix_find] = count_nr_patents(...
-        patentsearch_corpus, 'PATN');
 
     % Test: did not find patents
     if nr_patents < 100
@@ -101,7 +108,7 @@ for ix_week = week_start:week_end
     
     % Test if there are any spaces in WKU numbers
     test_contains_space = strfind(patent_number, ' ');
-    show_ix_contains_space = find(~cellfun(@isempty,test_contains_space));
+    show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
     if not(isempty(show_ix_contains_space))
         warning('There is a space in the patent WKU numbers')
     end
