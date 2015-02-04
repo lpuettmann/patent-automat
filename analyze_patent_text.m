@@ -6,57 +6,32 @@ close all
 tic
 
 
+%% Define keyword to look for
+% ========================================================================
+find_str = 'automat'; 
+
+
 %% Choose time period to analyze
 % ========================================================================
-% year = 1982;
-year = 1983;
-% year = 1993;
-% year = 2000;
-% year = 2001;
+year = 1976;
 week_start = 1; % default: 42
 week_end = 52; % this can be the same as week_start
 
+build_data_path = horzcat('.\data\', num2str(year));
 
 addpath('functions');
 addpath('data');
-addpath('data\1982');
-addpath('data\1983');
-addpath('data\1984');
-addpath('data\1985');
-addpath('data\1986');
-addpath('data\1987');
-addpath('data\1988');
-addpath('data\1989');
-addpath('data\1990');
-addpath('data\1991');
-addpath('data\1992');
-addpath('data\1993');
-addpath('data\1994');
-addpath('data\1995');
-addpath('data\1996');
-addpath('data\1997');
-addpath('data\1998');
-addpath('data\1999');
-addpath('data\2000');
-addpath('data\2001');
-
-
-%% Define keyword to look for
-% ========================================================================
-% use a dot as a place holder (probably not necessary at the moment)
-find_str = 'automat'; 
+addpath(build_data_path);
 
 
 %% Get names of files
 % ========================================================================
-liststruct = dir(horzcat('.\data\', ...
-    num2str(year)));
+liststruct = dir(build_data_path);
 filenames = {liststruct.name};
 filenames = filenames(3:end)'; % truncate first elements . and ..
 
 
-
-%% ITERATE THROUGH WEEKS
+%% ITERATE THROUGH FILES WITH WEEK PATENT DATA
 % ========================================================================
 disp('~~~ enter loop: ~~~')
 
@@ -218,6 +193,9 @@ else
 end
 
 
+mean_keyword_per_patent = mean(nr_keyword_per_patent);
+median_keyword_per_patent = median(nr_keyword_per_patent);
+
 sorted_summ_list = sort(nr_keyword_per_patent);
 nr_patents_1match = sum(nr_keyword_per_patent == 1);
 nr_patents_2match = sum(nr_keyword_per_patent == 2);
@@ -257,9 +235,13 @@ box off
 % Add text arrows to the plot
 arrowannotation = sprintf(['Total patents: %d\n' ...
     'Total number of keyword matches: %d\n' ...
-    'Distinct patents with at least one match: %d'], ...
-    size(patent_keyword_appear,1), total_keywords_found, nr_distinct_patents_hits);
-annotation('textbox', [0.5 0.6 0.44 0.15], 'String', arrowannotation, ...
+    'Distinct patents with at least one match: %d\n', ...
+    'Mean matches per patent: %s\n' ...
+    'Median matches per patent: %d'], ...
+    size(patent_keyword_appear,1), total_keywords_found, ...
+    nr_distinct_patents_hits, num2str(round2(mean_keyword_per_patent,0.01)), ...
+    median_keyword_per_patent);
+annotation('textbox', [0.5 0.6 0.44 0.21], 'String', arrowannotation, ...
     'FontSize', 12, 'HorizontalAlignment', 'left', ...
     'EdgeColor', 'black'); % [x y w h]
 
