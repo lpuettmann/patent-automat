@@ -4,8 +4,6 @@ close all
 
 
 
-
-
 %% Define keyword to look for
 % ========================================================================
 find_str = 'automat'; 
@@ -14,11 +12,11 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 1997:1997
+for ix_year = 1999:1999
     tic
     
     year = ix_year;
-    week_start = 40;
+    week_start = 1;
 
     % 53 weeks: 1980, 1985, 1991, 1996
     if year == 1980 | year == 1985 | year == 1991 | year == 1996
@@ -84,59 +82,37 @@ for ix_year = 1997:1997
         % --------------------------------------------------------------------
 
         if year == 2001 % special case: problem with 80 numel text file
-            search_corpus_trunc4 = search_corpus;
-            disp('*** Year 2001, special case')
-            for i=1:length(search_corpus_trunc4)
-                if numel(search_corpus_trunc4{i}) > 4
-                    row_shorten = search_corpus_trunc4{i};
-                    search_corpus_trunc4{i} = row_shorten(1:4);
-                end
-            end
-            [indic_find, nr_patents, ix_find] = count_nr_patents(...
-                search_corpus_trunc4, 'PATN');
+            fprintf('*** Enter special case, year: %d, week: %d.\n', ...
+                  year, ix_week)
+            trunc4_corpus
         
         % Something is wrong in year 1978
         elseif year == 1978 && (ix_week == 25 | ix_week == 26)  
-            search_corpus_trunc4 = search_corpus;
-            disp('*** Year 1978, week 25 and 26, special cases')
-            for i=1:length(search_corpus_trunc4)
-                if numel(search_corpus_trunc4{i}) > 4
-                    row_shorten = search_corpus_trunc4{i};
-                    search_corpus_trunc4{i} = row_shorten(1:4);
-                end
-            end
-            [indic_find, nr_patents, ix_find] = count_nr_patents(...
-                search_corpus_trunc4, 'PATN');
+            fprintf('*** Enter special case, year: %d, week: %d.\n', ...
+                  year, ix_week)
+            trunc4_corpus
             
           elseif year == 1979 && (ix_week == 11 | ix_week == 12)
-            search_corpus_trunc4 = search_corpus;
-            disp('*** Year 1979, special cases')
-            for i=1:length(search_corpus_trunc4)
-                if numel(search_corpus_trunc4{i}) > 4
-                    row_shorten = search_corpus_trunc4{i};
-                    search_corpus_trunc4{i} = row_shorten(1:4);
-                end
-            end
-            [indic_find, nr_patents, ix_find] = count_nr_patents(...
-                search_corpus_trunc4, 'PATN');
-          
+            fprintf('*** Enter special case, year: %d, week: %d.\n', ...
+                  year, ix_week)
+            trunc4_corpus
+            
           % I can probably delete the following special case: 
           % The problem was with the empty lines in week 50
-          elseif year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
-            search_corpus_trunc4 = search_corpus;
-            disp('*** Year 1984, special cases')
-            for i=1:length(search_corpus_trunc4)
-                if numel(search_corpus_trunc4{i}) > 4
-                    row_shorten = search_corpus_trunc4{i};
-                    search_corpus_trunc4{i} = row_shorten(1:4);
-                end
-            end
-            [indic_find, nr_patents, ix_find] = count_nr_patents(...
-                search_corpus_trunc4, 'PATN');
+          
+         elseif year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
+             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
+                 year, ix_week)
+            trunc4_corpus
             
         elseif year == 1997 && (ix_week >= 38) 
-            fprintf('*** Enter special case, year: %d, week: %d.', ...
-                year, ix_week)
+            fprintf('*** Enter special case, year: %d, week: %d.\n', ...
+                  year, ix_week)
+            trunc4_corpus
+            
+        elseif year == 1998
+            fprintf('*** Enter special case, year: %d, week: %d.\n', ...
+                  year, ix_week)
             trunc4_corpus
             
         else
@@ -181,6 +157,16 @@ for ix_year = 1997:1997
             warning('There is a space in the patent WKU numbers')
         end
 
+        
+        % 'PATN' shows up in a table header, delete this entry
+        if year == 1999 && ix_week == 14
+            fprintf('Delete patent number %d.\n', ...
+                show_ix_contains_space)
+            patent_number(show_ix_contains_space) = [];
+            ix_find(show_ix_contains_space) = [];
+            nr_patents = nr_patents - 1;
+        end
+        
 
         % Test if all WKU numbers are 9 digits long
         test_is9long = cellfun(@length, patent_number);
@@ -273,94 +259,6 @@ for ix_year = 1997:1997
 
 end
 
-
-
-
-% %% Display findings
-% % ========================================================================
-% nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
-% 
-% % Calculate summary statistics
-% total_keywords_found = sum(nr_keyword_per_patent);
-% 
-% if length(find_str) < 20 % only display if not too long
-%     fprintf('Number appearances of keystring >>%s<<: %d.\n', find_str, ...
-%         total_keywords_found)
-%     disp('---------------------------------------------------------------')
-% else
-%     fprintf('Number appearances of keystring: %d.\n', total_keywords_found)
-%     disp('---------------------------------------------------------------')
-% end
-% 
-% 
-% mean_keyword_per_patent = mean(nr_keyword_per_patent);
-% median_keyword_per_patent = median(nr_keyword_per_patent);
-% 
-% sorted_summ_list = sort(nr_keyword_per_patent);
-% nr_patents_1match = sum(nr_keyword_per_patent == 1);
-% nr_patents_2match = sum(nr_keyword_per_patent == 2);
-% nr_patents_3match = sum(nr_keyword_per_patent == 3);
-% nr_patents_4match = sum(nr_keyword_per_patent == 4);
-% nr_patents_5match = sum(nr_keyword_per_patent == 5);
-% nr_patents_37match = sum(nr_keyword_per_patent == 37);
-% nr_patents_82match = sum(nr_keyword_per_patent == 82);
-% nr_patents_180match = sum(nr_keyword_per_patent == 180);
-% 
-% nonzero_count = nr_keyword_per_patent;
-% nonzero_count(nr_keyword_per_patent==0) = [];
-% 
-% nr_distinct_patents_hits = length(nonzero_count);
-% 
-% 
-% % Make histogram
-% % -------------------------------------------------------------------
-% color1_pick = [0.7900, 0.3800, 0.500];
-% 
-% 
-% figureHandle = figure;
-% hist(nonzero_count, max(nr_keyword_per_patent))
-% set(gca,'FontSize',12) % change default font size of axis labels
-% title_phrase = sprintf(['Number of appearances of keyword "automat" ', ...
-%     'in US patents, %d'], year);
-% title(title_phrase, 'FontSize', 14)
-% xlabel('Number of patents')
-% ylabel_phrase = sprintf(['Number of keyword appearances \n'...
-%     '(zero matches ommited)']);
-% ylabel(ylabel_phrase)
-% set(get(gca,'child'), 'FaceColor', 'none', 'EdgeColor', color1_pick);
-% set(gcf, 'Color', 'w');
-% box off
-% 
-% 
-% % Add text arrows to the plot
-% arrowannotation = sprintf(['Total patents: %d\n' ...
-%     'Total number of keyword matches: %d\n' ...
-%     'Distinct patents with at least one match: %d\n', ...
-%     'Mean matches per patent: %s\n' ...
-%     'Median matches per patent: %d'], ...
-%     size(patent_keyword_appear,1), total_keywords_found, ...
-%     nr_distinct_patents_hits, num2str(round2(mean_keyword_per_patent,0.01)), ...
-%     median_keyword_per_patent);
-% annotation('textbox', [0.5 0.6 0.44 0.21], 'String', arrowannotation, ...
-%     'FontSize', 12, 'HorizontalAlignment', 'left', ...
-%     'EdgeColor', 'black'); % [x y w h]
-% 
-% 
-% % Reposition the figure
-% % -----------------------------------------------------------------------
-% set(gcf, 'Position', [200 350 800 500]) % in vector: left bottom width height
-% 
-% set(figureHandle, 'Units', 'Inches');
-% pos = get(figureHandle, 'Position');
-% 
-% set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-%     'Inches', 'PaperSize', [pos(3), pos(4)])
-% 
-% 
-% % Export to pdf
-% % -----------------------------------------------------------------------
-% print_pdf_name = horzcat('nr_keyword_patent_', num2str(year), '.pdf');
-% print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
 
 %% End
