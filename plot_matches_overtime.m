@@ -5,13 +5,18 @@ clc
 
 %% Define parameters
 year_start = 1976;
-year_end = 1996;
+year_end = 1998;
 
+
+%% Load summary data
+load('total_matches_week_1976-1998')
+
+
+ix_new_year
 
 %% Make time series plot of matches per week
-load('total_matches_week_1976-1996')
-
 color1_pick = [0.7900, 0.3800, 0.500];
+my_gray = [0.6706, 0.6706, 0.6706];
 
 figureHandle = figure;
 plot(allyear_total_matches_week, 'Color', color1_pick, 'LineWidth', 0.8, ...
@@ -23,6 +28,14 @@ title(title_phrase, 'FontSize', 14, 'FontWeight', 'bold')
 ylabel('Total number of matches per week')
 box off
 set(gcf, 'Color', 'w');
+
+
+% Set the x-axis tick labels
+set(gca, 'XTick', ix_new_year)
+
+
+% Make grey grid lines
+gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1)
 
 
 

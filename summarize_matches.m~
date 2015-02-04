@@ -13,7 +13,7 @@ addpath('functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 1998;
+year_end = 1987;
 week_start = 1;
 
 
@@ -77,17 +77,17 @@ end
 allyear_total_matches_week = allyear_total_matches_week(2:end);
 
 % Re-formate the index showing where new year data starts
-ix_new_year = ix_new_year(1:end-1);
+ix_new_year = ix_new_year(1:end-1)
 
 if length(ix_new_year) ~= length(year_start:year_end)
-    warning('Should be the same.')
+    warning('Number of patents not equal to number of week identifiers')
 end
 
 
 %% Save
 % ========================================================================
 save_name = horzcat('total_matches_week_', num2str(year_start), '-',  num2str(year_end), '.mat');
-save(save_name, 'allyear_total_matches_week', 'ix_new_year')
+save(save_name, 'allyear_total_matches_week')
 
 
 %% End
