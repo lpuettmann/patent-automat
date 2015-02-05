@@ -30,6 +30,7 @@ median_patents_yr = zeros(length(year_start:year_end), 1);
 max_patents_yr = zeros(length(year_start:year_end), 1);
 nr_distinct_patents_hits = zeros(length(year_start:year_end), 1);
 mean_nonzero_count = zeros(length(year_start:year_end), 1);
+outlier_cutoff = zeros(length(year_start:year_end), 1);
 
 aux_ix_save = 1; % where to save data in vector
 
@@ -55,6 +56,9 @@ for ix_year=year_start:year_end
     % Add all weekly total matches together
     % -------------------------------------------------------------
     nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
+    
+    outlier_cutoff(aux_ix_save) = prctile(nr_keyword_per_patent, 99)
+    
     patent_week = cell2mat(patent_keyword_appear(:, 5));
     
     

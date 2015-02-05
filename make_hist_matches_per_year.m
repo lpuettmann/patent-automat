@@ -12,7 +12,7 @@ addpath('functions');
 find_str = 'automat'; 
 
 
-for year=1976:1996
+for year=1976:2001
 
     
     %% Load matches

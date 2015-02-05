@@ -5,41 +5,42 @@ clc
 
 %% Define parameters
 year_start = 1976;
-year_end = 1998;
+year_end = 2001;
 
 
 %% Load summary data
-load('total_matches_week_1976-1998')
+load('total_matches_week_1976-2001')
 
 
-ix_new_year
 
 %% Make time series plot of matches per week
 color1_pick = [0.7900, 0.3800, 0.500];
-my_gray = [0.6706, 0.6706, 0.6706];
+my_gray = [0.806, 0.806, 0.806];
 
 figureHandle = figure;
 plot(allyear_total_matches_week, 'Color', color1_pick, 'LineWidth', 0.8, ...
-    'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
+    'Marker', 'o', 'MarkerSize', 2, 'MarkerFaceColor', color1_pick)
 set(gca,'FontSize',12) % change default font size of axis labels
 title_phrase = sprintf(['Number of weekly occurences of keyword "automat" ', ...
     'in US patents, %d-%d'], year_start, year_end);
 title(title_phrase, 'FontSize', 14, 'FontWeight', 'bold')
-ylabel('Total number of matches per week')
+set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
+xlim([1 length(allyear_total_matches_week)])
 
 
 % Set the x-axis tick labels
 set(gca, 'XTick', ix_new_year)
 
+set(gca, 'xticklabel',{})
 
 % Make grey grid lines
 gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1)
 
 
 
-% Version 2: HP filter
+% % Version 2: HP filter
 % figureHandle = figure;
 % plot(allyear_total_matches_week, 'Color', 'white', 'LineWidth', 0.8, ...
 %     'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
