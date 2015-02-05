@@ -12,11 +12,11 @@ find_str = 'automat';
 %% Choose time period to analyze
 % ========================================================================
 
-for ix_year = 2001:2001
+for ix_year = 1976:1979
     tic
     
     year = ix_year;
-    week_start = 8;
+    week_start = 1;
 
     % 53 weeks: 1980, 1985, 1991, 1996
     if year == 1980 | year == 1985 | year == 1991 | year == 1996
@@ -155,8 +155,8 @@ for ix_year = 2001:2001
         show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
         if not(isempty(show_ix_contains_space))
             warning('There is a space in the patent WKU numbers')
+            disp(patent_number(show_ix_contains_space))
         end
-
         
         % 'PATN' shows up in a table header, delete this entry
         if year == 1999 && ix_week == 14
@@ -165,7 +165,7 @@ for ix_year = 2001:2001
             patent_number(show_ix_contains_space) = [];
             ix_find(show_ix_contains_space) = [];
             nr_patents = nr_patents - 1;
-        elseif year == 2001 && ix_week == 10
+        elseif year == 2001 && (ix_week == 10 | ix_week == 26 | ix_week == 40 | ix_week==52) 
             fprintf('Delete patent number %d.\n', ...
                 show_ix_contains_space)
             patent_number(show_ix_contains_space) = [];
