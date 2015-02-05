@@ -93,6 +93,19 @@ set(gcf, 'Color', 'w');
 set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
 
+%% Plot: mean of matches truncated above 99th percentile
+pick_plot_series = patent_match_summary.trunc_mean;
+
+figureHandle = figure;
+plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 1.4, ...
+    'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
+set(gca,'FontSize',12) % change default font size of axis labels
+title_phrase = sprintf(['Mean matches per patent below 99th percentile', ...
+    ', %d-%d'], year_start, year_end);
+title(title_phrase, 'FontSize', 14, 'FontWeight', 'bold')
+box off
+set(gcf, 'Color', 'w');
+set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
 
 

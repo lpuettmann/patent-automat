@@ -13,7 +13,7 @@ addpath('functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 2001;
+year_end = 1979;
 week_start = 1;
 
 
@@ -57,7 +57,13 @@ for ix_year=year_start:year_end
     % -------------------------------------------------------------
     nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
     
-    outlier_cutoff(aux_ix_save) = prctile(nr_keyword_per_patent, 99)
+    % Check for outlier above 99th percentile and report separate mean
+    patent_match_summary.perc_99(aux_ix_save) = prctile(nr_keyword_per_patent, 99);
+    trunc_nr_keyword = nr_keyword_per_patent;
+    trunc_nr_keyword = trunc_nr_keyword(trunc_nr_keyword < ...
+        patent_match_summary.perc_99(aux_ix_save));
+    patent_match_summary.trunc_mean(aux_ix_save) = mean(trunc_nr_keyword);
+   
     
     patent_week = cell2mat(patent_keyword_appear(:, 5));
     
