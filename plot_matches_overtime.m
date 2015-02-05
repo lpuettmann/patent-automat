@@ -17,7 +17,7 @@ load('total_matches_week_1976-2001')
 color1_pick = [0.7900, 0.3800, 0.500];
 my_gray = [0.806, 0.806, 0.806];
 
-figureHandle = figure;
+% figureHandle = figure;
 plot(allyear_total_matches_week, 'Color', color1_pick, 'LineWidth', 0.8, ...
     'Marker', 'o', 'MarkerSize', 2, 'MarkerFaceColor', color1_pick)
 set(gca,'FontSize',12) % change default font size of axis labels
@@ -28,37 +28,34 @@ set(gca,'TickDir','out')
 box off
 set(gcf, 'Color', 'w');
 xlim([1 length(allyear_total_matches_week)])
-
-
-% Set the x-axis tick labels
-set(gca, 'XTick', ix_new_year)
-
-set(gca, 'xticklabel',{})
-
-% Make grey grid lines
-gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1)
+set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+set(gca, 'xticklabel',{}) % turn x-axis labels off
+gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
 
 
 
-% % Version 2: HP filter
+% Version 2: HP filter
 % figureHandle = figure;
-% plot(allyear_total_matches_week, 'Color', 'white', 'LineWidth', 0.8, ...
-%     'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
+% % plot(allyear_total_matches_week, 'Color', 'white', 'LineWidth', 0.8, ...
+% %     'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
 % set(gca,'FontSize',12) % change default font size of axis labels
-% title_phrase = sprintf(['Number of weekly occurences of keyword "automat" ', ...
+% title_phrase = sprintf(['HP filtered trend of keyword "automat" ', ...
 %     'in US patents, %d-%d'], year_start, year_end);
 % title(title_phrase, 'FontSize', 14, 'FontWeight', 'bold')
-% ylabel('Total number of matches per week')
+% set(gca,'TickDir','out') 
 % box off
 % set(gcf, 'Color', 'w');
-% 
 % hold on
 % [total_matches_trend, ~] = hpfilter(allyear_total_matches_week, 5000);
 % plot(total_matches_trend, 'Color', color1_pick, 'LineWidth', 1.5)
-
-
-
-
+% % Set the x-axis tick labels
+% xlim([1 length(allyear_total_matches_week)])
+% set(gca, 'XTick', ix_new_year)
+% set(gca, 'xticklabel',{})
+% % Make grey grid lines
+% gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1)
+% 
+% 
 % Reposition the figure
 % -----------------------------------------------------------------------
 set(gcf, 'Position', [100 200 1300 700]) % in vector: left bottom width height
