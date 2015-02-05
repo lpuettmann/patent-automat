@@ -1,5 +1,5 @@
 close all
-clear all
+%clear all
 clc
 
 
@@ -26,11 +26,12 @@ color1_pick = [0.7900, 0.3800, 0.500];
 my_gray = [0.806, 0.806, 0.806];
 
 figureHandle = figure;
-subplot(2,1,1)
+subplot(3,1,1)
+
 plot(allyear_total_matches_week, 'Color', color1_pick, 'LineWidth', 0.8, ...
     'Marker', 'o', 'MarkerSize', 1.5, 'MarkerFaceColor', color1_pick)
 set(gca,'FontSize',11) % change default font size of axis labels
-title_phrase = sprintf(['Number of weekly occurences ', ...
+title_phrase = sprintf(['A. Number of weekly occurences ', ...
     'in US patents']);
 
 title(title_phrase, 'FontSize', 11, ...
@@ -48,14 +49,12 @@ gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % m
 set(gca, 'xticklabel', my_xaxis_labels); 
 
 
-
-
 % Version 2: HP filter
-subplot(2,1,2)
+subplot(3,1,2)
 % plot(allyear_total_matches_week, 'Color', 'white', 'LineWidth', 0.8, ...
 %     'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
 set(gca,'FontSize',11) % change default font size of axis labels
-title_phrase = sprintf(['HP filtered trend', ...
+title_phrase = sprintf(['B. HP filtered trend', ...
     'in US patents, lambda = 5000']);
 title(title_phrase, 'FontSize', 11, ...
     'Units', 'normalized', ...
@@ -74,8 +73,32 @@ set(gca, 'XTick', ix_new_year)
 set(gca, 'xticklabel',{})
 % Make grey grid lines
 gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1)
-
 set(gca, 'xticklabel', my_xaxis_labels); 
+
+
+
+% Version 3: Index based on number of matches, weighted down by log
+subplot(3,1,3)
+plot(allyear_total_automix, 'Color', color1_pick, 'LineWidth', 0.8, ...
+    'Marker', 'o', 'MarkerSize', 1.5, 'MarkerFaceColor', color1_pick)
+set(gca,'FontSize',11) % change default font size of axis labels
+title_phrase = sprintf(['C. Weekly automation index ']);
+title(title_phrase, 'FontSize', 11, ...
+    'Units', 'normalized', ...
+    'Position', [0.34 1.1], ...
+    'HorizontalAlignment', 'right')
+set(gca,'TickDir','out')  
+box off
+set(gcf, 'Color', 'w');
+xlim([1 length(allyear_total_matches_week)])
+set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+% set(gca, 'xticklabel',{}) % turn x-axis labels off
+gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
+set(gca, 'xticklabel', my_xaxis_labels); 
+
+
+
+
 
 % Reposition the figure
 % -----------------------------------------------------------------------

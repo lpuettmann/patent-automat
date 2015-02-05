@@ -13,7 +13,7 @@ addpath('functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 1979;
+year_end = 2001;
 week_start = 1;
 
 
@@ -22,6 +22,8 @@ week_start = 1;
 
 % Pre-define some vectors to initialize them for the loops
 allyear_total_matches_week = 0; % delete this afterwards
+allyear_total_automix = 0; % delete this afterwards
+
 ix_new_year = ones(length(year_start:year_end) + 1, 1); % where new year data starts
 
 nr_patents_yr = zeros(length(year_start:year_end), 1);
@@ -84,10 +86,18 @@ for ix_year=year_start:year_end
 
 
     total_matches_week = zeros(week_end, 1);
+    total_automix = zeros(week_end, 1);
+    
+    % Make an index of a patent
+    automix = log(1 + nr_keyword_per_patent);
+    
     
     for ix_week=week_start:week_end
         keywords_week = nr_keyword_per_patent(patent_week==ix_week);
         total_matches_week(ix_week) = sum(keywords_week);
+        
+        automix_week = automix(patent_week==ix_week);
+        total_automix(ix_week) = sum(automix_week);
     end
     
     if size(total_matches_week, 1) < size(total_matches_week, 2)
@@ -97,17 +107,21 @@ for ix_year=year_start:year_end
     allyear_total_matches_week = [allyear_total_matches_week;
                                   total_matches_week];
     
+    allyear_total_automix = [allyear_total_automix;
+                            total_automix];
     
     % Subtract one from saving index because of the sero in the beginning
     % that we need for the initialization.
     ix_new_year(aux_ix_save + 1) = size(allyear_total_matches_week, 1);
     aux_ix_save = aux_ix_save + 1;
     
+    
     fprintf('Year %d completed.\n', year)
 end
 
 % Cut of the first zero used for pre-defining
 allyear_total_matches_week = allyear_total_matches_week(2:end);
+allyear_total_automix = allyear_total_automix(2:end);
 
 % Re-formate the index showing where new year data starts
 ix_new_year = ix_new_year(1:end-1);
@@ -125,7 +139,7 @@ save_name = horzcat('patent_match_summary_', num2str(year_start), '-',  num2str(
 save(save_name, 'patent_match_summary')
 
 save_name = horzcat('total_matches_week_', num2str(year_start), '-',  num2str(year_end), '.mat');
-save(save_name, 'allyear_total_matches_week', 'ix_new_year')
+save(save_name, 'allyear_total_matches_week', 'ix_new_year', 'allyear_total_automix')
 
 
 %% End
