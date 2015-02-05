@@ -13,15 +13,25 @@ addpath('functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 1998;
+year_end = 1977;
 week_start = 1;
 
 
 %% Loop through data for all years
 % ========================================================================
-allyear_total_matches_week = 0; % pre-define vector
-ix_new_year = ones(length(year_start:year_end) + 1, 1);
-aux_ix_save = 2; % initialize index to save where new year data starts
+
+% Pre-define some vectors to initialize them for the loops
+allyear_total_matches_week = 0; % delete this afterwards
+ix_new_year = ones(length(year_start:year_end) + 1, 1); % where new year data starts
+
+nr_patents_yr = zeros(length(year_start:year_end), 1);
+mean_patents_yr = zeros(length(year_start:year_end), 1);
+median_patents_yr = zeros(length(year_start:year_end), 1);
+max_patents_yr = zeros(length(year_start:year_end), 1);
+nr_distinct_patents_hits = zeros(length(year_start:year_end), 1);
+mean_nonzero_count = zeros(length(year_start:year_end), 1);
+
+aux_ix_save = 1; % where to save data in vector
 
 
 for ix_year=year_start:year_end
@@ -39,19 +49,32 @@ for ix_year=year_start:year_end
     load_file_name = horzcat('patent_keyword_appear_', num2str(year));
     load(load_file_name)
 
-
+    patent_match_summary.nr_patents_yr(aux_ix_save) = size(patent_keyword_appear, 1);
+   
+    
     % Add all weekly total matches together
     % -------------------------------------------------------------
     nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
     patent_week = cell2mat(patent_keyword_appear(:, 5));
+    
+    
+    patent_match_summary.mean_patents_yr(aux_ix_save) = mean(nr_keyword_per_patent);
+    patent_match_summary.median_patents_yr(aux_ix_save) = median(nr_keyword_per_patent);
+    patent_match_summary.max_patents_yr(aux_ix_save) = max(nr_keyword_per_patent);
+    
+    nonzero_count = nr_keyword_per_patent;
+    nonzero_count(nr_keyword_per_patent==0) = [];
+    patent_match_summary.mean_nonzero_count(aux_ix_save) = mean(nonzero_count);
+    patent_match_summary.nr_distinct_patents_hits(aux_ix_save) = length(nonzero_count);
 
+    
     if size(patent_week, 1) ~= size(nr_keyword_per_patent, 1)
         warning('Number of patents not equal to number of week identifiers')
     end
 
 
     total_matches_week = zeros(week_end, 1);
-
+    
     for ix_week=week_start:week_end
         keywords_week = nr_keyword_per_patent(patent_week==ix_week);
         total_matches_week(ix_week) = sum(keywords_week);
@@ -67,7 +90,7 @@ for ix_year=year_start:year_end
     
     % Subtract one from saving index because of the sero in the beginning
     % that we need for the initialization.
-    ix_new_year(aux_ix_save) = size(allyear_total_matches_week, 1);
+    ix_new_year(aux_ix_save + 1) = size(allyear_total_matches_week, 1);
     aux_ix_save = aux_ix_save + 1;
     
     fprintf('Year %d completed.\n', year)
@@ -84,8 +107,13 @@ if length(ix_new_year) ~= length(year_start:year_end)
 end
 
 
+
+
 %% Save
 % ========================================================================
+save_name = horzcat('patent_match_summary_', num2str(year_start), '-',  num2str(year_end), '.mat');
+save(save_name, 'patent_match_summary')
+
 save_name = horzcat('total_matches_week_', num2str(year_start), '-',  num2str(year_end), '.mat');
 save(save_name, 'allyear_total_matches_week', 'ix_new_year')
 
