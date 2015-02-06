@@ -42,8 +42,8 @@ official_nr_patents = [...
         2001      183970];
 
 
-error_nr_patents = (official_nr_patents(:,2) - ...
-    patent_match_summary.nr_patents_yr');
+error_nr_patents = (patent_match_summary.nr_patents_yr' - ...
+    official_nr_patents(:,2));
 
 
 
@@ -60,10 +60,6 @@ color3_pick = [0.890,0.412,0.525];
 
 my_gray = [0.6706, 0.6706, 0.6706];
 
-% Give both subplots on mean matches the same scale
-% mean_y_axis_limit = [0.5, 1.5];
-
-
 figureHandle = figure;
 
 
@@ -72,22 +68,35 @@ pick_plot_series = error_nr_patents;
 plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 1.4, ...
     'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
 set(gca,'FontSize',12) % change default font size of axis labels
-title('A. Number of identified US patents per year', 'FontSize', 14)
+%title('Error in number of identified patents', 'FontSize', 14)
 box off
 xlim([year_start year_end]);
 set(gca,'TickDir','out'); 
-% set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
-
 get(gca, 'YTickLabel')
 new_yticks = {'0'; '100,000'; '150,000'; '200,000'};
-% set(gca, 'yticklabel', new_yticks); 
 
-%gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
-
+% Make grey horizontal dashed line at zero y-axis
+% ----------------------------------------------------------------
+hline = refline([0 0]);
+set(hline,'LineStyle', ':', 'Color', 'k');
 
 
 
 % General settings
 set(gcf, 'Color', 'w');
+
+
+
+%% Change position and size
+set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+%% Export to pdf
+print_pdf_name = horzcat('error_nr_patents_', num2str(year_start), '-',  num2str(year_end),'.pdf');
+print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
 
