@@ -78,11 +78,18 @@ if length(cleaned_nr_keyword) ~= length(patent_number_cleaned)
 end
 
 
+%% Write to csv file
+csvwrite('cleaned_patentnr_4transfer.csv', patent_number_cleaned);
+csvwrite('cleaned_matches_4transfer.csv', cleaned_nr_keyword);
     
     
 
 %%
 toc
+
+
+
+
 
 
 
