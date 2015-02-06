@@ -35,16 +35,15 @@ set(gca,'FontSize',12) % change default font size of axis labels
 title('A. Number of identified US patents per year', 'FontSize', 14)
 box off
 xlim([year_start year_end]);
+ylim([0 200000]);
 set(gca,'TickDir','out'); 
 % set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
 get(gca, 'YTickLabel')
-new_yticks = {'0'; '100,000'; '150,000'; '200,000'};
+new_yticks = {'0'; '50,000'; '100,000'; '150,000'; '200,000'};
 set(gca, 'yticklabel', new_yticks); 
 
 %gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
-
-
 
 
 % Plot: distinct patent matches

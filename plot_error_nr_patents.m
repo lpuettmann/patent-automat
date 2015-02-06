@@ -72,7 +72,7 @@ set(gca,'FontSize',12) % change default font size of axis labels
 box off
 xlim([year_start year_end]);
 set(gca,'TickDir','out'); 
-get(gca, 'YTickLabel')
+get(gca, 'YTickLabel');
 new_yticks = {'0'; '100,000'; '150,000'; '200,000'};
 
 % Make grey horizontal dashed line at zero y-axis
