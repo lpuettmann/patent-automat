@@ -25,7 +25,7 @@ end
 matches_per_patent_weekly = allyear_total_matches_week ./ ...
     vector_nrpat_per_week;
 
-
+[plot_trend, ~] = hpfilter(matches_per_patent_weekly, 100000);
 
 
 %% Make time series plot of matches per week
@@ -37,10 +37,14 @@ my_gray = [0.806, 0.806, 0.806];
 
 
 figureHandle = figure;
-
+hold on
 scatter(1:length(matches_per_patent_weekly), matches_per_patent_weekly, ...
     'Marker', 'o', 'MarkerEdgeColor', color2_pick)
 
+h_trend = plot(1:length(matches_per_patent_weekly), plot_trend, ...
+    'Color', color2_pick, 'Linewidth', 3);
+
+uistack(h_trend, 'bottom');
 
 set(gca,'FontSize',11) % change default font size of axis labels
 title_phrase = sprintf(['A. Number of weekly occurences ', ...
@@ -54,12 +58,11 @@ title(title_phrase, 'FontSize', 11, ...
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-% xlim([1 length(allyear_total_matches_week)])
-% set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
-% set(gca, 'xticklabel',{}) % turn x-axis labels off
-% set(gca, 'xticklabel', my_xaxis_labels); 
-
-
+ylim([0 2.5]) % watch out: this omits entry 190 which is very high with 2.297
+xlim([1 length(allyear_total_matches_week)])
+set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+set(gca, 'xticklabel',{}) % turn x-axis labels off
+set(gca, 'xticklabel', my_xaxis_labels); 
 
 
 % Reposition the figure
@@ -78,3 +81,4 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 print_pdf_name = horzcat('match_over_nrpatents_weekly_', num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
+hold off

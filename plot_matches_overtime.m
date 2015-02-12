@@ -2,7 +2,6 @@ close all
 clear all
 clc
 
-
 addpath('functions');
 
 %% Define parameters
@@ -14,23 +13,16 @@ year_end = 2001;
 load('total_matches_week_1976-2001')
 
 
-
 %% Make time series plot of matches per week
 my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; ''; 2001;};
-
 
 color1_pick = [0.7900, 0.3800, 0.500];
 my_gray = [0.806, 0.806, 0.806];
 
 figureHandle = figure;
-hold('on')
-% fig.GraphicsSmoothing = 'off';
-% hx = plot(allyear_total_matches_week, 'Color', 'white', 'LineWidth', 0.8, ...
-%     'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick);
 
 scatter(1:length(allyear_total_matches_week), allyear_total_matches_week, ...
     'Marker', 'o', 'MarkerEdgeColor', color1_pick)
-
 
 set(gca,'FontSize',11) % change default font size of axis labels
 title_phrase = sprintf(['A. Number of weekly occurences ', ...
@@ -51,9 +43,6 @@ set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 
 
-
-
-
 % Reposition the figure
 % -----------------------------------------------------------------------
 set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
@@ -69,4 +58,3 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % -----------------------------------------------------------------------
 print_pdf_name = horzcat('keyword_matches_weekly_', num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
