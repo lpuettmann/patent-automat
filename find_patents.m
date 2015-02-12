@@ -13,7 +13,7 @@ addpath('functions');
 %% Set some inputs
 % ========================================================================
 year_start = 1976;
-year_end = 1978;
+year_end = 1977;
 
 
 
@@ -32,8 +32,7 @@ for ix_year = year_start:year_end
         week_end = 52; 
     end
     
-    week_end = 4;
-
+    
     build_data_path = horzcat('.\data\', num2str(year));
     addpath(build_data_path);
 
@@ -45,7 +44,7 @@ for ix_year = year_start:year_end
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
 
-    % ITERATE THROUGH FILES WITH WEEK PATENT DATA
+    % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
     fprintf('Enter loop for year %d:\n', year)
 
@@ -207,6 +206,15 @@ for ix_year = year_start:year_end
     fprintf('Year %d finished, time: %d seconds \n', year, round(toc))
     disp('---------------------------------------------------------------')
 end
+
+
+  
+
+%% Save
+% ========================================================================
+save_name = horzcat('patent_index_', num2str(year_start), '-', ...
+    num2str(year_end), '.mat');
+save(save_name, 'pat_ix')
 
 
 
