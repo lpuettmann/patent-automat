@@ -3,46 +3,50 @@ clear all
 close all
 
 
+%% Add path to functions
+addpath('functions');
+addpath('patent_index');
 
-%% Define keyword to look for
-% ========================================================================
+
+%% Load summary data
+load('patent_index_1976-1977')
+
+
+%% Set some inputs
+
+% Define keyword to look for
 find_str = 'automat'; 
 
+year_start = 1976;
+year_end = 1977;
 
-%% Choose time period to analyze
+
+
+%% Go
 % ========================================================================
-
-for ix_year = 1976:1979
+for ix_year = year_start:year_end
     tic
-    
-    year = ix_year;
+
     week_start = 1;
 
-    % 53 weeks: 1980, 1985, 1991, 1996
-    if year == 1980 | year == 1985 | year == 1991 | year == 1996
-        week_end = 53;
-    else
-        week_end = 52; 
-    end
-
-
-    build_data_path = horzcat('.\data\', num2str(year));
-
-    addpath('functions');
-    addpath('data');
+    % Determine if there are 52 or 53 weeks in year
+    week_end = set_weekend(ix_year); 
+    
+    % Build path to data
+    build_data_path = horzcat('.\data\', num2str(ix_year));
     addpath(build_data_path);
 
-
-    %% Get names of files
-    % ========================================================================
+    
+    % Get names of files
+    % -------------------------------------------------------------------
     liststruct = dir(build_data_path);
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
 
-    %% ITERATE THROUGH FILES WITH WEEK PATENT DATA
-    % ========================================================================
-    fprintf('* Enter loop for year %d\n', year)
+    % Iterate through files of weekly patent grant text data
+    % -------------------------------------------------------------------
+    fprintf('* Enter loop for year %d\n', ix_year)
 
     for ix_week = week_start:week_end
         choose_file_open = filenames{ix_week};
@@ -81,38 +85,38 @@ for ix_year = 1976:1979
         %% Count number of patents in a given week
         % --------------------------------------------------------------------
 
-        if year == 2001 % special case: problem with 80 numel text file
+        if ix_year == 2001 % special case: problem with 80 numel text file
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
-                  year, ix_week)
+                  ix_year, ix_week)
             trunc4_corpus
         
         % Something is wrong in year 1978
-        elseif year == 1978 && (ix_week == 25 | ix_week == 26)  
+        elseif ix_year == 1978 && (ix_week == 25 | ix_week == 26)  
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
-                  year, ix_week)
+                  ix_year, ix_week)
             trunc4_corpus
             
-          elseif year == 1979 && (ix_week == 11 | ix_week == 12)
+          elseif ix_year == 1979 && (ix_week == 11 | ix_week == 12)
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
-                  year, ix_week)
+                  ix_year, ix_week)
             trunc4_corpus
             
           % I can probably delete the following special case: 
           % The problem was with the empty lines in week 50
           
-         elseif year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
+         elseif ix_year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
              fprintf('*** Enter special case, year: %d, week: %d.\n', ...
-                 year, ix_week)
+                 ix_year, ix_week)
             trunc4_corpus
             
-        elseif year == 1997 && (ix_week >= 38) 
+        elseif ix_year == 1997 && (ix_week >= 38) 
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
-                  year, ix_week)
+                  ix_year, ix_week)
             trunc4_corpus
             
-        elseif year == 1998
+        elseif ix_year == 1998
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
-                  year, ix_week)
+                  ix_year, ix_week)
             trunc4_corpus
             
         else
@@ -159,13 +163,13 @@ for ix_year = 1976:1979
         end
         
         % 'PATN' shows up in a table header, delete this entry
-        if year == 1999 && ix_week == 14
+        if ix_year == 1999 && ix_week == 14
             fprintf('Delete patent number %d.\n', ...
                 show_ix_contains_space)
             patent_number(show_ix_contains_space) = [];
             ix_find(show_ix_contains_space) = [];
             nr_patents = nr_patents - 1;
-        elseif year == 2001 && (ix_week == 10 | ix_week == 26 | ix_week == 40 | ix_week==52) 
+        elseif ix_year == 2001 && (ix_week == 10 | ix_week == 26 | ix_week == 40 | ix_week==52) 
             fprintf('Delete patent number %d.\n', ...
                 show_ix_contains_space)
             patent_number(show_ix_contains_space) = [];
@@ -192,7 +196,7 @@ for ix_year = 1976:1979
 
         % Insert the current year for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
-            num2cell(repmat(year, nr_patents, 1))];
+            num2cell(repmat(ix_year, nr_patents, 1))];
 
         % Insert the current week for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
@@ -254,12 +258,12 @@ for ix_year = 1976:1979
     
     %% Save
     % ========================================================================
-    save_name = horzcat('patent_keyword_appear_', num2str(year), '.mat');
+    save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
     save(save_name, 'patent_keyword_appear')
 
 
     disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds \n', year, round(toc))
+    fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
     disp('---------------------------------------------------------------')
 
 
