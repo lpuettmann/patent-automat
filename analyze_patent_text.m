@@ -9,7 +9,7 @@ addpath('patent_index');
 
 
 %% Load summary data
-load('patent_index_1976-1977')
+load('patent_index_1977-1977')
 
 
 %% Set some inputs
@@ -17,7 +17,7 @@ load('patent_index_1976-1977')
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 1976;
+year_start = 1977;
 year_end = 1977;
 
 
@@ -31,6 +31,8 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year 
     week_end = set_weekend(ix_year); 
+    
+    week_end = 25;
     
     % Build path to data
     build_data_path = horzcat('.\data\', num2str(ix_year));
@@ -78,7 +80,7 @@ for ix_year = year_start:year_end
         show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
         search_corpus(show_row_NAM) = []; % delete rows with NAN
 
-        
+
         % Get the index position of patent and the WKU number
         % ----------------------------------------------------------------
         patent_number = pat_ix_yearly{ix_week, 1};
