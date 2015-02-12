@@ -2,7 +2,7 @@ close all
 clear all
 clc
 
-addpath('functions');
+addpath('../functions');
 
 %% Define parameters
 year_start = 1976;

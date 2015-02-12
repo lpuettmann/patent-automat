@@ -3,7 +3,7 @@ close all
 clc
 
 
-addpath('functions');
+addpath('../functions');
 
 
 %% Define parameters

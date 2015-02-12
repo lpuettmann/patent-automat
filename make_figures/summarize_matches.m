@@ -4,8 +4,8 @@ clc
 
 tic
 
-addpath('matches');
-addpath('functions');
+addpath('../matches');
+addpath('../functions');
 
 
 %% Define parameters
