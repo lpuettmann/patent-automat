@@ -44,6 +44,11 @@ for ix_year = year_start:year_end
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
 
+    % Extract year data from patent index
+    % -------------------------------------------------------------------
+    pat_ix_yearly = pat_ix{ix_year - year_start + 1};
+    
+    
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
     fprintf('* Enter loop for year %d\n', ix_year)
@@ -67,15 +72,21 @@ for ix_year = year_start:year_end
         % Define new search corpus as we might change some things about this
         search_corpus = file_str; 
 
-
         % Eliminate the name section from the search corpus
         % ----------------------------------------------------------------
         ix_find_NAM = strfind(file_str,'NAM');
         show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
-
         search_corpus(show_row_NAM) = []; % delete rows with NAN
 
-
+        
+        % Get the index position of patent and the WKU number
+        % ----------------------------------------------------------------
+        patent_number = pat_ix_yearly{ix_week, 1};
+        ix_find = pat_ix_yearly{ix_week, 2};
+        
+        nr_patents = length(patent_number);
+        
+        
         % Extract patent text
         % ----------------------------------------------------------------
         nr_keyword_appear = patent_number;
@@ -84,9 +95,6 @@ for ix_year = year_start:year_end
         nr_keyword_appear{1,2} = []; % column for keyword matches
         nr_keyword_appear{1,3} = []; % column for OCL classifications
 
-        % Insert the current year for later reference
-        nr_keyword_appear = [nr_keyword_appear, ...
-            num2cell(repmat(ix_year, nr_patents, 1))];
 
         % Insert the current week for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
