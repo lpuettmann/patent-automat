@@ -39,7 +39,7 @@ ylim([0 200000]);
 set(gca,'TickDir','out'); 
 % set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
-get(gca, 'YTickLabel')
+get(gca, 'YTickLabel');
 new_yticks = {'0'; '50,000'; '100,000'; '150,000'; '200,000'};
 set(gca, 'yticklabel', new_yticks); 
 
