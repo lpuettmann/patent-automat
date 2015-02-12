@@ -26,7 +26,7 @@ for ix_year = year_start:year_end
     week_end = set_weekend(ix_year); 
         
     
-    build_data_path = horzcat('.\data\', num2str(year));
+    build_data_path = horzcat('.\data\', num2str(ix_year));
     addpath(build_data_path);
 
 
@@ -58,20 +58,6 @@ for ix_year = year_start:year_end
 
         % Define new search corpus as we might change some things about this
         search_corpus = file_str; 
-
-
-        % Eliminate the name section from the search corpus
-        % --------------------------------------------------------------------
-        ix_find_NAM = strfind(file_str,'NAM');
-        show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
-
-        search_corpus(show_row_NAM) = []; % delete rows with NAN
-
-        % Test if we get the right number of rows
-        if length(file_str)-length(search_corpus) ~= length(show_row_NAM)
-            warning(['Are you sure you deleted the right columns with ', ...
-                'NAM in them?'])
-        end
 
 
         % Count number of patents in a given week
