@@ -18,7 +18,9 @@ Current plan:
 
 To run:
 ---------------------------
-1. Main analysis file is analyze_patent_text.m. This searches the patent text files for a specified keyword.
+1. Run `find_patents.m`. This runs through patent grant texts and saves where new patents start. It also saves the patent's WKU number and the name rows that are deleted. 
+2. Main analysis file is `analyze_patent_text.m`. This searches the patent text files for a specified keyword.
+3. In folder *make_figures*, run script to visualize findings.
 
 
 
