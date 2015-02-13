@@ -56,10 +56,17 @@ for ix_year = year_start:year_end
     fprintf('* Enter loop for year %d\n', ix_year)
 
     for ix_week = week_start:week_end
-        choose_file_open = filenames{ix_week};
+        % Get the index position of patent and the WKU number
+        % ----------------------------------------------------------------
+        patent_number = pat_ix_yearly{ix_week, 1};
+        ix_find = pat_ix_yearly{ix_week, 2};
+        show_row_NAM = pat_ix_yearly{ix_week, 3};
+        nr_patents = length(patent_number);        
 
         % Load the patent text
         % ----------------------------------------------------------------
+        choose_file_open = filenames{ix_week};
+        
         unique_file_identifier = fopen(choose_file_open, 'r');   
 
         if unique_file_identifier == -1
@@ -73,21 +80,10 @@ for ix_year = year_start:year_end
 
         % Define new search corpus as we might change some things about this
         search_corpus = file_str; 
-
+             
         % Eliminate the name section from the search corpus
         % ----------------------------------------------------------------
-        ix_find_NAM = strfind(file_str,'NAM');
-        show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
         search_corpus(show_row_NAM) = []; % delete rows with NAN
-
-
-        % Get the index position of patent and the WKU number
-        % ----------------------------------------------------------------
-        patent_number = pat_ix_yearly{ix_week, 1};
-        ix_find = pat_ix_yearly{ix_week, 2};
-        
-        nr_patents = length(patent_number);
-        
         
         % Extract patent text
         % ----------------------------------------------------------------

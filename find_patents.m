@@ -25,6 +25,8 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
         
+    week_end = 3;
+    
     
     build_data_path = horzcat('.\data\', num2str(ix_year));
     addpath(build_data_path);
@@ -58,6 +60,13 @@ for ix_year = year_start:year_end
 
         % Define new search corpus as we might change some things about this
         search_corpus = file_str; 
+        
+        
+        % Eliminate the name section from the search corpus
+        % ----------------------------------------------------------------
+        ix_find_NAM = strfind(file_str,'NAM');
+        show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
+        search_corpus(show_row_NAM) = []; % delete rows with NAN
 
 
         % Count number of patents in a given week
@@ -173,7 +182,8 @@ for ix_year = year_start:year_end
         % and its index position in the file. Save information for week in cell array
         % -------------------------------------------------------------------
         pat_ix_weekly{ix_week, 1} = patent_number;
-        pat_ix_weekly{ix_week, 2} = ix_find;
+        pat_ix_weekly{ix_week, 2} = ix_find; % position of patent start
+        pat_ix_weekly{ix_week, 3} = show_row_NAM; % save which rows deleted
         
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
