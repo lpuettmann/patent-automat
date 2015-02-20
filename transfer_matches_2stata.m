@@ -10,8 +10,14 @@ tic
 addpath('matches');
 addpath('functions');
 
+%%
+year_start = 1976;
+year_end = 2001;
 
-for ix_year = 1976:2001
+
+%%
+
+for ix_year = year_start:year_end
 
     % Load matches
     disp('Start loading file...')
@@ -59,8 +65,8 @@ for ix_year = 1976:2001
     end
 
 
-    patent_nr_letter(ix_year) = length(save_row_delete);
-    share_w_letter(ix_year) = length(save_row_delete)/nr_patents_yr;
+    patent_nr_letter(ix_year-year_start+1) = length(save_row_delete);
+    share_w_letter(ix_year-year_start+1) = length(save_row_delete)/nr_patents_yr;
     
 
     %%
@@ -100,7 +106,7 @@ for ix_year = 1976:2001
 
 
     %% Clear variables from memory that could cause problems
-    keep patent_nr_letter share_w_letter
+    keep year_start year_end patent_nr_letter share_w_letter
 end
 
 disp('FINISH LOOP')

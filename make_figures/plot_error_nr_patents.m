@@ -81,7 +81,6 @@ hline = refline([0 0]);
 set(hline,'LineStyle', ':', 'Color', 'k');
 
 
-
 % General settings
 set(gcf, 'Color', 'w');
 
