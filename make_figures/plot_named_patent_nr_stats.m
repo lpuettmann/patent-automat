@@ -39,6 +39,7 @@ ylim([0 100])
 ylabel('percentage (%)')
 
 
+
 %% Change position and size
 set(gcf, 'Position', [100 200 600 400]) % in vector: left bottom width height
 set(figureHandle, 'Units', 'Inches');

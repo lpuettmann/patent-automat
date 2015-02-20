@@ -46,8 +46,12 @@ for ix_year = year_start:year_end
 
         extract_row = patent_numbers{ix_patent};
 
-        if strcmp(extract_row(1), 'D') | strcmp(extract_row(1), 'P') ...
-                | strcmp(extract_row(1), 'R') | strcmp(extract_row(1), 'H')
+        if strcmp(extract_row(1), 'D') ... % design patents
+                | strcmp(extract_row(1), 'P') ... % PP: plant patents
+                | strcmp(extract_row(1), 'R') ... % reissue patents
+                | strcmp(extract_row(1), 'T') ... % defensive publications
+                | strcmp(extract_row(1), 'H') ... % SIR (statutory invention registration)
+                | strcmp(extract_row(1), 'X') % early X-patents
            save_row_delete(ix_save) = ix_patent;
            ix_save = ix_save + 1;
         end   
