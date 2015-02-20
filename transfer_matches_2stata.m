@@ -101,5 +101,11 @@ for ix_year = 1976:2001
 
     %% Clear variables from memory that could cause problems
     keep patent_nr_letter share_w_letter
-
 end
+
+disp('FINISH LOOP')
+disp('==================================================================')
+
+
+%% Save info on named patent numbers
+save('named_patents_stats.mat', 'patent_nr_letter', 'share_w_letter')
