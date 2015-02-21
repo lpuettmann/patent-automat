@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2004;
-year_end = 2004;
+year_start = 2005;
+year_end = 2005;
 
 
 
@@ -19,15 +19,16 @@ year_end = 2004;
 %% Go
 % ========================================================================
 for ix_year = year_start:year_end
-    tic 
+    tic
 
     week_start = 1;
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-  m
     
-    build_data_path = horzcat('.\data\', num2str(ix_year));
+    week_end = 3;
+    
+    build_data_path = horzcat('./data/', num2str(ix_year));
     addpath(build_data_path);
 
 
@@ -37,7 +38,12 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
-    
+    % on Apple: truncate also '.DS_Store'
+    if ismac
+        disp('Great, you are working on a mac.')
+        filenames = filenames(2:end);
+    end
+
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
     fprintf('Enter loop for year %d:\n', ix_year)
@@ -58,8 +64,8 @@ for ix_year = year_start:year_end
         search_corpus = open_file_aux{1,1};
 
 
-        %% Look for patents
-        find_str = '<B110><DNUM><PDAT>';
+        % Look for patents
+        find_str = '<us-patent-grant lang=';
         indic_find = regexp(search_corpus, find_str);
         indic_find = ~cellfun(@isempty,indic_find); % make logical array
 
@@ -81,8 +87,11 @@ for ix_year = year_start:year_end
         for i=1:nr_patents
             patent_nr_line = search_corpus(ix_find(i), :);
             patent_nr_line = patent_nr_line{1};
-            patent_nr_end = regexp(patent_nr_line, '</PDAT>'); 
-            patent_number{i} = patent_nr_line(19:patent_nr_end-1);
+            patent_nr_start = regexp(patent_nr_line, 'file="US');
+            patent_nr_trunc = patent_nr_line(patent_nr_start+8:end); % WATCH OUT: 8 is hard-coded
+            patent_nr_end = regexp(patent_nr_trunc, '-'); 
+            patent_nr_end = patent_nr_end(1);
+            patent_number{i} = patent_nr_trunc(1:patent_nr_end-1);
 
             if numel(patent_number) < 2
                 warning('Something is fishy.')
@@ -114,45 +123,49 @@ for ix_year = year_start:year_end
 
         
         
-        % Look up OCL (tech classification)
+        % To find patent technology classification, iterate through
+        % patents.
         % ------------------------------------------------------------
-        find_class_str = '<B521><PDAT>';
-        indic_class_find = regexp(search_corpus, find_class_str);
-        indic_class_find = ~cellfun(@isempty, indic_class_find); % make logical array
-        ix_class_find = find(indic_class_find);
-        
-        if length(ix_class_find) ~= length(unique(ix_class_find))
-            warning('Elements in ix_class_find should all be different.')
-        end
+        class_number = repmat({''}, nr_patents, 1); % initialize
+        for ix_patent=1:nr_patents
 
-        nr_class = length(ix_class_find);
-        
-        if nr_class ~= nr_patents
-            warning('Number of patents should equal number of classifications')
-        end
+            % Get start and end of patent text
+            % ------------------------------------------------------------
+            start_text_corpus = ix_find(ix_patent);
 
-        if nr_class < 100
+            if ix_patent < nr_patents
+                end_text_corpus = ix_find(ix_patent+1) - 3; % ATTENTION: this number is hard-coded!
+            else
+                end_text_corpus = length(search_corpus);
+            end
+
+            patent_text_corpus = search_corpus(start_text_corpus:...
+                end_text_corpus, :);
+
+            % Search for technology classification number
+            % ------------------------------------------------------------
+            find_class_str = '<classification-national>';
+            indic_class_find = regexp(patent_text_corpus, find_class_str);
+            indic_class_find = ~cellfun(@isempty, indic_class_find); % make logical array
+            ix_class_find = find(indic_class_find);
+            
+            % Two lines below the first appearance of the search string 
+            % is where we find our tech classificiation
+            class_nr_ix = ix_class_find(1) + 2;
+            class_nr_line = patent_text_corpus(class_nr_ix, :);
+            class_nr_line = class_nr_line{1};
+            % Classificiations differ in length, so have to find end
+            % where the classification stops.
+            class_find_end = regexp(class_nr_line, '</main-classification>'); 
+            class_number{ix_patent} = class_nr_line(22:class_find_end-1);
+        end
+        
+        if length(class_number) < 100
             warning(['Number of classifications (= %d) is implausibly small'], ...
                 nr_class)
         end 
         
-        class_number = repmat({''}, nr_class, 1);        
 
-        for i=1:nr_class
-            class_nr_line = search_corpus(ix_class_find(i), :);
-            class_nr_line = class_nr_line{1};
-            % Classificiations differ in length, so have to find end
-            % where the classification stops.
-            class_find_end = regexp(class_nr_line, '</PDAT>'); 
-            class_number{i} = class_nr_line(13:class_find_end-1);
-
-            if numel(class_number) < 2
-                warning('Something is fishy.')
-            end
-        end
-        
-        
-        
         % Define patent index. It consists of the patent's WKU number 
         % and its index position in the file. Save information for week in cell array
         % -------------------------------------------------------------------

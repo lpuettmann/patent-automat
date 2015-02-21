@@ -16,8 +16,8 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 2004;
-year_end = 2004;
+year_start = 2005;
+year_end = 2005;
 
 
 
@@ -102,7 +102,7 @@ for ix_year = year_start:year_end
             start_text_corpus = ix_find(ix_patent);
 
             if ix_patent < nr_patents
-                end_text_corpus = ix_find(ix_patent+1) - 10; % ATTENTION: this number is hard-coded!
+                end_text_corpus = ix_find(ix_patent+1) - 3; % ATTENTION: this number is hard-coded!
             else
                 end_text_corpus = length(search_corpus);
             end

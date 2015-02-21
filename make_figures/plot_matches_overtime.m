@@ -6,17 +6,19 @@ addpath('../functions');
 
 %% Define parameters
 year_start = 1976;
-year_end = 2003;
+year_end = 2004;
 
 
 %% Load summary data
-% load('total_matches_week_1976-2001')
-load('total_matches_week_1976-2003')
+build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+    '-', num2str(year_end), '.mat');
+load(build_load_filename)
 
 
 %% Make time series plot of matches per week
+% my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; ''; 2001};
 % my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; ''; 2001;};
-my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ''; 2003};
+my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ''; ''; 2004};
 
 
 color1_pick = [0.7900, 0.3800, 0.500];
