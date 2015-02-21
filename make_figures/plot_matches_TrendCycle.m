@@ -73,13 +73,13 @@ box off
 set(gcf, 'Color', 'w');
 hold on
 plot(total_matches_cycle, 'Color', color1_pick, 'LineWidth', 1)
-Set the x-axis tick labels
+% Set the x-axis tick labels
 ylim([0 8000])
 xlim([1 length(allyear_total_matches_week)])
 set(gca, 'XTick', ix_new_year)
 set(gca, 'xticklabel',{})
 
-Make grey grid lines
+% Make grey grid lines
 gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1)
 set(gca, 'xticklabel', my_xaxis_labels); 
 

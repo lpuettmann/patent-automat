@@ -38,12 +38,12 @@ set(gca,'FontSize',12) % change default font size of axis labels
 title('A. Number of identified US patents per year', 'FontSize', 14)
 box off
 xlim([year_start year_end]);
-ylim([0 200000]);
+ylim([0 250000]);
 set(gca,'TickDir','out'); 
-% set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
+set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
 get(gca, 'YTickLabel');
-new_yticks = {'0'; '50,000'; '100,000'; '150,000'; '200,000'};
+new_yticks = {'0'; '50,000'; '100,000'; '150,000'; '200,000'; '250,000'};
 set(gca, 'yticklabel', new_yticks); 
 
 %gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
@@ -60,8 +60,8 @@ box off
 xlim([year_start year_end]);
 set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')); % turn scientific notation off
 get(gca, 'YTickLabel');
-ylim([0 50000]);
-new_yticks = {'0'; '10,000'; '20,000'; '30,000'; '40,000'; '50,000'};
+ylim([0 60000]);
+new_yticks = {'0'; '10,000'; '20,000'; '30,000'; '40,000'; '50,000'; '60,000'};
 set(gca, 'yticklabel', new_yticks); 
 
 
@@ -135,21 +135,21 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 
 %% Add text
-annotation('textbox', [0.21 0.14 0.1 0.1], 'String', '0.93', ...
-        'FontSize', 12, 'HorizontalAlignment', 'left', ...
-        'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
-
-annotation('textbox', [0.41 0.335 0.1 0.1], 'String', '1.3', ...
-        'FontSize', 12, 'HorizontalAlignment', 'left', ...
-        'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
-
-annotation('textbox', [0.67 0.05 0.1 0.1], 'String', '0.61', ...
-        'FontSize', 12, 'HorizontalAlignment', 'left', ...
-        'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
-
-annotation('textbox', [0.85 0.175 0.1 0.1], 'String', '0.86', ...
-        'FontSize', 12, 'HorizontalAlignment', 'left', ...
-        'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
+% annotation('textbox', [0.21 0.14 0.1 0.1], 'String', '0.93', ...
+%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
+%         'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
+% 
+% annotation('textbox', [0.41 0.335 0.1 0.1], 'String', '1.3', ...
+%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
+%         'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
+% 
+% annotation('textbox', [0.67 0.05 0.1 0.1], 'String', '0.61', ...
+%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
+%         'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
+% 
+% annotation('textbox', [0.85 0.175 0.1 0.1], 'String', '0.86', ...
+%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
+%         'EdgeColor', 'none', 'Color', color2_pick); % [x y w h]
 
 
 %% Export to pdf
