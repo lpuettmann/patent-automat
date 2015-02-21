@@ -16,8 +16,8 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 2005;
-year_end = 2005;
+year_start = 2008;
+year_end = 2008;
 
 
 
@@ -147,8 +147,10 @@ for ix_year = year_start:year_end
     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
     save(save_name, 'patent_keyword_appear')
     
+    year_loop_time = toc;
     disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
+    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
+        ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
 
@@ -156,5 +158,4 @@ end
 
 %% End
 % ======================================================================
-toc
 disp('*** end ***')
