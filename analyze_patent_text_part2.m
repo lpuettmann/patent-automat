@@ -9,18 +9,20 @@ clc
 addpath('functions');
 
 
-
-%% Load summary data
-load('patent_index_2003-2003')
-
-
 %% Set some inputs
 
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 2003;
+year_start = 2002;
 year_end = 2003;
+
+
+
+%% Load summary data
+build_load_filename = horzcat('patent_index_', num2str(year_start), '-', ...
+    num2str(year_end));
+load(build_load_filename)
 
 
 
