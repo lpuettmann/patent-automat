@@ -13,7 +13,7 @@ addpath('../functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 2007;
+year_end = 2008;
 nr_years = length(year_start:year_end);
 week_start = 1;
 

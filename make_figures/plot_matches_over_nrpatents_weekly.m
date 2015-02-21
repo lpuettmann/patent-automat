@@ -6,11 +6,14 @@ clc
 
 %% Define parameters
 year_start = 1976;
-year_end = 2001;
+year_end = 2008;
 
 
 %% Load summary data
-load('total_matches_week_1976-2001')
+build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+    '-', num2str(year_end), '.mat');
+load(build_load_filename)
+
 
 
 

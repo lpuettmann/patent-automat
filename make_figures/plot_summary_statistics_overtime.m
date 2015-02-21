@@ -4,14 +4,17 @@ clc
 
 % Define parameters
 year_start = 1976;
-year_end = 2001;
+year_end = 2008;
 
 
-% Load summary data
-load('patent_match_summary_1976-2001')
+%% Load summary data
+build_load_filename = horzcat('patent_match_summary_', num2str(year_start), ...
+    '-', num2str(year_end), '.mat');
+load(build_load_filename)
 
 
-% Some settings for the plots
+
+%% Some settings for the plots
 plot_time = year_start:year_end;
 color1_pick = [0.7900, 0.3800, 0.500];
 color2_pick = [0.000,0.639,0.561];
