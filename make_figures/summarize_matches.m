@@ -13,14 +13,13 @@ addpath('../functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 2001;
+year_end = 2003;
 nr_years = length(year_start:year_end);
 week_start = 1;
 
 
-%% Loop through data for all years
+%% Make some initializations
 % ========================================================================
-
 % Pre-define some vectors to initialize them for the loops
 allyear_total_matches_week = 0; % delete this afterwards
 allyear_total_automix = 0; % delete this afterwards
@@ -40,21 +39,30 @@ allyear_nr_patents_per_week = repmat({''}, length(year_start:year_end), 1);
 aux_ix_save = 1; % where to save data in vector
 
 
+
+%% Loop through data for all years
+% ========================================================================
+
 for ix_year=year_start:year_end
     year = ix_year;
 
-    if year == 1980 | year == 1985 | year == 1991 | year == 1996
-        week_end = 53;
-    else
-        week_end = 52;
-    end
+    week_end = set_weekend(ix_year); 
 
 
     % Load matches
     % -------------------------------------------------------------
     load_file_name = horzcat('patent_keyword_appear_', num2str(year));
     load(load_file_name)
-
+    
+    
+    % Delete 4th column for years < 2001. I previously saved the year
+    % there, but I stopped doing that (it doesn't add any new information)
+    if ix_year < 2002
+        aux_part1 = patent_keyword_appear(:, 1:3);
+        aux_part2 = patent_keyword_appear(:, 5);
+        patent_keyword_appear = [aux_part1 aux_part2];
+    end
+    
     patent_match_summary.nr_patents_yr(aux_ix_save) = size(patent_keyword_appear, 1);
    
     
@@ -70,7 +78,7 @@ for ix_year=year_start:year_end
     patent_match_summary.trunc_mean(aux_ix_save) = mean(trunc_nr_keyword);
    
     
-    patent_week = cell2mat(patent_keyword_appear(:, 5));
+    patent_week = cell2mat(patent_keyword_appear(:, 4));
     
     
     patent_match_summary.mean_patents_yr(aux_ix_save) = mean(nr_keyword_per_patent);

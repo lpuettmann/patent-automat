@@ -6,15 +6,18 @@ addpath('../functions');
 
 %% Define parameters
 year_start = 1976;
-year_end = 2001;
+year_end = 2003;
 
 
 %% Load summary data
-load('total_matches_week_1976-2001')
+% load('total_matches_week_1976-2001')
+load('total_matches_week_1976-2003')
 
 
 %% Make time series plot of matches per week
-my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; ''; 2001;};
+% my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; ''; 2001;};
+my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ''; 2003};
+
 
 color1_pick = [0.7900, 0.3800, 0.500];
 my_gray = [0.806, 0.806, 0.806];
