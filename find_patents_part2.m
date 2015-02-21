@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2002;
-year_end = 2003;
+year_start = 2004;
+year_end = 2004;
 
 
 
@@ -19,14 +19,14 @@ year_end = 2003;
 %% Go
 % ========================================================================
 for ix_year = year_start:year_end
-    tic
+    tic 
 
     week_start = 1;
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-    
   
+    
     build_data_path = horzcat('.\data\', num2str(ix_year));
     addpath(build_data_path);
 
