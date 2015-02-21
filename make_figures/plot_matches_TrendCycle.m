@@ -5,14 +5,16 @@ clc
 
 addpath('../functions');
 
-
 %% Define parameters
 year_start = 1976;
-year_end = 2001;
+year_end = 2005;
 
 
 %% Load summary data
-load('total_matches_week_1976-2001')
+build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+    '-', num2str(year_end), '.mat');
+load(build_load_filename)
+
 
 
 %% Get HP filtered trend and cycle
@@ -20,7 +22,7 @@ load('total_matches_week_1976-2001')
 
 
 %% Make time series plot of matches per week
-my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; '';};
+my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ''; ''; ''; 2005};
 
 
 
