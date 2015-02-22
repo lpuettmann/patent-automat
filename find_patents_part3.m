@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2009;
-year_end = 2009;
+year_start = 2012;
+year_end = 2012;
 
 
 
@@ -44,7 +44,7 @@ for ix_year = year_start:year_end
 
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Enter loop for year %d:\n', ix_year)
+    fprintf('Start looking for patents for year %d:\n', ix_year)
     
     for ix_week = week_start:week_end
         choose_file_open = filenames{ix_week};
