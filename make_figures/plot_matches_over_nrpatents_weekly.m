@@ -6,7 +6,7 @@ clc
 
 %% Define parameters
 year_start = 1976;
-year_end = 2008;
+year_end = 2015;
 
 
 %% Load summary data
@@ -33,7 +33,7 @@ matches_per_patent_weekly = allyear_total_matches_week ./ ...
 %% Make time series plot of matches per week
 my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ...
-    ''; ''; ''; 2005; ''; ''; 2008};
+    ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 color2_pick = [0.000,0.639,0.561];
 my_gray = [0.806, 0.806, 0.806];

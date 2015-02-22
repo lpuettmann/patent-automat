@@ -4,7 +4,7 @@ clc
 
 % Define parameters
 year_start = 1976;
-year_end = 2001;
+year_end = 2015;
 
 
 % Load summary data

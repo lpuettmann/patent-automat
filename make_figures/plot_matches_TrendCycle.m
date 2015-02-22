@@ -7,7 +7,7 @@ addpath('../functions');
 
 %% Define parameters
 year_start = 1976;
-year_end = 2008;
+year_end = 2015;
 
 
 %% Load summary data
@@ -24,7 +24,7 @@ load(build_load_filename)
 %% Make time series plot of matches per week
 my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ...
-    ''; ''; ''; 2005; ''; ''; 2008};
+    ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
 color1_pick = [0.7900, 0.3800, 0.500];

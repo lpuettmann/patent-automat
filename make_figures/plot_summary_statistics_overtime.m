@@ -4,13 +4,16 @@ clc
 
 % Define parameters
 year_start = 1976;
-year_end = 2008;
+year_end = 2014;
+
+
 
 
 %% Load summary data
 build_load_filename = horzcat('patent_match_summary_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
 load(build_load_filename)
+
 
 
 
@@ -23,7 +26,7 @@ color3_pick = [0.890,0.412,0.525];
 my_gray = [0.6706, 0.6706, 0.6706];
 
 % Give both subplots on mean matches the same scale
-mean_y_axis_limit = [0.5, 1.5];
+mean_y_axis_limit = [0.5, 2];
 
 
 figureHandle = figure;
@@ -38,12 +41,12 @@ set(gca,'FontSize',12) % change default font size of axis labels
 title('A. Number of identified US patents per year', 'FontSize', 14)
 box off
 xlim([year_start year_end]);
-ylim([0 250000]);
+ylim([0 400000]);
 set(gca,'TickDir','out'); 
 set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
 get(gca, 'YTickLabel');
-new_yticks = {'0'; '50,000'; '100,000'; '150,000'; '200,000'; '250,000'};
+new_yticks = {'0'; ''; '100,000'; ''; '200,000'; ''; '300,000'; ''; '400,000'};
 set(gca, 'yticklabel', new_yticks); 
 
 %gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
@@ -60,8 +63,8 @@ box off
 xlim([year_start year_end]);
 set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')); % turn scientific notation off
 get(gca, 'YTickLabel');
-ylim([0 60000]);
-new_yticks = {'0'; '10,000'; '20,000'; '30,000'; '40,000'; '50,000'; '60,000'};
+ylim([0 110000]);
+new_yticks = {'0'; '20,000'; '40,000'; '60,000'; '80,000'; '100,000'};
 set(gca, 'yticklabel', new_yticks); 
 
 
