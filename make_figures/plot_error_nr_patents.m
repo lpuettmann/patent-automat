@@ -4,11 +4,14 @@ clc
 
 % Define parameters
 year_start = 1976;
-year_end = 2001;
+year_end = 2013;
 
 
 % Load summary data
-load('patent_match_summary_1976-2001')
+load('patent_match_summary_1976-2014')
+
+
+nr_pat_until2013 = patent_match_summary.nr_patents_yr(1:end-1)';
 
 
 %% Calculate error in number of patents
@@ -39,10 +42,22 @@ official_nr_patents = [...
         1998      163142;
         1999      169085;
         2000      175979;
-        2001      183970];
+        2001      183970;
+        2002      184375;
+        2003      187012;
+        2004      181299;
+        2005      157718;
+        2006      196405;
+        2007      182899;
+        2008      185224;
+        2009      191927;
+        2010      244341;
+        2011      247713;
+        2012      276788;
+        2013      302948];
 
 
-error_nr_patents = (patent_match_summary.nr_patents_yr' - ...
+error_nr_patents = (nr_pat_until2013 - ...
     official_nr_patents(:,2));
 
 
@@ -65,8 +80,8 @@ figureHandle = figure;
 
 % Plot total number of identified patents per year
 pick_plot_series = error_nr_patents;
-plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 1.4, ...
-    'Marker', 'o', 'MarkerSize', 3, 'MarkerFaceColor', color1_pick)
+plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 0.5, ...
+    'Marker', 'o', 'MarkerSize', 7, 'MarkerFaceColor', color1_pick)
 set(gca,'FontSize',12) % change default font size of axis labels
 %title('Error in number of identified patents', 'FontSize', 14)
 box off
