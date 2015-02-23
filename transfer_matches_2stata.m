@@ -1,5 +1,5 @@
 % Take matches of keywords in patents and delete those with patent numbers
-% starting with 
+% starting with a letter
 
 clc
 clear all
@@ -48,7 +48,7 @@ for ix_year = year_start:year_end
 
         if strcmp(extract_row(1), 'D') ... % design patents
                 | strcmp(extract_row(1), 'P') ... % PP: plant patents
-                | strcmp(extract_row(1), 'R') ... % reissue patents
+                || strcmp(extract_row(1), 'R') ... % reissue patents
                 | strcmp(extract_row(1), 'T') ... % defensive publications
                 | strcmp(extract_row(1), 'H') ... % SIR (statutory invention registration)
                 | strcmp(extract_row(1), 'X') % early X-patents
