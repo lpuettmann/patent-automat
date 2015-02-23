@@ -3,6 +3,12 @@ Analyze Patent Grant Texts
 **Katja Mann, Lukas Püttmann (2015)**
 
 
+Get data:
+---------------------------
+Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents.html) and download the Patent Grant Full Texts for all years 1976-2015. For 2001, the data is provided as two filetypes. We choose the one used in the previous years (plain .txt). The unzipped files are around 100 GB for 1976-2001 and around 200 GB for 2002-2015. 
+
+
+
 To run:
 ---------------------------
 1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting:
