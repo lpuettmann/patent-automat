@@ -80,20 +80,17 @@ figureHandle = figure;
 
 % Plot total number of identified patents per year
 pick_plot_series = error_nr_patents;
-plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 0.5, ...
-    'Marker', 'o', 'MarkerSize', 7, 'MarkerFaceColor', color1_pick)
-set(gca,'FontSize',12) % change default font size of axis labels
-%title('Error in number of identified patents', 'FontSize', 14)
-box off
-xlim([year_start year_end]);
-set(gca,'TickDir','out'); 
-get(gca, 'YTickLabel');
-new_yticks = {'0'; '100,000'; '150,000'; '200,000'};
 
-% Make grey horizontal dashed line at zero y-axis
-% ----------------------------------------------------------------
-hline = refline([0 0]);
-set(hline,'LineStyle', ':', 'Color', 'k');
+bar(plot_time, pick_plot_series, 0.7, 'FaceColor', color1_pick, ...
+    'EdgeColor', color1_pick)
+
+%plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 0.5, ...
+%    'Marker', 'o', 'MarkerSize', 7, 'MarkerFaceColor', color1_pick)
+%set(gca,'FontSize',12) % change default font size of axis labels
+title('Error in number of identified patents', 'FontSize', 14, ...
+    'FontWeight', 'bold')
+box off
+set(gca,'FontSize',12) % change default font size of axis labels
 
 
 % General settings
