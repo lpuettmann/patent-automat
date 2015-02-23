@@ -2,24 +2,22 @@ Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
 
-Testchange
-
 
 To run:
 ---------------------------
-1. Run `find_patents.m`. This runs through patent grant texts and saves where new patents start. It also saves the patent's WKU number and the name rows that are deleted. 
-2. Main analysis file is `analyze_patent_text.m`. This searches the patent text files for a specified keyword.
-3. In folder *make_figures*, run script to visualize findings.
-
-
-Current plan:
----------------------------
-1. Do a text search through the corpus of United States patent texts. Look for words with "autom" in them.
-
-2. Count the number of times the keyword appears in the patent description.
-
-3. Match patent to industries. Patent classifications have already been matched to industry sectors. 
-
-4. Look at how our index correlates with:
-	1. other indices for automatization
-	2. offshoring indices
+1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting:
+	1. Run `find_patents_part1.m`. Years: 1976-2001
+	2. Run `find_patents_part2.m`. Years: 2002-2004
+	3. Run `find_patents_part3.m`. Years: 2005-2015
+	4. Copy all .mat files `patent_index_[year].mat` into folder *patent_index*.
+2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices.
+	1. Run `analyze_patent_text_part1.m`. Years: 1976-2001
+	2. Run `analyze_patent_text_part2.m`. Years: 2002-2004
+	3. Run `analyze_patent_text_part3.m`. Years: 2005-2015
+	4. Copy all .mat files `patent_keyword_appear_[year].mat` into folder *matches*.
+3. In folder *make_figures*, run scripts to visualize findings.
+	1. Run `summarize_matches` first.
+	2. Make the visualizations you like. The most important ones are probably the following:
+		* `plot_matches_overtime.m` 
+		* `plot_matches_over_nrpatents_weekly.m` 
+		* `plot_summary_statistics_overtime.m` 

@@ -11,8 +11,8 @@ addpath('matches');
 addpath('functions');
 
 %%
-year_start = 2002;
-year_end = 2003;
+year_start = 1976;
+year_end = 2015;
 
 
 %%

@@ -15,6 +15,13 @@ build_load_filename = horzcat('patent_match_summary_', num2str(year_start), ...
 load(build_load_filename)
 
 
+%% Print some summaries
+fprintf('Total number of identified patents all years: %d.\n', ...
+    sum(patent_match_summary.nr_patents_yr))
+
+fprintf('Total number of identified patents all years: %d.\n', ...
+    sum(patent_match_summary.nr_patents_yr))
+
 
 
 %% Some settings for the plots
