@@ -11,6 +11,12 @@ year_end = 2015;
 load('named_patents_stats')
 
 
+
+%% Set font
+set(0,'DefaultTextFontName','Palatino')
+set(0,'DefaultAxesFontName','Palatino')
+
+
 %% Plot
 
 % Some settings for the plots

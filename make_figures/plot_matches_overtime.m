@@ -4,6 +4,12 @@ clc
 
 addpath('../functions');
 
+
+%% Set font
+set(0,'DefaultTextFontName','Palatino')
+set(0,'DefaultAxesFontName','Palatino')
+
+
 %% Define parameters
 year_start = 1976;
 year_end = 2015;

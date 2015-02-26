@@ -8,6 +8,10 @@ year_end = 2014;
 
 
 
+%% Set font
+set(0,'DefaultTextFontName','Palatino')
+set(0,'DefaultAxesFontName','Palatino')
+
 
 %% Load summary data
 build_load_filename = horzcat('patent_match_summary_', num2str(year_start), ...

@@ -14,6 +14,12 @@ load('patent_match_summary_1976-2014')
 nr_pat_until2013 = patent_match_summary.nr_patents_yr(1:end-1)';
 
 
+
+%% Set font
+set(0,'DefaultTextFontName','Palatino')
+set(0,'DefaultAxesFontName','Palatino')
+
+
 %% Calculate error in number of patents
 % From: http://www.uspto.gov/web/offices/ac/ido/oeip/taf/us_stat.htm
 official_nr_patents = [...  

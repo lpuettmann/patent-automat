@@ -9,6 +9,12 @@ year_start = 1976;
 year_end = 2015;
 
 
+
+%% Set font
+set(0,'DefaultTextFontName','Palatino')
+set(0,'DefaultAxesFontName','Palatino')
+
+
 %% Load summary data
 build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
