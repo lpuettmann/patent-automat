@@ -11,7 +11,7 @@ addpath('matches');
 addpath('functions');
 
 %%
-year_start = 1976;
+year_start = 2002;
 year_end = 2015;
 
 
@@ -85,7 +85,12 @@ for ix_year = year_start:year_end
 
         extract_row = cleaned_full_info{ix_patent};
 
-        trunc_row = extract_row(2:end-1);
+        if ix_year >= 2002 % after (not incl.) 2001: delete first letter only
+            trunc_row = extract_row(2:end);
+        else % before 2001: delete first and last letter
+            trunc_row = extract_row(2:end-1);
+        end
+        
         patent_number_cleaned{ix_patent} = trunc_row;
     end
 
