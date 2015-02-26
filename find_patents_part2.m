@@ -103,7 +103,7 @@ for ix_year = year_start:year_end
         test_is9long = cellfun(@length, patent_number);
         test_vector_nines = repmat(8, nr_patents, 1); % don't do this every time
         if min(test_is9long == test_vector_nines) < 1
-            warning('Not all patent WKU numbers are 9 characters long')
+            warning('Not all patent WKU numbers are 8s characters long')
         end
 
 
