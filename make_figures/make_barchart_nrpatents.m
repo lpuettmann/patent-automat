@@ -53,7 +53,7 @@ ylim([0 400000])
 set(gca, 'YTickLabel', num2str(get(gca, 'YTick')')) % turn scientific notation off
 
 get(gca, 'YTickLabel');
-new_yticks = {'0'; ''; '100,000'; ''; '200,000'; ''; '300,000'; ''; '400,000'};
+new_yticks = {'0'; ''; '100000'; ''; '200000'; ''; '300000'; ''; '400000'};
 set(gca, 'yticklabel', new_yticks); 
 
 
@@ -76,15 +76,13 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 
 %% Add text
-% text_annotation = 'Total';
-% annotation('textbox', [0.9 0.7 0.1 0.1], 'String', text_annotation, ...
-%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
-%         'EdgeColor', 'none', 'Color', color1_pick); % [x y w h]
-% 
-% text_annotation = 'Number distinct patents with matches';
-% annotation('textbox', [0.9 0.45 0.1 0.1], 'String', text_annotation, ...
-%         'FontSize', 12, 'HorizontalAlignment', 'left', ...
-%         'EdgeColor', 'none', 'Color', color4_pick); % [x y w h]
+annotation('textbox', [0.135 0.23 0.1 0.1], 'String', '70900', ...
+        'FontSize', 12, 'HorizontalAlignment', 'left', ...
+        'EdgeColor', 'none'); % [x y w h]
+
+annotation('textbox', [0.85 0.75 0.1 0.1], 'String', '327000', ...
+        'FontSize', 12, 'HorizontalAlignment', 'left', ...
+        'EdgeColor', 'none'); % [x y w h]
 
 
 
