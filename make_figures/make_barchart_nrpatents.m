@@ -8,9 +8,6 @@ year_end = 2014;
 
 
 
-%% Set font
-set(0,'DefaultTextFontName','Palatino')
-set(0,'DefaultAxesFontName','Palatino')
 
 
 %% Load summary data
@@ -33,17 +30,18 @@ color3_pick = [0.890,0.412,0.525];
 color4_pick = [0.890,0.412,0.525];
 
 
-my_gray = [0.6706, 0.6706, 0.6706];
+my_light_gray = [0.95, 0.95, 0.95];
+my_dark_gray = [0.8, 0.8, 0.8];
 
 
 figureHandle = figure;
 
 % Plot total number of identified patents per year
 bar(plot_time, patent_match_summary.nr_patents_yr, 'FaceColor', ...
-    color4_pick, 'EdgeColor', 'k')
+    my_light_gray, 'EdgeColor', 'k')
 hold on
 bar(plot_time, patent_match_summary.nr_distinct_patents_hits, ...
-    'FaceColor', color1_pick, 'EdgeColor', 'k')
+    'FaceColor', my_dark_gray, 'EdgeColor', 'k')
 hold off
 
 set(gca,'FontSize',12) % change default font size of axis labels
@@ -57,12 +55,12 @@ new_yticks = {'0'; ''; '100000'; ''; '200000'; ''; '300000'; ''; '400000'};
 set(gca, 'yticklabel', new_yticks); 
 
 
-% Plot: mean of matches truncated above 99th percentile
-% title('D. Mean matches per patent below 99th percentile', 'FontSize', 14)
-
 
 % General settings
 set(gcf, 'Color', 'w');
+
+set(0,'DefaultTextFontName','Palatino') % set font
+set(0,'DefaultAxesFontName','Palatino') % set font
 
 
 
