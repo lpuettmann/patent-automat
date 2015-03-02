@@ -44,14 +44,13 @@ aux_ix_save = 1; % where to save data in vector
 % ========================================================================
 
 for ix_year=year_start:year_end
-    year = ix_year;
 
     week_end = set_weekend(ix_year); 
 
 
     % Load matches
     % -------------------------------------------------------------
-    load_file_name = horzcat('patent_keyword_appear_', num2str(year));
+    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
     load(load_file_name)
     
     
@@ -127,13 +126,13 @@ for ix_year=year_start:year_end
     
     allyear_nr_patents_per_week{ix_year - year_start + 1} = nr_patents_per_week; 
                         
-    % Subtract one from saving index because of the sero in the beginning
+    % Subtract one from saving index because of the zero in the beginning
     % that we need for the initialization.
     ix_new_year(aux_ix_save + 1) = size(allyear_total_matches_week, 1);
     aux_ix_save = aux_ix_save + 1;
     
     
-    fprintf('Year %d completed.\n', year)
+    fprintf('Year %d completed.\n', ix_year)
 end
 
 % Cut of the first zero used for pre-defining

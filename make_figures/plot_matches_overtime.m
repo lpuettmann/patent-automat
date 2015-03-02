@@ -32,7 +32,10 @@ my_gray = [0.806, 0.806, 0.806];
 
 figureHandle = figure;
 
-scatter(1:length(allyear_total_matches_week), allyear_total_matches_week, ...
+plot_series = allyear_total_matches_week;
+% plot_series = allyear_total_automix;
+
+scatter(1:length(plot_series), allyear_total_matches_week, ...
     'Marker', 'o', 'MarkerEdgeColor', color1_pick)
 
 set(gca,'FontSize',11) % change default font size of axis labels

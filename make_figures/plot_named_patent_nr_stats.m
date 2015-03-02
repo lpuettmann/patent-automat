@@ -25,7 +25,8 @@ color1_pick = [0.7900, 0.3800, 0.500];
 color2_pick = [0.000,0.639,0.561];
 color3_pick = [0.890,0.412,0.525];
 
-
+set(0,'DefaultTextFontName','Palatino') % set font
+set(0,'DefaultAxesFontName','Palatino') % set font
 
 figureHandle = figure;
 
@@ -43,6 +44,8 @@ xlim([year_start year_end]);
 % ylim([0 ceil(max(plot_series))])
 ylim([0 100])
 ylabel('percentage (%)')
+
+
 
 
 
