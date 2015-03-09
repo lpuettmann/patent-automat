@@ -8,16 +8,16 @@ year_end = 2013;
 
 
 % Load summary data
-load('patent_match_summary_1976-2014')
+load('patent_match_summary_1976-2015')
 
 
-nr_pat_until2013 = patent_match_summary.nr_patents_yr(1:end-1)';
+nr_pat_until2013 = patent_match_summary.nr_patents_yr(1:end-2)';
 
 
 
 %% Set font
-set(0,'DefaultTextFontName','Palatino')
-set(0,'DefaultAxesFontName','Palatino')
+set(0, 'DefaultTextFontName', 'Palatino')
+set(0, 'DefaultAxesFontName', 'Palatino')
 
 
 %% Calculate error in number of patents
@@ -71,8 +71,6 @@ error_nr_patents = (nr_pat_until2013 - ...
 %% Plot
 
 
-
-
 % Some settings for the plots
 plot_time = year_start:year_end;
 color1_pick = [0.7900, 0.3800, 0.500];
@@ -93,7 +91,7 @@ bar(plot_time, pick_plot_series, 0.7, 'FaceColor', color1_pick, ...
 %plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 0.5, ...
 %    'Marker', 'o', 'MarkerSize', 7, 'MarkerFaceColor', color1_pick)
 %set(gca,'FontSize',12) % change default font size of axis labels
-title('Error in number of identified patents', 'FontSize', 14, ...
+title('Error in number of identified patents (negative: identified too few patents)', 'FontSize', 14, ...
     'FontWeight', 'bold')
 box off
 set(gca,'FontSize',12) % change default font size of axis labels
@@ -115,5 +113,4 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 %% Export to pdf
 print_pdf_name = horzcat('error_nr_patents_', num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
 

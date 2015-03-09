@@ -53,7 +53,15 @@ for ix_year=year_start:year_end
     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
     load(load_file_name)
     
- 
+    
+    % Delete 4th column for 1976 < years < 2001. I previously saved the year
+    % there, but I stopped doing that (it doesn't add any new information)
+    if ix_year < 2002 & ix_year > 1976
+        aux_part1 = patent_keyword_appear(:, 1:3);
+        aux_part2 = patent_keyword_appear(:, 5);
+        patent_keyword_appear = [aux_part1 aux_part2];
+    end
+    
     patent_match_summary.nr_patents_yr(aux_ix_save) = size(patent_keyword_appear, 1);
    
     

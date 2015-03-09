@@ -6,8 +6,8 @@ addpath('../functions');
 
 
 %% Set font
-set(0,'DefaultTextFontName','Palatino')
-set(0,'DefaultAxesFontName','Palatino')
+set(0, 'DefaultTextFontName', 'Palatino')
+set(0, 'DefaultAxesFontName', 'Palatino')
 
 
 %% Define parameters
