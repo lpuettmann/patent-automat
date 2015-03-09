@@ -166,8 +166,9 @@ for ix_year = year_start:year_end
     % Save to .mat file
     % -------------------------------------------------------------------
     save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
-    save(save_name, 'pat_ix')
-    
+    matfile_path_save = fullfile('patent_index', save_name);
+    save(matfile_path_save, 'pat_ix');    
+    fprintf('Saved: %s.\n', save_name)
     
     disp('---------------------------------------------------------------')
     fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))

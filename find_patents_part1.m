@@ -11,7 +11,7 @@ addpath('functions');
 
 %% Set some inputs
 year_start = 1976;
-year_end = 1977;
+year_end = 1976;
 
 
 
@@ -24,7 +24,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-    
+       
     build_data_path = horzcat('.\data\', num2str(ix_year));
     addpath(build_data_path);
 
@@ -188,19 +188,17 @@ for ix_year = year_start:year_end
     pat_ix{ix_year - year_start + 1, 1} = pat_ix_weekly;
 
     
+    % Save to .mat file
+    % -------------------------------------------------------------------
+    save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
+    matfile_path_save = fullfile('patent_index', save_name);
+    save(matfile_path_save, 'pat_ix');    
+    fprintf('Saved: %s.\n', save_name)
+    
     disp('---------------------------------------------------------------')
     fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
     disp('---------------------------------------------------------------')
 end
-
-
-  
-
-%% Save
-% ========================================================================
-save_name = horzcat('patent_index_', num2str(year_start), '-', ...
-    num2str(year_end), '.mat');
-save(save_name, 'pat_ix')
 
 
 

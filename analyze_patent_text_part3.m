@@ -143,10 +143,12 @@ for ix_year = year_start:year_end
     end
 
     
-    % Save
-    % ----------------------------------------------------------------
+    % Save to .mat file
+    % -------------------------------------------------------------------
     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-    save(save_name, 'patent_keyword_appear')
+    matfile_path_save = fullfile('matches', save_name);
+    save(matfile_path_save, 'patent_keyword_appear');    
+    fprintf('Saved: %s.\n', save_name)
     
     year_loop_time = toc;
     disp('---------------------------------------------------------------')

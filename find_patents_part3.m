@@ -174,11 +174,13 @@ for ix_year = year_start:year_end
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
 
+    
     % Save to .mat file
     % -------------------------------------------------------------------
     save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
-    save(save_name, 'pat_ix')
-    
+    matfile_path_save = fullfile('patent_index', save_name);
+    save(matfile_path_save, 'pat_ix');    
+    fprintf('Saved: %s.\n', save_name)
     
     year_loop_time = toc;
     disp('---------------------------------------------------------------')
@@ -186,8 +188,6 @@ for ix_year = year_start:year_end
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
-
-
 
 
 

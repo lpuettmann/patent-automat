@@ -10,7 +10,7 @@ addpath('patent_index');
 
 
 %% Load summary data
-load('patent_index_1976-1977')
+load('patent_index_1976')
 
 
 %% Set some inputs
@@ -150,16 +150,19 @@ for ix_year = year_start:year_end
 
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
-
     
-    % Save
-    % ----------------------------------------------------------------
+    
+    % Save to .mat file
+    % -------------------------------------------------------------------
     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-    save(save_name, 'patent_keyword_appear')
-
-
+    matfile_path_save = fullfile('matches', save_name);
+    save(matfile_path_save, 'patent_keyword_appear');    
+    fprintf('Saved: %s.\n', save_name)
+    
+    year_loop_time = toc;
     disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
+    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
+        ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
 
