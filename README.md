@@ -9,16 +9,14 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 
 To run:
 ---------------------------
-1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting:
+1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. These files then save `.mat` files `patent_index_[year].mat` into folder *patent_index*.
 	1. Run `find_patents_part1.m`. Years: 1976-2001
 	2. Run `find_patents_part2.m`. Years: 2002-2004
 	3. Run `find_patents_part3.m`. Years: 2005-2015
-	4. Copy all `.mat` files `patent_index_[year].mat` into folder *patent_index*.
-2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices.
+2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices. These files then save `.mat` files `patent_keyword_appear_[year].mat` into folder *matches*.
 	1. Run `analyze_patent_text_part1.m`. Years: 1976-2001
 	2. Run `analyze_patent_text_part2.m`. Years: 2002-2004
 	3. Run `analyze_patent_text_part3.m`. Years: 2005-2015
-	4. Copy all `.mat` files `patent_keyword_appear_[year].mat` into folder *matches*.
 3. In folder *make_figures*, run scripts to visualize findings.
 	1. Run `summarize_matches` first.
 	2. Make the visualizations you like. The most important ones are probably the following:
