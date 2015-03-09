@@ -102,7 +102,7 @@ for ix_year = year_start:year_end
             start_text_corpus = ix_find(ix_patent);
 
             if ix_patent < nr_patents
-                end_text_corpus = ix_find(ix_patent+1) - 10; % ATTENTION: this number is hard-coded!
+                end_text_corpus = ix_find(ix_patent+1) - 10; % this number is hard-coded
             else
                 end_text_corpus = length(search_corpus);
             end

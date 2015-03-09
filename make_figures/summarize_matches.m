@@ -13,7 +13,7 @@ addpath('../functions');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 2014;
+year_end = 2015;
 nr_years = length(year_start:year_end);
 week_start = 1;
 
@@ -53,15 +53,7 @@ for ix_year=year_start:year_end
     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
     load(load_file_name)
     
-    
-    % Delete 4th column for years < 2001. I previously saved the year
-    % there, but I stopped doing that (it doesn't add any new information)
-    if ix_year < 2002
-        aux_part1 = patent_keyword_appear(:, 1:3);
-        aux_part2 = patent_keyword_appear(:, 5);
-        patent_keyword_appear = [aux_part1 aux_part2];
-    end
-    
+ 
     patent_match_summary.nr_patents_yr(aux_ix_save) = size(patent_keyword_appear, 1);
    
     

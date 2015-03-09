@@ -153,8 +153,9 @@ for ix_year = year_start:year_end
         
         
         
-        % Define patent index. It consists of the patent's WKU number 
-        % and its index position in the file. Save information for week in cell array
+        % Define patent index. It consists of the patent's WKU number, its
+        % index position in the file and its tech classification. Save 
+        % information for each week in a cell array.
         % -------------------------------------------------------------------
         pat_ix{ix_week, 1} = patent_number;
         pat_ix{ix_week, 2} = ix_find; % position of patent start

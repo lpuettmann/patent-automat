@@ -9,17 +9,13 @@ addpath('functions');
 addpath('patent_index');
 
 
-%% Load summary data
-load('patent_index_1976')
-
-
 %% Set some inputs
 
 % Define keyword to look for
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 1977;
+year_end = 1976;
 
 
 
@@ -44,10 +40,13 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
-
-    % Extract year data from patent index
+    
+    % Load patent_index for year
     % -------------------------------------------------------------------
-    pat_ix_yearly = pat_ix{ix_year - year_start + 1};
+    build_load_filename = horzcat('patent_index_', num2str(ix_year), ...
+        '.mat');
+    load(build_load_filename)
+
     
     
     % Iterate through files of weekly patent grant text data
@@ -57,9 +56,9 @@ for ix_year = year_start:year_end
     for ix_week = week_start:week_end
         % Get the index position of patent and the WKU number
         % ----------------------------------------------------------------
-        patent_number = pat_ix_yearly{ix_week, 1};
-        ix_find = pat_ix_yearly{ix_week, 2};
-        show_row_NAM = pat_ix_yearly{ix_week, 3};
+        patent_number = pat_ix{ix_week, 1};
+        ix_find = pat_ix{ix_week, 2};
+        show_row_NAM = pat_ix{ix_week, 3};
         nr_patents = length(patent_number);        
 
         % Load the patent text
@@ -80,9 +79,6 @@ for ix_year = year_start:year_end
         % Define new search corpus as we might change some things about this
         search_corpus = file_str; 
              
-        % Eliminate the name section from the search corpus
-        % ----------------------------------------------------------------
-        search_corpus(show_row_NAM) = []; % delete rows with NAN
         
         % Extract patent text
         % ----------------------------------------------------------------
@@ -90,8 +86,11 @@ for ix_year = year_start:year_end
 
         % Get empty cells next to the WKU patent numbers. 
         nr_keyword_appear{1,2} = []; % column for keyword matches
-        nr_keyword_appear{1,3} = []; % column for OCL classifications
 
+        classification_nr = pat_ix{ix_week, 3};
+
+        % Column for OCL classifications
+        nr_keyword_appear(:,3) = classification_nr;
 
         % Insert the current week for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
@@ -105,7 +104,7 @@ for ix_year = year_start:year_end
             start_text_corpus = ix_find(ix_patent);
 
             if ix_patent < nr_patents
-                end_text_corpus = ix_find(ix_patent+1)-1;
+                end_text_corpus = ix_find(ix_patent+1)-1; % this number is hard-coded
             else
                 end_text_corpus = length(search_corpus);
             end
@@ -119,18 +118,10 @@ for ix_year = year_start:year_end
             ix_keyword_find = ix_keyword_find(~cellfun('isempty', ...
                 ix_keyword_find));
             nr_keyword_find = length(ix_keyword_find);
-            
-            % Look up OCL (tech classification)
-            % ------------------------------------------------------------
-            ix_find_OCL = strfind(patent_text_corpus, 'OCL');
-            all_OCL_matches = find(~cellfun(@isempty,ix_find_OCL));
-            row_OCL_class = patent_text_corpus{all_OCL_matches(1)};
-            patent_OCL_class = row_OCL_class(5:numel(row_OCL_class));
-            
+                       
             % Stack weekly information underneath
             % ------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
-            nr_keyword_appear{ix_patent, 3} = patent_OCL_class;
         end
 
         % Save information for all weeks

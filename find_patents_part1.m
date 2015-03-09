@@ -58,13 +58,6 @@ for ix_year = year_start:year_end
         % Define new search corpus as we might change some things about this
         search_corpus = file_str; 
         
-        
-        % Eliminate the name section from the search corpus
-        % ----------------------------------------------------------------
-        ix_find_NAM = strfind(file_str,'NAM');
-        show_row_NAM = find(~cellfun(@isempty,ix_find_NAM));
-        search_corpus(show_row_NAM) = []; % delete rows with NAN
-
 
         % Count number of patents in a given week
         % --------------------------------------------------------------------
@@ -175,18 +168,49 @@ for ix_year = year_start:year_end
             warning('Should be the same.')
         end            
         
-        % Define patent index. It consists of the patent's WKU number 
-        % and its index position in the file. Save information for week in cell array
-        % -------------------------------------------------------------------
-        pat_ix_weekly{ix_week, 1} = patent_number;
-        pat_ix_weekly{ix_week, 2} = ix_find; % position of patent start
-        pat_ix_weekly{ix_week, 3} = show_row_NAM; % save which rows deleted
+        
+        class_number = repmat({''}, nr_patents, 1);      
+        
+        for ix_patent=1:nr_patents
+
+            % Get start and end of patent text
+            % ------------------------------------------------------------
+            start_text_corpus = ix_find(ix_patent);
+
+            if ix_patent < nr_patents
+                end_text_corpus = ix_find(ix_patent+1)-1;
+            else
+                end_text_corpus = length(search_corpus);
+            end
+
+            patent_text_corpus = search_corpus(...
+                start_text_corpus:end_text_corpus, :);
+
+            
+            % Look up OCL (tech classification)
+            % ------------------------------------------------------------
+            ix_find_OCL = strfind(patent_text_corpus, 'OCL');
+            all_OCL_matches = find(~cellfun(@isempty,ix_find_OCL));
+            row_OCL_class = patent_text_corpus{all_OCL_matches(1)}; % only look at first OCL match
+            patent_OCL_class = row_OCL_class(5:numel(row_OCL_class));
+            
+            % Stack weekly information underneath
+            % ------------------------------------------------------------
+            class_number{ix_patent} = patent_OCL_class;
+        end
+        
+
+        
+        % Define patent index. It consists of the patent's WKU number, its
+        % index position in the file and its tech classification. Save 
+        % information for each week in a cell array.
+        % -------------------------------------------------------------------      
+        pat_ix{ix_week, 1} = patent_number;
+        pat_ix{ix_week, 2} = ix_find; % position of patent start
+        pat_ix{ix_week, 3} = class_number; % position of patent start
         
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
-    
-    pat_ix{ix_year - year_start + 1, 1} = pat_ix_weekly;
-
     
     % Save to .mat file
     % -------------------------------------------------------------------
