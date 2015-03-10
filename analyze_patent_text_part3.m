@@ -16,8 +16,8 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 2012;
-year_end = 2012;
+year_start = 2015;
+year_end = 2015;
 
 
 
@@ -33,7 +33,9 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 
-    build_data_path = horzcat('./data/', num2str(ix_year));
+%     build_data_path = horzcat('./data/', num2str(ix_year));
+    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
+        num2str(ix_year));
     addpath(build_data_path);
 
 
@@ -53,7 +55,7 @@ for ix_year = year_start:year_end
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Start analyzing patent grant texts for year %d:\n', ix_year)
+    fprintf('Start searching through patent grant texts for year %d:\n', ix_year)
     
     for ix_week = week_start:week_end
         % Get the index position of patent and the WKU number

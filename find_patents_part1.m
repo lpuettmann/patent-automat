@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1977;
-year_end = 2001;
+year_start = 1984;
+year_end = 1984;
 
 
 
@@ -24,7 +24,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-       
+           
 %     build_data_path = horzcat('.\data\', num2str(ix_year));
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', num2str(ix_year));
     addpath(build_data_path);
@@ -116,7 +116,7 @@ for ix_year = year_start:year_end
              wku_line = wku_line{1};
              
              if numel(wku_line) < 2
-                 fprintf('~~~ Empty string after patent number %d/%d\n', ...
+                 fprintf('~~~ Correct for empty string after patent number %d/%d\n', ...
                      i, nr_patents)
                  wku_line = search_corpus(ix_find(i)+2, :); % jump over empty line
                  wku_line = wku_line{1};

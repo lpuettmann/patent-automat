@@ -29,6 +29,8 @@ color2_pick = [0.000,0.639,0.561];
 color3_pick = [0.890,0.412,0.525];
 color4_pick = [0.890,0.412,0.525];
 
+color1_pick = [49, 130, 189] ./ 255; % necessary conversion to RGB  
+color2_pick = [158, 202, 225] ./ 255;
 
 my_light_gray = [0.95, 0.95, 0.95];
 my_dark_gray = [0.8, 0.8, 0.8];
@@ -38,10 +40,10 @@ figureHandle = figure;
 
 % Plot total number of identified patents per year
 bar(plot_time, patent_match_summary.nr_patents_yr, 'FaceColor', ...
-    my_light_gray, 'EdgeColor', 'k')
+    color1_pick, 'EdgeColor', 'k')
 hold on
 bar(plot_time, patent_match_summary.nr_distinct_patents_hits, ...
-    'FaceColor', my_dark_gray, 'EdgeColor', 'k')
+    'FaceColor', color2_pick, 'EdgeColor', 'k')
 hold off
 
 set(gca,'FontSize',12) % change default font size of axis labels
@@ -54,7 +56,7 @@ get(gca, 'YTickLabel');
 new_yticks = {'0'; ''; '100000'; ''; '200000'; ''; '300000'; ''; '400000'};
 set(gca, 'yticklabel', new_yticks); 
 
-
+xlim([year_start-0.5, year_end+1.5])
 
 % General settings
 set(gcf, 'Color', 'w');
@@ -80,11 +82,12 @@ annotation('textarrow', arrow_x, arrow_y, 'String', '70900', ...
         'FontSize', 12, 'HorizontalAlignment', 'left', ...
         'HeadStyle', 'none'); % [x y w h]
     
-arrow_x = [0.885, 0.885];
-arrow_y = [0.825, 0.78];
-annotation('textarrow', arrow_x, arrow_y, 'String', '327000', ...
-        'FontSize', 12, 'HorizontalAlignment', 'left', ...
-        'HeadStyle', 'none'); % [x y w h]
+annotation('textarrow',[0.861157082748948 0.872370266479663],...
+    [0.83452380952381 0.792857142857143],'TextEdgeColor','none',...
+    'HorizontalAlignment','left',...
+    'FontSize',12,...
+    'String','327000',...
+    'HeadStyle','none');
 
 
 

@@ -168,8 +168,12 @@ In total, we identify around 5.5 mio. patents. Figure~\ref{fig:keyword_match_ove
 \caption{Number of weekly matches of word stem ``automat" in US patents, 1976-2015}
 	\centering
 	\includegraphics[trim=1cm 0cm 0cm 0cm, clip=true, totalheight=0.38\textheight]{./figures/keyword_matches_weekly_1976-2015.pdf}
-	\floatfoot{\textit{Note:} Every data point displays sum of matches from searching through one file of weekly patent grant texts; total identified patents: 5.5 mio.; total number of keyword matches: 6.9 mio.\\[0.1cm]
-	\textit{Source:} USPTO, Google and own calculations.}
+	\floatfoot{
+	\begin{minipage}{0.8\textwidth}
+	\textit{Note:} Every data point displays sum of matches from searching through one file of weekly patent grant texts; total identified patents: 5.5 mio.; total number of keyword matches: 6.9 mio.\\[0.1cm]
+	\textit{Source:} USPTO, Google and own calculations.
+	\end{minipage}
+	}
 	\label{fig:keyword_match_over_time}
 \end{figure}
 
@@ -182,9 +186,24 @@ Figure~\ref{fig:summary_stats} shows a summary of the matches. The increase in k
 \caption{Number of identified patents, 1976-2014}
 	\includegraphics[trim=0cm 0cm 1cm 0.5cm, clip=true, totalheight=0.25\textheight]{./figures/barchart_identified_patents_1976-2014.pdf}
 	\label{fig:summary_stats}
-	\floatfoot{\textit{Note:} Identified patents are those found through the search algorithm; the bottom darker-shade bars are the number of distinct patents with at least one match \\[0.1cm]
-	\textit{Source:} USPTO, Google and own calculations.}
+	\floatfoot{
+	\begin{minipage}{0.8\textwidth}
+\textit{Note:} Identified patents are those found through the search algorithm; the bottom darker-shade bars are the number of distinct patents with at least one match \\[0.1cm]
+	\textit{Source:} USPTO, Google and own calculations. 
+	\end{minipage}
+		}
 \end{figure}
+
+
+%\begin{figure}[tb]
+%\caption{Number of identified patents, 1976-2014}
+%	\includegraphics[trim=0cm 0cm 1cm 0.5cm, clip=true, totalheight=0.25\textheight]{./figures/barchart_identified_patents_1976-2014.pdf}
+%	\label{fig:summary_stats}
+%	\floatfoot{\textit{Note:} Identified patents are those found through the search algorithm; the bottom darker-shade bars are the number of distinct patents with at least one match \\[0.1cm]
+%	\textit{Source:} USPTO, Google and own calculations.}
+%\end{figure}
+
+
 
 However, the mean number of matches has also shifted upwards from around 0.93 to 1.6 (panel C). \footnote{The median is reliably at zero.} Panel D shows that this trend is robust when we exclude the top percentile of matches, which contains outliers of patents that have hundreds of matches. Figure~\ref{fig:match_per_nrpatents} plot the weekly average over average of the number of keyword matches per week which is upwards trending. 
 
@@ -193,8 +212,12 @@ However, the mean number of matches has also shifted upwards from around 0.93 to
 \caption{Weekly averages of number of average matches per patent, 1976-2015}
 	\centering
 	\includegraphics[trim=1cm 0cm 1cm 0cm, clip=true, totalheight=0.4\textheight]{./figures/match_over_nrpatents_weekly_1976-2015.pdf}
-	\floatfoot{\textit{Note:} Every data point displays sum of matches from searching through one file of weekly patent grant texts divided by the number of identified patents for that week; the solid line is the HP-filtered trend with $\lambda = 100'000$; the size of markers corresponds to number of patents in week.\\[0.1cm]
-	\textit{Source:} USPTO, Google and own calculations.}
+	\floatfoot{
+	\begin{minipage}{0.8\textwidth}
+	\textit{Note:} Every data point displays sum of matches from searching through one file of weekly patent grant texts divided by the number of identified patents for that week; the solid line is the HP-filtered trend with $\lambda = 100'000$; the size of markers corresponds to number of patents in week.\\[0.1cm]
+	\textit{Source:} USPTO, Google and own calculations.
+	\end{minipage}
+	}
 	\label{fig:match_per_nrpatents}
 \end{figure}
 
