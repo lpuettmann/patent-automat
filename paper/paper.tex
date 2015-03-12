@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,fleqn]{article}
+\documentclass[11pt,a4paper]{article}
 
 \usepackage{graphicx,hyperref,amsmath,natbib,bm,url}
 \usepackage[utf8]{inputenc} % include umlaute
@@ -97,10 +97,10 @@ breaklinks=true
 \end{center}
 
 
-\vspace*{1.1cm}
+\vspace*{0.8cm}
 \begin{center}
-\begin{minipage}{0.65\textwidth}
-\textbf{Abstract.} We propose to develop a new industry-level indicator of automation based on searching patent grant texts for keywords. We show the feasibility of such a project by searching the text of all 5.5 mio. patents granted by the U.S. Patent Office from 1976-2015 for words containing the stem ``automat". The 6.9 mio. such matches exhibit a strong and robust upward trend in absolute and relative terms. We are able to match 40 percent of patents up to 2006 with industries through information on the firms being granted a patent. We aim to improve this exploratory first analysis along several dimensions: by refining our search algorithm, by matching patents to industries through existing patent classifications and by potentially extending the coverage back until 1920. We suggest several research avenues to put our new indicator to use: to contribute to the discussion on automation and reshoring and to test if sector-level technological progress in automation has led to changes in employment in such sectors.
+\begin{minipage}{0.8\textwidth}
+\textbf{Abstract.} We propose to develop a new industry-level indicator of automation based on searching patent grant texts for keywords. We show the feasibility of such a project by searching the text of all 5.5 mio. patents granted by the U.S. Patent Office from 1976-2015 for keywords related to automation. The 6.9 mio. such matches exhibit a strong and robust upward trend in absolute and relative terms. We are able to match 40 percent of patents up to 2006 with industries through information on the firms being granted a patent. We aim to improve this exploratory first analysis along several dimensions: by refining our search algorithm, by matching patents to industries through existing patent classifications and by potentially extending the coverage back until 1920. We suggest several research avenues to put our new indicator to use: to contribute to the discussion on automation and reshoring and to test if sector-level technological progress in automation has led to changes in employment in such sectors.
 \end{minipage}
 \end{center}
 
@@ -108,7 +108,7 @@ breaklinks=true
 %\tableofcontents 
 
 
-\newpage
+%\newpage
 \section{Introduction}
 The rapid technological change of the recent decades has fundamentally altered production processes: it is becoming more widespread to use machines for tasks previously executed by humans. This process has long since attracted the interest of economists. In labor economics, researchers try to assess the effects of automation on labor demand, wages and employment. 
 
@@ -129,7 +129,8 @@ Patent grant texts are a rich publicly-available data source that allows for a m
 
 The patent grant document includes the patent number, the name of the inventor, date, the patent classification, citations to other patents, an abstract, (most importantly) a description and a range of other legal information and drawings, all of which data that can be searched and analyzed. 
 
-We are not the first to analyze patent data: \cite{HJT2001} provide data on patent citations and link those to publicly-traded firms on Compustat. A number of papers, such as \cite{AAC2014} and \cite{ABP2015} have made use of patent citations. However, contrary to those papers, we concentrate on the patent's \textit{content}, not on its relation to other patents. As \citep[p.~290]{MVS2010} note, 
+We are not the first to analyze patent data: \cite{HJT2001} provide data on patent citations and link those to publicly-traded firms on Compustat.. A number of papers, such as \cite{AAC2014} , \cite{ABP2015} and \cite{BCJPV2015} have made use of patent citations. However, contrary to those papers, we concentrate on the patent's \textit{content}, not on its relation to other patents.  \cite{G1998} surveys the use of patents in economics and recommends a stronger use of the contents of patent documents, not only its meta information.
+As \citep[p.~290]{MVS2010} note, 
 \begin{quotation} 
 ``[...] the majority of studies and analyses undertaken in [patent and publication text search] focus on mere counts and/or quantitative attributes of relevant documents (e.g. number of publications, patents, number of references, number of citations); less attention is paid to analysis in which the content of the underlying documents is the focal point of attention."
 \end{quotation}
@@ -179,7 +180,7 @@ In total, we identify around 5.5 mio. patents. Figure~\ref{fig:keyword_match_ove
 
 
 
-Figure~\ref{fig:summary_stats} shows a summary of the matches. The increase in keyword matches could be due to the general increase in the number of patents (see panel A) from around 70'000 to 320'000 patents. 
+Figure~\ref{fig:summary_stats} shows a summary of the matches. The increase in keyword matches could be due to the general increase in the number of patents (see panel A) from around 70'000 to 320'000 patents. The share of distinct patents with at least one match (the light blue bars in figure~\ref{fig:summary_stats} ) has also steadily risen from 20 in 1991 to 30 percent in 2014. 
 
 
 \begin{figure}[tb]
@@ -419,6 +420,8 @@ Although not of immediate interest to us in the context of this research project
 	
 	\bibitem[Baker, Bloom and Davis(2011)]{BBD2013} \textbf{Baker, Scott R., Nicholas Bloom and Steven J. Davis} (2013). ``Measuring economic policy uncertainty." \textit{Chicago Booth research paper}, 13-02.
 	
+	\bibitem[Bell et al.(2015)]{BCJPV2015} \textbf{Bell, Alex, Raj Chetty, Xavier Jaravel, Neviana Petkova and John Van Reenen} (2015). ``Innovation Policy and the Lifecycle of Inventors." mimeo, Harvard University, Office of Tax Analysis, CEPR, LSE.
+	
 %	\bibitem[Banister and Cook(2011)]{BC2011} \textbf{Banister, Judith and George Cook} (2011). ``China's Employment and Compensation Costs in Manufacturing through 2008." \textit{Monthly Labor Review}, 39-52.
 	
 	\bibitem[Blinder(2009)]{B2009} \textbf{Blinder, Alan S.} (2009). ``How Many US Jobs Might be Offshorable." \textit{World Economics}, 10: 41-78.
@@ -440,6 +443,8 @@ Although not of immediate interest to us in the context of this research project
 	\bibitem[Goos and Manning(2007)]{GM2007} \textbf{Goos, Maarten and Alan Manning} (2007). ``Lousy and Lovely Jobs: The Rising Polarization of Work in Britain." \textit{Review of Economics and Statistics}, 89(1): 118-133.
 	
 	\bibitem[Goos, Manning and Salomons(2014)]{GMS2014} \textbf{Goos, Maarten, Alan Manning and Anna Salomons} (2014). ``Explaining Job Polarization: Routine-Biased Technological Change and Offshoring." \textit{American Economic Review}, 104(8): 2509-2526.
+	
+	\bibitem[Griliches(1998)]{G1998} \textbf{Griliches, Zvi} (1998). ``Patent Statistics as Economic Indicators: A Survey." \textit{R&D and Productivity: The Econometric Evidence}, University of Chicago Press, 287-343.
 	
 	\bibitem[Grossman and Rossi-Hansberg(2008)]{GR2008} \textbf{Grossman, Gene M. and Esteban Rossi-Hansberg} (2008). ``Trading Tasks: A Simple Theory of Offshoring". \textit{American Economic Review}, 98(5): 1978-1997.
 
