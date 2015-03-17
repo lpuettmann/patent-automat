@@ -100,7 +100,7 @@ breaklinks=true
 \vspace*{0.8cm}
 \begin{center}
 \begin{minipage}{0.8\textwidth}
-\textbf{Abstract.} We propose to develop a new industry-level indicator of automation based on searching patent grant texts for keywords. We show the feasibility of such a project by searching the text of all 5.5 mio. patents granted by the U.S. Patent Office from 1976-2015 for words containing the stem ``automat". The 6.9 mio. such matches exhibit a strong and robust upward trend in absolute and relative terms. We are able to match 40 percent of patents up to 2006 with industries through information on the firms being granted a patent. We aim to improve this exploratory first analysis along several dimensions: by refining our search algorithm, by matching patents to industries through existing patent classifications and by potentially extending the coverage back until 1920. We suggest several research avenues to put our new indicator to use: to contribute to the discussion on automation and reshoring and to test if sector-level technological progress in automation has led to changes in employment in such sectors.
+\textbf{Abstract.} We propose to develop a new industry-level indicator of automation based on searching patent grant texts for keywords. We show the feasibility of such a project by searching the text of all 5.5 mio. patents granted by the U.S. Patent Office from 1976-2015 for keywords related to automation. The 6.9 mio. such matches exhibit a strong and robust upward trend in absolute and relative terms. We are able to match 40 percent of patents up to 2006 with industries through information on the firms being granted a patent. We aim to improve this exploratory first analysis along several dimensions: by refining our search algorithm, by matching patents to industries through existing patent classifications and by potentially extending the coverage back until 1920. We suggest several research avenues to put our new indicator to use: to contribute to the discussion on automation and reshoring and to test if sector-level technological progress in automation has led to changes in employment in such sectors.
 \end{minipage}
 \end{center}
 
@@ -129,7 +129,8 @@ Patent grant texts are a rich publicly-available data source that allows for a m
 
 The patent grant document includes the patent number, the name of the inventor, date, the patent classification, citations to other patents, an abstract, (most importantly) a description and a range of other legal information and drawings, all of which data that can be searched and analyzed. 
 
-We are not the first to analyze patent data: \cite{HJT2001} provide data on patent citations and link those to publicly-traded firms on Compustat. A number of papers, such as \cite{AAC2014} and \cite{ABP2015} have made use of patent citations. However, contrary to those papers, we concentrate on the patent's \textit{content}, not on its relation to other patents. As \citep[p.~290]{MVS2010} note, 
+We are not the first to analyze patent data: \cite{HJT2001} provide data on patent citations and link those to publicly-traded firms on Compustat. Patent citations differ from academic citations in that the patent examiner determines determine the novelty of the patent and the citations are therefore likely to be more objective than those in academic publications. A number of papers, such as \cite{AAC2014} , \cite{ABP2015} and \cite{BCJPV2015} have made use of patent citations. However, contrary to those papers, we concentrate on the patent's \textit{content}, not on its relation to other patents.  \cite{G1998} surveys the use of patents in economics and recommends a stronger use of the contents of patent documents, not only its aggregated meta information.
+As \citep[p.~290]{MVS2010} note, 
 \begin{quotation} 
 ``[...] the majority of studies and analyses undertaken in [patent and publication text search] focus on mere counts and/or quantitative attributes of relevant documents (e.g. number of publications, patents, number of references, number of citations); less attention is paid to analysis in which the content of the underlying documents is the focal point of attention."
 \end{quotation}
@@ -179,7 +180,7 @@ In total, we identify around 5.5 mio. patents. Figure~\ref{fig:keyword_match_ove
 
 
 
-Figure~\ref{fig:summary_stats} shows a summary of the matches. The increase in keyword matches could be due to the general increase in the number of patents (see panel A) from around 70'000 to 320'000 patents. 
+Figure~\ref{fig:summary_stats} shows a summary of the matches. The increase in keyword matches could be due to the general increase in the number of patents (see panel A) from around 70'000 to 320'000 patents. The share of distinct patents with at least one match (the light blue bars in figure~\ref{fig:summary_stats} ) has also steadily risen from 20 in 1991 to 30 percent in 2014. \cite{G1998}  remarks that there was a global reduction in patents granted (and only a minor reduction in applications) throughout the 1970s, the end of which can also be seen in our data. \cite{G1998} discusses the possibility of this being due to ``bureaucratic cycles". 
 
 
 \begin{figure}[tb]
@@ -226,11 +227,11 @@ However, the mean number of matches has also shifted upwards from around 0.93 to
 \subsection{Developing an index for automation}
 We propose to develop a new sector-level index of automation based on the keyword search. The index should rise in the number of matches, but we want the marginal benefit of an additional match to decrease.  A possible candidate for such an index is $x_i = log(1+m_i)$, where $m_i$ are the number of keyword matches per patent and $x_i$ is the index assigned to patent $i$. 
 
-As a further option we could weigh this index by the number of times a patent has been cited by other patents using the data provided by \cite{HJT2001}, however correcting for the fact that older patents have been cited more often. Such a citation-weighted index could take the form $x_i = log(1+m_i) [1+log(1+\frac{c_i}{C_t})]$, where $c_i$ are the patent $i$'s citations over the whole period and $C_t$ are the total number of citations of patents in the same year over the whole period. A potential cost of including patent citations would be limiting the number of patents to the roughly 3 mio. patents and the time up to 2006 that \cite{HJT2001} (and later revisions) cover. 
+\cite{G1998} recommends weighting for the importance of patents. A such we could weigh this index by the number of times a patent has been cited by other patents using the data provided by \cite{HJT2001}, however correcting for the fact that older patents have been cited more often. Such a citation-weighted index could take the form $x_i = log(1+m_i) [1+log(1+\frac{c_i}{C_t})]$, where $c_i$ are the patent $i$'s citations over the whole period and $C_t$ are the total number of citations of patents in the same year over the whole period. A potential cost of including patent citations would be limiting the number of patents to the roughly 3 mio. patents and the time up to 2006 that \cite{HJT2001} (and later revisions) cover. 
 
 
 \section{Linking Patent Citations to Industries}
-In order to use our patent data for economic analyses other than at the aggregate level, we need to match the patent classes with the industries where these patents are applied. In general, this is not an easy task since the same patent might be of use in various different industries. The industry to which the patent assignee belongs might not be informative in this context because many large companies - which are, in general, those companies most likely to innovate - are active in multiple different fields. Having warned about these possible shortcomings, we still believe that patent-industry matching yields meaningful insights.%\linebreak
+In order to use our patent data for economic analyses other than at the aggregate level, we need to match the patent classes with the industries where these patents are applied. In general, this is not an easy task since the same patent might be of use in various different industries. \cite{G1998} describes some of the difficulties faced when matching patents to industries. The industry to which the patent assignee belongs might not be informative in this context because many large companies - which are, in general, those companies most likely to innovate - are active in multiple different fields. Having warned about these possible shortcomings, we still believe that patent-industry matching yields meaningful insights.%\linebreak
 
 There are two ways of doing this: The first is to use the patent's technical class to assign a patent to an industry. The USPTO provides a convergence table that links patent classes with NAICS industries, which has been compiled manually by trained analysts.\footnote{\href{http://www.uspto.gov/web/offices/ac/ido/oeip/taf/data/naics_conc/2013/read_me.txt}{\texttt{http://www.uspto.gov/web/offices/ac/ido/oeip/taf/data/naics\_conc}}} However, it only contains manufacturing industries, and their number is restricted to 26. 
 
@@ -398,26 +399,33 @@ This short discussion makes clear that the timing of offshoring and automation i
 In order to establish a causal link between automation and offshoring and hence to provide support for the reshoring hypothesis, a theoretical model is needed. We plan to develop such a model, using as a starting point some existing models of offshoring (e.g. \cite{GR2008}) and automation (e.g. \cite{ALM2003}, \cite{L2011}). In this model, complementarity and substitutability of home labor, foreign labor and machines will play a major role. One difficulty will be to transfer the mechanics of the existing occupation-level models to the industry level. The model could be tested empirically once we have the necessary data at hand. 
 
 \subsection{Other possible uses of database not linked to employment}
-Although not of immediate interest to us in the context of this research project, there are many other possible applications of the automation database, which could be the subject of future research projects: (1) automation and sectoral productivity: does technological change increase (labor) productivity more in some sectors than in others? (2) comparing U.S. automation patents to European automation patents (using additional data from the European Patent Office or other sources): where is automation higher? Are there sector-level differences and do these link to comparative advantage and/or institutional characteristics? (The political economy literature on varieties of capitalism suggests that U.S. firms should innovate more in IT, pharmaceutics, biotechnology and related sectors whereas continental European firms should innovate more in manufacturing.)
+Although not of immediate interest to us in the context of this research project, there are many other possible applications of the automation database, which could be the subject of future research projects: 
+\begin{enumerate}
+\item automation and sectoral productivity: does technological change increase (labor) productivity more in some sectors than in others? 
+\item comparing U.S. automation patents to European automation patents (using additional data from the European Patent Office or other sources): where is automation higher? Are there sector-level differences and do these link to comparative advantage and/or institutional characteristics? (The political economy literature on varieties of capitalism suggests that U.S. firms should innovate more in IT, pharmaceutics, biotechnology and related sectors whereas continental European firms should innovate more in manufacturing.) 
+\item one could also compare this patent index to aggregate total factor productivity. However, \cite{G1998} discusses the use of patents as an  ``output" index (like a technology frontier) vs an ``input" index (for example, to measure a firms research activities) and warns against interpreting changes in patent numbers in the time dimension.
+\end{enumerate}
 
 
 %%%%%%%%%%%Bibliography%%%%%%%%%%%
-\newpage
+\clearpage
 \vspace*{0.5cm}
 \setstretch{1} % Set line spacing to 1 for the bibliography.
 \begin{thebibliography}{9}
 	
-	\bibitem[Acemoglu, Akcigit and Celik(2014)]{AAC2014} \textbf{Acemoglu, Daron, Ufuk Akcigit and Murat Alp Celik} (2014). ``Young, Restless and Creative: Openness to Disruption and Creative Innovations." NBER Working Paper No. 19894
+	\bibitem[Acemoglu et al.(2014)]{AAC2014} \textbf{Acemoglu, Daron, Ufuk Akcigit and Murat Alp Celik} (2014). ``Young, Restless and Creative: Openness to Disruption and Creative Innovations." NBER Working Paper No. 19894
 
-	\bibitem[Arora, Belenzon and Patacconi(2015)]{ABP2015} \textbf{Arora, Ashish, Sharon Belenzon and Andrea Patacconi} (2015). ``Killing the Golden Goose? The Decline of Science in Corporate R\&D." \textit{NBER Working Paper No. 20902}.
+	\bibitem[Arora et al.(2015)]{ABP2015} \textbf{Arora, Ashish, Sharon Belenzon and Andrea Patacconi} (2015). ``Killing the Golden Goose? The Decline of Science in Corporate R\&D." \textit{NBER Working Paper No. 20902}.
 	
 	\bibitem[Autor and Dorn(2013)]{AD2013} \textbf{Autor, David H. and David Dorn} (2013). ``The Growth of Low-Skill Service Jobs and the Polarizatio of the US Labor Market." \textit{American Economic Review}, 103(5): 1553-1597
 	
-	\bibitem[Autor, Katz and Kearney(2008)]{AKK2008} \textbf{Autor, David H., Lawrence F. Katz and Melissa S. Kearney} (2008). ``Trends in US wage inequality: Revising the revisionists." \textit{The Review of Economics and Statistics}, 90(2): 300-323.
+	\bibitem[Autor et al.(2008)]{AKK2008} \textbf{Autor, David H., Lawrence F. Katz and Melissa S. Kearney} (2008). ``Trends in US wage inequality: Revising the revisionists." \textit{The Review of Economics and Statistics}, 90(2): 300-323.
 	
-	\bibitem[Autor, Levy and Murnane(2003)]{ALM2003} \textbf{Autor, David H., Frank Levy and Richard J. Murnane} (2003). ``The Skill Content of Recent Technological Change: An Empirical Exploration." \textit{The Quarterly Journal of Economics}, 118(4): 1279-1333.
+	\bibitem[Autor et al.(2003)]{ALM2003} \textbf{Autor, David H., Frank Levy and Richard J. Murnane} (2003). ``The Skill Content of Recent Technological Change: An Empirical Exploration." \textit{The Quarterly Journal of Economics}, 118(4): 1279-1333.
 	
-	\bibitem[Baker, Bloom and Davis(2011)]{BBD2013} \textbf{Baker, Scott R., Nicholas Bloom and Steven J. Davis} (2013). ``Measuring economic policy uncertainty." \textit{Chicago Booth research paper}, 13-02.
+	\bibitem[Baker et al.(2011)]{BBD2013} \textbf{Baker, Scott R., Nicholas Bloom and Steven J. Davis} (2013). ``Measuring economic policy uncertainty." \textit{Chicago Booth research paper}, 13-02.
+	
+	\bibitem[Bell et al.(2015)]{BCJPV2015} \textbf{Bell, Alex, Raj Chetty, Xavier Jaravel, Neviana Petkova and John Van Reenen} (2015). ``Innovation Policy and the Lifecycle of Inventors." mimeo, Harvard University, Office of Tax Analysis, CEPR, LSE.
 	
 %	\bibitem[Banister and Cook(2011)]{BC2011} \textbf{Banister, Judith and George Cook} (2011). ``China's Employment and Compensation Costs in Manufacturing through 2008." \textit{Monthly Labor Review}, 39-52.
 	
@@ -427,9 +435,9 @@ Although not of immediate interest to us in the context of this research project
 	
 	\bibitem[Brynjolfsson and McAfee(2014)]{BM2014} \textbf{Brynjolfsson, Erik and Andrew McAfee} (2014). \textit{The Second Machine Age: Work, Progress, and Prosperity in a Time of Brilliant Technologies.} WW Norton \& Company.
 	
-		\bibitem[Brynjolfsson, McAfee and Spence(2014)]{BMS2014}\textbf{Brynjolfsson, Erik, Andrew McAfee and Michael Spence} (2014). ``New World Order. Labor, Capital, and Ideas in the New Power Law Economy." \textit{Foreign Affairs}, 93(4): 44-53.
+		\bibitem[Brynjolfsson et al.(2014)]{BMS2014}\textbf{Brynjolfsson, Erik, Andrew McAfee and Michael Spence} (2014). ``New World Order. Labor, Capital, and Ideas in the New Power Law Economy." \textit{Foreign Affairs}, 93(4): 44-53.
 	
-	\bibitem[Ebenstein, Harrison, McMillan and Phillips(2014)] {EHMP2014} \textbf{Ebenstein, Avraham, Ann Harrison, Margret McMillan and Shannon Phillips} (2014). ``Estimating the Impact of Trade and Offshroing on American Workers Using the Current Population Surveys." \textit{Review of Economics and Statistics}, 96(4): 581-595. 
+	\bibitem[Ebenstein et al.(2014)] {EHMP2014} \textbf{Ebenstein, Avraham, Ann Harrison, Margret McMillan and Shannon Phillips} (2014). ``Estimating the Impact of Trade and Offshroing on American Workers Using the Current Population Surveys." \textit{Review of Economics and Statistics}, 96(4): 581-595. 
 	
 	\bibitem[Feenstra and Hanson(1999)]{FH1999} \textbf{Feenstra, Robert C. and Gordon H. Hanson} (1999). ``The Impact of Outsourcing and High-Technology Capital on Wages: Estimates for the United States, 1979-1990." \textit{Quarterly Journal of Economics}, 114(3): 907-940.
 
@@ -439,26 +447,28 @@ Although not of immediate interest to us in the context of this research project
 
 	\bibitem[Goos and Manning(2007)]{GM2007} \textbf{Goos, Maarten and Alan Manning} (2007). ``Lousy and Lovely Jobs: The Rising Polarization of Work in Britain." \textit{Review of Economics and Statistics}, 89(1): 118-133.
 	
-	\bibitem[Goos, Manning and Salomons(2014)]{GMS2014} \textbf{Goos, Maarten, Alan Manning and Anna Salomons} (2014). ``Explaining Job Polarization: Routine-Biased Technological Change and Offshoring." \textit{American Economic Review}, 104(8): 2509-2526.
+	\bibitem[Goos et al.(2014)]{GMS2014} \textbf{Goos, Maarten, Alan Manning and Anna Salomons} (2014). ``Explaining Job Polarization: Routine-Biased Technological Change and Offshoring." \textit{American Economic Review}, 104(8): 2509-2526.
+	
+	\bibitem[Griliches(1998)]{G1998} \textbf{Griliches, Zvi} (1998). ``Patent Statistics as Economic Indicators: A Survey." \textit{R&D and Productivity: The Econometric Evidence}, University of Chicago Press, 287-343.
 	
 	\bibitem[Grossman and Rossi-Hansberg(2008)]{GR2008} \textbf{Grossman, Gene M. and Esteban Rossi-Hansberg} (2008). ``Trading Tasks: A Simple Theory of Offshoring". \textit{American Economic Review}, 98(5): 1978-1997.
 
-	\bibitem[Hall, Jaffe and Trajtenberg(2001)]{HJT2001} \textbf{Hall, Bronwyn H., Adam B. Jaffe and Manuel Trajtenberg} (2001). ``The NBER Patent Citation Data File: Lessons, Insights and Methodologial Tools". \textit{NBER Working Paper No. 8498}.
+	\bibitem[Hall  et al.(2001)]{HJT2001} \textbf{Hall, Bronwyn H., Adam B. Jaffe and Manuel Trajtenberg} (2001). ``The NBER Patent Citation Data File: Lessons, Insights and Methodologial Tools". \textit{NBER Working Paper No. 8498}.
 	
-	\bibitem[Hansen, McMaho and Prat(2014)]{HMP2014} \textbf{Hansen, Stephen, Michael McMahon and Andrea Prat} (2014). ``Transparency and Deliberation within the FOMC:
+	\bibitem[Hansen et al.(2014)]{HMP2014} \textbf{Hansen, Stephen, Michael McMahon and Andrea Prat} (2014). ``Transparency and Deliberation within the FOMC:
 a Computational Linguistics Approach". CEPR Discussion Paper 9994.
 
 	\bibitem[Hinze and Schmoch(2005)]{HS2005} \textbf{Hinze, Sybille and Ulrich Schmoch} (2005). ``Opening the Black Box." \textit{Handbook of Quantitative Science and Technology Research}, Springer Netherlands, 215-235.
 	
-	\bibitem[Hummels, Jørgensen, Munch and Xiang(2014)]{HJMX2014} \textbf{Hummels, David, Rasmus Jørgensen, Jakob Munch and Chong Xiang} (2014). ``The Wage Effects of Offshoring: Evidence from Danish Matched Worker-Firm Data." \textit{American Economic Review}, 104(6): 1597-1629.
+	\bibitem[Hummels et al.(2014)]{HJMX2014} \textbf{Hummels, David, Rasmus Jørgensen, Jakob Munch and Chong Xiang} (2014). ``The Wage Effects of Offshoring: Evidence from Danish Matched Worker-Firm Data." \textit{American Economic Review}, 104(6): 1597-1629.
 	
 	\bibitem[Lewis(2011)]{L2011} \textbf{Lewis, Ethan} (2011). ``Immigration, Skill Mix, and Capital Skill Complementarity." \textit{The Quarterly Journal of Economics}, 126(2): 1029-1069.
 	
 %	\bibitem[Marin(2014)]{M2014} \textbf{Marin, Dalia} (2014). ``Globalisation and the Rise of the Robots." \textit{VoxEU.org}, CEPR. \href{http://www.voxeu.org/article/globalisation-and-rise-robots}{\texttt{[link]}}
 	
-	\bibitem[Magerman, Van Looy and Song(2010)]{MVS2010} \textbf{Magerman, Tom, Bart Van Looy and Xiaoyan Song} (2010). ``Exploring the feasibility and accuracy of Latent Semantic Analysis based on text mining techniques to detect similarity between patent documents and scientific publication." \textit{Scientometrics}, 82(2): 289-306.	
+	\bibitem[Magerman et al.(2010)]{MVS2010} \textbf{Magerman, Tom, Bart Van Looy and Xiaoyan Song} (2010). ``Exploring the feasibility and accuracy of Latent Semantic Analysis based on text mining techniques to detect similarity between patent documents and scientific publication." \textit{Scientometrics}, 82(2): 289-306.	
 
-	\bibitem[Manning, Raghavan and Schütze(2009)]{MRS2009} \textbf{Manning, Christopher D., Prabhakar Raghavan and Hinrich Schütze} (2009). \textit{An Introduction to Information Retrieval.}  Cambridge University Press.
+	\bibitem[Manning, et al.(2009)]{MRS2009} \textbf{Manning, Christopher D., Prabhakar Raghavan and Hinrich Schütze} (2009). \textit{An Introduction to Information Retrieval.}  Cambridge University Press.
 	
 	\bibitem[Schrader and Laaser(2009)]{SL2009} \textbf{Schrader, Klaus and Claus-Friedrich Laaser} (2009). ``Globalisierung in der Wirtschaftskrise: wie sicher sind die Jobs in Deutschland." \textit{Kieler Diskussionsbeiträge} No. 465
 	
