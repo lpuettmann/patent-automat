@@ -79,7 +79,7 @@ for ix_year=year_start:year_end
     
     patent_week = cell2mat(patent_keyword_appear(:, 4));
     
-    
+    patent_match_summary.total_matches_yr(aux_ix_save) = sum(nr_keyword_per_patent);
     patent_match_summary.mean_patents_yr(aux_ix_save) = mean(nr_keyword_per_patent);
     patent_match_summary.median_patents_yr(aux_ix_save) = median(nr_keyword_per_patent);
     patent_match_summary.max_patents_yr(aux_ix_save) = max(nr_keyword_per_patent);
@@ -126,6 +126,8 @@ for ix_year=year_start:year_end
     
     allyear_nr_patents_per_week{ix_year - year_start + 1} = nr_patents_per_week; 
                         
+    patent_match_summary.total_automix_yr(aux_ix_save) = sum(allyear_total_automix);
+    
     % Subtract one from saving index because of the zero in the beginning
     % that we need for the initialization.
     ix_new_year(aux_ix_save + 1) = size(allyear_total_matches_week, 1);
