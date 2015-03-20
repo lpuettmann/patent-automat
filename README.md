@@ -9,11 +9,11 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 
 To run:
 ---------------------------
-1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. These files then save `.mat` files `patent_index_[year].mat` into folder *patent_index*.
+1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. Save `.mat` files `patent_index_[year].mat` to folder *patent_index*.
 	1. Run `find_patents_part1.m`. Years: 1976-2001
 	2. Run `find_patents_part2.m`. Years: 2002-2004
 	3. Run `find_patents_part3.m`. Years: 2005-2015
-2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices. These files then save `.mat` files `patent_keyword_appear_[year].mat` into folder *matches*.
+2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices. Save `.mat` files `patent_keyword_appear_[year].mat` to folder *matches*.
 	1. Run `analyze_patent_text_part1.m`. Years: 1976-2001
 	2. Run `analyze_patent_text_part2.m`. Years: 2002-2004
 	3. Run `analyze_patent_text_part3.m`. Years: 2005-2015
@@ -23,4 +23,4 @@ To run:
 		* `plot_matches_overtime.m` 
 		* `plot_matches_over_nrpatents_weekly.m` 
 		* `plot_summary_statistics_overtime.m` 
-4. The script `transfer_matches_2stata.m` deletes those patents that start with a letter and clean patent classifications. Then export matches to `.csv` to be transported to Stata. Then copy all `.csv` files to *cleaned_matches_and_patentnr*. 
+4. The script `transfer_matches_2stata.m` deletes those patents that start with a letter and cleans patent classifications. Then export matches to `.csv` to be transported to Stata. It saves all `.csv` files to *cleaned_matches_and_patentnr*. 

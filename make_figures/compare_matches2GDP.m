@@ -65,10 +65,10 @@ plot(plottime, nr_patents_yr_norm, 'Color', color1_pick, 'LineWidth', 1.5, ...
     'Marker', 'o', 'MarkerSize', 1.8, 'MarkerFaceColor', color1_pick)
 hold on
 plot(plottime, rgdp_norm, 'Color', color2_pick, 'LineWidth', 1.5, ...
-    'Marker', 'o', 'MarkerSize', 1.8, 'MarkerFaceColor', color2_pick)
+    'Marker', 'square', 'MarkerSize', 1.8, 'MarkerFaceColor', color2_pick)
 hold on
 plot(plottime, total_matches_yr_norm, 'Color', color3_pick, 'LineWidth', 1.5, ...
-    'Marker', 'o', 'MarkerSize', 1.8, 'MarkerFaceColor', color3_pick)
+    'Marker', 'diamond', 'MarkerSize', 1.8, 'MarkerFaceColor', color3_pick)
 hold on
 set(gca,'TickDir','out') 
 box off
