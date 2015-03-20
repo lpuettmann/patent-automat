@@ -10,8 +10,6 @@ addpath('../functions');
 
 %% Define parameters
 % ========================================================================
-find_str = 'automat'; 
-
 year_start = 1976;
 year_end = 2015;
 nr_years = length(year_start:year_end);
