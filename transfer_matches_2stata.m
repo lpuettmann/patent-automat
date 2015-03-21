@@ -11,7 +11,7 @@ addpath('matches');
 addpath('functions');
 
 %%
-year_start = 2002;
+year_start = 1976;
 year_end = 2015;
 
 
@@ -38,7 +38,9 @@ for ix_year = year_start:year_end
     patent_numbers = patent_keyword_appear(:, 1);
 
     cleaned_full_info = patent_numbers;
-
+    
+    patent_tech_class = patent_keyword_appear(:, 3);
+    cleaned_patent_tech_class = patent_tech_class;
 
     ix_save = 1; % initalize saving index
 
@@ -63,6 +65,8 @@ for ix_year = year_start:year_end
     %%
     cleaned_full_info(save_row_delete) = [];
     cleaned_nr_keyword(save_row_delete) = [];
+    cleaned_patent_tech_class(save_row_delete) = [];
+    
 
     if nr_patents_yr - length(save_row_delete) ~= length(cleaned_full_info)
         warning('They should be the same')
@@ -102,8 +106,13 @@ for ix_year = year_start:year_end
     %% Write to csv file
     save_name = horzcat('cleaned_patentnr_4transfer_', num2str(ix_year), '.csv');
     csvwrite(save_name, patent_number_cleaned);
+    
     save_name = horzcat('cleaned_matches_4transfer_', num2str(ix_year), '.csv');
     csvwrite(save_name, cleaned_nr_keyword);
+    
+    save_name = horzcat('cleaned_techclass_4transfer_', num2str(ix_year), '.csv');
+    cell2csv(save_name, cleaned_patent_tech_class);
+    
     disp('Finished saving csv files.')
 
 

@@ -2,8 +2,6 @@ close all
 clear all
 clc
 
-addpath('../functions');
-
 
 %% Set font
 set(0, 'DefaultTextFontName', 'Palatino')
