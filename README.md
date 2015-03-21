@@ -1,4 +1,4 @@
-Analyze PatentAAAA Grant Texts
+Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
 
