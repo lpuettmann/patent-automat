@@ -83,7 +83,11 @@ for ix_year = year_start:year_end
         num2str(length(save_row_delete)/nr_patents_yr*100))
 
 
-    %% Delete first and last letter
+    %% Remove leading and trailing whitespace (but not those in between)
+    cleaned_patent_tech_class = strtrim(cleaned_patent_tech_class);
+    
+    
+    %% Delete first and last letter of patent numbers
     patent_number_cleaned =  repmat({''}, length(cleaned_full_info), 1);
     for ix_patent = 1:length(cleaned_full_info)
 
@@ -103,6 +107,7 @@ for ix_year = year_start:year_end
     end
 
 
+    
     %% Write to csv file
     save_name = horzcat('cleaned_patentnr_4transfer_', num2str(ix_year), '.csv');
     csvwrite(save_name, patent_number_cleaned);
