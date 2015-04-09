@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1984;
-year_end = 1984;
+year_start = 1976;
+year_end = 2001;
 
 
 
@@ -25,7 +25,6 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
            
-%     build_data_path = horzcat('.\data\', num2str(ix_year));
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', num2str(ix_year));
     addpath(build_data_path);
 
@@ -192,8 +191,15 @@ for ix_year = year_start:year_end
             % ------------------------------------------------------------
             ix_find_OCL = strfind(patent_text_corpus, 'OCL');
             all_OCL_matches = find(~cellfun(@isempty,ix_find_OCL));
-            row_OCL_class = patent_text_corpus{all_OCL_matches(1)}; % only look at first OCL match
-            patent_OCL_class = row_OCL_class(5:numel(row_OCL_class));
+            
+            % only look at first OCL match
+            row_OCL_class = patent_text_corpus{all_OCL_matches(1)}; 
+            
+            % extract tech class number from string
+            patent_OCL_class = row_OCL_class(6:numel(row_OCL_class));
+            
+            % only keep first 3 digits
+            patent_OCL_class = patent_OCL_class(1:3);
             
             % Stack weekly information underneath
             % ------------------------------------------------------------
@@ -215,14 +221,14 @@ for ix_year = year_start:year_end
     
     % Save to .mat file
     % -------------------------------------------------------------------
-    save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('patent_index', save_name);
-    save(matfile_path_save, 'pat_ix');    
-    fprintf('Saved: %s.\n', save_name)
-    
-    disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
-    disp('---------------------------------------------------------------')
+%     save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
+%     matfile_path_save = fullfile('patent_index', save_name);
+%     save(matfile_path_save, 'pat_ix');    
+%     fprintf('Saved: %s.\n', save_name)
+%     
+%     disp('---------------------------------------------------------------')
+%     fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
+%     disp('---------------------------------------------------------------')
 end
 
 

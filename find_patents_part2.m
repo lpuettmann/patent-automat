@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2004;
-year_end = 2004;
+year_start = 2002;
+year_end = 2002;
 
 
 
@@ -25,9 +25,10 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-  m
+    week_end = 2;
     
-    build_data_path = horzcat('.\data\', num2str(ix_year));
+    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
+        num2str(ix_year));
     addpath(build_data_path);
 
 
@@ -145,21 +146,19 @@ for ix_year = year_start:year_end
             % where the classification stops.
             class_find_end = regexp(class_nr_line, '</PDAT>'); 
             class_number{i} = class_nr_line(13:class_find_end-1);
-
-            if numel(class_number) < 2
-                warning('Something is fishy.')
-            end
         end
         
-        
+        % Keep only the first 3 digits
+        class_number = cellfun(@(s) s(1:3), class_number, 'uni', ...
+            false);
         
         % Define patent index. It consists of the patent's WKU number, its
         % index position in the file and its tech classification. Save 
         % information for each week in a cell array.
         % -------------------------------------------------------------------
         pat_ix{ix_week, 1} = patent_number;
-        pat_ix{ix_week, 2} = ix_find; % position of patent start
-        pat_ix{ix_week, 3} = class_number; % position of patent start
+        pat_ix{ix_week, 2} = ix_find;
+        pat_ix{ix_week, 3} = class_number;
 
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
