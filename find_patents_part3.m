@@ -165,13 +165,26 @@ for ix_year = year_start:year_end
                 nr_class)
         end 
         
+        cleaned_patent_tech_class = strtrim(class_number);
 
+        % Keep only the first 3 digits
+        for i=1:length(cleaned_patent_tech_class)
+            pick = cleaned_patent_tech_class{i};
+
+            if numel(pick)>=3
+                trunc_tech_class{i} = pick(1:3);
+            else
+                trunc_tech_class{i} = pick;
+                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ix_year, i, pick)
+            end
+        end
+        
         % Define patent index. It consists of the patent's WKU number 
         % and its index position in the file. Save information for week in cell array
         % -------------------------------------------------------------------
         pat_ix{ix_week, 1} = patent_number;
-        pat_ix{ix_week, 2} = ix_find; % position of patent start
-        pat_ix{ix_week, 3} = class_number; % position of patent start
+        pat_ix{ix_week, 2} = ix_find;
+        pat_ix{ix_week, 3} = trunc_tech_class;
 
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end

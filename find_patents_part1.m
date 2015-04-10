@@ -25,7 +25,8 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
            
-    build_data_path = horzcat('T:\Puettmann\patent_data_save\', num2str(ix_year));
+    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
+        num2str(ix_year));
     addpath(build_data_path);
 
 
@@ -198,14 +199,19 @@ for ix_year = year_start:year_end
             % extract tech class number from string
             patent_OCL_class = row_OCL_class(6:numel(row_OCL_class));
             
-            % only keep first 3 digits
-            patent_OCL_class = patent_OCL_class(1:3);
+            % get rid of leading and trailing whitespace
+            patent_OCL_class = strtrim(patent_OCL_class);
             
             % Stack weekly information underneath
+            % only keep first 3 digits
             % ------------------------------------------------------------
-            class_number{ix_patent} = patent_OCL_class;
+            if numel(patent_OCL_class)>=3
+                trunc_tech_class{ix_patent} = patent_OCL_class(1:3);
+            else
+                trunc_tech_class{ix_patent} = patent_OCL_class;
+                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ix_year, i, pick)
+            end         
         end
-        
 
         
         % Define patent index. It consists of the patent's WKU number, its
@@ -213,8 +219,8 @@ for ix_year = year_start:year_end
         % information for each week in a cell array.
         % -------------------------------------------------------------------      
         pat_ix{ix_week, 1} = patent_number;
-        pat_ix{ix_week, 2} = ix_find; % position of patent start
-        pat_ix{ix_week, 3} = class_number; % position of patent start
+        pat_ix{ix_week, 2} = ix_find;
+        pat_ix{ix_week, 3} = trunc_tech_class;
         
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end

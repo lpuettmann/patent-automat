@@ -30,7 +30,8 @@ for ix_year = year_start:year_end
     week_end = set_weekend(ix_year); 
     
     % Build path to data
-    build_data_path = horzcat('.\data\', num2str(ix_year));
+    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
+        num2str(ix_year));
     addpath(build_data_path);
 
     

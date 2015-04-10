@@ -16,8 +16,8 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 2004;
-year_end = 2004;
+year_start = 2002;
+year_end = 2002;
 
 
 
@@ -32,7 +32,8 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
     
-    build_data_path = horzcat('.\data\', num2str(ix_year));
+    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
+        num2str(ix_year));
     addpath(build_data_path);
 
 

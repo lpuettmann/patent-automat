@@ -12,7 +12,7 @@ addpath('functions');
 
 %%
 year_start = 1976;
-year_end = 2015;
+year_end = 2014;
 
 
 %%
@@ -20,7 +20,6 @@ year_end = 2015;
 for ix_year = year_start:year_end
 
     % Load matches
-    disp('Start loading file...')
     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
     load(load_file_name)
 
@@ -49,11 +48,11 @@ for ix_year = year_start:year_end
         extract_row = patent_numbers{ix_patent};
 
         if strcmp(extract_row(1), 'D') ... % design patents
-                | strcmp(extract_row(1), 'P') ... % PP: plant patents
+                || strcmp(extract_row(1), 'P') ... % PP: plant patents
                 || strcmp(extract_row(1), 'R') ... % reissue patents
-                | strcmp(extract_row(1), 'T') ... % defensive publications
-                | strcmp(extract_row(1), 'H') ... % SIR (statutory invention registration)
-                | strcmp(extract_row(1), 'X') % early X-patents
+                || strcmp(extract_row(1), 'T') ... % defensive publications
+                || strcmp(extract_row(1), 'H') ... % SIR (statutory invention registration)
+                || strcmp(extract_row(1), 'X') % early X-patents
            save_row_delete(ix_save) = ix_patent;
            ix_save = ix_save + 1;
         end   
@@ -82,10 +81,7 @@ for ix_year = year_start:year_end
         length(save_row_delete), nr_patents_yr, ...
         num2str(length(save_row_delete)/nr_patents_yr*100))
 
-
-    %% Remove leading and trailing whitespace (but not those in between)
-    cleaned_patent_tech_class = strtrim(cleaned_patent_tech_class);
-    
+  
     
     %% Delete first and last letter of patent numbers
     patent_number_cleaned =  repmat({''}, length(cleaned_full_info), 1);
@@ -121,9 +117,7 @@ for ix_year = year_start:year_end
     disp('Finished saving csv files.')
 
 
-
     %%
-    toc
     fprintf('Finished year %d\n', ix_year)
     disp('------------------------------------------------------------------')
 
