@@ -1,7 +1,7 @@
 Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
-*University of Bonn*
+
 
 Get data:
 ---------------------------
@@ -10,7 +10,7 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 
 To run:
 ---------------------------
-1. Search through weekly patent grant text files and save where each new patent starts. Also save the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. Save `.mat` files `patent_index_[year].mat` to folder *patent_index*.
+1. Search through weekly patent grant text files and save where each new patent starts. Also save the first 3 digiits of the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. Save `.mat` files `patent_index_[year].mat` to folder *patent_index*.
 	1. Run `find_patents_part1.m`. Years: 1976-2001
 	2. Run `find_patents_part2.m`. Years: 2002-2004
 	3. Run `find_patents_part3.m`. Years: 2005-2015
@@ -25,3 +25,5 @@ To run:
 		* `plot_matches_over_nrpatents_weekly.m` 
 		* `plot_summary_statistics_overtime.m` 
 4. The script `transfer_matches_2stata.m` deletes those patents that start with a letter and cleans patent classifications. Then export matches to `.csv` to be transported to Stata. It saves all `.csv` files to *cleaned_matches_and_patentnr*. 
+5. Run `prepare_conversion_table.m` which loads and prepares the table which allows to link patent's technologoy classification number to manufacturing sectors. 
+6. Run `match_pat2industry.m` which for 26 manufacturing sectors check which patents are linked to it.
