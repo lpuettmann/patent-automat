@@ -149,6 +149,10 @@ save('conversion_patent2industry/share_patents_linked.mat', ...
     'share_patents_linked');
 
 
+save('conversion_patent2industry/nr_appear_allyear.mat', ...
+    'nr_appear_allyear');
+
+
 length(nr_appear_allyear)
 
 
