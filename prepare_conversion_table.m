@@ -46,7 +46,7 @@ end
 
 save_name = 'conversion_table.mat';
 matfile_path_save = fullfile('conversion_patent2industry', save_name);
-save(matfile_path_save, 'naics_class_list');    
+save(matfile_path_save, 'naics_class_list', 'tech_class_list');    
 fprintf('Saved: %s.\n', save_name)
 
 fprintf('Finished, time = %dm.\n', round(toc/60))
