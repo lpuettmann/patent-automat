@@ -1,6 +1,7 @@
 Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
+*University of Bonn*
 
 Get data:
 ---------------------------
