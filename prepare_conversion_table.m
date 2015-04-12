@@ -11,7 +11,7 @@ fileName = 'Naics_co13.csv';
 
 fid = fopen(fileName, 'r'); % open the file
 
-lineArray = cell(203074, 1); % preallocate a cell array 
+lineArray = cell(203074, 1); % initialize
                           
 lineIndex = 1; % index of cell to place the next line in
 nextLine = fgetl(fid); % read the first line from the file
@@ -40,7 +40,7 @@ for ix_line = 1:length(lineArray)
 end
 
 if ~(length(tech_class_list)==length(naics_class_list))
-    warning('tech_class_list and naics_class_list should be equal.')
+    warning('tech_class_list and naics_class_list should have same length.')
 end
 
 

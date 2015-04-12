@@ -43,7 +43,7 @@ for ix_year = year_start:year_end
         % Get the set of patent tech classifications that are matched into the
         % respective industry.
         tc2ind = tech_class_list(positions_table);
-        tc2ind = unique(tc2ind);
+        tc2ind = unique(tc2ind); % delete duplicates (and sort)
 
 
         % Find patents that have the right tech classifications
@@ -113,7 +113,7 @@ for ix_year = year_start:year_end
     
     % Check which patents are linked
     patents_linked = unique(allind_patix2ind);
-    patents_not_linked = setdiff(1:nr_patents, patents_linked);
+    patents_not_linked = setdiff(1:nr_patents, patents_linked)';
 
     if ~((length(patents_not_linked) + length(patents_linked)) == nr_patents)
         warning('Should be equal.')
@@ -126,14 +126,11 @@ for ix_year = year_start:year_end
         length(patents_not_linked), 1-share_patents_linked(ix_iter,1))
     
     
-    % Histogram over how many industries patents are linked to
+    % Count how many industries patents are linked to
     [nr_appear, ~] = histc(allind_patix2ind, 1:nr_patents);
-    nr_appear = [zeros(length(patents_not_linked),1);
-                nr_appear];
     
     nr_appear_allyear = [nr_appear_allyear;
                         nr_appear];
-    
 end
 
 nr_appear_allyear(1) = [];
@@ -177,7 +174,7 @@ bar(hist_centers, hist_counts, 'FaceColor', color1_pick, 'EdgeColor', 'k')
 box off
 set(gca,'TickDir','out') 
 xlabel('Number of industries that patent is linked to')
-ylabel('Share')
+ylabel('Share of patents')
 xlim([-0.5, 18.5])
 
 
@@ -252,7 +249,3 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % Export to pdf
 print_pdf_name = horzcat('share_pat_link2ind.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
-
-

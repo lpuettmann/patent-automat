@@ -64,12 +64,8 @@ for ix_industry=1:size(industry_sumstats, 1)
     xlim(xax_limit)
     ylim(yax_limit)
     
-    
     leave_xaxis_bottomonly(ix_industry, dim_subplot, ...
-        size(industry_sumstats, 1), 'labels')
-    
-    ax2 = axes('Position', get(gca, 'Position'),'Color','none');
-    set(ax2,'XTick',[], 'YTick',[], 'YColor','w')   
+        size(industry_sumstats, 1), 'labels') 
 end
 
 
