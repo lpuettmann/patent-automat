@@ -3,7 +3,7 @@ clear all
 clc
 
 addpath('conversion_patent2industry')
-addpath('matches')
+addpath('cleaned_matches')
 
 % Load industry names
 [~, ind_code_table] = xlsread('industry_names.xlsx');
@@ -24,10 +24,10 @@ for ix_year = year_start:year_end
     
     ix_iter = ix_year - year_start + 1;
     
-    load(horzcat('patent_keyword_appear_', num2str(ix_year), '.mat'))  
+    load(horzcat('patsearch_results_', num2str(ix_year), '.mat'))  
 
     % Count how many patents map into the industry
-    classification_nr = patent_keyword_appear(:, 3);
+    classification_nr = patsearch_results(:, 3);
 
     
     for ix_industry=1:length(industry_list)
@@ -68,7 +68,7 @@ for ix_year = year_start:year_end
         linked_pat_ix{ix_iter, ix_industry} = patix2ind;
         
         % Find keyword matches of the patents that map to the industry
-        nr_keyword_appear = cell2mat(patent_keyword_appear(:, 2));
+        nr_keyword_appear = cell2mat(patsearch_results(:, 2));
         industry_keyword_matches = nr_keyword_appear(patix2ind);
         
         % Patents with at least one keyword match
@@ -107,8 +107,8 @@ for ix_year = year_start:year_end
     allind_patix2ind(1) = [];
    
     % Import info about patents in that year
-    load(horzcat('patent_keyword_appear_', num2str(ix_year), '.mat'))
-    nr_patents = size(patent_keyword_appear, 1);
+    load(horzcat('patsearch_results_', num2str(ix_year), '.mat'))
+    nr_patents = size(patsearch_results, 1);
     
     
     % Check which patents are linked
@@ -135,12 +135,6 @@ end
 
 nr_appear_allyear(1) = [];
 
-disp('---------------------------------------------------------------')
-fprintf('Average share of patents linked to industry per year: %3.2f.\n', ...
-    mean(share_patents_linked))
-
-
-
 
 save('conversion_patent2industry/share_patents_linked.mat', ...
     'share_patents_linked');
@@ -159,6 +153,11 @@ length(nr_appear_allyear)
     length(0:max(nr_appear)));
 
 hist_counts = hist_counts ./ sum(hist_counts);
+
+disp('---------------------------------------------------------------')
+fprintf('Share of patents linked to at least one industry: %3.2f.\n', ...
+    1-hist_counts(1))
+
 hist_centers = 0:max(nr_appear_allyear);
 
 
@@ -177,6 +176,7 @@ xlabel('Number of industries that patent is linked to')
 ylabel('Share of patents')
 xlim([-0.5, 18.5])
 
+set(gca, 'YTick', [], 'YColor', 'white') % turn y-axis off
 
 % Change position and size
 set(gcf, 'Position', [100 100 800 500]) % in vector: left bottom width height
@@ -186,19 +186,39 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
     'Inches', 'PaperSize', [pos(3), pos(4)])
 
 
-annotation(figureHandle,'textarrow',[0.17 0.150070126227209],...
-    [0.860714285714289 0.840476190476191],'TextEdgeColor','none',...
+annotation(figureHandle,'textarrow',[0.138849929873773 0.144460028050491],...
+    [0.485714285714286 0.454761904761907],'TextEdgeColor','none',...
     'HorizontalAlignment','left',...
     'FontSize',12,...
-    'String','0.31',...
+    'String','9.8%',...
     'HeadStyle','none');
 
-
-annotation(figureHandle,'textarrow',[0.210378681626928 0.192145862552595],...
-    [0.583333333333333 0.542857142857143],'TextEdgeColor','none',...
+annotation(figureHandle,'textarrow',[0.193548387096773 0.192145862552595],...
+    [0.885714285714289 0.873809523809524],'TextEdgeColor','none',...
     'HorizontalAlignment','left',...
     'FontSize',12,...
-    'String','0.17',...
+    'String','22%',...
+    'HeadStyle','none');
+
+annotation(figureHandle,'textarrow',[0.239831697054698 0.23562412342216],...
+    [0.811904761904763 0.800000000000001],'TextEdgeColor','none',...
+    'HorizontalAlignment','left',...
+    'FontSize',12,...
+    'String','20%',...
+    'HeadStyle','none');
+
+annotation(figureHandle,'textarrow',[0.282272089761571 0.272089761570827],...
+    [0.601428571428576 0.583333333333334],'TextEdgeColor','none',...
+    'HorizontalAlignment','left',...
+    'FontSize',12,...
+    'String','14%',...
+    'HeadStyle','none');
+
+annotation(figureHandle,'textarrow',[0.879382889200561 0.884992987377279],...
+    [0.204761904761905 0.185714285714287],'TextEdgeColor','none',...
+    'HorizontalAlignment','left',...
+    'FontSize',12,...
+    'String','1.6%',...
     'HeadStyle','none');
 
 

@@ -4,7 +4,7 @@ clc
 
 tic
 
-addpath('../matches');
+addpath('../cleaned_matches');
 addpath('../functions');
 
 
@@ -48,24 +48,24 @@ for ix_year=year_start:year_end
 
     % Load matches
     % -------------------------------------------------------------
-    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+    load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
     
     
     % Delete 4th column for 1976 < years < 2001. I previously saved the year
     % there, but I stopped doing that (it doesn't add any new information)
     if ix_year < 2002 & ix_year > 1976
-        aux_part1 = patent_keyword_appear(:, 1:3);
-        aux_part2 = patent_keyword_appear(:, 5);
-        patent_keyword_appear = [aux_part1 aux_part2];
+        aux_part1 = patsearch_results(:, 1:3);
+        aux_part2 = patsearch_results(:, 5);
+        patsearch_results = [aux_part1 aux_part2];
     end
     
-    patent_match_summary.nr_patents_yr(aux_ix_save) = size(patent_keyword_appear, 1);
+    patent_match_summary.nr_patents_yr(aux_ix_save) = size(patsearch_results, 1);
    
     
     % Add all weekly total matches together
     % -------------------------------------------------------------
-    nr_keyword_per_patent = cell2mat(patent_keyword_appear(:, 2));
+    nr_keyword_per_patent = cell2mat(patsearch_results(:, 2));
     
     % Check for outlier above 99th percentile and report separate mean
     patent_match_summary.perc_99(aux_ix_save) = prctile(nr_keyword_per_patent, 99);
@@ -75,7 +75,7 @@ for ix_year=year_start:year_end
     patent_match_summary.trunc_mean(aux_ix_save) = mean(trunc_nr_keyword);
    
     
-    patent_week = cell2mat(patent_keyword_appear(:, 4));
+    patent_week = cell2mat(patsearch_results(:, 4));
     
     patent_match_summary.total_matches_yr(aux_ix_save) = sum(nr_keyword_per_patent);
     patent_match_summary.mean_patents_yr(aux_ix_save) = mean(nr_keyword_per_patent);
