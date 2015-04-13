@@ -1,6 +1,6 @@
 close all
 clear all
-clc
+
 
 
 
@@ -16,8 +16,8 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 2015;
-year_end = 2015;
+year_start = 2010;
+year_end = 2011;
 
 
 
@@ -116,10 +116,14 @@ for ix_year = year_start:year_end
 
             % Search for keyword
             % ------------------------------------------------------------
-            ix_keyword_find = regexpi(patent_text_corpus, find_str);
-            ix_keyword_find = ix_keyword_find(~cellfun('isempty', ...
-                ix_keyword_find));
-            nr_keyword_find = length(ix_keyword_find);
+            check_keyword_find = regexpi(patent_text_corpus, find_str);
+            
+            % Get the start of the keyword match on every line
+            line_hit_keyword_find = check_keyword_find(~cellfun('isempty', ...
+                check_keyword_find));
+            
+              % Count the number of appearances of the keyword
+            nr_keyword_find = count_elements_cell(line_hit_keyword_find);
             
             % Stack weekly information underneath
             % ------------------------------------------------------------

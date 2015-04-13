@@ -1,6 +1,6 @@
 close all
 clear all
-clc
+
 
 
 
@@ -90,12 +90,16 @@ for ix_year = year_start:year_end
 
         classification_nr = pat_ix{ix_week, 3};
 
-        % Column for OCL classifications
+        % Column for (OCL) technology classifications
         nr_keyword_appear(:,3) = classification_nr;
 
         % Insert the current week for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
             num2cell(repmat(ix_week, nr_patents, 1))];
+        
+        % Make a cell which saves which words are found
+        nr_keyword_appear = [nr_keyword_appear, ...
+            num2cell(repmat(' ', nr_patents, 1))];
 
 
         for ix_patent=1:nr_patents
@@ -113,25 +117,64 @@ for ix_year = year_start:year_end
             patent_text_corpus = search_corpus(start_text_corpus:...
                 end_text_corpus, :);
 
+%             patent_text_corpus{15,:} = 'Hi there automation whAUTomat is $$ hello automated this.'
+            
             % Search for keyword
             % ------------------------------------------------------------
             check_keyword_find = regexpi(patent_text_corpus, find_str);
             
             % Get the start of the keyword match on every line
-            line_hit_keyword_find = cell2mat(ix_keyword_find);
+            line_hit_keyword_find = check_keyword_find(~cellfun('isempty', ...
+                check_keyword_find));
             
             % Get the line index of where the match is
-            ix_keyword_find = find(not(cellfun(@isempty,check_keyword_find)));
+            ix_keyword_find = find(not(cellfun(@isempty, check_keyword_find)));
             
-            nr_keyword_find = length(ix_keyword_find);
+            % Count the number of appearances of the keyword
+            nr_keyword_find = count_elements_cell(line_hit_keyword_find);
                        
             % Find the words surrounding the keyword match
-%             ix_keyword_find = cell2mat(ix_keyword_find)
-%             patent_text_corpus((ix_keyword_find), 1)
+            match_fullword = repmat({''}, 1, nr_keyword_find);
+            save_ix = 1; % index to save the words of the matches
             
+            if nr_keyword_find > 0
+                for ix_lines=1:length(ix_keyword_find)
+
+                    % Get the text for the line where one or more matches
+                    % occured
+                    line_text = patent_text_corpus{ix_keyword_find(ix_lines), :};
+                    
+                    % Get information where on the line the match(es)
+                    % occured
+                    line_hit_position = line_hit_keyword_find{ix_lines};
+                    
+                    % Find spaces on the line
+                    line_space_ix = regexp(line_text, ' ');
+                    
+                    for ix_linematches = 1:length(line_hit_keyword_find{ix_lines})
+                        ix_line_position = line_hit_position(ix_linematches);
+
+                        match_fullword_start = max(line_space_ix(line_space_ix < ix_line_position)) + 1;
+                        if isempty(match_fullword_start) % if match is the first word
+                            match_fullword_end = 1;
+                        end
+                        
+                        match_fullword_end = min(line_space_ix(line_space_ix > ix_line_position)) - 1;
+                        if isempty(match_fullword_end) % if match is the last word
+                            match_fullword_end = length(line_text);
+                        end
+                            
+                        match_fullword{save_ix} = line_text(match_fullword_start:match_fullword_end);  
+                        
+                        save_ix = save_ix + 1;
+                    end
+                end
+            end
+                        
             % Stack weekly information underneath
             % ------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
+            nr_keyword_appear{ix_patent, 6} = match_fullword;
         end
 
         % Save information for all weeks
