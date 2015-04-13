@@ -17,7 +17,7 @@ addpath('patent_index');
 find_str = 'automat'; 
 
 year_start = 2002;
-year_end = 2002;
+year_end = 2004;
 
 
 
@@ -95,6 +95,9 @@ for ix_year = year_start:year_end
         nr_keyword_appear = [nr_keyword_appear, ...
             num2cell(repmat(ix_week, nr_patents, 1))];
         
+        % Make a cell which saves which words are found
+        nr_keyword_appear = [nr_keyword_appear, ...
+            num2cell(repmat(' ', nr_patents, 1))];
         
         for ix_patent=1:nr_patents
 
@@ -122,10 +125,15 @@ for ix_year = year_start:year_end
               % Count the number of appearances of the keyword
             nr_keyword_find = count_elements_cell(line_hit_keyword_find);
             
+            % Find the words surrounding the keyword match
+            match_fullword = get_fullword_matches(nr_keyword_find, ...
+                check_keyword_find, patent_text_corpus, ...
+                line_hit_keyword_find) ;
             
             % Stack weekly information underneath
             % ------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
+            nr_keyword_appear{ix_patent, 6} = match_fullword;
         end
         
         
@@ -144,7 +152,7 @@ for ix_year = year_start:year_end
             patent_keyword_appear(1,:) = [];
         end 
         
-        fprintf('Week finished: %d/%d.\n', ix_week, week_end)
+        fprintf('Week finished: %d/%d.\n', ix_week, week_end)   
     end
 
     
