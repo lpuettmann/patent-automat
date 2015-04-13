@@ -115,11 +115,20 @@ for ix_year = year_start:year_end
 
             % Search for keyword
             % ------------------------------------------------------------
-            ix_keyword_find = regexpi(patent_text_corpus, find_str);
-            ix_keyword_find = ix_keyword_find(~cellfun('isempty', ...
-                ix_keyword_find));
+            check_keyword_find = regexpi(patent_text_corpus, find_str);
+            
+            % Get the start of the keyword match on every line
+            line_hit_keyword_find = cell2mat(ix_keyword_find);
+            
+            % Get the line index of where the match is
+            ix_keyword_find = find(not(cellfun(@isempty,check_keyword_find)));
+            
             nr_keyword_find = length(ix_keyword_find);
                        
+            % Find the words surrounding the keyword match
+%             ix_keyword_find = cell2mat(ix_keyword_find)
+%             patent_text_corpus((ix_keyword_find), 1)
+            
             % Stack weekly information underneath
             % ------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;

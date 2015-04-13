@@ -33,8 +33,10 @@ figureHandle = figure;
 plot_series = allyear_total_matches_week;
 % plot_series = allyear_total_automix;
 
-scatter(1:length(plot_series), allyear_total_matches_week, ...
+scatter(1:length(plot_series), plot_series, ...
     'Marker', 'o', 'MarkerEdgeColor', color1_pick)
+
+
 
 set(gca,'FontSize',11) % change default font size of axis labels
 title_phrase = sprintf(['A. Number of weekly occurences ', ...
