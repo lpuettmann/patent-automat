@@ -55,6 +55,7 @@ for ix_year = year_start:year_end
     fprintf('Enter loop for year %d:\n', ix_year)
 
     for ix_week = week_start:week_end
+        
         % Get the index position of patent and the WKU number
         % ----------------------------------------------------------------
         patent_number = pat_ix{ix_week, 1};
@@ -156,7 +157,7 @@ for ix_year = year_start:year_end
 
                         match_fullword_start = max(line_space_ix(line_space_ix < ix_line_position)) + 1;
                         if isempty(match_fullword_start) % if match is the first word
-                            match_fullword_end = 1;
+                            match_fullword_start = 1;
                         end
                         
                         match_fullword_end = min(line_space_ix(line_space_ix > ix_line_position)) - 1;
@@ -193,6 +194,8 @@ for ix_year = year_start:year_end
         end 
 
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
+        
+        error('Stop here.')
     end
     
     
