@@ -138,6 +138,7 @@ for ix_year = year_start:year_end
         end 
         
         class_number = repmat({''}, nr_class, 1);        
+        trunc_tech_class = repmat({''}, nr_patents, 1); % initialize
 
         for i=1:nr_class
             class_nr_line = search_corpus(ix_class_find(i), :);

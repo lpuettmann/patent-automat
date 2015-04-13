@@ -87,6 +87,8 @@ for ix_year = year_start:year_end
         nr_keyword_appear{1,2} = []; % column for keyword matches
         
         classification_nr = pat_ix{ix_week, 3};
+        
+        classification_nr = classification_nr'; % DELETE ME
 
         % Column for OCL classifications
         nr_keyword_appear(:,3) = classification_nr; 

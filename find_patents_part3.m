@@ -26,7 +26,6 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 
-    % build_data_path = horzcat('./data/', num2str(ix_year));
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
     addpath(build_data_path);
@@ -38,7 +37,7 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
-    % on Apple: truncate also '.DS_Store'
+    % on Apple computer: truncate also '.DS_Store'
     if ismac
         disp('Great, you are working on a mac.')
         filenames = filenames(2:end);
@@ -46,7 +45,7 @@ for ix_year = year_start:year_end
 
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Start looking for patents for year %d:\n', ix_year)
+    fprintf('Build patent index for year %d:\n', ix_year)
     
     for ix_week = week_start:week_end
         choose_file_open = filenames{ix_week};
@@ -127,6 +126,8 @@ for ix_year = year_start:year_end
         % patents.
         % ------------------------------------------------------------
         class_number = repmat({''}, nr_patents, 1); % initialize
+        trunc_tech_class = repmat({''}, nr_patents, 1); % initialize
+                
         for ix_patent=1:nr_patents
 
             % Get start and end of patent text

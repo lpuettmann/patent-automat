@@ -171,6 +171,7 @@ for ix_year = year_start:year_end
         
         
         class_number = repmat({''}, nr_patents, 1);      
+        trunc_tech_class = repmat({''}, nr_patents, 1); % initialize
         
         for ix_patent=1:nr_patents
 

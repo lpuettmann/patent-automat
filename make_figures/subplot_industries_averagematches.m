@@ -31,7 +31,6 @@ dim_subplot = [7, 4];
 
 figureHandle = figure;
 set(gcf, 'Color', 'w');
-suptitle('Average Keyword Matches per Patent in Manufacturing Industries')
 for ix_industry=1:size(industry_sumstats, 1)
 
     industry_name = industry_sumstats{ix_industry, 1, 1};

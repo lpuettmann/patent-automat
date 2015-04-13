@@ -150,7 +150,7 @@ length(nr_appear_allyear)
 
 %% Make histogram: patents linked to how many industries
 [hist_counts, ~] = hist(nr_appear_allyear, ...
-    length(0:max(nr_appear)));
+    length(0:max(nr_appear_allyear)));
 
 hist_counts = hist_counts ./ sum(hist_counts);
 
@@ -172,6 +172,7 @@ set(gcf, 'Color', 'w');
 bar(hist_centers, hist_counts, 'FaceColor', color1_pick, 'EdgeColor', 'k')
 box off
 set(gca,'TickDir','out') 
+set(gca,'FontSize',11) % change default font size of axis labels
 xlabel('Number of industries that patent is linked to')
 ylabel('Share of patents')
 xlim([-0.5, 18.5])
@@ -244,11 +245,10 @@ set(gcf, 'Color', 'w');
 plot(plottime, share_patents_linked, 'Color', color1_pick, 'Marker', 'o', ...
     'MarkerEdgeColor', color1_pick, 'MarkerFaceColor', color1_pick, ...
     'MarkerSize', 2.1)
-title('Share of Patents linked to Manufacturing Industries')
 box off
 set(gca,'TickDir','out') 
 ylim(yax_limit)
-
+set(gca,'FontSize',11) % change default font size of axis labels
 yLimits = get(gca,'YLim');
 ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 
@@ -259,7 +259,7 @@ ax2 = axes('Position', get(gca, 'Position'),'Color','none');
 set(ax2,'XTick',[], 'YTick',[], 'YColor','w')
 
 % Change position and size
-set(gcf, 'Position', [100 100 800 500]) % in vector: left bottom width height
+set(gcf, 'Position', [100 100 500 250]) % in vector: left bottom width height
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
 set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
