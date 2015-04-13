@@ -15,7 +15,7 @@ addpath('patent_index');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 2001;
+year_end = 1976;
 
 
 
@@ -28,7 +28,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year 
     week_end = set_weekend(ix_year); 
-    
+    week_end = 1;
     % Build path to data
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
@@ -170,7 +170,7 @@ for ix_year = year_start:year_end
     
     year_loop_time = toc;
     disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
+    fprintf('Year %d finished, time: %d seconds (%d minutes).\n', ...
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
