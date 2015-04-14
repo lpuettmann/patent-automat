@@ -10,8 +10,8 @@ addpath('matches');
 
 % delete empty 5th column 1976-1984
 
-year_start = XXX; % be careful
-year_end = XXX; % be careful
+year_start = 2002; % be careful
+year_end = 2002; % be careful
 
 
 for ix_year = year_start:year_end
