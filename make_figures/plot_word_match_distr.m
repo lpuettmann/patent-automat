@@ -71,10 +71,6 @@ set(gca, 'xticklabel', my_xaxis_labels);
 % set(gca, 'YTick', [], 'YColor', 'white') % turn y-axis off
 rotateXLabels( gca(), -45 )
 
-a = [cellstr(num2str(get(gca,'ytick')'*100))]; 
-pct = char(ones(size(a,1),1)*'%'); % create a vector of '%' signs
-new_yticks = [char(a),pct]; % append the '%' signs after the percentage values
-set(gca,'yticklabel', new_yticks)
 
 
 % Reposition the figure
@@ -86,6 +82,12 @@ pos = get(figureHandle, 'Position');
 
 set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
     'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+a = [cellstr(num2str(get(gca,'ytick')'*100))]; 
+pct = char(ones(size(a,1),1)*'%'); % create a vector of '%' signs
+new_yticks = [char(a),pct]; % append the '%' signs after the percentage values
+set(gca,'yticklabel', new_yticks)
 
 
 % Export to pdf

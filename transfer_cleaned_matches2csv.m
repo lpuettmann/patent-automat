@@ -82,11 +82,6 @@ save(horzcat('patsearch_allyears', '.mat'), 'patsearch_allyears');
 time_file_write = toc;
 fprintf('Save file (%3.2fs): %s.mat.\n', time_file_write, save_name)
 
-% Save to .csv file
-% tic
-% csvwrite(horzcat('patsearch_allyears', '.csv'), patsearch_allyears);
-% time_file_write = toc;
-% fprintf('Save file (%3.2fs): %s.csv.\n', time_file_write, save_name)
 
 
 % Transfer results to cell array to make use of cell2csv
