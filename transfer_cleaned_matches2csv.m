@@ -10,8 +10,8 @@ addpath('functions'); % (for cell2csv)
 
 
 %%
-year_start = 1976;
-year_end = 2015;
+year_start = 2005;
+year_end = 2012;
 
 
 
@@ -19,6 +19,7 @@ year_end = 2015;
 patsearch_allyears = zeros(1, 5); % initialize
 
 for ix_year = year_start:year_end
+    
     % Load cleaned matches
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
