@@ -4,11 +4,9 @@ clear all
 
 
 
-
 %% Add path to functions
 addpath('functions');
 addpath('patent_index');
-
 
 
 %% Set some inputs
@@ -21,7 +19,6 @@ year_end = 2004;
 
 
 
-
 %% Go
 % ========================================================================
 for ix_year = year_start:year_end
@@ -31,7 +28,8 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-    
+
+    % Build path to data
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
     addpath(build_data_path);
@@ -53,9 +51,10 @@ for ix_year = year_start:year_end
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Enter loop for year %d:\n', ix_year)
+    fprintf('Start searching through patent grant texts for year %d:\n', ix_year)
     
     for ix_week = week_start:week_end
+        
         % Get the index position of patent and the WKU number
         % ----------------------------------------------------------------
         patent_number = pat_ix{ix_week, 1};
@@ -151,6 +150,13 @@ for ix_year = year_start:year_end
         if ix_week == week_end % last iteration: delete first row
             patent_keyword_appear(1,:) = [];
         end 
+        
+        
+        % Close file again. It can cause errors if you open too many
+        % (around 512) files at once.
+        fclose(unique_file_identifier);
+
+        check_open_files
         
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)   
     end

@@ -223,6 +223,13 @@ for ix_year = year_start:year_end
         pat_ix{ix_week, 2} = ix_find;
         pat_ix{ix_week, 3} = trunc_tech_class;
         
+        
+        % Close file again. It can cause errors if you open too many
+        % (around 512) files at once.
+        fclose(unique_file_identifier);
+
+        check_open_files
+        
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
     
