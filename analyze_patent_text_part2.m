@@ -132,7 +132,7 @@ for ix_year = year_start:year_end
             % Stack weekly information underneath
             % ------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
-            nr_keyword_appear{ix_patent, 6} = match_fullword;
+            nr_keyword_appear{ix_patent, 5} = match_fullword;
         end
         
         

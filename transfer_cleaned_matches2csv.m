@@ -6,6 +6,7 @@ clc
 
 %% Add path to functions
 addpath('cleaned_matches');
+addpath('functions'); % (for cell2csv)
 
 
 %%
@@ -15,7 +16,7 @@ year_end = 2015;
 
 
 %%
-patsearch_allyears = zeros(1, 5);
+patsearch_allyears = zeros(1, 5); % initialize
 
 for ix_year = year_start:year_end
     % Load cleaned matches
@@ -71,18 +72,29 @@ end
 
 patsearch_allyears(1, :) = [];
 
+
+%% Save the final matrix to different file formats
+save_name = 'patsearch_allyears';
+
+% Save to .mat file
+tic
+save(horzcat('patsearch_allyears', '.mat'), 'patsearch_allyears');
+time_file_write = toc;
+fprintf('Save file (%3.2fs): %s.mat.\n', time_file_write, save_name)
+
+% Save to .csv file
+% tic
+% csvwrite(horzcat('patsearch_allyears', '.csv'), patsearch_allyears);
+% time_file_write = toc;
+% fprintf('Save file (%3.2fs): %s.csv.\n', time_file_write, save_name)
+
+
+% Transfer results to cell array to make use of cell2csv
+patsearch_allyears = num2cell(patsearch_allyears);
+
 % Save to .csv file
 tic
-save_name = 'patsearch_allyears.csv';
-csvwrite(save_name, patsearch_allyears);
-time_csv_write = toc;
-fprintf('Save file (%3.2fs): %s.\n', save_name, time_csv_write)
-
-
-
-
-
-
-
-
+cell2csv(horzcat('patsearch_allyears', '.csv'), patsearch_allyears);
+time_file_write = toc;
+fprintf('Save file (%3.2fs): %s.csv.\n', time_file_write, save_name)
 
