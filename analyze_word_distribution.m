@@ -128,7 +128,7 @@ end
 
 % Save to .mat file
 % -------------------------------------------------------------------
-save_name = horzcat('word_mach_distr_', num2str(year_start), '-', ...
+save_name = horzcat('word_match_distr_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
 save(save_name, 'word_match_distr', 'rest_matches');    
 fprintf('Saved: %s.\n', save_name)

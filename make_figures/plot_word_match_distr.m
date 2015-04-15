@@ -14,7 +14,7 @@ year_end = 2015;
 %     '-', num2str(year_end), '.mat');
 % load(load_file_name)
 
-load('D:\US_PatentsData\patent-automat\word_mach_distr_1976-2015.mat')
+load('D:\US_PatentsData\patent-automat\word_match_distr_1976-2015.mat')
 
 
 %%
