@@ -62,6 +62,7 @@ for ix_year = year_start:year_end
         warning('Are you deleting the right column here?')
     end
     
+    % Delete word list
     patsearch_results(:,5) = [];
 
     % Save some information on the deleted named patents
