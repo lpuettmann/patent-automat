@@ -1,6 +1,6 @@
-close all
-clear all
-clc
+% close all
+% clear all
+% clc
 
 
 
@@ -36,6 +36,7 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
+    filenames = ifmac_truncate_more(filenames);
 
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
@@ -61,7 +62,7 @@ for ix_year = year_start:year_end
         
 
         % Count number of patents in a given week
-        % --------------------------------------------------------------------
+        % ----------------------------------------------------------------
 
         if ix_year == 2001 % special case: problem with 80 numel text file
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
@@ -82,7 +83,8 @@ for ix_year = year_start:year_end
           % I can probably delete the following special case: 
           % The problem was with the empty lines in week 50
           
-         elseif ix_year == 1984 && (ix_week == 1 | ix_week == 49 | ix_week == 50) 
+         elseif ix_year == 1984 && (ix_week == 1 | ix_week == 49 ...
+                 | ix_week == 50) 
              fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                  ix_year, ix_week)
             trunc4_corpus
@@ -134,7 +136,8 @@ for ix_year = year_start:year_end
         
         % Test if there are any spaces in WKU numbers
         test_contains_space = strfind(patent_number, ' ');
-        show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
+        show_ix_contains_space = find(~cellfun(@isempty, ...
+            test_contains_space));
         if not(isempty(show_ix_contains_space))
             warning('There is a space in the patent WKU numbers')
             disp(patent_number(show_ix_contains_space))
@@ -147,7 +150,8 @@ for ix_year = year_start:year_end
             patent_number(show_ix_contains_space) = [];
             ix_find(show_ix_contains_space) = [];
             nr_patents = nr_patents - 1;
-        elseif ix_year == 2001 && (ix_week == 10 | ix_week == 26 | ix_week == 40 | ix_week==52) 
+        elseif ix_year == 2001 && (ix_week == 10 | ix_week == 26 ...
+                | ix_week == 40 | ix_week==52) 
             fprintf('Delete patent number %d.\n', ...
                 show_ix_contains_space)
             patent_number(show_ix_contains_space) = [];
@@ -169,9 +173,10 @@ for ix_year = year_start:year_end
             warning('Should be the same.')
         end            
         
-        
-        class_number = repmat({''}, nr_patents, 1);      
-        trunc_tech_class = repmat({''}, nr_patents, 1); % initialize
+        % Initialize
+        class_number = repmat({''}, nr_patents, 1);
+        trunc_tech_class = repmat({''}, nr_patents, 1);
+        fdate = repmat({''}, nr_patents, 1); % save filing date
         
         for ix_patent=1:nr_patents
 
@@ -188,6 +193,22 @@ for ix_year = year_start:year_end
             patent_text_corpus = search_corpus(...
                 start_text_corpus:end_text_corpus, :);
 
+            lines_7and8 = patent_text_corpus(7:8,:);
+            ix_fdate = strfind(lines_7and8, 'APD');
+            ix_fdate = find(~cellfun(@isempty, ix_fdate));
+            
+            if isempty(ix_fdate)
+                fprintf('APD (filing date) not found (%d, %d, %d).\n', ...
+                    ix_year, ix_week, ix_patent)
+            end
+            
+            line_fdate = lines_7and8{ix_fdate,:};
+            fdate_extract = line_fdate(6:end-2); % don't save the filing day
+            
+            check_fdate_formatting(fdate_extract)          
+
+            % Stack information for all patents in a week under each other
+             fdate{ix_patent} = fdate_extract;
             
             % Look up OCL (tech classification)
             % ------------------------------------------------------------
@@ -210,8 +231,9 @@ for ix_year = year_start:year_end
                 trunc_tech_class{ix_patent} = patent_OCL_class(1:3);
             else
                 trunc_tech_class{ix_patent} = patent_OCL_class;
-                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ix_year, i, pick)
-            end         
+                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ...
+                    ix_year, i, pick)
+            end
         end
 
         
@@ -222,6 +244,7 @@ for ix_year = year_start:year_end
         pat_ix{ix_week, 1} = patent_number;
         pat_ix{ix_week, 2} = ix_find;
         pat_ix{ix_week, 3} = trunc_tech_class;
+        pat_ix{ix_week, 4} = fdate;
         
         
         % Close file again. It can cause errors if you open too many

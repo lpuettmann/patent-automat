@@ -74,7 +74,7 @@ title(title_phrase, 'FontSize', 11, ...
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-ylim([0 2.5]) % watch out: this omits entry 190 which is very high with 2.297
+ylim([0 3.5]) % watch out: this omits entry 190 which is very high with 2.297
 xlim([1 length(allyear_total_matches_week)])
 set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off

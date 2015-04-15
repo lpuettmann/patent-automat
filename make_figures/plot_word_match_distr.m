@@ -83,6 +83,8 @@ for w=1:length(nr_word_matches)
     fprintf(FID,'%s & %d & %3.1f \\tabularnewline[0.1cm]\n', word_name{w}, nr_word_matches(w), nr_word_share(w)*100);
 end
 
+fprintf(FID,' & \\textbf{%d} & \\textbf{100} \\tabularnewline[0.1cm]\n', sum(nr_word_matches));
+
 fprintf(FID,'\\bottomrule\n');
 fprintf(FID,'\\end{tabular}\n');
 fprintf(FID,'\\begin{tablenotes}\n');

@@ -1,6 +1,6 @@
-close all
-clear all
-clc
+% close all
+% clear all
+% clc
 
 
 
@@ -12,7 +12,6 @@ addpath('functions');
 %% Set some inputs
 year_start = 2015;
 year_end = 2015;
-
 
 
 
@@ -37,11 +36,7 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
-    % on Apple computer: truncate also '.DS_Store'
-    if ismac
-        disp('Great, you are working on a mac.')
-        filenames = filenames(2:end);
-    end
+    filenames = ifmac_truncate_more(filenames);
 
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
@@ -49,7 +44,6 @@ for ix_year = year_start:year_end
     
     for ix_week = week_start:week_end
         choose_file_open = filenames{ix_week};
-
 
         % Load the patent text
         unique_file_identifier = fopen(choose_file_open, 'r');   
@@ -125,9 +119,12 @@ for ix_year = year_start:year_end
         % To find patent technology classification, iterate through
         % patents.
         % ------------------------------------------------------------
-        class_number = repmat({''}, nr_patents, 1); % initialize
-        trunc_tech_class = repmat({''}, nr_patents, 1); % initialize
-                
+        
+        % Initialize
+        class_number = repmat({''}, nr_patents, 1); 
+        trunc_tech_class = repmat({''}, nr_patents, 1);
+        fdate = repmat({''}, length(nr_patents), 1); % filing date
+        
         for ix_patent=1:nr_patents
 
             % Get start and end of patent text
@@ -159,6 +156,26 @@ for ix_year = year_start:year_end
             % where the classification stops.
             class_find_end = regexp(class_nr_line, '</main-classification>'); 
             class_number{ix_patent} = class_nr_line(22:class_find_end-1);
+            
+            
+            % Look up filing date
+            % ------------------------------------------------------------
+            find_fdate_str1 = '</doc-number>';
+            find_fdate_str2 = '<date>';
+
+            indic_fdate_find1 = strfind(patent_text_corpus, find_fdate_str1);
+            indic_fdate_find1 = ~cellfun(@isempty, indic_fdate_find1);
+            ix_fdate_find1 = find(indic_fdate_find1);
+            nextline = patent_text_corpus(ix_fdate_find1+1);
+
+            indic_fdate_find = strfind(nextline, find_fdate_str2);
+            indic_fdate_find = ~cellfun(@isempty, indic_fdate_find);
+            ix_fdate_find = find(indic_fdate_find);
+            extract_lines = nextline(ix_fdate_find);
+            fdate_line = extract_lines{1}; % take the first occurence
+            fdate_extract = fdate_line(7:12);
+            check_fdate_formatting(fdate_extract)   
+            fdate{ix_patent,1} = fdate_extract;
         end
         
         if length(class_number) < 100
@@ -180,12 +197,15 @@ for ix_year = year_start:year_end
             end
         end
         
+   
+        
         % Define patent index. It consists of the patent's WKU number 
         % and its index position in the file. Save information for week in cell array
         % -------------------------------------------------------------------
         pat_ix{ix_week, 1} = patent_number;
         pat_ix{ix_week, 2} = ix_find;
         pat_ix{ix_week, 3} = trunc_tech_class;
+        pat_ix{ix_week, 4} = fdate;
 
         
         % Close file again. It can cause errors if you open too many

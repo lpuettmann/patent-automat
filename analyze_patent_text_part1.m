@@ -3,7 +3,6 @@ clear all
 
 
 
-
 %% Add path to functions
 addpath('functions');
 addpath('patent_index');
@@ -14,7 +13,7 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 1990;
+year_start = 1976;
 year_end = 2001;
 
 
@@ -116,9 +115,7 @@ for ix_year = year_start:year_end
 
             patent_text_corpus = search_corpus(start_text_corpus:...
                 end_text_corpus, :);
-
-%             patent_text_corpus{15,:} = 'Hi there automation whAUTomat is $$ hello automated this.'
-            
+           
             % Search for keyword
             % ------------------------------------------------------------
             check_keyword_find = regexpi(patent_text_corpus, find_str);

@@ -1,6 +1,6 @@
-close all
-clear all
-clc
+% close all
+% clear all
+% clc
 
 
 
@@ -11,8 +11,7 @@ addpath('functions');
 
 %% Set some inputs
 year_start = 2002;
-year_end = 2002;
-
+year_end = 2004;
 
 
 
@@ -25,7 +24,6 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-    week_end = 2;
     
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
@@ -38,6 +36,7 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
+    filenames = ifmac_truncate_more(filenames);
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
@@ -45,7 +44,6 @@ for ix_year = year_start:year_end
     
     for ix_week = week_start:week_end
         choose_file_open = filenames{ix_week};
-
 
         % Load the patent text
         unique_file_identifier = fopen(choose_file_open, 'r');   
@@ -163,6 +161,9 @@ for ix_year = year_start:year_end
             end
         end
         
+        % Look up filing date
+        fdate = lookup_fdate(search_corpus);
+            
         % Define patent index. It consists of the patent's WKU number, its
         % index position in the file and its tech classification. Save 
         % information for each week in a cell array.
@@ -170,6 +171,7 @@ for ix_year = year_start:year_end
         pat_ix{ix_week, 1} = patent_number;
         pat_ix{ix_week, 2} = ix_find;
         pat_ix{ix_week, 3} = trunc_tech_class;
+        pat_ix{ix_week, 4} = fdate;
 
         
         % Close file again. It can cause errors if you open too many
