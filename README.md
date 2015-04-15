@@ -27,5 +27,5 @@ To run:
 		* `plot_summary_statistics_overtime.m` 
 5. Run `transfer_cleaned_matches2csv.m`. This takes `patsearch_results_[year].mat`, cleans the numbers some more and then saves the results from the patent search for all years in an .csv to be exported to Stata.
 6. Run `analyze_word_distribution.m` which counts the occurences of frequent words in the found matches. This saves `word_match_distr_1976-2015.mat` which can be visualized and transferred to a `.tex` table by running `plot_word_match_distr.m` in directory *make_figures*.
-7. Run `prepare_conversion_table.m` which loads and prepares the table which allows to link patent's technologoy classification number to manufacturing sectors. 
+7. Run `prepare_conversion_table.m` which loads and prepares the table which allows to link patent's technologoy classification number to manufacturing sectors. It saves `conversion_table.mat` to *conversion_patent2industry*. 
 8. Run `match_pat2industry.m` which for 26 manufacturing sectors check which patents are linked to it.
