@@ -10,7 +10,7 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2015;
+year_start = 2005;
 year_end = 2015;
 
 
@@ -71,7 +71,7 @@ for ix_year = year_start:year_end
         nr_patents = length(ix_find);
 
         if nr_patents < 100
-            warning(['The number of patents (= %d) is implausibly small'], ...
+            warning('The number of patents (= %d) is implausibly small', ...
                 nr_patents)
         end 
 
@@ -123,7 +123,7 @@ for ix_year = year_start:year_end
         % Initialize
         class_number = repmat({''}, nr_patents, 1); 
         trunc_tech_class = repmat({''}, nr_patents, 1);
-        fdate = repmat({''}, length(nr_patents), 1); % filing date
+        fdate = repmat({''}, nr_patents, 1); % filing date
         
         for ix_patent=1:nr_patents
 
@@ -179,7 +179,7 @@ for ix_year = year_start:year_end
         end
         
         if length(class_number) < 100
-            warning(['Number of classifications (= %d) is implausibly small'], ...
+            warning('Number of classifications (= %d) is implausibly small', ...
                 nr_class)
         end 
         
@@ -227,13 +227,12 @@ for ix_year = year_start:year_end
     
     year_loop_time = toc;
     disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
+    fprintf('Year %d finished, time: %d seconds (%d minutes).\n', ...
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
+    
+    
+    subject = sprintf('Matlab status report: Year %d finished (%d minutes).', ix_year, round(year_loop_time/60))
+    sendmail(recipient, subject, subject);
 end
 
-
-
-%% End
-% ======================================================================
-disp('*** end ***')

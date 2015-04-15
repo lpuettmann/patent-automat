@@ -10,7 +10,7 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1976;
+year_start = 1977;
 year_end = 2001;
 
 
@@ -24,7 +24,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-           
+
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
     addpath(build_data_path);
@@ -40,7 +40,7 @@ for ix_year = year_start:year_end
 
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Enter loop for year %d:\n', ix_year)
+    fprintf('Build patent index for year %d:\n', ix_year)
 
     for ix_week = week_start:week_end
         choose_file_open = filenames{ix_week};
@@ -106,7 +106,7 @@ for ix_year = year_start:year_end
 
         % Test: did not find patents
         if nr_patents < 100
-            warning(['The number of patents (= %d) is implausibly small'], ...
+            warning('The number of patents (= %d) is implausibly small', ...
                 nr_patents)
         end    
 
@@ -208,7 +208,7 @@ for ix_year = year_start:year_end
             check_fdate_formatting(fdate_extract)          
 
             % Stack information for all patents in a week under each other
-             fdate{ix_patent} = fdate_extract;
+            fdate{ix_patent} = fdate_extract;
             
             % Look up OCL (tech classification)
             % ------------------------------------------------------------
@@ -263,13 +263,14 @@ for ix_year = year_start:year_end
     save(matfile_path_save, 'pat_ix');    
     fprintf('Saved: %s.\n', save_name)
     
+    year_loop_time = toc;
     disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds \n', ix_year, round(toc))
+    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
+        ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
+    
+
+    subject = sprintf('Matlab status report: Year %d finished (%d minutes).', ix_year, round(year_loop_time/60))
+    sendmail(recipient, subject, subject);
 end
 
-
-
-%% End
-% ======================================================================
-disp('*** end ***')
