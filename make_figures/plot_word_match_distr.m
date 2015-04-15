@@ -4,13 +4,17 @@ clc
 
 addpath('../functions')
 
-load('../word_match_distr_1976-1989.mat')
-
 
 
 %%
 year_start = 1976;
-year_end = 1989;
+year_end = 2015;
+
+% load_file_name = horzcat('../word_match_distr_', num2str(year_start), ...
+%     '-', num2str(year_end), '.mat');
+% load(load_file_name)
+
+load('D:\US_PatentsData\patent-automat\word_mach_distr_1976-2015.mat')
 
 
 %%
@@ -40,7 +44,67 @@ word_name = word_name(ix_sort);
 
 % Optional: replace last stuff
 nr_word_matches = [nr_word_matches(1:6), sum(nr_word_matches(7:end))];
-word_name = {word_name{1:6}, 'rest'};
+word_name = {word_name{1:6}, 'Other'};
+
+
+% Also attach the not assigned matches
+nr_word_matches = [nr_word_matches(1:end), sum(rest_matches)];
+word_name = {word_name{1:end}, 'Not assigned'};
+
+
+
+% Normalize word matches to show shares
+nr_word_share = nr_word_matches / sum(nr_word_matches);
+
+
+
+
+
+%% Make table
+table_word_distr = table(nr_word_matches', round(nr_word_share'*1000)/10, ...
+    'RowNames', word_name, 'VariableNames', {'Count', 'Share'})
+
+%% Print to .txt file in Latex format
+printname = 'table_word_distribution.tex';
+
+FID = fopen(printname, 'w');
+
+fprintf(FID,'\\begin{table}\n');
+fprintf(FID,'\\begin{small}\n');
+fprintf(FID,'\\begin{threeparttable}\n');
+fprintf(FID,'\\caption{{\\normalsize Distribution over word matches}}\n');
+fprintf(FID,'\\label{tab:word_distribution}\n');
+fprintf(FID,'\\begin{tabular}{lrr}\n');
+fprintf(FID,'\\toprule \\addlinespace[0.5em]\n');
+fprintf(FID,' & \\textbf{Count} & \\textbf{Share (\\%%)}\\tabularnewline[0.1cm]\n');
+fprintf(FID,'\\midrule \\addlinespace[0.5em]\n');
+
+for w=1:length(nr_word_matches)
+    fprintf(FID,'%s & %d & %3.1f \\tabularnewline[0.1cm]\n', word_name{w}, nr_word_matches(w), nr_word_share(w)*100);
+end
+
+fprintf(FID,'\\bottomrule\n');
+fprintf(FID,'\\end{tabular}\n');
+fprintf(FID,'\\begin{tablenotes}\n');
+fprintf(FID,'\\small\n');
+fprintf(FID,'\\item \\textit{Note:} \n');
+fprintf(FID,'\\item \\textit{Source:} \n');
+fprintf(FID,'\\end{tablenotes}\n');
+fprintf(FID,'\\end{threeparttable}\n');
+fprintf(FID,'\\end{small}\n');
+fprintf(FID,'\\end{table}\n');
+fclose(FID); 
+
+
+%%
+fprintf('Saved: %s.\n', printname)
+
+
+
+
+%% Plot the not assigned values over time
+plot(rest_matches)
+
 
 
 
@@ -51,21 +115,19 @@ set(0, 'DefaultAxesFontName', 'Palatino')
 color1_pick = [49, 130, 189] ./ 255;
 my_gray = [0.8, 0.8, 0.8];
 
-
-nr_word_matches = nr_word_matches / sum(nr_word_matches);
 my_xaxis_labels = word_name;
 
 
 figureHandle = figure;
 set(gcf, 'Color', 'w');
-bar(nr_word_matches, 'FaceColor', color1_pick, 'EdgeColor', 'none')
+bar(nr_word_share, 'FaceColor', color1_pick, 'EdgeColor', 'none')
 box off
 set(gca,'TickDir','out') 
 set(gca,'FontSize',10) % change default font size of axis labels
 ylim([0, 1])
-xlim([0.5, length(nr_word_matches)+0.5])
+xlim([0.5, length(nr_word_share)+0.5])
 
-set(gca, 'XTick', 1:length(nr_word_matches)) % Set the x-axis tick labels
+set(gca, 'XTick', 1:length(nr_word_share)) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 % set(gca, 'YTick', [], 'YColor', 'white') % turn y-axis off

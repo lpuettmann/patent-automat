@@ -10,7 +10,7 @@ addpath('functions');
 
 %%
 year_start = 1976;
-year_end = 1989;
+year_end = 2015;
 
 
 %%
@@ -111,15 +111,15 @@ for ix_year = year_start:year_end
     end
 
     
-    rest_matches = sum_keyword_find - ...
+    rest_matches(ix_iter) = sum_keyword_find - ...
         sum(cell2mat(word_match_distr(:, 2, ix_iter)));
     
-    if rest_matches < 0
+    if rest_matches(ix_iter) < 0
         warning('Assigned more words that there are matches.')
     end
     
     fprintf('Year %d: Matches not assigned to full words: %d (%3.2f percent).\n', ...
-        ix_year, rest_matches, rest_matches / sum_keyword_find*100)
+        ix_year, rest_matches(ix_iter), rest_matches(ix_iter) / sum_keyword_find*100)
 
     % delete ix_count_phrase
     clear ix_count_phrase 
@@ -130,14 +130,8 @@ end
 % -------------------------------------------------------------------
 save_name = horzcat('word_mach_distr_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
-save(save_name, 'word_match_distr');    
+save(save_name, 'word_match_distr', 'rest_matches');    
 fprintf('Saved: %s.\n', save_name)
-
-
-
-
-
-
 
 
 

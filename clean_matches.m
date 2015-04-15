@@ -11,8 +11,8 @@ addpath('matches');
 addpath('functions');
 
 %%
-year_start = 2012;
-year_end = 2012;
+year_start = 1976;
+year_end = 2015;
 
 
 %%
@@ -57,6 +57,12 @@ for ix_year = year_start:year_end
         warning('They should be the same')
     end
 
+    % 
+    if ~(size(patsearch_results,2)==5)
+        warning('Are you deleting the right column here?')
+    end
+    
+    patsearch_results(:,5) = [];
 
     % Save some information on the deleted named patents
     patent_nr_letter(ix_year-year_start+1) = length(save_row_delete);

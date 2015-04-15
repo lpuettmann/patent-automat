@@ -10,8 +10,8 @@ addpath('matches');
 
 % delete empty 5th column 1976-1984
 
-year_start = 2002; % be careful
-year_end = 2002; % be careful
+year_start = 1976; % be careful
+year_end = 2015; % be careful
 
 
 for ix_year = year_start:year_end
@@ -20,20 +20,21 @@ for ix_year = year_start:year_end
     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
     load(load_file_name)
     
+    
     if size(patent_keyword_appear, 2) < 6
-        error('Error: patent_keyword_appear should have 6 columns.')
+        error('patent_keyword_appear in year %d should have 6 columns.\n', ix_year)
     end
     
-    patent_keyword_appear(:, 5) = [];
+    
+%     patent_keyword_appear(:, 5) = [];
     
     
     % Overwrite the file
     % -------------------------------------------------------------------
-    save_name = horzcat(load_file_name, '.mat');
-    matfile_path_save = fullfile('matches', save_name);
-    save(matfile_path_save, 'patent_keyword_appear');    
-    fprintf('Saved: %s.\n', save_name)
+%     save_name = horzcat(load_file_name, '.mat');
+%     matfile_path_save = fullfile('matches', save_name);
+%     save(matfile_path_save, 'patent_keyword_appear');    
+%     fprintf('Saved: %s.\n', save_name)
     
     
 end
-
