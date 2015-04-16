@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1979;
-year_end = 2001;
+year_start = 1984;
+year_end = 1984;
 
 
 
@@ -21,7 +21,7 @@ for ix_year = year_start:year_end
     tic
     
     week_start = 1;
-
+    
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 
@@ -193,7 +193,7 @@ for ix_year = year_start:year_end
             patent_text_corpus = search_corpus(...
                 start_text_corpus:end_text_corpus, :);
 
-            lines_extracted = patent_text_corpus(3:8,:);
+            lines_extracted = patent_text_corpus(3:20,:);
             ix_fdate = strfind(lines_extracted, 'APD');
             ix_fdate = find(~cellfun(@isempty, ix_fdate));
             
