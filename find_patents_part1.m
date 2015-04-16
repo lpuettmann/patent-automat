@@ -21,7 +21,7 @@ for ix_year = year_start:year_end
     tic
     
     week_start = 1;
-    week_start = 13
+
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 
@@ -203,9 +203,9 @@ for ix_year = year_start:year_end
             end
             
             line_fdate = lines_extracted{ix_fdate,:};
-            fdate_extract = line_fdate(6:end-2); % don't save the filing day
+            fdate_extract = line_fdate(6:11); % don't save the filing day
             
-            check_fdate_formatting(fdate_extract)          
+            check_fdate_formatting(fdate_extract, patent_number, ix_patent)          
 
             % Stack information for all patents in a week under each other
             fdate{ix_patent} = fdate_extract;

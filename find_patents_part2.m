@@ -1,6 +1,6 @@
-% close all
-% clear all
-% clc
+close all
+clear all
+clc
 
 
 
@@ -195,9 +195,5 @@ for ix_year = year_start:year_end
     fprintf('Year %d finished, time: %d seconds (%d minutes).\n', ...
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
-    
-    
-    subject = sprintf('Matlab status report: Year %d finished (%d minutes).', ix_year, round(year_loop_time/60))
-    sendmail(recipient, subject, subject);
 end
 
