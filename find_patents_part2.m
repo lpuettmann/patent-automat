@@ -10,7 +10,7 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2002;
+year_start = 2004;
 year_end = 2004;
 
 

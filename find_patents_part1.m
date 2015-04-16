@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1976;
-year_end = 1976;
+year_start = 1989;
+year_end = 1989;
 
 
 
@@ -21,7 +21,7 @@ for ix_year = year_start:year_end
     tic
     
     week_start = 1;
-    
+
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 

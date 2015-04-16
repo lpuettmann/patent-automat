@@ -1,6 +1,6 @@
 close all
 clear all
-clc
+% clc
 
 
 
@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2005;
-year_end = 2015;
+year_start = 2013;
+year_end = 2013;
 
 
 
