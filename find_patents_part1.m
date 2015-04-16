@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1989;
-year_end = 1989;
+year_start = 1976;
+year_end = 1976;
 
 
 
@@ -21,8 +21,6 @@ for ix_year = year_start:year_end
     tic
     
     week_start = 1;
-    
-week_start = 24
     
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
@@ -233,8 +231,8 @@ week_start = 24
                 trunc_tech_class{ix_patent} = patent_OCL_class(1:3);
             else
                 trunc_tech_class{ix_patent} = patent_OCL_class;
-                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ...
-                    ix_year, ix_patent, patent_OCL_class)
+                fprintf('Patent %s has too short tech class: %s.\n', ...
+                    patent_number{ix_patent}, patent_OCL_class)
             end
         end
 
