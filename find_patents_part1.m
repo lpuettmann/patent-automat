@@ -1,6 +1,6 @@
-% close all
-% clear all
-% clc
+close all
+clear all
+clc
 
 
 
@@ -10,7 +10,7 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 1977;
+year_start = 1979;
 year_end = 2001;
 
 
@@ -21,7 +21,7 @@ for ix_year = year_start:year_end
     tic
     
     week_start = 1;
-
+    week_start = 13
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 
@@ -193,8 +193,8 @@ for ix_year = year_start:year_end
             patent_text_corpus = search_corpus(...
                 start_text_corpus:end_text_corpus, :);
 
-            lines_7and8 = patent_text_corpus(7:8,:);
-            ix_fdate = strfind(lines_7and8, 'APD');
+            lines_extracted = patent_text_corpus(3:8,:);
+            ix_fdate = strfind(lines_extracted, 'APD');
             ix_fdate = find(~cellfun(@isempty, ix_fdate));
             
             if isempty(ix_fdate)
@@ -202,7 +202,7 @@ for ix_year = year_start:year_end
                     ix_year, ix_week, ix_patent)
             end
             
-            line_fdate = lines_7and8{ix_fdate,:};
+            line_fdate = lines_extracted{ix_fdate,:};
             fdate_extract = line_fdate(6:end-2); % don't save the filing day
             
             check_fdate_formatting(fdate_extract)          
@@ -269,8 +269,5 @@ for ix_year = year_start:year_end
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
     
-
-    subject = sprintf('Matlab status report: Year %d finished (%d minutes).', ix_year, round(year_loop_time/60))
-    sendmail(recipient, subject, subject);
 end
 
