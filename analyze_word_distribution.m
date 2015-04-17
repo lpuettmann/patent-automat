@@ -31,10 +31,6 @@ for ix_year = year_start:year_end
     
     word_matches_list = make_cellarray_flat(word_matches_list);
     
-    
-%     ix_punct_marks = regexp(word_matches_list, ',')
-%     AA = delete_empty_cells(ix_punct_marks)
-
 
     find_str = {'automatic';
                 'automatically';
@@ -44,16 +40,47 @@ for ix_year = year_start:year_end
                 'automat';
                 'automatable';
                 'automaton';
+                'automatice';
+                'non-automatic';
+                'nonautomatic';
+                'unautomated';
+                'non-automated';
+                'automating';
+                'automaticity';
+                'automata';
+                'automatiche';
+                'd''Automatisme';
+                'automatical';
+                'automaticen';
+                'automative';
+                'automati';
+                'automatics';
+                'automatism';
+                'automatizacie';
+                'automatique';
+                'automatisch';
+                'automatik';
+                'automatic-closing';
+                'automatisk';
+                'automatos';
+                'automatially';
+                'automaticaly';
+                'automatizacie';
+                'automates';
+                'automats';
+                'automatized';
+                'automaticaly';
+                'automatove';
+                'automaticaaly';
+                'automatech';
                 '(ATF=automatic';
                 'automated-sequencing,';
                 'automatically-operating';
-                'automatice';
-                'Neutral/Automatic';
-                'non-automatic';
+                'neutral/automatic';
                 'automatic/manual';
                 'automatic-threading';
                 'automatic-air-ventilation';
-                'Kopierautomat'};
+                'kopierautomat'};
 
     % Check that there are no equal terms in the list
      if length(find_str) ~= length(unique(find_str))
@@ -66,6 +93,7 @@ for ix_year = year_start:year_end
         
         line_find_str = {str, [str, ',']};
         line_find_str = {line_find_str{:}, [str, '.']};
+        line_find_str = {line_find_str{:}, [str, ';']};
         line_find_str = {line_find_str{:}, ['semi-', str]};
         line_find_str = {line_find_str{:}, ['semi', str]};
         line_find_str = {line_find_str{:}, ['full-', str]};
@@ -75,7 +103,9 @@ for ix_year = year_start:year_end
         line_find_str = {line_find_str{:}, [str, ').']};
         line_find_str = {line_find_str{:}, [str, ')"']};
         line_find_str = {line_find_str{:}, [str, '?"']};
+        line_find_str = {line_find_str{:}, [str, '/']};
         line_find_str = {line_find_str{:}, ['"', str, '"']};
+        line_find_str = {line_find_str{:}, ['(', str, ')']};
         line_find_str = {line_find_str{:}, ['"', str]};
         line_find_str = {line_find_str{:}, [str, '"']};
         line_find_str = {line_find_str{:}, [str, '-']};
@@ -89,6 +119,8 @@ for ix_year = year_start:year_end
          warning('There are duplicates in cell array and this causes double counts.')
      end   
 
+    covered_words = 0; % initialize
+    
     for ix_find_str=1:size(find_str_extend, 1)
         line_find_str = find_str_extend{ix_find_str, :};
         
@@ -102,7 +134,20 @@ for ix_year = year_start:year_end
 
         word_match_distr{ix_find_str, 1, ix_iter} = line_find_str;
         word_match_distr{ix_find_str, 2, ix_iter} = sum(ix_count_phrase);
+        
+        covered_words = [covered_words;
+                        find(ix_count_phrase)];
     end
+    
+    covered_words(1) = [];
+    if length(covered_words) ~= length(unique(covered_words))
+        warning('There should be no duplicates here.')
+    end   
+    
+    % Find those words we have not yet assigned to a match
+    matches_notassigned = word_matches_list(setdiff(...
+        1:length(word_matches_list), covered_words));
+
     
     sum_keyword_find = sum(cell2mat(patent_keyword_appear(:, 2)));
     

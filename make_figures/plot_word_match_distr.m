@@ -43,8 +43,10 @@ word_name = word_name(ix_sort);
 
 
 % Optional: replace last stuff
-nr_word_matches = [nr_word_matches(1:6), sum(nr_word_matches(7:end))];
-word_name = {word_name{1:6}, 'Other'};
+cutoff_par = 12;
+
+nr_word_matches = [nr_word_matches(1:cutoff_par), sum(nr_word_matches(7:end))];
+word_name = {word_name{1:cutoff_par}, 'Other'};
 
 
 % Also attach the not assigned matches
@@ -89,20 +91,18 @@ fprintf(FID,'\\bottomrule\n');
 fprintf(FID,'\\end{tabular}\n');
 fprintf(FID,'\\begin{tablenotes}\n');
 fprintf(FID,'\\small\n');
-fprintf(FID,'\\item \\textit{Note:} \n');
-fprintf(FID,'\\item \\textit{Source:} \n');
+fprintf(FID,'\\item \\textit{Note:} Full words are delimited by spaces, line beginnings or endings or characters such as a comma, period, etc.\n');
+fprintf(FID,'\\item \\textit{Source:} USPTO, Google and own calculations.\n');
 fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');
 fprintf(FID,'\\end{small}\n');
 fprintf(FID,'\\end{table}\n');
 fclose(FID); 
 
-
-%%
 fprintf('Saved: %s.\n', printname)
 
 
-
+break
 
 %% Plot the not assigned values over time
 plot(rest_matches)
