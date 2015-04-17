@@ -50,22 +50,37 @@ rescale_markers = allyear_total_matches_week ./ 50;
 
 
 figureHandle = figure;
+
+h_gline = plot(1:length(matches_per_patent_weekly), repmat(1, ...
+    length(matches_per_patent_weekly), 1), 'Color', my_gray , ...
+    'linewidth', 0.5);
+uistack(h_gline, 'bottom');
+hold on
+h_gline = plot(1:length(matches_per_patent_weekly), repmat(2, ...
+    length(matches_per_patent_weekly), 1), 'Color', my_gray , ...
+    'linewidth', 0.5);
+uistack(h_gline, 'bottom');
+hold on
+h_gline = plot(1:length(matches_per_patent_weekly), repmat(3, ...
+    length(matches_per_patent_weekly), 1), 'Color', my_gray , ...
+    'linewidth', 0.5);
+uistack(h_gline, 'bottom');
 hold on
 h_scatter = scatter(1:length(matches_per_patent_weekly), ...
     matches_per_patent_weekly, rescale_markers, ...
     'Marker', 'o', 'MarkerEdgeColor', color2_pick);
-
-h_trend = plot(1:length(matches_per_patent_weekly), plot_trend, ...
-    'Color', color2_pick, 'Linewidth', 1.6);
+% 
+% h_trend = plot(1:length(matches_per_patent_weekly), plot_trend, ...
+%     'Color', color2_pick, 'Linewidth', 1.6);
 
 uistack(h_scatter, 'top');
-uistack(h_trend, 'bottom');
+% uistack(h_trend, 'bottom');
 
 set(gca,'FontSize',11) % change default font size of axis labels
 title_phrase = sprintf(['A. Number of weekly occurences ', ...
     'in US patents']);
 
-title(title_phrase, 'FontSize', 11, ...
+title(title_phrase, 'FontSize', 12, ...
     'Units', 'normalized', ...
     'Position', [0.365 1.1], ...
     'HorizontalAlignment', 'right')
@@ -74,16 +89,18 @@ title(title_phrase, 'FontSize', 11, ...
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-ylim([0 3.5]) % watch out: this omits entry 190 which is very high with 2.297
+ylim([0 3.5])
+
 xlim([1 length(allyear_total_matches_week)])
 set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 
 
+
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 600]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');

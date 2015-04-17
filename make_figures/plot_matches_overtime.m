@@ -59,7 +59,7 @@ set(gca, 'xticklabel', my_xaxis_labels);
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
