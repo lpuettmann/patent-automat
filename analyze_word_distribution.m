@@ -14,6 +14,7 @@ year_end = 2015;
 
 
 %%
+tic
 
 for ix_year = year_start:year_end
 
@@ -45,6 +46,7 @@ for ix_year = year_start:year_end
                 'nonautomatic';
                 'unautomated';
                 'non-automated';
+                'automatization';
                 'automating';
                 'automaticity';
                 'automata';
@@ -55,38 +57,69 @@ for ix_year = year_start:year_end
                 'automative';
                 'automati';
                 'automatics';
+                'automatica';
                 'automatism';
+                'automatisms';
                 'automatizacie';
                 'automatique';
                 'automatisch';
+                'hybrid-automatic';
                 'automatik';
                 'automatic-closing';
+                'quasi-automated';
                 'automatisk';
                 'automatos';
+                'automatistic';
+                'programmatic/automatic';
+                'automatic/programmatic';
                 'automatially';
+                'automatedly';
+                'automatically-controlled';
+                'automatic-release';
+                'automatic-feeding';
+                'automatic-stop/restart';
+                'automatically-generated';
                 'automaticaly';
-                'automatizacie';
                 'automates';
+                'normal-automatic';
+                'under-automatic-stop';
                 'automats';
+                'anonymous-automatic';
                 'automatized';
-                'automaticaly';
+                'automatic-transmission';
+                'automata-based';
                 'automatove';
+                'computer-automated';
+                'hardware-automated';
                 'automaticaaly';
                 'automatech';
+                'Automatisierter';
+                'automations';
+                'un-automated';
+                'local-automatic-order-taking';
                 '(ATF=automatic';
+                'automation-related';
                 'automated-sequencing,';
+                'automatic/mechanical';
                 'automatically-operating';
                 'neutral/automatic';
+                'automatched';
+                'build-automation';
+                'automatch';
+                'automata''s';
+                'wholly-automated';
+                'appropriately-automated';
                 'automatic/manual';
                 'automatic-threading';
                 'automatic-air-ventilation';
+                'Automatisierungstechnik';
                 'kopierautomat'};
 
     % Check that there are no equal terms in the list
      if length(find_str) ~= length(unique(find_str))
          warning('There are duplicates in cell array and this causes double counts.')
      end   
-    
+     
     % Extend strings by common attachments
     for ix_find_str=1:length(find_str)
         str = find_str{ix_find_str, :};
@@ -145,7 +178,7 @@ for ix_year = year_start:year_end
     end   
     
     % Find those words we have not yet assigned to a match
-    matches_notassigned = word_matches_list(setdiff(...
+    matches_notassigned{ix_iter} = word_matches_list(setdiff(...
         1:length(word_matches_list), covered_words));
 
     
@@ -170,12 +203,13 @@ for ix_year = year_start:year_end
     clear ix_count_phrase 
 end
 
+toc
 
 % Save to .mat file
 % -------------------------------------------------------------------
 save_name = horzcat('word_match_distr_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
-save(save_name, 'word_match_distr', 'rest_matches');    
+save(save_name, 'word_match_distr', 'rest_matches', 'matches_notassigned');    
 fprintf('Saved: %s.\n', save_name)
 
 
