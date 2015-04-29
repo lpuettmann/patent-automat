@@ -106,4 +106,5 @@ for ix_year = year_start:year_end
     keep year_start year_end patent_nr_letter share_w_letter
 end
 
+toc
 disp('Finished.')

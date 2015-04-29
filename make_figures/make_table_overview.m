@@ -25,7 +25,7 @@ fprintf('Total number of keyword matches in all years: %d.\n', ...
 
 
 %% Load data on how many patents are matched to industries
-addpath('conversion_patent2industry')
+addpath('../conversion_patent2industry')
 load('share_patents_linked.mat')
 
 
@@ -52,7 +52,10 @@ for t=1:length(patent_match_summary.nr_patents_yr)
     ix_year = year_start + t - 1;
     
     if ix_year == 2015
-       fprintf(FID,'2015$^2$ & %d & %d & %3.1f & & -- \\tabularnewline[0.1cm]\n', patent_match_summary.nr_distinct_patents_hits(t), patent_match_summary.nr_patents_yr(t), patent_match_summary.nr_distinct_patents_hits(t)/patent_match_summary.nr_patents_yr(t)*100);
+       fprintf(FID,'\\rowcolor{mygrey} 2015$^2$ & %d & %d & %3.1f & & -- \\tabularnewline[0.1cm]\n', patent_match_summary.nr_distinct_patents_hits(t), patent_match_summary.nr_patents_yr(t), patent_match_summary.nr_distinct_patents_hits(t)/patent_match_summary.nr_patents_yr(t)*100);
+    elseif mod(t,2) == 0
+        fprintf(FID,'\\rowcolor{mygrey} %d & %d & %d & %3.1f & & %3.1f \\tabularnewline[0.1cm]\n', ix_year, patent_match_summary.nr_distinct_patents_hits(t), patent_match_summary.nr_patents_yr(t), patent_match_summary.nr_distinct_patents_hits(t)/patent_match_summary.nr_patents_yr(t)*100, share_patents_linked(t)*100);
+         
     else
         fprintf(FID,'%d & %d & %d & %3.1f & & %3.1f \\tabularnewline[0.1cm]\n', ix_year, patent_match_summary.nr_distinct_patents_hits(t), patent_match_summary.nr_patents_yr(t), patent_match_summary.nr_distinct_patents_hits(t)/patent_match_summary.nr_patents_yr(t)*100, share_patents_linked(t)*100);
     end

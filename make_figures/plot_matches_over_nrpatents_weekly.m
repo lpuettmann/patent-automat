@@ -42,6 +42,7 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 color2_pick = [0.000,0.639,0.561];
+color2_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806];
 my_dark_gray = [0.3, 0.3, 0.3];
 
@@ -77,13 +78,7 @@ uistack(h_scatter, 'top');
 % uistack(h_trend, 'bottom');
 
 set(gca,'FontSize',11) % change default font size of axis labels
-title_phrase = sprintf(['A. Number of weekly occurences ', ...
-    'in US patents']);
-
-title(title_phrase, 'FontSize', 12, ...
-    'Units', 'normalized', ...
-    'Position', [0.365 1.1], ...
-    'HorizontalAlignment', 'right')
+% title('Matches per Patent', 'FontSize', 18)
 
 % set(gca, 'XColor', my_dark_gray, 'YColor', my_dark_gray)
 set(gca,'TickDir','out')  

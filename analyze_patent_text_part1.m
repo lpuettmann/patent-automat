@@ -13,8 +13,8 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 1976;
-year_end = 2001;
+year_start = 1977;
+year_end = 1977;
 
 
 

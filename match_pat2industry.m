@@ -2,6 +2,8 @@ close all
 clear all
 clc
 
+tic
+
 addpath('conversion_patent2industry')
 addpath('cleaned_matches')
 
@@ -161,8 +163,8 @@ fprintf('Share of patents linked to at least one industry: %3.2f.\n', ...
 hist_centers = 0:max(nr_appear_allyear);
 
 
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
+%set(0, 'DefaultTextFontName', 'Palatino')
+%set(0, 'DefaultAxesFontName', 'Palatino')
 
 color1_pick = [49, 130, 189] ./ 255;
 my_gray = [0.8, 0.8, 0.8];
@@ -178,6 +180,8 @@ ylabel('Share of patents')
 xlim([-0.5, 18.5])
 
 set(gca, 'YTick', [], 'YColor', 'white') % turn y-axis off
+
+title('Patents linked to Industries', 'FontSize', 18)
 
 % Change position and size
 set(gcf, 'Position', [100 100 800 500]) % in vector: left bottom width height
@@ -227,45 +231,4 @@ annotation(figureHandle,'textarrow',[0.879382889200561 0.884992987377279],...
 print_pdf_name = horzcat('histogram_nr_ind_linked2.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
-
-
-%% Make figure: share of patents linked to industries over time
-
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
-
-color1_pick = [49, 130, 189] ./ 255;
-my_gray = [0.8, 0.8, 0.8];
-
-yax_limit = [0, 1];
-plottime = year_start:year_end;
-
-figureHandle = figure;
-set(gcf, 'Color', 'w');
-plot(plottime, share_patents_linked, 'Color', color1_pick, 'Marker', 'o', ...
-    'MarkerEdgeColor', color1_pick, 'MarkerFaceColor', color1_pick, ...
-    'MarkerSize', 2.1)
-box off
-set(gca,'TickDir','out') 
-ylim(yax_limit)
-set(gca,'FontSize',11) % change default font size of axis labels
-yLimits = get(gca,'YLim');
-ygrid_lines = [yLimits(1):0.2:yLimits(end)];
-
-addpath('make_figures\') % change later
-handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', 0.9);
-
-ax2 = axes('Position', get(gca, 'Position'),'Color','none');
-set(ax2,'XTick',[], 'YTick',[], 'YColor','w')
-
-% Change position and size
-set(gcf, 'Position', [100 100 500 250]) % in vector: left bottom width height
-set(figureHandle, 'Units', 'Inches');
-pos = get(figureHandle, 'Position');
-set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-    'Inches', 'PaperSize', [pos(3), pos(4)])
-
-
-% Export to pdf
-print_pdf_name = horzcat('share_pat_link2ind.pdf');
-print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+toc

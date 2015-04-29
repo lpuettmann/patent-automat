@@ -43,7 +43,7 @@ word_name = word_name(ix_sort);
 
 
 % Optional: replace last stuff
-cutoff_par = 14;
+cutoff_par = 5;
 
 nr_word_matches = [nr_word_matches(1:cutoff_par), sum(nr_word_matches(cutoff_par+1:end))];
 word_name = {word_name{1:cutoff_par}, 'Other'};

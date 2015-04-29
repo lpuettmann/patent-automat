@@ -10,8 +10,8 @@ addpath('functions');
 
 
 %% Set some inputs
-year_start = 2004;
-year_end = 2004;
+year_start = 2003;
+year_end = 2003;
 
 
 
@@ -24,7 +24,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-    
+
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
     addpath(build_data_path);

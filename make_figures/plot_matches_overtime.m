@@ -25,8 +25,10 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
-color1_pick = [0.7900, 0.3800, 0.500];
-my_gray = [0.806, 0.806, 0.806];
+color1_pick = [0.7900, 0.3800, 0.500]; % red
+% color1_pick = [0.3, 0.3, 0.3]; % dark gray
+my_gray = [0.806, 0.806, 0.806]; % light gray
+
 
 figureHandle = figure;
 
@@ -39,13 +41,7 @@ scatter(1:length(plot_series), plot_series, ...
 
 
 set(gca,'FontSize',11) % change default font size of axis labels
-title_phrase = sprintf(['A. Number of weekly occurences ', ...
-    'in US patents']);
-
-title(title_phrase, 'FontSize', 11, ...
-    'Units', 'normalized', ...
-    'Position', [0.365 1.1], ...
-    'HorizontalAlignment', 'right')
+% title('Number weekly matches in U.S. Patents', 'FontSize', 18)
 
 set(gca,'TickDir','out')  
 box off

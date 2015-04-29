@@ -15,7 +15,7 @@ addpath('patent_index');
 find_str = 'automat'; 
 
 year_start = 2003;
-year_end = 2004;
+year_end = 2003;
 
 
 
