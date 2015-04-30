@@ -8,7 +8,7 @@ clc
 year_start = 1976;
 year_end = 2014;
 
-
+addpath('../functions')
 
 %% Load summary data
 load('../conversion_patent2industry/industry_sumstats.mat')
@@ -36,9 +36,7 @@ for ix_industry=1:size(industry_sumstats, 1)
 
     industry_name = industry_sumstats{ix_industry, 1, 1};
 
-    for ix_period=1:size(industry_sumstats, 3)
-        sumstats(ix_period, :) = industry_sumstats{ix_industry, 2, ix_period};
-    end
+    sumstats = extract_sumstats(industry_sumstats, ix_industry);
 
     industry_pat_1match = sumstats(:, 3);
 

@@ -21,8 +21,7 @@ year_end = 2014;
 
 load('conversion_patent2industry/linked_pat_ix.mat', ...
     'linked_pat_ix');
-load('conversion_patent2industry/industry_sumstats.mat', ...
-    'industry_sumstats');
+
 
 
 %% Analyze how many patents were linked to how many industries 
