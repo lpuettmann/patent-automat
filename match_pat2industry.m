@@ -22,6 +22,9 @@ year_end = 2014;
 linked_pat_ix = repmat({''}, length(year_start:year_end), ...
     length(industry_list));
 
+
+% Iterate through yearly files and link the patent's technology
+% classification to the industry.
 for ix_year = year_start:year_end
     
     ix_iter = ix_year - year_start + 1;
@@ -93,7 +96,7 @@ save('conversion_patent2industry/industry_sumstats.mat', ...
     'industry_sumstats');
 
 
-%%
+%% Analyze how many patents were linked to how many industries 
 nr_appear_allyear = 0;
 
 for ix_year = year_start:year_end
@@ -147,9 +150,6 @@ save('conversion_patent2industry/nr_appear_allyear.mat', ...
 
 
 length(nr_appear_allyear)
-
-
-
 
 
 toc
