@@ -14,13 +14,13 @@ addpath('industry_data');
 
 industry_naics_pick = 311;
 
-naics_otaf = industry_data(:,2):
+naics_otaf = industry_data(:,2);
 
-naics_list = unique(naics_otaf):
+naics_list = unique(naics_otaf);
 
 industry_employment = industry_data(:, 8);
 
 pos_industry = find(naics_otaf==industry_naics_pick);
 
 
-employment_pick = industry_employment(pos_industry)
+employment_pick = industry_employment(pos_industry);

@@ -21,6 +21,8 @@ year_end = 2014;
 % Initialize
 linked_pat_ix = repmat({''}, length(year_start:year_end), ...
     length(industry_list));
+all_industry_keyword_matches = repmat({''}, length(year_start:year_end), ...
+    length(industry_list));
 
 
 % Iterate through yearly files and link the patent's technology
@@ -75,6 +77,9 @@ for ix_year = year_start:year_end
         % Find keyword matches of the patents that map to the industry
         nr_keyword_appear = cell2mat(patsearch_results(:, 2));
         industry_keyword_matches = nr_keyword_appear(patix2ind);
+        
+        % Save industry keyword matches for all industries
+        all_industry_keyword_matches{ix_iter, ix_industry} = industry_keyword_matches;
         
         % Patents with at least one keyword match
         industry_distpatents_w_1m = (industry_keyword_matches>0);
