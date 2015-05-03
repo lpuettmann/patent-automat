@@ -142,6 +142,15 @@ end
 
 % Take mean of correlations
 meancorr = nanmean(corr_laborm_patentm, 3);
+tablestr = repmat({''}, size(meancorr));
+
+for ix_val=1:length(meancorr(:))
+    if meancorr(ix_val) > 0
+        tablestr{ix_val} = ['\\cellcolor{mylightred}', num2str(round(100*meancorr(ix_val))/100)];
+    else
+        tablestr{ix_val} = num2str(round(100*meancorr(ix_val))/100);
+    end
+end
 
 % Print to .txt file in Latex format
 printname = 'table_meancorr_laborm_patentm.tex';
@@ -160,10 +169,21 @@ fprintf(FID,'\\toprule \\addlinespace[0.5em]\n');
 fprintf(FID,' & \\rot{Production} & \\rot{Output} & \\rot{Capital} & \\rot{Capital Productivity} & \\rot{Employment} & \\rot{Labor cost} & \\rot{Labor productivity} & \\rot{Capital cost} & \\rot{Output deflator}  \\tabularnewline[0.05cm]\n');
 fprintf(FID,'\\midrule \\addlinespace[0.5em]\n');
 
-fprintf(FID,'\\# Automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', corr_laborm_patentm(1,1), corr_laborm_patentm(1,2), corr_laborm_patentm(1,3), corr_laborm_patentm(1,4), corr_laborm_patentm(1,5), corr_laborm_patentm(1,6), corr_laborm_patentm(1,7), corr_laborm_patentm(1,8), corr_laborm_patentm(1,9));
-fprintf(FID,'Average match per patent & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', corr_laborm_patentm(2,1), corr_laborm_patentm(2,2), corr_laborm_patentm(2,3), corr_laborm_patentm(2,4), corr_laborm_patentm(2,5), corr_laborm_patentm(2,6), corr_laborm_patentm(2,7), corr_laborm_patentm(2,8), corr_laborm_patentm(2,9));
-fprintf(FID,'Share of automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', corr_laborm_patentm(3,1), corr_laborm_patentm(3,2), corr_laborm_patentm(3,3), corr_laborm_patentm(3,4), corr_laborm_patentm(3,5), corr_laborm_patentm(3,6), corr_laborm_patentm(3,7), corr_laborm_patentm(3,8), corr_laborm_patentm(3,9));
-fprintf(FID,'Automation index & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', corr_laborm_patentm(4,1), corr_laborm_patentm(4,2), corr_laborm_patentm(4,3), corr_laborm_patentm(4,4), corr_laborm_patentm(4,5), corr_laborm_patentm(4,6), corr_laborm_patentm(4,7), corr_laborm_patentm(4,8), corr_laborm_patentm(4,9));
+fprintf(FID,'\\# Automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', meancorr(1,:));
+fprintf(FID,'Average match per patent & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(2,:));
+fprintf(FID,'Share of automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(3,:));
+fprintf(FID,'Automation index & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(4,:));
+
+
+
+% fprintf(FID,'\\# Automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', meancorr(1,:));
+% fprintf(FID,'Average match per patent & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(2,:));
+% fprintf(FID,'Share of automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(3,:));
+% fprintf(FID,'Automation index & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(4,:));
+
+
+
+
 
 
 fprintf(FID,'\\bottomrule\n');
