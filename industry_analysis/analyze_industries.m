@@ -142,7 +142,7 @@ end
 
 % Take mean of correlations
 meancorr = nanmean(corr_laborm_patentm, 3);
-meancorr = meancorr(:, [5, 4, 2, 8, 6, 9, 1, 3, 7])
+meancorr = meancorr(:, [5, 4, 2, 8, 6, 9, 1, 3, 7]);
 
 
 stdcorr = nan(size(meancorr));
@@ -158,10 +158,12 @@ end
 tablestr = repmat({''}, size(meancorr));
 
 for ix_val=1:length(meancorr(:))
-    if meancorr(ix_val) > 0
-        tablestr{ix_val} = ['\cellcolor{mylightred}', num2str(round(100*meancorr(ix_val))/100)];
-    elseif meancorr(ix_val) < 0
-        tablestr{ix_val} = ['\cellcolor{mylightgreen}', num2str(round(100*meancorr(ix_val))/100)];
+    if abs(meancorr(ix_val))/stdcorr(ix_val) > 1
+        tablestr{ix_val} = ['\textbf{', num2str(round(100*meancorr(ix_val))/100), '}'];
+%     if meancorr(ix_val) > 0
+%         tablestr{ix_val} = ['\cellcolor{mylightred}', num2str(round(100*meancorr(ix_val))/100)];
+%     elseif meancorr(ix_val) < 0
+%         tablestr{ix_val} = ['\cellcolor{mylightgreen}', num2str(round(100*meancorr(ix_val))/100)];
     else
         tablestr{ix_val} = num2str(round(100*meancorr(ix_val))/100);
     end
@@ -227,9 +229,9 @@ fprintf(FID,'\\bottomrule\n');
 fprintf(FID,'\\end{tabular}\n');
 fprintf(FID,'\\begin{tablenotes}\n');
 fprintf(FID,'\\small\n');
-fprintf(FID,'\\item \\textit{Note:} Correlations are calculated from the yearly time series 1987-2014 of the automation indicator and the labor market outcome series. The values are cross-sectional averages across the 26 manufacturing industries. Values in parentheses show standard deviations.\n');
+fprintf(FID,'\\item \\textit{Note:} Correlations are calculated from the yearly time series 1987-2014 of the automation indicator and the labor market outcome series. The values are cross-sectional averages across the 26 manufacturing industries. Values in parentheses show standard deviations. Bold values are at least one standard deviation away from 0.\n');
 fprintf(FID,'\\item $^1$: Automation patents are defined as patents with at least one keyword match.\n');
-fprintf(FID,'\\item $^2$: $log(1 + \\text{number of matches per patent})$.\n');
+fprintf(FID,'\\item $^2$: Calculated as $log(1 + \\text{number of matches per patent})$.\n');
 fprintf(FID,'\\item \\textit{Source:} USPTO, Google and own calculations.\n');
 fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');
