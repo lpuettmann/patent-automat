@@ -17,7 +17,7 @@ load('../conversion_patent2industry/industry_sumstats.mat')
 [industry_data, txt, ~] = xlsread('industrial_dataset.xlsx');
 
 var_list = txt(4,:);
-pick_var = 7;
+pick_var = 3;
 fprintf('Chosen labor market variable: %s.\n', var_list{pick_var})
 
 % Get industry data
@@ -56,12 +56,13 @@ for ix_industry=1:size(industry_sumstats, 1)
     industry_nr_matches = sumstats(:, 2);
     industry_pat_1match = sumstats(:, 3);
     industry_avg_matches = industry_nr_matches ./ industry_nr_pat;
+    % Share of patents classified as automation patents (> 1 keyword match)
     industry_pat1match_share = industry_pat_1match ./ industry_nr_pat;
     
     % Pick a metric of the patent matches to compare to labor market
     % outcomes
     patent_metric_pick = industry_pat1match_share;
-    
+        
     % Extract labor market data for industry
     industry_nr = industry_sumstats{ix_industry, 1, 1};
      
@@ -132,11 +133,11 @@ for ix_industry=1:size(industry_sumstats, 1)
     hold on
     xlim(xax_limit)
     ylim(yax_limit)
-    hx = plot([pick_normalization_date, pick_normalization_date], ...
-        [yax_limit(1), yax_limit(2)], 'Color', my_light_gray, ...
-        'LineWidth', 0.1);
-    uistack(hx, 'bottom');
     
+    hx = graph2d.constantline(pick_normalization_date, 'LineStyle',':', ...
+        'Color', my_dark_gray);
+    changedependvar(hx,'x');
+
     % Calculate correlation where we have data
     correlation_plotseries = corrcoef(laborm_pick, ...
         patent_metric_pick, 'rows','complete');
@@ -153,7 +154,7 @@ end
 legend('Labor market statistic', 'Automation statistic', 'Location', 'NorthEastOutside')
 
 
-%% Change position and size
+% Change position and size
 set(gcf, 'Position', [100 100 1500 900]) % in vector: left bottom width height
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
@@ -161,13 +162,14 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
     'Inches', 'PaperSize', [pos(3), pos(4)])
 
 
-%% Export to pdf
+% Export to pdf
 print_pdf_name = horzcat('subplot_industry_vs_labormarket.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
 
 
 %% Scatterplot
+% ========================================================================
 close all
 
 figureHandle = figure;
@@ -180,13 +182,20 @@ set(gcf, 'Color', 'w');
 ylabel('Change in labor market')
 xlabel('Change in patent match metric')
 hl = lsline;
+xlim([0, 3])
+ylim([0, 3])
+set(hl, 'Color', my_light_gray);
 uistack(hl, 'bottom')
 titlephrase = sprintf('Correlation: %3.2f', corr(labormarket_change', patent_metric_change'));
 title(titlephrase)
 
 % Add a 45 degree line
+h_45line = refline([1 0]);
+set(h_45line, 'Color', 'black', 'Linestyle', '--');
+uistack(h_45line, 'bottom')
 
-%% Change position and size
+
+% Change position and size
 set(gcf, 'Position', [100 100 900 500]) % in vector: left bottom width height
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
@@ -194,11 +203,13 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
     'Inches', 'PaperSize', [pos(3), pos(4)])
 
 
-%% Export to pdf
+% Export to pdf
 print_pdf_name = horzcat('scatter_labormarket_vs_patentmatches.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
 
 
-
+%% Make table of correlations of labor market statistics vs. patent match 
+% summary statistics
+% ========================================================================
 
