@@ -81,12 +81,15 @@ for ix_year = year_start:year_end
         % Save industry keyword matches for all industries
         all_industry_keyword_matches{ix_iter, ix_industry} = industry_keyword_matches;
         
+        % Calculate our custom automation index
+        industry_automix = sum(log(1 + industry_keyword_matches));
+        
         % Patents with at least one keyword match
         industry_distpatents_w_1m = (industry_keyword_matches>0);
 
         % Save yearly summary statistics for industries
         save_sumstats = [length(patix2ind), sum(industry_keyword_matches), ...
-            sum(industry_distpatents_w_1m)];
+            sum(industry_distpatents_w_1m), industry_automix];
 
         industry_sumstats(ix_industry, :, ix_iter) = ...
             {industry_nr, industry_name, save_sumstats};
