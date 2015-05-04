@@ -25,6 +25,38 @@ naics_otaf = industry_data_raw(:, 2);
 naics_list = unique(naics_otaf);
 
 
+
+%% Make new labor market series: share of employees of total manufacturing 
+% industry employment in one industry
+employment = industry_data(:, 5); % extract employment series
+
+yearlength = length(year_start:year_end);
+industrylength = length(naics_list);
+
+manufact_employment = zeros(yearlength, 1); % initialize
+
+for t=1:yearlength
+
+    employment_sum = 0;
+    
+    for j=1:industrylength
+        add_number = employment(t + (yearlength)*(j-1));
+        employment_sum = employment_sum + add_number;
+    end
+    
+    % Total manufacturing employment
+    manufact_employment(t) = employment_sum;
+    
+end
+
+employment_share = employment ./ repmat(manufact_employment, ...
+    industrylength, 1); % new series manufacturing employment share
+
+% Add series to previous dataset
+industry_data = [industry_data, employment_share];
+var_list = [var_list, 'employment_share'];
+
+
 %%  
 for ix_labormvar=1:length(var_list)
     labormvar = var_list{ix_labormvar};
@@ -123,17 +155,36 @@ for ix_labormvar=1:length(var_list)
             pick_normalization_index = pick_normalization_date-year_start+1;
 
             laborm_pick_norm = laborm_pick / laborm_pick(pick_normalization_index);
-            patent_metric_pick = patent_metric_pick / patent_metric_pick(pick_normalization_index);
+            patent_metric_pick_norm = patent_metric_pick / patent_metric_pick(pick_normalization_index);
 
             % Calculate correlation where we have data (ignoring NaNs)
             correlation_plotseries = corrcoef(laborm_pick_norm, ...
-                patent_metric_pick, 'rows','complete');
+                patent_metric_pick_norm, 'rows','complete');
             correlation_plotseries = correlation_plotseries(1,2);
 
             % Save the correlations between all variables for all industries
             corr_laborm_patentm(ix_patentmetric, ix_labormvar, ix_industry) = correlation_plotseries;
+            
+            if ix_patentmetric==1
+                % Initialize matrix on first iteration
+                patent_metric_pickmat = zeros(size(patent_metric_pick)); 
+            end
+            patent_metric_pickmat = [patent_metric_pickmat, patent_metric_pick];
+            if ix_patentmetric==size(patent_metrics,2)
+                % Delete first column in last iteration
+                patent_metric_pickmat = patent_metric_pickmat(:, 2:end); 
+            end
         end
         
+        
+        % Save industry labor market series in a structure
+        savename = regexprep(industry_name,' ','_');
+        savename = regexprep(savename,',','');
+        if numel(savename)>50
+            savename = savename(1:50);
+        end
+        eval(horzcat('idata.patent_metric.', savename, ' = patent_metric_pickmat;'));
+                
         % Save all industry series for the labor market variable in a
         % matrix
         if ix_industry==1
@@ -147,134 +198,12 @@ for ix_labormvar=1:length(var_list)
         end
     end
     
-    % Save industry series in a structure
-    eval(horzcat('laborm_idata.', labormvar, ' = laborm_pickmat;'));
+    % Save industry labor market series in a structure
+    eval(horzcat('idata.laborm.', labormvar, ' = laborm_pickmat;'));
 
 end
 
 
-%% Make table of correlations
-
-% Take mean of correlations
-meancorr = nanmean(corr_laborm_patentm, 3);
-meancorr = meancorr(:, [5, 4, 2, 8, 6, 9, 1, 3, 7]);
-
-
-stdcorr = nan(size(meancorr));
-
-for ix_row=1:size(stdcorr,1)
-    for ix_column=1:size(stdcorr,2)
-        extractvec = squeeze(corr_laborm_patentm(ix_row, ix_column, :));
-        stdcorr(ix_row, ix_column) = nanstd(extractvec);
-    end
-end
-
-
-tablestr = repmat({''}, size(meancorr));
-
-for ix_val=1:length(meancorr(:))
-    if abs(meancorr(ix_val))/stdcorr(ix_val) > 1
-        tablestr{ix_val} = ['\textbf{', num2str(round(100*meancorr(ix_val))/100), '}'];
-%     if meancorr(ix_val) > 0
-%         tablestr{ix_val} = ['\cellcolor{mylightred}', num2str(round(100*meancorr(ix_val))/100)];
-%     elseif meancorr(ix_val) < 0
-%         tablestr{ix_val} = ['\cellcolor{mylightgreen}', num2str(round(100*meancorr(ix_val))/100)];
-    else
-        tablestr{ix_val} = num2str(round(100*meancorr(ix_val))/100);
-    end
-end
-
-% Print to .txt file in Latex format
-printname = 'table_meancorr_laborm_patentm.tex';
-
-FID = fopen(printname, 'w');
-
-fprintf(FID,'\\begin{table}\n');
-fprintf(FID,'\\begin{small}\n');
-fprintf(FID,'\\begin{threeparttable}\n');
-fprintf(FID,'\\caption{{\\normalsize Average correlations of labor market outcomes and automation across industries}}\n');
-fprintf(FID,'\\label{tab:meancorr_laborm_patentm}\n');
-fprintf(FID,'\\begin{tabular}{lrrrrrrrrr}\n');
-fprintf(FID,'\\toprule \\addlinespace[0.5em]\n');
-% fprintf(FID,' & Production & Output & Capital & Capital Productivity & Employment & Labor cost & Labor productivity & Capital cost & Output deflator  \\tabularnewline[0.05cm]\n');
-
-fprintf(FID,' & \\rot{Employment} & \\rot{Capital Productivity} & \\rot{Output} & \\rot{Capital cost} &  \\rot{Labor cost} & \\rot{Output deflator} & \\rot{Production} & \\rot{Capital} & \\rot{Labor productivity} \\tabularnewline[0.05cm]\n');
-fprintf(FID,'\\midrule \\addlinespace[0.5em]\n');
-
-
-fprintf(FID,'\\# Automation patents$^1$ ');
-for ix_element=1:size(tablestr,2)
-    fprintf(FID,'& %s ', tablestr{1,ix_element});
-end
-fprintf(FID,' \\tabularnewline[0.0cm]\n');
-fprintf(FID,' & \\scriptsize{\\scriptsize{(%3.2f)}} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} \\tabularnewline[0.1cm]\n', stdcorr(1,:));
-
-
-fprintf(FID,'Average match per patent ');
-for ix_element=1:size(tablestr,2)
-    fprintf(FID,'& %s ', tablestr{2,ix_element});
-end
-fprintf(FID,' \\tabularnewline[0.0cm]\n');
-fprintf(FID,' & \\scriptsize{\\scriptsize{(%3.2f)}} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} \\tabularnewline[0.1cm]\n', stdcorr(2,:));
-
-
-fprintf(FID,'Share of automation patents ');
-for ix_element=1:size(tablestr,2)
-    fprintf(FID,'& %s ', tablestr{3,ix_element});
-end
-fprintf(FID,' \\tabularnewline[0.0cm]\n');
-fprintf(FID,' & \\scriptsize{\\scriptsize{(%3.2f)}} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} \\tabularnewline[0.1cm]\n', stdcorr(3,:));
-
-
-fprintf(FID,'Automation index$^2$ ');
-for ix_element=1:size(tablestr,2)
-    fprintf(FID,'& %s ', tablestr{4,ix_element});
-end
-fprintf(FID,' \\tabularnewline[0.0cm]\n');
-fprintf(FID,' & \\scriptsize{\\scriptsize{(%3.2f)}} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} & \\scriptsize{(%3.2f)} \\tabularnewline[0.1cm]\n', stdcorr(4,:));
-
-
-% fprintf(FID,'\\# Automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n', meancorr(1,:));
-% fprintf(FID,'Average match per patent & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(2,:));
-% fprintf(FID,'Share of automation patents & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(3,:));
-% fprintf(FID,'Automation index & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f & %3.2f \\tabularnewline[0.1cm]\n',  meancorr(4,:));
-
-
-fprintf(FID,'\\bottomrule\n');
-fprintf(FID,'\\end{tabular}\n');
-fprintf(FID,'\\begin{tablenotes}\n');
-fprintf(FID,'\\small\n');
-fprintf(FID,'\\item \\textit{Note:} Correlations are calculated from the yearly time series 1987-2014 of the automation indicator and the labor market outcome series. The values are cross-sectional averages across the 26 manufacturing industries. Values in parentheses show standard deviations. Bold values are at least one standard deviation away from 0.\n');
-fprintf(FID,'\\item $^1$: Automation patents are defined as patents with at least one keyword match.\n');
-fprintf(FID,'\\item $^2$: Calculated as $log(1 + \\text{number of matches per patent})$.\n');
-fprintf(FID,'\\item \\textit{Source:} USPTO, Google and own calculations.\n');
-fprintf(FID,'\\end{tablenotes}\n');
-fprintf(FID,'\\end{threeparttable}\n');
-fprintf(FID,'\\end{small}\n');
-fprintf(FID,'\\end{table}\n');
-fclose(FID); 
-
-
-%%
-fprintf('Saved: %s.\n', printname)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+save('manufacturing_ind_data.mat', 'idata', ...
+    'corr_laborm_patentm', 'labormarket_change', 'patent_metric_change');
 
