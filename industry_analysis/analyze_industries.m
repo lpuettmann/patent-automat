@@ -104,7 +104,6 @@ for ix_labormvar=1:length(var_list)
 
             end
 
-
             % Save changes in series for scatterplot
             notnanval = find(not(isnan(laborm_pick)));
 
@@ -123,18 +122,34 @@ for ix_labormvar=1:length(var_list)
             pick_normalization_date = 2000;
             pick_normalization_index = pick_normalization_date-year_start+1;
 
-            laborm_pick = laborm_pick / laborm_pick(pick_normalization_index);
+            laborm_pick_norm = laborm_pick / laborm_pick(pick_normalization_index);
             patent_metric_pick = patent_metric_pick / patent_metric_pick(pick_normalization_index);
 
             % Calculate correlation where we have data (ignoring NaNs)
-            correlation_plotseries = corrcoef(laborm_pick, ...
+            correlation_plotseries = corrcoef(laborm_pick_norm, ...
                 patent_metric_pick, 'rows','complete');
             correlation_plotseries = correlation_plotseries(1,2);
 
             % Save the correlations between all variables for all industries
             corr_laborm_patentm(ix_patentmetric, ix_labormvar, ix_industry) = correlation_plotseries;
         end
+        
+        % Save all industry series for the labor market variable in a
+        % matrix
+        if ix_industry==1
+            % Initialize matrix on first iteration
+            laborm_pickmat = zeros(size(laborm_pick)); 
+        end
+        laborm_pickmat = [laborm_pickmat, laborm_pick];
+        if ix_industry==size(industry_sumstats, 1)
+            % Delete first column in last iteration
+            laborm_pickmat = laborm_pickmat(:, 2:end); 
+        end
     end
+    
+    % Save industry series in a structure
+    eval(horzcat('laborm_idata.', labormvar, ' = laborm_pickmat;'));
+
 end
 
 
