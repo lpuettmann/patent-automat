@@ -101,7 +101,7 @@ fprintf(FID,'\\small\n');
 fprintf(FID,'\\item \\textit{Note:} Correlations are calculated from the yearly time series 1987-2014 of the automation indicator and the labor market outcome series. The values are cross-sectional averages across the 26 manufacturing industries. Values in parentheses show standard deviations. Bold values are at least one standard deviation away from 0.\n');
 fprintf(FID,'\\item $^1$: Automation patents are defined as patents with at least one keyword match.\n');
 fprintf(FID,'\\item $^2$: Calculated as $log(1 + \\text{number of matches per patent})$.\n');
-fprintf(FID,'\\item \\textit{Source:} USPTO, Google and own calculations.\n');
+fprintf(FID,'\\item \\textit{Source:} BLS, USPTO, Google and own calculations.\n');
 fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');
 fprintf(FID,'\\end{small}\n');

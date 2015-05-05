@@ -41,7 +41,7 @@ fprintf(FID,'\\begin{table}\n');
 fprintf(FID,'\\begin{small}\n');
 fprintf(FID,'\\begin{threeparttable}\n');
 fprintf(FID,'\\caption{{\\normalsize Overview of yearly matched patents}}\n');
-fprintf(FID,'\\label{tab:word_distribution}\n');
+fprintf(FID,'\\label{tab:overview_yr_matchpatents}\n');
 fprintf(FID,'\\begin{tabular}{lrrrrr}\n');
 fprintf(FID,'\\toprule \\addlinespace[0.5em]\n');
 fprintf(FID,' & \\textbf{Automation} & \\textbf{Total} & \\textbf{Share (\\%%)} & & \\textbf{Share matched} \\tabularnewline[0.05cm]\n');

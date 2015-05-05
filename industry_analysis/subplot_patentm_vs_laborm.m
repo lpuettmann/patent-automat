@@ -2,6 +2,9 @@ close all
 clear all
 clc
 
+%% Choose labor market and patent match statistic
+ix_patentmetric  = 1;
+ix_labormvar = 10;
 
 addpath('../functions')
 
@@ -48,8 +51,9 @@ choose_labormvar_list = {'production', 'output', 'capital', ...
     'capital_productivity', 'employment', 'labor_cost', ...
     'labor_productivity', 'capital_cost', 'output_deflator', ...
     'employment_share'}; % list to choose from
-ix_labormvar = 5; % CHOOSE HERE
+
 choose_labormvar = choose_labormvar_list{ix_labormvar};
+fprintf('Chosen labor market variable: %s.\n', choose_labormvar)
 
 
 %% Loop through subplots
@@ -70,7 +74,10 @@ for ix_industry=1:size(industry_sumstats, 1)
     % Share of patents classified as automation patents (> 1 keyword match)
     industry_pat1match_share = industry_pat_1match ./ industry_nr_pat;
     
-    patent_metric_pick = industry_pat_1match; % CHOOSE HERE
+    patent_metrics = [industry_pat_1match, industry_avg_matches, ...
+            industry_pat1match_share, industry_automix];
+    patent_metric_pick = patent_metrics(:, ix_patentmetric);
+
     
     % Normalize for plot
     pick_normalization_index = pick_normalization_date-year_start+1;
@@ -112,14 +119,14 @@ for ix_industry=1:size(industry_sumstats, 1)
 
 
     titlestring = sprintf('%s (%3.2f)', industry_name, correlation_plotseries);
-    title(titlestring)
+    title(titlestring, 'FontSize', 8)
     box off
     set(gca,'TickDir','out') 
     leave_xaxis_bottomonly(ix_industry, dim_subplot, ...
         size(industry_sumstats, 1), 'labels')
 end
 
-legend(choose_labormvar, 'Automation statistic', 'Location', 'NorthEastOutside')
+legend(regexprep(choose_labormvar,'_',' '), 'Automation statistic', 'Location', 'NorthEastOutside')
 legend boxoff  
 
 % Change position and size
