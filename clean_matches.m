@@ -9,10 +9,12 @@ tic
 
 addpath('matches');
 addpath('functions');
+addpath('patent_index');
+
 
 %%
-year_start = 1976;
-year_end = 2015;
+year_start = 2003;
+year_end = 2003;
 
 
 %%
@@ -24,6 +26,29 @@ for ix_year = year_start:year_end
     load(load_file_name)
 
 
+    % Load patent_index for year
+    % -------------------------------------------------------------------
+    build_load_filename = horzcat('patent_index_', num2str(ix_year), ...
+        '.mat');
+    load(build_load_filename)
+   
+    week_start = 1;
+    week_end = set_weekend(ix_year); 
+    length_pattext = [];
+    for ix_week=week_start:week_end
+        % Calculate average number of matches per line
+        ix_find = pat_ix{ix_week, 2};
+        wly_lenpattext = ix_find(2:end) - ix_find(1:end-1);
+        % Big assumption: last patent gets average length of weekly file (problem:
+        % I didn't save the length of the weekly file, opening it again here would
+        % take a long time)
+        wly_lenpattext = [wly_lenpattext; round(mean(wly_lenpattext))];
+        length_pattext = [length_pattext; wly_lenpattext];
+    end
+    
+    %% 
+    patsearch_results = [patent_keyword_appear, num2cell(length_pattext)];  % Patent search result table
+    
     %% Find numbers starting with a letter
     % Number of patents per ix_year
     nr_patents_yr = size(patent_keyword_appear, 1);
@@ -50,7 +75,6 @@ for ix_year = year_start:year_end
     
     
     %% Delete patents that start with letter
-    patsearch_results = patent_keyword_appear;  % Patent search result table
     patsearch_results(save_row_delete, :) = [];
     
     if nr_patents_yr - length(save_row_delete) ~= size(patsearch_results, 1)

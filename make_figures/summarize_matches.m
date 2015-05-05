@@ -19,8 +19,10 @@ week_start = 1;
 %% Make some initializations
 % ========================================================================
 % Pre-define some vectors to initialize them for the loops
-allyear_total_matches_week = 0; % delete this afterwards
-allyear_total_automix = 0; % delete this afterwards
+allyear_total_matches_week = []; 
+allyear_total_automix = []; 
+allyear_total_mean_matches_per_line = []; 
+allyear_mean_len_pattxt = []; 
 
 ix_new_year = ones(length(year_start:year_end) + 1, 1); % where new year data starts
 
@@ -51,7 +53,7 @@ for ix_year=year_start:year_end
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
     
-       
+
     patent_match_summary.nr_patents_yr(aux_ix_save) = size(patsearch_results, 1);
    
     
@@ -88,14 +90,23 @@ for ix_year=year_start:year_end
     total_matches_week = zeros(week_end, 1);
     total_automix = zeros(week_end, 1);
     nr_patents_per_week = zeros(week_end, 1);
+    mean_matches_per_line = zeros(week_end, 1);
+    mean_len_pattxt = zeros(week_end, 1);
     
     % Make an index of a patent
     automix = log(1 + nr_keyword_per_patent);
     
+    length_pattext = cell2mat(patsearch_results(:, 5));
     
     for ix_week=week_start:week_end
         keywords_week = nr_keyword_per_patent(patent_week==ix_week);
         total_matches_week(ix_week) = sum(keywords_week);
+        
+        % Calculate average number of matches per line
+        length_pattext_week = length_pattext(patent_week==ix_week);
+        mean_len_pattxt(ix_week) = mean(length_pattext_week);
+        matches_per_line = keywords_week ./ length_pattext_week;
+        mean_matches_per_line(ix_week) = mean(matches_per_line);
         
         % Count number of patents per week
         nr_patents_per_week(ix_week) = length(keywords_week);
@@ -104,15 +115,22 @@ for ix_year=year_start:year_end
         total_automix(ix_week) = sum(automix_week);
     end
     
+    
     if size(total_matches_week, 1) < size(total_matches_week, 2)
         warning('Check if column vector')
     end
-
+    
     allyear_total_matches_week = [allyear_total_matches_week;
                                   total_matches_week];
+                
+    allyear_mean_len_pattxt = [allyear_mean_len_pattxt;
+                               mean_len_pattxt];
     
     allyear_total_automix = [allyear_total_automix;
                             total_automix];
+                        
+    allyear_total_mean_matches_per_line = [allyear_total_mean_matches_per_line;
+                                          mean_matches_per_line];
     
     allyear_nr_patents_per_week{ix_year - year_start + 1} = nr_patents_per_week; 
                         
@@ -127,9 +145,6 @@ for ix_year=year_start:year_end
     fprintf('Year %d completed.\n', ix_year)
 end
 
-% Cut of the first zero used for pre-defining
-allyear_total_matches_week = allyear_total_matches_week(2:end);
-allyear_total_automix = allyear_total_automix(2:end);
 
 % Re-formate the index showing where new year data starts
 ix_new_year = ix_new_year(1:end-1);
@@ -150,7 +165,9 @@ save(save_name, 'patent_match_summary')
 save_name = horzcat('total_matches_week_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
 save(save_name, 'allyear_total_matches_week', ...
-    'allyear_nr_patents_per_week', 'ix_new_year', 'allyear_total_automix')
+    'allyear_nr_patents_per_week', 'ix_new_year', ...
+    'allyear_total_automix', 'allyear_total_mean_matches_per_line', ...
+    'allyear_mean_len_pattxt')
 
 
 %% End
