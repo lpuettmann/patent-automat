@@ -13,8 +13,8 @@ addpath('patent_index');
 
 
 %%
-year_start = 2003;
-year_end = 2003;
+year_start = 1976;
+year_end = 2015;
 
 
 %%
@@ -47,7 +47,11 @@ for ix_year = year_start:year_end
     end
     
     %% 
-    patsearch_results = [patent_keyword_appear, num2cell(length_pattext)];  % Patent search result table
+    patsearch_results = [patent_keyword_appear, num2cell(length_pattext)]; % Patent search result table
+    fprintf('Average line length of patents: %3.1f.\n', mean(length_pattext))
+    yearmean_len_pattxt(ix_year - year_start + 1) = mean(length_pattext);
+
+    
     
     %% Find numbers starting with a letter
     % Number of patents per ix_year
@@ -127,7 +131,8 @@ for ix_year = year_start:year_end
     disp('----------')
 
     %% Clear variables from memory that could cause problems
-    keep year_start year_end patent_nr_letter share_w_letter
+    keep year_start year_end patent_nr_letter share_w_letter ...
+        yearmean_len_pattxt
 end
 
 toc

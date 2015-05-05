@@ -155,7 +155,6 @@ end
 
 
 
-
 %% Save
 % ========================================================================
 save_name = horzcat('patent_match_summary_', num2str(year_start), '-',  ...
@@ -168,6 +167,7 @@ save(save_name, 'allyear_total_matches_week', ...
     'allyear_nr_patents_per_week', 'ix_new_year', ...
     'allyear_total_automix', 'allyear_total_mean_matches_per_line', ...
     'allyear_mean_len_pattxt')
+
 
 
 %% End
