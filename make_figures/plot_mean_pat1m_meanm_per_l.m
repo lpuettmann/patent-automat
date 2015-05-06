@@ -25,13 +25,13 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
-color1_pick = [0.3, 0.3, 0.3]; % dark gray
+color1_pick = [5,48,97]./ 255; 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
 
 figureHandle = figure;
 
-plot_series = allyear_mean_len_pattxt;
+plot_series = allyear_total_mean_pat1m_meanm_per_l;
 [plot_trend, ~] = hpfilter(plot_series, 100000);
 
 scatter(1:length(plot_series), plot_series, ...
@@ -42,7 +42,7 @@ h_trend = plot(1:length(plot_series), plot_trend, ...
 
 
 set(gca,'FontSize',11) % change default font size of axis labels
-title('Average patent line length', 'FontSize', 18)
+title('Mean matches per line for patents with at least one match', 'FontSize', 18)
 
 set(gca,'TickDir','out')  
 box off
@@ -66,6 +66,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('mean_len_pattxt', num2str(year_start), '-', ...
+print_pdf_name = horzcat('meanmatches_per_line_pat1m', num2str(year_start), '-', ...
     num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')

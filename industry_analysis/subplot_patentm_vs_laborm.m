@@ -4,7 +4,7 @@ clc
 
 %% Choose labor market and patent match statistic
 ix_patentmetric  = 4;
-ix_labormvar = 10;
+ix_labormvar = 5;
 
 addpath('../functions')
 
@@ -38,7 +38,7 @@ set(0, 'DefaultAxesFontName', 'Palatino')
 
 plottime = year_start:year_end;
 xax_limit = [year_start, year_end];
-yax_limit = [0, 2];
+yax_limit = [0, 4];
 
 figureHandle = figure;
 set(gcf, 'Color', 'w');
@@ -80,10 +80,10 @@ for ix_industry=1:size(industry_sumstats, 1)
 
     
     % Normalize for plot
-    pick_normalization_index = pick_normalization_date-year_start+1;
-
-    laborm_pick = laborm_pick / laborm_pick(pick_normalization_index);
-    patent_metric_pick = patent_metric_pick / patent_metric_pick(pick_normalization_index);
+%     pick_normalization_index = pick_normalization_date-year_start+1;
+% 
+%     laborm_pick = laborm_pick / laborm_pick(pick_normalization_index);
+%     patent_metric_pick = patent_metric_pick / patent_metric_pick(pick_normalization_index);
 
 
     % Make a time series plot with both series
@@ -105,7 +105,7 @@ for ix_industry=1:size(industry_sumstats, 1)
         'MarkerFaceColor', color2_pick);
     hold on
     xlim(xax_limit)
-    ylim(yax_limit)
+%     ylim(yax_limit)
 
     hx = graph2d.constantline(pick_normalization_date, 'LineStyle',':', ...
         'Color', my_dark_gray);

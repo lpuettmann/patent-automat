@@ -23,6 +23,8 @@ allyear_total_matches_week = [];
 allyear_total_automix = []; 
 allyear_total_mean_matches_per_line = []; 
 allyear_mean_len_pattxt = []; 
+allyear_total_mean_pat1m_meanm_per_l = [];     
+allyear_total_nr_pat1m = [];
 
 ix_new_year = ones(length(year_start:year_end) + 1, 1); % where new year data starts
 
@@ -92,6 +94,8 @@ for ix_year=year_start:year_end
     nr_patents_per_week = zeros(week_end, 1);
     mean_matches_per_line = zeros(week_end, 1);
     mean_len_pattxt = zeros(week_end, 1);
+    mean_pat1m_meanm_per_l = zeros(week_end, 1);
+    nr_pat1m = zeros(week_end, 1);
     
     % Make an index of a patent
     automix = log(1 + nr_keyword_per_patent);
@@ -111,6 +115,13 @@ for ix_year=year_start:year_end
         % Count number of patents per week
         nr_patents_per_week(ix_week) = length(keywords_week);
         
+        % Only look at patents with at least one match
+        pat1m_matches = keywords_week(keywords_week>1);
+        pat1m_len_pattxt = length_pattext_week(keywords_week>1);
+        pat1m_meanm_per_l = pat1m_matches ./ pat1m_len_pattxt;
+        mean_pat1m_meanm_per_l(ix_week) = mean(pat1m_meanm_per_l);
+        nr_pat1m(ix_week) = length(pat1m_matches);
+                
         automix_week = automix(patent_week==ix_week);
         total_automix(ix_week) = sum(automix_week);
     end
@@ -131,6 +142,12 @@ for ix_year=year_start:year_end
                         
     allyear_total_mean_matches_per_line = [allyear_total_mean_matches_per_line;
                                           mean_matches_per_line];
+                                      
+    allyear_total_mean_pat1m_meanm_per_l = [allyear_total_mean_pat1m_meanm_per_l;
+                                            mean_pat1m_meanm_per_l];                        
+                                      
+    allyear_total_nr_pat1m = [allyear_total_nr_pat1m;
+                              nr_pat1m];  
     
     allyear_nr_patents_per_week{ix_year - year_start + 1} = nr_patents_per_week; 
                         
@@ -166,7 +183,8 @@ save_name = horzcat('total_matches_week_', num2str(year_start), '-', ...
 save(save_name, 'allyear_total_matches_week', ...
     'allyear_nr_patents_per_week', 'ix_new_year', ...
     'allyear_total_automix', 'allyear_total_mean_matches_per_line', ...
-    'allyear_mean_len_pattxt')
+    'allyear_mean_len_pattxt', 'allyear_total_mean_pat1m_meanm_per_l', ...
+    'allyear_total_nr_pat1m')
 
 
 

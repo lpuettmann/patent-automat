@@ -25,7 +25,7 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
-color1_pick = [0.3, 0.3, 0.3]; % dark gray
+color1_pick = [5,48,97]./ 255; 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
 
@@ -43,7 +43,7 @@ h_trend = plot(1:length(plot_series), plot_trend, ...
 
 
 set(gca,'FontSize',11) % change default font size of axis labels
-
+title('Mean matches per line', 'FontSize', 18)
 
 set(gca,'TickDir','out')  
 box off
