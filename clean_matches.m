@@ -46,11 +46,11 @@ for ix_year = year_start:year_end
         length_pattext = [length_pattext; wly_lenpattext];
     end
     
+    
     %% 
     patsearch_results = [patent_keyword_appear, num2cell(length_pattext)]; % Patent search result table
     fprintf('Average line length of patents: %3.1f.\n', mean(length_pattext))
     yearmean_len_pattxt(ix_year - year_start + 1) = mean(length_pattext);
-
     
     
     %% Find numbers starting with a letter
@@ -85,8 +85,8 @@ for ix_year = year_start:year_end
         warning('They should be the same')
     end
 
-    % 
-    if ~(size(patsearch_results,2)==5)
+    
+    if ~(size(patsearch_results,2)==6)
         warning('Are you deleting the right column here?')
     end
     
@@ -102,7 +102,6 @@ for ix_year = year_start:year_end
     fprintf('Patent numbers that start with a letter: %d/%d = %s percent.\n', ...
         length(save_row_delete), nr_patents_yr, ...
         num2str(length(save_row_delete)/nr_patents_yr*100))
-
   
     
     %% Delete first (and last [for some]) letter of patent numbers
@@ -119,16 +118,34 @@ for ix_year = year_start:year_end
         
         patent_number_cleaned{ix_patent} = trunc_row;
     end
-
     % Insert truncated patent numbers back into patent result table
     patsearch_results(:, 1) = patent_number_cleaned;
+    
+    
+    %% Clean technology classification (OCL) numbers
+    tech_class_nr = patsearch_results(:, 3);
+    tech_class_nr = strtrim(tech_class_nr); % remove leading and trailing whitespace
+    tech_class_nr = strtok(tech_class_nr); % keep string until first whitespace
 
-    % Save
+    % Test if there is whitespaces tech classification numbers
+    test_contains_space = strfind(tech_class_nr, ' ');
+    show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
+    if not(isempty(show_ix_contains_space))
+        warning('There is a space in the patent tech classification numbers')
+        disp(tech_class_nr(show_ix_contains_space))
+    end
+    
+    % Insert prepared tech class numbers back
+    patsearch_results(:, 3) = tech_class_nr;
+    
+
+    %% Save
     save_name = horzcat('patsearch_results_', num2str(ix_year), '.mat');
     matfile_path_save = fullfile('cleaned_matches', save_name);
     save(matfile_path_save, 'patsearch_results');    
     fprintf('Saved: %s.\n', save_name)
     disp('----------')
+    
 
     %% Clear variables from memory that could cause problems
     keep year_start year_end patent_nr_letter share_w_letter ...
@@ -137,3 +154,4 @@ end
 
 toc
 disp('Finished.')
+

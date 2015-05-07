@@ -37,6 +37,7 @@ for ix_year = year_start:year_end
     classification_nr = patsearch_results(:, 3);
 
     
+    
     for ix_industry=1:length(industry_list)
         industry_nr = industry_list{ix_industry};
         list_pos = find(strcmp(ind_code_table(:,1), industry_nr));
@@ -54,7 +55,7 @@ for ix_year = year_start:year_end
 
 
         % Find patents that have the right tech classifications
-        patix2ind = 0;
+        patix2ind = [];
 
         for ix_set=1:length(tc2ind)
             pick_nr = num2str(tc2ind(ix_set));
@@ -63,12 +64,10 @@ for ix_year = year_start:year_end
                         find(strcmp(classification_nr, pick_nr))];
         end
 
-        patix2ind(1) = [];
-
         patix2ind = sort(patix2ind);
 
         if min(unique(patix2ind) == patix2ind) < 1
-            warning('There should be no duplicates here.')
+            warning('I''m not sure there can be duplicates here.')
         end
 
         % Save which patents link to industries
