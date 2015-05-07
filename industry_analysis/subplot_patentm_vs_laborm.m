@@ -3,7 +3,7 @@ clear all
 clc
 
 %% Choose labor market and patent match statistic
-ix_patentmetric  = 4;
+ix_patentmetric  = 3;
 ix_labormvar = 5;
 
 addpath('../functions')
