@@ -36,13 +36,17 @@ for ix_year=year_start:year_end
     % Draw a random sample without replacement from the patents in year
     rand_pat_year = randsample(nr_patents_yr, nr_draw_pat_yr);
         
-    
     patent_number = patsearch_results(rand_pat_year, 1);
-    patent_number = cellfun(@str2num, patent_number);
+    patent_number = cellfun(@str2num, patent_number); 
+    
+    nr_keyword_find = patsearch_results(rand_pat_year, 2);
+    nr_keyword_find = cell2mat(nr_keyword_find);
+       
     
     % Stack yearly draws underneath
     rand_pat = [rand_pat; 
-                patent_number, repmat(ix_year, size(rand_pat_year))];
+                patent_number, repmat(ix_year, size(rand_pat_year)), ...
+                nr_keyword_find];
     
     fprintf('Year %d completed.\n', ix_year)
 end
@@ -52,12 +56,15 @@ end
 %% Export
 % ========================================================================
 % Rearrange elements randomly
-rand_pat = rand_pat(randperm(length(rand_pat)),:);
+rand_pat = rand_pat(randperm(length(rand_pat)), :);
 
 % Create an Excel document which gives the patent number of the drawn
 % patent
-col_header = {'Patent number', 'Year', 'Classification (0 = no, 1 = yes, 99 = don''t know)', 'Technical problem', 'Comment'};
-data4exc = [rand_pat, nan(length(rand_pat), length(col_header) - 2)];
+col_header = {'Patent number', 'Year', ...
+    'Classification (0 = no, 1 = yes)', 'Comment', ...
+    'Number of keyword matches'};
+data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
+    length(col_header) - 3), rand_pat(:, 3)];
 output_matrix = [col_header; num2cell(data4exc)];
 save_name = 'manual_classif.xlsx';
 xlswrite(save_name, output_matrix);
