@@ -1,0 +1,423 @@
+\documentclass[10pt]{beamer}
+%\documentclass[14pt, handout]{beamer} % to print out, change to this set-up
+
+\usepackage{amsmath} % to include math
+\usepackage{tikz}
+\usetikzlibrary{arrows} % to use arrows in tikz
+
+\usepackage{pgfplots}
+\usepackage{units}
+\usepackage{ulem}
+\usepackage{epstopdf} % for making .eps to .pdf
+\usepackage{graphicx} % to include graphics
+\usepackage{subfigure}
+\usepackage{hyperref}
+\usepackage{appendixnumberbeamer} 
+\usepackage{bbm}
+\usepackage[utf8]{inputenc} % this makes it possible to use e
+
+\usepackage{setspace} % to use \setstretch later
+
+\usepackage[australian]{babel} % change date to to European date format
+
+\usetheme{Dresden}
+
+%%% The following section removes the second lighter blue line below the navigation panel %%%
+\makeatletter
+\beamer@theme@subsectionfalse
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[flushleft]{threeparttable}  % for nice table
+
+\usepackage{caption,fixltx2e}  % for nice tables
+\usepackage[flushleft]{threeparttable}  % for nice tables
+
+
+%%% I added the following two lines together to edit the color of the navigation bar at the top
+\setbeamercolor{section in head/foot}{fg=gray,bg=white} 
+%\setbeamertemplate{section in head/foot shaded}[default][10] % I'm not sure what this does
+
+
+\hypersetup{pdfpagemode=UseNone} % un-comment this if you don't want to show bookmarks open when opening the pdf
+
+
+%%%%%%%%%% Uncomment the following two lines to use Helvetica as font %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\familydefault}{\sfdefault} % to use sans-serif font
+\usepackage{helvet} % use Helvetica font
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% -------- Define new color ------------------------------
+\usepackage{color}  
+
+\definecolor{mygrey}{rgb}{0.85,0.85,0.85} % make grey for the table
+\definecolor{mytextgrey}{rgb}{0.25, 0.25, 0.25} % make grey for text
+% --------------------------------------------------------
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\useinnertheme{circles} % changes the appearance of bullet points for both numbers and circles
+
+\setbeamerfont{page number in head/foot}{size={\scriptsize}} % set size of page numbers
+
+\setbeamertemplate{footline}[frame number]{} % shows the page numbers
+\setbeamertemplate{navigation symbols}{} % this turns off the annoying navigation symbols at the bottom of the page
+
+\definecolor{beamer@blendedblue}{rgb}{0.0471,0.298,0.6824} % changed the default color
+
+
+\setbeamercolor{button}{bg=beamer@blendedblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title {\textbf{Manual Coding Handbook} \\[1cm]
+A New Indicator of Automation \\ Based on Patent Text Search}
+\author{
+Katja Mann, Lukas P\"uttmann \\  
+\textit{University of Bonn}}
+\date{\textbf{Version: \today}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\section{Introduction}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+
+\begin{frame}\frametitle{Introduction}
+%\vspace{-0.5cm}
+	\begin{itemize}		
+		\item Automation of tasks affects jobs to a large degree. 
+		\item Therefore we need a good measure to be able to analyze the impact of automation on labor markets.
+		\item In this research project, we design a new indicator of automation based on searching patent grant texts for keywords.
+		\item We check this computer-based analysis by \textbf{manual coding}, the guidelines for which we describe in this document.
+	\end{itemize}
+\end{frame}
+
+
+\section{Patents}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+
+\begin{frame}\frametitle{What is a patent?}
+	\begin{itemize}	
+		\item Patents guarantee the intellectual property right to an innovation. In the US this right is for 20 years. 
+		\item People or firms apply for patents in a \textit{patent application} in which they describe, why a patent is new, useful and not trivial.
+		\item The patent office then looks at the application and decides whether to grant the patent.
+		\item If the patent is granted, an official \textit{patent grant text} is written. This is the document we will look at.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Patent grant text ...}
+... contains most importantly:
+	\begin{itemize}	
+		\item abstract
+		\item detailed description
+	\end{itemize}
+... and contains also:
+	\begin{itemize}	
+		\item patent number
+		\item name of the inventor
+		\item date
+		\item citations to other patents
+		\item other legal information
+		\item drawings
+		\item technology classification number
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Our sample}
+	\begin{itemize}	
+	\item We study U.S. patents 1976-2015.
+	\item Utility patents only. The patents we exclude have a patent number starting with a letter: D (design patents), PP (plant patents), R (reissue patents), T (defensive publications), H (statutory invention registration), X (very early patents)
+	\end{itemize}
+\end{frame}
+
+
+\section{Automat}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+
+\begin{frame}
+\textcolor{beamer@blendedblue}{\textbf{Definition:}}
+
+	\begin{itemize}	
+	\item An \textit{automat} is a \textbf{device}$^1$ that carries out a \textbf{process}$^2$ \textbf{independently}$^3$.
+		\begin{itemize}	
+		\item $^1$: could be a a physical machine, computer program, a robot.
+		\item $^2$: could be a production process, the act of creation, composing a song, altering something, measuring something, a task
+		\item $^3$: without human interference (apart from that needed for supervision, maintenance or at the start)
+		\end{itemize}
+		\item What we are not looking for: 
+			\begin{itemize}
+			\item tools, labor efficiency enhancing tools
+			\item business or production methods and techniques
+			\item new chemicals or medical drugs
+			\end{itemize}			
+	\end{itemize}
+\vspace{0.6cm}
+\textcolor{beamer@blendedblue}{\textbf{Our question to you:}}
+	\begin{itemize}	
+	\item Does the patent we will show you, \textit{even just in a loose sense}, describe an automat?
+	\end{itemize}
+\end{frame}
+
+
+
+\section{Coding}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+
+\begin{frame}\frametitle{Practical issues}
+	\begin{itemize}	
+	\item We will give you an Excel document containing a list of patent numbers such as: 7091471 or 7124853 or 9027105.
+	\item Please go to one of the following websites: \\[0.1cm]
+ \href{https://www.google.com/patents}{\texttt{https://www.google.com/patents}}\\[0.1cm]
+\href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{http://patft.uspto.gov/netahtml/PTO/search-bool.html}}\\[0.1cm]
+	and enter the patent number
+	\item We recommend using Google Patents first, as it has usually the nicer interface. If you cannot find it (this happens rarely), please try at the USPTO website.
+	\item The right patent might not be the first one in the list. In Google Patents, you might find patents from other countries. You identify the right patent as the one starting with ``US". In the USPTO search interface, the right patent is often the last one in the list (don't ask us why...).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Practical issues}
+	\begin{itemize}	
+	\item There are some warning signs, that you might have clicked on the wrong patent: if the main language is not in English (but for example in German or Chinese), then it's probably not an US patent.
+	\item If the date of the patent grant text (also called publication date) is before 1976, then something might be wrong. We are only looking at patents that were granted in 1976 and the years after. The application dates can be earlier, though (sometimes a long time before 1976). 
+	\item If there is a problem and you cannot figure it out, please indicate that in the comment box.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Manual coding}
+	\begin{itemize}	
+	\item After you have found the patent text, please read through the patent grant text, with a particular emphasis on the abstract and the description and decide: is this an automation patent?
+		\begin{itemize}
+		\item If yes please also decide:
+			\begin{itemize}
+			\item Is this is a cognitive automation patent?
+			\item Is this is a manual automation patent?
+			\item Or both?
+			\item Or neither?
+			\end{itemize}
+		\end{itemize}
+	\item Please use 1 to encode a Yes and 0 to encode a No.
+	\item There is also a comment field. Please try to avoid using this, but you can enter here if you encountered technical problems, if something seemed wrong to you or if you encountered some other problem.
+	\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}\frametitle{Excel table after filling it in}
+\vspace{-1cm}
+\begin{table}
+\begin{small}
+  \begin{threeparttable}
+     \begin{tabular}{ccccl}
+        \textbf{Patent number} & \textbf{Classification} & \textbf{Cognitive} & \textbf{Manual} & \textbf{Comment}  \tabularnewline
+        \hline
+        8851703	& 0  &  &  &	\tabularnewline
+        7725116 & 0	 &  &  &	Technical problem\tabularnewline
+        8975301 & 0	 &  &  &	\tabularnewline
+        4716621 & 1	 & 1 &  &	Not sure\tabularnewline
+        4789151 & 0	 &  &  & 	\tabularnewline
+        4116621 & 1	 & 1 & 1 &	\tabularnewline
+        6785151 & 0	 &  &  & 	\tabularnewline
+        \hline
+     \end{tabular}
+  \end{threeparttable}
+\end{small}
+\end{table}
+\vspace{0.5cm}
+{\small \textcolor{mytextgrey}{Please note that these patents and numbers have not been checked so don't use them as an orientation for your coding. Also the proportion of patents classified as automation patents is probably not representative.} }
+
+\end{frame}
+
+
+
+\begin{frame}\frametitle{When you're done}
+	\begin{itemize}	
+		\item Please make sure your file is formatted the following way:\\[0.1cm]
+\texttt{manual\textunderscore classif\textunderscore <FirstnameLastname>\textunderscore <year>-<month>-<day>.xlsx}\\[0.3cm]
+		for example, for Lukas on the 11\textsuperscript{th} of May 2015 that would be:\\[0.1cm]
+\texttt{manual\textunderscore classif\textunderscore LukasPuettmann\textunderscore 2015-05-11.xlsx}\\[0.3cm]
+		\item and then send it back to us in an email to\\[0.1cm] \hspace{1cm}\href{mailto:lukas.puettmann@uni-bonn.de}{\texttt{lukas.puettmann@uni-bonn.de}}\\[0.1cm]
+	\end{itemize}
+\end{frame}
+
+
+
+\section{Examples}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+
+
+\begin{frame}\frametitle{An automation patent}
+	\begin{itemize}	
+	\item Hello
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Not an automation patent}
+	\begin{itemize}	
+	\item 6905407, Gaming device having display with interacting multiple rotating members and indicator
+	\item 5552597, Hand-held scanner having adjustable light path 
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Not an automation patent (close call)}
+	\begin{itemize}	
+	\item 8457498, Methods and apparatus for target identification
+	\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\section{FAQs}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{What am I looking for?}\\[0.1cm]
+	We ask you to classify patents as to whether they are about automation or not. If they are about automation, we also ask you whether they are cognitive or manual.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{What should I write to say Yes?}\\[0.1cm]
+	Please write 1.
+	\item \textit{What should I write to say No?}\\[0.1cm]
+	Please write 0.
+	\item \textit{Can I also leave the field blank if it's a No?}\\[0.1cm]
+	We ask you to please fill out the classification with either a 0 or a 1. If that's somehow not possible, please write this into the comment box. The fields cognitive and manual you can leave empty to signal a No.
+		\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{What if I don't find the patent text?}\\[0.1cm]
+	Have you tried both search masks? If you cannot find it on either one, please write this in the comment box.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{Should I read the whole patent?}\\[0.1cm]
+	No, that is likely not necessary (if the text is not very short). We recommend to concentrate on: the title, the abstract (which is a short overview), the beginning of the description and the beginning of the background. It also helps to look at the images. It can also help to see which patents were cited (they are likely similar to the one you're looking at) and who applied for it (you might know the firm and infer something from that).
+	\end{itemize}
+\end{frame}	
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{Should I enter whether a patent is cognitive or manual even if I don't think the patent is an automation patent?}\\[0.1cm]
+	No, that is not necessary, you can just leave this field empty.
+	\end{itemize}
+\end{frame}	
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{Do I need any technical knowledge to judge a patent?}\\[0.1cm]
+	Patent texts are written in a technical language and they can be very complex. We only ask you to classify the patent as an automation patent if you are \textit{reasonably sure} that the patent is an automation patent. 
+	\end{itemize}
+\end{frame}
+
+	
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{How often do you expect me to use the comment box?}\\[0.1cm]
+	We would like you to use that box as little as possible. Please only use that box to mark if you encounter any problems or if you are absolutely not sure how to classify the patent.
+	\end{itemize}
+\end{frame}	
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{What if I don't understand what the patent is about?}\\[0.1cm]
+	No problem, just judge if you think this patent might have something to contribute to automation. If you cannot find that out, it's probably a no. If you're not sure, please indicate this in the comment box.
+	\end{itemize}
+\end{frame}
+	
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{How long should I take for a patent?}\\[0.1cm]
+	We are not quite sure about that yet. If it's less 30 seconds per patent, it's probably too fast. If it's more than 5 minutes per patent, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's ok (and indeed recommendable) to take more time for that.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{Am I doing you a favor if I classify more patents as Yes?}\\[0.1cm]
+	Unfortunately not. We might use your classifications to help us classify other patents. This will not work, if patents are wrongly classified. Also, it makes our work more credible if our manual classifications have a high quality.
+	\end{itemize}
+\end{frame}
+	
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{Should I hurry and try to classify as many patents as possible?}\\[0.1cm]
+	No, please take your time. It's much more important for us for your coding to accurate than to code more patents. Don't worry if things are going slow, it's ok to classify only few patents. If you're tired and you think you might be making mistakes, then please take a break or stop.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{What if cannot find the patent?}\\[0.1cm]
+Sometimes patent don't show up in \href{https://www.google.com/patents}{\texttt{Google Patents}}, but they do appear in the \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{USPTO}} search interace. In Google Patents you might get several hits and you should search for the patent number starting with US and then the number we give you. On the USPTO website, the patent you're looking for usually shows up as the last hit (don't ask us why). If after some searching you cannot find it, please just write something like ``Cannot find" in the comment box.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{FAQs}
+	\begin{itemize}	
+	\item \textit{Question?}\\[0.1cm]
+	Answer.
+	\item \textit{Question?}\\[0.1cm]
+	Answer.
+	\end{itemize}
+\end{frame}
+
+
+\section{Thank you.}
+\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
+\begin{frame}
+	Last and most importantly: \textbf{Thank you for your help}. We appreciate it very much.
+\end{frame}
+
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

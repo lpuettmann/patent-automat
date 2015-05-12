@@ -53,7 +53,7 @@ end
 
 
 
-%% Export
+%% Export to excel files
 % ========================================================================
 % Rearrange elements randomly
 rand_pat = rand_pat(randperm(length(rand_pat)), :);
@@ -61,17 +61,30 @@ rand_pat = rand_pat(randperm(length(rand_pat)), :);
 % Create an Excel document which gives the patent number of the drawn
 % patent
 col_header = {'Patent number', 'Year', ...
-    'Classification (0 = no, 1 = yes)', 'Comment', ...
-    'Number of keyword matches'};
+    'Classification (0 = no, 1 = yes)', 'Cognitive', 'Manual', 'Comment', ...
+    'Number matches'};
 data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
     length(col_header) - 3), rand_pat(:, 3)];
+output_matrix = [col_header; num2cell(data4exc)];
+save_name = 'manual_classif_FULL.xlsx';
+xlswrite(save_name, output_matrix);
+fprintf('Saved: %s.\n', save_name)
+
+% Create an Excel document which gives the patent number of the drawn
+% patent
+col_header = {'Patent number', 'Year', ...
+    'Classification (0 = no, 1 = yes)', 'Cognitive', 'Manual', 'Comment'};
+data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
+    length(col_header) - 2)];
 output_matrix = [col_header; num2cell(data4exc)];
 save_name = 'manual_classif.xlsx';
 xlswrite(save_name, output_matrix);
 fprintf('Saved: %s.\n', save_name)
 
 
+
 toc
+
 
 
 
