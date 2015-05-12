@@ -74,7 +74,7 @@ A New Indicator of Automation \\ Based on Patent Text Search}
 \author{
 Katja Mann, Lukas P\"uttmann \\  
 \textit{University of Bonn}}
-\date{\textbf{Version: \today}}
+\date{\today}
 
 
 
@@ -91,12 +91,9 @@ Katja Mann, Lukas P\"uttmann \\
 \setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
 
 \begin{frame}\frametitle{Introduction}
-%\vspace{-0.5cm}
-	\begin{itemize}		
-		\item Automation of tasks affects jobs to a large degree. 
-		\item Therefore we need a good measure to be able to analyze the impact of automation on labor markets.
-		\item In this research project, we design a new indicator of automation based on searching patent grant texts for keywords.
-		\item We check this computer-based analysis by \textbf{manual coding}, the guidelines for which we describe in this document.
+	\begin{itemize}	
+		\item This document lays out the guidelines for the manual coding of patent texts.
+		\item This is used as both a reference and to train and guide human auditors.
 	\end{itemize}
 \end{frame}
 
@@ -135,8 +132,10 @@ Katja Mann, Lukas P\"uttmann \\
 
 \begin{frame}\frametitle{Our sample}
 	\begin{itemize}	
-	\item We study U.S. patents 1976-2015.
-	\item Utility patents only. The patents we exclude have a patent number starting with a letter: D (design patents), PP (plant patents), R (reissue patents), T (defensive publications), H (statutory invention registration), X (very early patents)
+	\item We study all U.S. utility patents 1976-2015.
+	\item We randomly pick an equal number of patents from all years.
+	\item We assign each auditor patents. 50\% of patents are assigned to multiple auditors.
+	\item The articles are passed in random order (so not in chronological order).
 	\end{itemize}
 \end{frame}
 
@@ -180,7 +179,7 @@ Katja Mann, Lukas P\"uttmann \\
  \href{https://www.google.com/patents}{\texttt{https://www.google.com/patents}}\\[0.1cm]
 \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{http://patft.uspto.gov/netahtml/PTO/search-bool.html}}\\[0.1cm]
 	and enter the patent number
-	\item We recommend using Google Patents first, as it has usually the nicer interface. If you cannot find it (this happens rarely), please try at the USPTO website.
+	\item We recommend using Google Patents first, as it has the nicer interface. If you cannot find it (this happens rarely), please try at the USPTO search interface.
 	\item The right patent might not be the first one in the list. In Google Patents, you might find patents from other countries. You identify the right patent as the one starting with ``US". In the USPTO search interface, the right patent is often the last one in the list (don't ask us why...).
 	\end{itemize}
 \end{frame}
@@ -197,20 +196,20 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{Manual coding}
 	\begin{itemize}	
 	\item After you have found the patent text, please read through the patent grant text, with a particular emphasis on the abstract and the description and decide: is this an automation patent?
-		\begin{itemize}
-		\item If yes please also decide:
-			\begin{itemize}
-			\item Is this is a cognitive automation patent?
-			\item Is this is a manual automation patent?
-			\item Or both?
-			\item Or neither?
-			\end{itemize}
-		\end{itemize}
 	\item Please use 1 to encode a Yes and 0 to encode a No.
 	\item There is also a comment field. Please try to avoid using this, but you can enter here if you encountered technical problems, if something seemed wrong to you or if you encountered some other problem.
 	\end{itemize}
 \end{frame}
 
+
+\begin{frame}\frametitle{Sub-classification}
+If Yes (the patent is an automation patent) please also decide:
+	\begin{itemize}
+	\item Is this is a analytical (automation) patent? We mean by that if it does something cognitive and non-physical.
+	\item Is this is a manual (automation) patent? So is it a physical machine?
+	\end{itemize}
+It can also be both. If you think it's neither, that's ok, but please indicate why in the comment box (we haven't encountered that case yet).
+\end{frame}
 
 
 \begin{frame}\frametitle{Excel table after filling it in}
@@ -222,10 +221,10 @@ Katja Mann, Lukas P\"uttmann \\
         \textbf{Patent number} & \textbf{Classification} & \textbf{Cognitive} & \textbf{Manual} & \textbf{Comment}  \tabularnewline
         \hline
         8851703	& 0  &  &  &	\tabularnewline
-        7725116 & 0	 &  &  &	Technical problem\tabularnewline
+        7725116 & 	 &  &  &	Technical problem\tabularnewline
         8975301 & 0	 &  &  &	\tabularnewline
-        4716621 & 1	 & 1 &  &	Not sure\tabularnewline
-        4789151 & 0	 &  &  & 	\tabularnewline
+        4716621 & 1	 & 1 &  &	\tabularnewline
+        4789151 & 0	 &  &  & 	Not sure\tabularnewline
         4116621 & 1	 & 1 & 1 &	\tabularnewline
         6785151 & 0	 &  &  & 	\tabularnewline
         \hline
@@ -243,9 +242,9 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{When you're done}
 	\begin{itemize}	
 		\item Please make sure your file is formatted the following way:\\[0.1cm]
-\texttt{manual\textunderscore classif\textunderscore <FirstnameLastname>\textunderscore <year>-<month>-<day>.xlsx}\\[0.3cm]
+\texttt{manclass\textunderscore <FirstnameLastname>\textunderscore <year>-<month>-<day>.xlsx}\\[0.3cm]
 		for example, for Lukas on the 11\textsuperscript{th} of May 2015 that would be:\\[0.1cm]
-\texttt{manual\textunderscore classif\textunderscore LukasPuettmann\textunderscore 2015-05-11.xlsx}\\[0.3cm]
+\texttt{manclass\textunderscore LukasPuettmann\textunderscore 2015-05-11.xlsx}\\[0.3cm]
 		\item and then send it back to us in an email to\\[0.1cm] \hspace{1cm}\href{mailto:lukas.puettmann@uni-bonn.de}{\texttt{lukas.puettmann@uni-bonn.de}}\\[0.1cm]
 	\end{itemize}
 \end{frame}
@@ -256,25 +255,73 @@ Katja Mann, Lukas P\"uttmann \\
 \setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
 
 
-\begin{frame}\frametitle{An automation patent}
+\begin{frame}\frametitle{Example: automation patent (a clear case)}
+\href{https://www.google.de/patents/US5531156?dq=5531156&hl=en&sa=X&ei=KPtRVd3vHYOssgGe2YGQDg&ved=0CCAQ6AEwAA}{\texttt{5531156: Automatic taco machine}}
 	\begin{itemize}	
-	\item Hello
-	\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Not an automation patent}
-	\begin{itemize}	
-	\item 6905407, Gaming device having display with interacting multiple rotating members and indicator
-	\item 5552597, Hand-held scanner having adjustable light path 
+	\item We classify this as an automation patent as it automates the process of cooking tacos, keeping them fresh and filling them with minimal human input or interaction. 
+	\item We classify this as not a cognitive, but as a manual automation patent.
 	\end{itemize}
 \end{frame}
 
 
-\begin{frame}\frametitle{Not an automation patent (close call)}
+\begin{frame}\frametitle{Example: automation patent (a clear case)}
+\href{https://www.google.de/patents/US6362849?dq=6362849&hl=en&sa=X&ei=k-9RVZjJHMmcsgHbvYCIDA&ved=0CCAQ6AEwAA}{\texttt{6362849: Color measuring method and device }}
+	\begin{itemize}	
+	\item This patent contains a video camera, a processor and the program to measure color. We classify this as an automation patent as it works independently of carrying out the process of recognizing colors.
+	\item We classify this as both a cognitive and a manual automation patent.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Example: automation patent (a borderline case)}
+\href{https://www.google.de/patents/US8497785?dq=8497785&hl=en&sa=X&ei=2O5RVYD3L4GWsAGt0oCgCA&ved=0CCEQ6AEwAA}{\texttt{8497785: Handheld electronic device and method for disambiguation of text input providing suppression of low probability artificial variants}}
+	\begin{itemize}	
+	\item We classify as an automation patent, as it automates the process of recognizing complete words that are likely to occur from only a few letters that are entered.
+	\item What makes this a boarderline case is that it is close to being a tool that is used interactively by people.
+	\item As the patent contains both a small machine and the software to it with we classify this as both a cognitive and a manual automation patent
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Example: automation patent (a borderline case)}
+\href{https://www.google.de/patents/US6905407?dq=6905407&hl=en&sa=X&ei=XfJRVYDIAYmosAGKx4CwCw&ved=0CCEQ6AEwAA}{\texttt{6905407: Gaming device having display with interacting multiple rotating members and indicator}}
+	\begin{itemize}	
+	\item This is an automation patent as it automates the process of dealing hands for ``including but not limited to the games of slot, poker, keno, blackjack, bunco and checkers". What makes this a borderline case is the high degree of human interaction with the machine. Nevertheless, once the machine has been installed, it operates independently and with a high degree of sophistication.
+	\item It contains both the physical machine (which also has moving parts) and the software (like programs to play games with) to run on it, so we classify it as both cognitive and manual.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Example: \textbf{not} automation patent (a borderline case)}
 	\begin{itemize}	
 	\item 8457498, Methods and apparatus for target identification
 	\end{itemize}
 \end{frame}
+
+
+\begin{frame}\frametitle{Example: \textbf{not} automation patent (a borderline case)}
+\href{https://www.google.de/patents/US5505821?dq=5505821&hl=en&sa=X&ei=DvRRVbmqEomrsAHtxIE4&ved=0CCEQ6AEwAA}{\texttt{5505821: Turbulence insert of a papermaking machine}}
+	\begin{itemize}	
+	\item This is part of a machine which automates the process of paper making. However, it is only a small part of it related to the flow of materials.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Example: \textbf{not} automation patent (a clear case)}
+\href{https://www.google.de/patents/US5552597?dq=5552597&hl=en&sa=X&ei=mvtRVYXNNomjsAHFi4GYBw&ved=0CCEQ6AEwAA}{\texttt{5552597: Hand-held scanner having adjustable light path }}
+	\begin{itemize}	
+	\item This is a small hand-held version of a larger desktop scanner which delivers an electronic version of printed text. 
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Example: \textbf{not} automation patent (a clear case)}
+\href{https://www.google.de/patents/US7878521?dq=7878521&hl=en&sa=X&ei=VfZRVe_QMsGzswHZtYHwDA&ved=0CCEQ6AEwAA}{\texttt{7878521: Bicycle frame with device cavity }}
+	\begin{itemize}	
+	\item This is a bicycle frame that has a cavity for sensors. It does not automate anything.
+	\end{itemize}
+\end{frame}
+
+
 
 
 
@@ -301,23 +348,22 @@ Katja Mann, Lukas P\"uttmann \\
 	\item \textit{What should I write to say No?}\\[0.1cm]
 	Please write 0.
 	\item \textit{Can I also leave the field blank if it's a No?}\\[0.1cm]
-	We ask you to please fill out the classification with either a 0 or a 1. If that's somehow not possible, please write this into the comment box. The fields cognitive and manual you can leave empty to signal a No.
+	We ask you to please fill out the classification with either a 0 or a 1. The 0 is important for us to see that you made a conscious decision about it. If that's somehow not possible, leave it empty and please write this into the comment box. The fields cognitive and manual you can leave empty to signal a No.
 		\end{itemize}
 \end{frame}
 
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
-	\item \textit{What if I don't find the patent text?}\\[0.1cm]
-	Have you tried both search masks? If you cannot find it on either one, please write this in the comment box.
+	\item \textit{What if cannot find the patent?}\\[0.1cm]
+Sometimes patent don't show up in \href{https://www.google.com/patents}{\texttt{Google Patents}}, but they do appear in the \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{USPTO}} search interace. In Google Patents you might get several hits and you should search for the patent number starting with US and then the number we give you. On the USPTO website, the patent you're looking for usually shows up as the last hit. If after some searching you cannot find it, please just write something like ``Cannot find" in the comment box.
 	\end{itemize}
 \end{frame}
-
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Should I read the whole patent?}\\[0.1cm]
-	No, that is likely not necessary (if the text is not very short). We recommend to concentrate on: the title, the abstract (which is a short overview), the beginning of the description and the beginning of the background. It also helps to look at the images. It can also help to see which patents were cited (they are likely similar to the one you're looking at) and who applied for it (you might know the firm and infer something from that).
+	No, that is likely not necessary (if the text is not very short). We recommend to concentrate on: the title, the abstract (which is a short overview) and the description. The beginning of the description is often most interesting and there is sometimes a section called ``background" which is informative. It also helps to look at the images. It can also help to see which patents were cited (they are likely similar to the one you're looking at) and who applied for it (you might know the firm and infer something from that). You can also use outside knowledge (like Googling a term) if you think that helps. 
 	\end{itemize}
 \end{frame}	
 
@@ -325,7 +371,7 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Should I enter whether a patent is cognitive or manual even if I don't think the patent is an automation patent?}\\[0.1cm]
-	No, that is not necessary, you can just leave this field empty.
+	No, that is not necessary, you can just leave the field empty if the patent is not an automation patent.
 	\end{itemize}
 \end{frame}	
 
@@ -333,7 +379,7 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Do I need any technical knowledge to judge a patent?}\\[0.1cm]
-	Patent texts are written in a technical language and they can be very complex. We only ask you to classify the patent as an automation patent if you are \textit{reasonably sure} that the patent is an automation patent. 
+	Patent texts are written in a technical language and they can be very complex. We only ask you to classify the patent as an automation patent if you are \textit{reasonably sure} that the patent is an automation patent. If you absolutely cannot figure it out, then consider writing that in the comment box.
 	\end{itemize}
 \end{frame}
 
@@ -341,28 +387,28 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{How often do you expect me to use the comment box?}\\[0.1cm]
-	We would like you to use that box as little as possible. Please only use that box to mark if you encounter any problems or if you are absolutely not sure how to classify the patent.
+	Please only use that box to mark if you encounter any problems or if you are absolutely not sure how to classify the patent.
 	\end{itemize}
 \end{frame}	
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{What if I don't understand what the patent is about?}\\[0.1cm]
-	No problem, just judge if you think this patent might have something to contribute to automation. If you cannot find that out, it's probably a no. If you're not sure, please indicate this in the comment box.
+	No problem, just judge if you think this patent might have something to contribute to automation. If you're not sure \textit{beyond reasonable doubt} (to use such a legal term), please indicate this in the comment box.
 	\end{itemize}
 \end{frame}
 	
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{How long should I take for a patent?}\\[0.1cm]
-	We are not quite sure about that yet. If it's less 30 seconds per patent, it's probably too fast. If it's more than 5 minutes per patent, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's ok (and indeed recommendable) to take more time for that.
+	We are not quite sure about that yet. If it's less 30 seconds on average per patent, it's probably too fast. If it's more than 5 minutes per patent, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's ok (and indeed recommended by us) to take more time for those patents that you think might be automation patents.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Am I doing you a favor if I classify more patents as Yes?}\\[0.1cm]
-	Unfortunately not. We might use your classifications to help us classify other patents. This will not work, if patents are wrongly classified. Also, it makes our work more credible if our manual classifications have a high quality.
+	Unfortunately not. We might use your classifications to classify more patents. This will not work if patents are wrongly classified. Also, it makes our work more credible if the manual classifications have a high quality.
 	\end{itemize}
 \end{frame}
 	
@@ -374,27 +420,12 @@ Katja Mann, Lukas P\"uttmann \\
 \end{frame}
 
 
-\begin{frame}\frametitle{FAQs}
-	\begin{itemize}	
-	\item \textit{What if cannot find the patent?}\\[0.1cm]
-Sometimes patent don't show up in \href{https://www.google.com/patents}{\texttt{Google Patents}}, but they do appear in the \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{USPTO}} search interace. In Google Patents you might get several hits and you should search for the patent number starting with US and then the number we give you. On the USPTO website, the patent you're looking for usually shows up as the last hit (don't ask us why). If after some searching you cannot find it, please just write something like ``Cannot find" in the comment box.
-	\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{FAQs}
-	\begin{itemize}	
-	\item \textit{Question?}\\[0.1cm]
-	Answer.
-	\item \textit{Question?}\\[0.1cm]
-	Answer.
-	\end{itemize}
-\end{frame}
-
 
 \section{Thank you.}
 \setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
 \begin{frame}
-	Last and most importantly: \textbf{Thank you for your help}. We appreciate it very much.
+	Last and most importantly: \\[0.2cm]
+	\textbf{Thank you for your help}. We appreciate it very much.
 \end{frame}
 
 
