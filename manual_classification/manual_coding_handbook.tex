@@ -135,7 +135,7 @@ Katja Mann, Lukas P\"uttmann \\
 	\item We study all U.S. utility patents 1976-2015.
 	\item We randomly pick an equal number of patents from all years.
 	\item We assign each auditor patents. 50\% of patents are assigned to multiple auditors.
-	\item The articles are passed in random order (so not in chronological order).
+	\item The list of patents is given to the auditor in random (not chronological) order.
 	\end{itemize}
 \end{frame}
 
@@ -149,13 +149,13 @@ Katja Mann, Lukas P\"uttmann \\
 	\begin{itemize}	
 	\item An \textit{automat} is a \textbf{device}$^1$ that carries out a \textbf{process}$^2$ \textbf{independently}$^3$.
 		\begin{itemize}	
-		\item $^1$: could be a a physical machine, computer program, a robot.
+		\item $^1$: could be a physical machine, computer program, a robot.
 		\item $^2$: could be a production process, the act of creation, composing a song, altering something, measuring something, a task
 		\item $^3$: without human interference (apart from that needed for supervision, maintenance or at the start)
 		\end{itemize}
 		\item What we are not looking for: 
 			\begin{itemize}
-			\item tools, labor efficiency enhancing tools
+			\item tools, labor efficiency-enhancing machines
 			\item business or production methods and techniques
 			\item new chemicals or medical drugs
 			\end{itemize}			
@@ -197,7 +197,7 @@ Katja Mann, Lukas P\"uttmann \\
 	\begin{itemize}	
 	\item After you have found the patent text, please read through the patent grant text, with a particular emphasis on the abstract and the description and decide: is this an automation patent?
 	\item Please use 1 to encode a Yes and 0 to encode a No.
-	\item There is also a comment field. Please try to avoid using this, but you can enter here if you encountered technical problems, if something seemed wrong to you or if you encountered some other problem.
+	\item There is also a comment field. Please try to avoid using this, but you can enter here if you had technical problems, if something seemed wrong to you or if you encountered some other problem.
 	\end{itemize}
 \end{frame}
 
@@ -205,7 +205,7 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{Sub-classification}
 If Yes (the patent is an automation patent) please also decide:
 	\begin{itemize}
-	\item Is this is a analytical (automation) patent? We mean by that if it does something cognitive and non-physical.
+	\item Is this is an analytical (automation) patent? We mean by that if it does something cognitive and non-physical.
 	\item Is this is a manual (automation) patent? So is it a physical machine?
 	\end{itemize}
 It can also be both. If you think it's neither, that's ok, but please indicate why in the comment box (we haven't encountered that case yet).
@@ -233,7 +233,7 @@ It can also be both. If you think it's neither, that's ok, but please indicate w
 \end{small}
 \end{table}
 \vspace{0.5cm}
-{\small \textcolor{mytextgrey}{Please note that these patents and numbers have not been checked so don't use them as an orientation for your coding. Also the proportion of patents classified as automation patents is probably not representative.} }
+{\small \textcolor{mytextgrey}{Please note that these patents and numbers have not been checked so don't use them as an orientation for your coding. Also the proportion of patents classified as automation patents might not be representative.} }
 
 \end{frame}
 
@@ -291,9 +291,11 @@ It can also be both. If you think it's neither, that's ok, but please indicate w
 \end{frame}
 
 
-\begin{frame}\frametitle{Example: \textbf{not} automation patent (a borderline case)}
+\begin{frame}\frametitle{Example:  \textbf{not} automation patent (a borderline case)}
+\href{https://www.google.de/patents/US8457498?dq=8457498&hl=en&sa=X&ei=BgRSVYnsIMmdsgG_tYHQDQ&ved=0CCAQ6AEwAA}{\texttt{8457498: Methods and apparatus for target identification}}
 	\begin{itemize}	
-	\item 8457498, Methods and apparatus for target identification
+	\item This patent is a system to differentiate enemy and friendly troops through a system of back and forth communication. 
+	\item We classify this as not an automation patent, but it's a close call. The process automates the identification of enemy targets. However, it does so in a large scale back and forth communication manner that more resembles a business operation process. This is not what we understand as an automat.
 	\end{itemize}
 \end{frame}
 
@@ -355,8 +357,8 @@ It can also be both. If you think it's neither, that's ok, but please indicate w
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
-	\item \textit{What if cannot find the patent?}\\[0.1cm]
-Sometimes patent don't show up in \href{https://www.google.com/patents}{\texttt{Google Patents}}, but they do appear in the \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{USPTO}} search interace. In Google Patents you might get several hits and you should search for the patent number starting with US and then the number we give you. On the USPTO website, the patent you're looking for usually shows up as the last hit. If after some searching you cannot find it, please just write something like ``Cannot find" in the comment box.
+	\item \textit{What if I cannot find the patent?}\\[0.1cm]
+Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt{Google Patents}}, but they do appear in the \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{USPTO}} search interace. In Google Patents you might get several hits and you should search for the patent number starting with US and then the number we give you. On the USPTO website, the patent you're looking for usually shows up as the last hit. If after some searching you cannot find it, please just write something like ``Cannot find" in the comment box.
 	\end{itemize}
 \end{frame}
 
@@ -401,7 +403,7 @@ Sometimes patent don't show up in \href{https://www.google.com/patents}{\texttt{
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{How long should I take for a patent?}\\[0.1cm]
-	We are not quite sure about that yet. If it's less 30 seconds on average per patent, it's probably too fast. If it's more than 5 minutes per patent, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's ok (and indeed recommended by us) to take more time for those patents that you think might be automation patents.
+	There is no clear number here. If it's less 30 seconds on average per patent, it's probably too fast. If it's more than 5 minutes per patent, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's ok (and indeed recommended by us) to take more time for those patents that you think might be automation patents.
 	\end{itemize}
 \end{frame}
 
@@ -417,15 +419,6 @@ Sometimes patent don't show up in \href{https://www.google.com/patents}{\texttt{
 	\item \textit{Should I hurry and try to classify as many patents as possible?}\\[0.1cm]
 	No, please take your time. It's much more important for us for your coding to accurate than to code more patents. Don't worry if things are going slow, it's ok to classify only few patents. If you're tired and you think you might be making mistakes, then please take a break or stop.
 	\end{itemize}
-\end{frame}
-
-
-
-\section{Thank you.}
-\setcounter{subsection}{1} % add this after each \section{...} to start a new section of navigation circles
-\begin{frame}
-	Last and most importantly: \\[0.2cm]
-	\textbf{Thank you for your help}. We appreciate it very much.
 \end{frame}
 
 

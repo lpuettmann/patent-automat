@@ -19,3 +19,4 @@
 *.xlsx
 RUN_SEVERAL_LOCALLY.m
 delete_me.m
+correct4missing_matches_in_manclass.m
