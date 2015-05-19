@@ -58,6 +58,9 @@ end
 % Rearrange elements randomly
 rand_pat = rand_pat(randperm(length(rand_pat)), :);
 
+% Assign a version number
+vnum = 4;
+
 % Create an Excel document which gives the patent number of the drawn
 % patent
 col_header = {'Patent number', 'Year', ...
@@ -66,7 +69,7 @@ col_header = {'Patent number', 'Year', ...
 data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
     length(col_header) - 3), rand_pat(:, 3)];
 output_matrix = [col_header; num2cell(data4exc)];
-save_name = 'manclass_FULL.xlsx';
+save_name = horzcat('manclass_FULL_v', num2str(vnum), '.xlsx');
 xlswrite(save_name, output_matrix);
 fprintf('Saved: %s.\n', save_name)
 
@@ -77,7 +80,7 @@ col_header = {'Patent number', 'Year', ...
 data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
     length(col_header) - 2)];
 output_matrix = [col_header; num2cell(data4exc)];
-save_name = 'manclass.xlsx';
+save_name = horzcat('manclass_v', num2str(vnum), '.xlsx');
 xlswrite(save_name, output_matrix);
 fprintf('Saved: %s.\n', save_name)
 
