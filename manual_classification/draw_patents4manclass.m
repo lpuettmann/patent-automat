@@ -16,7 +16,7 @@ year_start = 1976;
 year_end = 2015;
 nr_years = length(year_start:year_end);
 week_start = 1;
-nr_draw_pat_yr = 10; % how many patents to draw from every year
+nr_draw_pat_yr = 1; % how many patents to draw from every year
 
 
 
@@ -59,7 +59,7 @@ end
 rand_pat = rand_pat(randperm(length(rand_pat)), :);
 
 % Assign a version number
-vnum = 4;
+vnum = 5;
 
 % Create an Excel document which gives the patent number of the drawn
 % patent

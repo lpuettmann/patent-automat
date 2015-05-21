@@ -86,6 +86,35 @@ matches_manclasspt = nr_keyword_find(pos_manclass_automat);
 matches_rest = nr_keyword_find(not(indic_automat));
 
 
+%% Save contingency table to .tex
+
+% Print to .txt file in Latex format
+printname = 'table_contingency_classfc.tex';
+
+FID = fopen(printname, 'w');
+
+fprintf(FID,'\\begin{table}\n');
+fprintf(FID,'\\begin{small}\n');
+fprintf(FID,'\\begin{threeparttable}\n');
+fprintf(FID,'\\caption{{\\normalsize Manual vs. automated classification}}\n');
+fprintf(FID,'\\begin{tabular}{ll|ll|l}\n');
+
+fprintf(FID, '& \\multicolumn{4}{c}{Automated} \\tabularnewline[0.1cm]\n');
+fprintf(FID, '& & No & Yes &   \\tabularnewline\n');
+fprintf(FID, '\\cline{2-5}\n');
+fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & 148 & 30 & 178 \\tabularnewline\n');
+fprintf(FID, '& Yes & 31 & 30 & 61 \\tabularnewline\n');
+fprintf(FID, '\\cline{2-5}\n');
+fprintf(FID, '&  & 209 & 60 & 239 \\tabularnewline\n');
+
+
+fprintf(FID,'\\end{tabular}\n');
+fprintf(FID,'\\end{threeparttable}\n');
+fprintf(FID,'\\end{small}\n');
+fprintf(FID,'\\end{table}\n');
+fclose(FID); 
+
+fprintf('Saved: %s.\n', printname)
 
 
 
