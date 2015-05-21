@@ -63,9 +63,9 @@ fprintf('  \n')
 
 fprintf('Number patents manually coded: %d.\n', ...
     nr_codpt)
-fprintf('Of those manually classified as automation patents: %d (%3.2f) .\n', ...
+fprintf('Of those manually classified as automation patents: %d (%3.2f).\n', ...
    sum_automat, share_automat)
-fprintf('Of those automatically classified as automation patents: %d (%3.2f) .\n', ...
+fprintf('Of those automatically classified as automation patents: %d (%3.2f).\n', ...
    sum(pat_1match), sum(pat_1match) / nr_codpt)
 
 fprintf('Overall agreement: %d/%d (%3.2f).\n', ...
@@ -102,10 +102,10 @@ fprintf(FID,'\\begin{tabular}{ll|ll|l}\n');
 fprintf(FID, '& \\multicolumn{4}{c}{Automated} \\tabularnewline[0.1cm]\n');
 fprintf(FID, '& & No & Yes &   \\tabularnewline\n');
 fprintf(FID, '\\cline{2-5}\n');
-fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & 148 & 30 & 178 \\tabularnewline\n');
-fprintf(FID, '& Yes & 31 & 30 & 61 \\tabularnewline\n');
+fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & %d & %d & %d \\tabularnewline\n', nr_codpt - sum_automat - length(automatic1_manual0), length(automatic1_manual0), nr_codpt - sum_automat);
+fprintf(FID, '& Yes & %d & %d & %d \\tabularnewline\n', length(manual1_automatic0), sum_automat - length(manual1_automatic0), sum_automat);
 fprintf(FID, '\\cline{2-5}\n');
-fprintf(FID, '&  & 209 & 60 & 239 \\tabularnewline\n');
+fprintf(FID, '&  & %d & %d & %d \\tabularnewline\n', nr_codpt - sum(pat_1match), sum(pat_1match), nr_codpt);
 
 
 fprintf(FID,'\\end{tabular}\n');
