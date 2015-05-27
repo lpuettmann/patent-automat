@@ -9,7 +9,8 @@ load('manclass_data.mat')
 
 
 %% Delete those patents with technology numbers some industries
-delete_technr = [430, 431, 514, 600, 800];
+% delete_technr = [430, 431, 435, 514, 600, 800];
+delete_technr = [430, 431, 435, 514, 800];
 technr = manclass_data(:, 8);
 delete_pat_pos = find(ismember(technr, delete_technr));
 
@@ -23,7 +24,8 @@ del_pat_automatic1_manual0 = setdiff(del_pat_automatic1, del_pat_manual1);
 fprintf('___________________________________________________________\n');
 fprintf('<strong>Discarded technologies</strong>\n');
 fprintf(' \n')
-fprintf('Delete %d patents.\n', length(delete_pat_pos))
+fprintf('Delete %d/%d (%3.2f) patents.\n', length(delete_pat_pos), ...
+    size(manclass_data, 1), length(delete_pat_pos)/size(manclass_data, 1))
 fprintf('Of those: \n')
 fprintf('\t %d = manual: 1, automatic: 1.\n', length(del_pat_manual1_automatic1))
 fprintf('\t %d = manual: 1, automatic: 0.\n', length(del_pat_manual1_automatic0))
