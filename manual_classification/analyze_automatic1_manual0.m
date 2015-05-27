@@ -1,29 +1,28 @@
-
 close all
 clear all
 clc
 
 addpath('../cleaned_matches');
 
-
-% Load excel file
-[manclass_data, txt, ~] = xlsread('manclass_FULL_v1.xlsx');
+load('patents_automatic1_manual0.mat')
 
 % Sort data after years. This is important as we'll later loop through
-[~, ix_sort] = sort(manclass_data(:,2));
-manclass_data = manclass_data(ix_sort, :);
+[~, ix_sort] = sort(patents_automatic1_manual0(:,2));
+patents_automatic1_manual0 = patents_automatic1_manual0(ix_sort, :);
 
-patent_data = manclass_data(:,1:2);
+patent_numbers = patents_automatic1_manual0(:, 1);
+patent_years = patents_automatic1_manual0(:, 2);
+
 
 year_start = 1976;
 year_end = 2015;
 nr_years = length(year_start:year_end);
 
-all_matches = [];
+all_technr = [];
 
 ix_extract_start = 1;
 
-
+%% Extract the technology numbers for patents
 for ix_year=year_start:year_end
     
     % Load matches
@@ -32,27 +31,27 @@ for ix_year=year_start:year_end
     load(load_file_name)
     
     patentyr_numbers = patsearch_results(:, 1);
-    patentyr_matches = patsearch_results(:, 2);
+    patentyr_technr = patsearch_results(:, 3);
     
-    nr_yearlength = length(find(manclass_data(:, 2) == ix_year));
+    nr_yearlength = length(find(patent_years == ix_year));
     
     ix_extract_stop = ix_extract_start + nr_yearlength - 1;
     
-    extract_patyrnr = patent_data(ix_extract_start:ix_extract_stop, 1);
+    extract_patyrnr = patent_numbers(ix_extract_start:ix_extract_stop);
     
     if length(extract_patyrnr) ~= nr_yearlength
-        warning('Check right length.')
+        warning('Check if length is right.')
     end
     
-    j_matches = zeros(nr_yearlength,1);
+    j_technr = zeros(nr_yearlength,1);
     
     for j=1:length(extract_patyrnr)
         extract_me = extract_patyrnr(j,:);
         extract_me = num2str(extract_me);
         ix_pos_ex = find(strcmp(patentyr_numbers, extract_me));
-        j_matches(j) = patentyr_matches{ix_pos_ex};
+        j_technr(j) = str2num(patentyr_technr{ix_pos_ex});
     end
-    all_matches = [all_matches; j_matches];
+    all_technr = [all_technr; j_technr];
     
     ix_extract_start = ix_extract_stop + 1;
     
@@ -60,14 +59,28 @@ for ix_year=year_start:year_end
 end
 
 
-%%
-if not(size(manclass_data,1) == size(all_matches, 1))
-    warning('Should be same size.')
+%% Check that extracted series have right size
+if not(length(patent_years) == length(all_technr))
+    warning('Should have same length.')
 end
 
-manclass_data = [manclass_data, all_matches];
+patents_automatic1_manual0 = [patents_automatic1_manual0, all_technr];
 
-xlswrite('new_manclass_FULL.xlsx', manclass_data)
+
+%%
+save('all_technr.mat', 'all_technr');    
+
+
+%%
+
+
+
+
+
+
+
+
+
 
 
 
