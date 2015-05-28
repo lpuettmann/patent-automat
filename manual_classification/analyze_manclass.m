@@ -10,7 +10,12 @@ load('manclass_data.mat')
 
 %% Delete those patents with technology numbers some industries
 % delete_technr = [430, 431, 435, 514, 600, 800];
-delete_technr = [430, 431, 435, 514, 800];
+delete_technr = [430, % Radiation Imagery Chemistry
+                 431, % Combustion
+                 435, % Chemistry: Molecular Biology and Microbiology
+                 514, % Drug, Bio-affecting and Body Treating Compositions
+                % 600, % Surgery
+                 800]; % Multicellar Living Organisms
 technr = manclass_data(:, 8);
 delete_pat_pos = find(ismember(technr, delete_technr));
 
