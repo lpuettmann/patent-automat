@@ -16,7 +16,7 @@ year_start = 1976;
 year_end = 2015;
 nr_years = length(year_start:year_end);
 week_start = 1;
-nr_draw_pat_yr = 10; % how many patents to draw from every year
+nr_draw_pat_yr = 1; % how many patents to draw from every year
 
 
 
@@ -42,11 +42,13 @@ for ix_year=year_start:year_end
     nr_keyword_find = patsearch_results(rand_pat_year, 2);
     nr_keyword_find = cell2mat(nr_keyword_find);
        
+    tech_nr = patsearch_results(rand_pat_year, 3);
+    tech_nr = cellfun(@str2num, tech_nr);
     
     % Stack yearly draws underneath
     rand_pat = [rand_pat; 
                 patent_number, repmat(ix_year, size(rand_pat_year)), ...
-                nr_keyword_find];
+                nr_keyword_find, tech_nr];
     
     fprintf('Year %d completed.\n', ix_year)
 end
@@ -59,15 +61,15 @@ end
 rand_pat = rand_pat(randperm(length(rand_pat)), :);
 
 % Assign a version number
-vnum = 5;
+vnum = 7;
 
 % Create an Excel document which gives the patent number of the drawn
 % patent
 col_header = {'Patent number', 'Year', ...
     'Classification', 'Cognitive', 'Manual', 'Comment', ...
-    'Number matches'};
+    'Number matches', 'Tech class nr'};
 data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
-    length(col_header) - 3), rand_pat(:, 3)];
+    length(col_header) - 4), rand_pat(:, 3:4)];
 output_matrix = [col_header; num2cell(data4exc)];
 save_name = horzcat('manclass_FULL_v', num2str(vnum), '.xlsx');
 xlswrite(save_name, output_matrix);
@@ -76,7 +78,8 @@ fprintf('Saved: %s.\n', save_name)
 % Create an Excel document which gives the patent number of the drawn
 % patent
 col_header = {'Patent number', 'Year', ...
-    'Classification', 'Cognitive', 'Manual', 'Comment'};
+    'Classification', 'Cognitive', 'Manual', 'Comment', ...
+    'Number matches', 'Tech class nr'};
 data4exc = [rand_pat(:, 1:2), nan(length(rand_pat), ...
     length(col_header) - 2)];
 output_matrix = [col_header; num2cell(data4exc)];

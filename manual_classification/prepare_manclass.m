@@ -10,8 +10,7 @@ addpath('../cleaned_matches')
 
 % Figure out how many patents have been classified yet
 indic_automat = manclass_data(:, 3);
-
-
+break
 %% Make some checks
 if length(unique(manclass_data(:, 1))) ~= length(manclass_data(:, 1))
     warning('There are duplicate patents.')
