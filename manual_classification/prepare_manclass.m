@@ -10,7 +10,8 @@ addpath('../cleaned_matches')
 
 % Figure out how many patents have been classified yet
 indic_automat = manclass_data(:, 3);
-break
+
+
 %% Make some checks
 if length(unique(manclass_data(:, 1))) ~= length(manclass_data(:, 1))
     warning('There are duplicate patents.')
@@ -24,13 +25,8 @@ if any(not((indic_automat == 1) | (indic_automat == 0)))
     warning('There should be only 0 and 1 here.')
 end
 
-last_codpt = find(isnan(indic_automat), 1) - 1;
-
-if not(isempty(last_codpt))
-    % Truncate until last coded patent
-    warning('TRUNCATING SAMPLE.')
-    indic_automat = indic_automat(1:last_codpt);
-    manclass_data = manclass_data(1:last_codpt, :);
+if not(isempty(find(isnan(indic_automat), 1) - 1))
+    warning('There are not classified patents.')
 end
 
 % Check if there any NaN's left in the vector of classifications
@@ -40,12 +36,19 @@ if any(isnan(indic_automat))
 end
 
 
-%% Sort data by years. IMPORTANT: We'll later loop through them.
-[~, ix_sort] = sort(manclass_data(:,2));
-manclass_data = manclass_data(ix_sort, :);
+%% Extract those patents that don't have tech class numbers yet
+indic_pat_no_technr = isnan(manclass_data(:,8));
 
-patent_numbers = manclass_data(:, 1);
-patent_years = manclass_data(:, 2);
+pat_no_technr = manclass_data(find(indic_pat_no_technr), :);
+pat_with_technr = manclass_data(find(not(indic_pat_no_technr)), :);
+
+
+%% Sort data by years. IMPORTANT: We'll later loop through them.
+[~, ix_sort] = sort(pat_no_technr(:,2));
+pat_no_technr = pat_no_technr(ix_sort, :);
+
+patent_numbers = pat_no_technr(:, 1);
+patent_years = pat_no_technr(:, 2);
 
 year_start = 1976;
 year_end = 2015;
@@ -98,8 +101,11 @@ if not(length(patent_years) == length(all_technr))
     warning('Should have same length.')
 end
 
-manclass_data = [manclass_data, all_technr];
+pat_no_technr = [pat_no_technr, all_technr];
 
+% Reattach those patents that already before had their tech classes
+manclass_data = [pat_no_technr;
+                pat_with_technr];
 
 %% Save to .mat file
 % -------------------------------------------------------------------
