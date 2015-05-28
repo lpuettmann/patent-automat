@@ -101,11 +101,16 @@ if not(length(patent_years) == length(all_technr))
     warning('Should have same length.')
 end
 
-pat_no_technr = [pat_no_technr, all_technr];
+pat_no_technr(:, 8) = all_technr;
 
 % Reattach those patents that already before had their tech classes
+if not(size(pat_no_technr, 2) == size(pat_with_technr, 2))
+    warning('Should be equal.')
+end
+
 manclass_data = [pat_no_technr;
                 pat_with_technr];
+            
 
 %% Save to .mat file
 % -------------------------------------------------------------------

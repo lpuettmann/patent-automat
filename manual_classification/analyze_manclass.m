@@ -9,6 +9,7 @@ load('manclass_data.mat')
 
 
 %% Delete those patents with technology numbers some industries
+
 delete_technr = [430, % Radiation Imagery Chemistry
                  431, % Combustion
                  435, % Chemistry: Molecular Biology and Microbiology
@@ -17,6 +18,7 @@ delete_technr = [430, % Radiation Imagery Chemistry
                 % 600, % Surgery
                 % 606, % Surgery
                  800]; % Multicellar Living Organisms
+             
 technr = manclass_data(:, 8);
 delete_pat_pos = find(ismember(technr, delete_technr));
 
@@ -149,7 +151,6 @@ fprintf('Saved: %s.\n', printname)
 % -------------------------------------------------------------------
 year_start = 1976;
 year_end = 2015;
-
 
 % Extract
 for ix_year=year_start:year_end
