@@ -48,6 +48,10 @@ classifstat_5year.compautom = classifstat_5year.sumpat1match ./ ...
     classifstat_5year.number;
 
 
+%% Print correlation
+fprintf('Correlation: %3.2f.\n', corr(classifstat_5year.manautom', ...
+    classifstat_5year.compautom'));
+
 
 %% Plot
 year_start = 1976;
@@ -57,6 +61,11 @@ year_end = 2015;
 plottime = year_start:5:year_end;
 my_gray = [0.806, 0.806, 0.806];
 my_dark_gray = [0.3, 0.3, 0.3];
+color1_pick = [244,165,130]./ 255;
+color2_pick = [178,24,43]./ 255;
+color3_pick = [5,48,97]./ 255;
+color4_pick = [67,147,195]./ 255;
+grid_linewidth = 0.3;
 
 
 figureHandle = figure;
@@ -64,84 +73,72 @@ set(gca,'FontSize',12) % change default font size of axis labels
 set(gcf,'color','w');
 
 subplot(3,1,1)
-plot(plottime, classifstat_5year.number)
+plot(plottime, classifstat_5year.number, 'Color', color3_pick, ...
+    'Marker', 'o', 'MarkerSize', 2, 'Color', color3_pick, ...
+    'MarkerFaceColor', color3_pick)
 box off
 hold on
-plot(plottime, classifstat_5year.summanclass, 'Color', 'red')
+plot(plottime, classifstat_5year.summanclass, 'Color', color1_pick, ...
+    'Marker', 'o', 'MarkerSize', 2, 'Color', color1_pick, ...
+    'MarkerFaceColor', color1_pick)
 hold on
-plot(plottime, classifstat_5year.sumpat1match, 'Color', 'green')
+plot(plottime, classifstat_5year.sumpat1match, 'Color', color2_pick, ...
+    'Marker', 'o', 'MarkerSize', 2, 'Color', color2_pick, ...
+    'MarkerFaceColor', color2_pick)
 box off
 legend('Total number', 'Manually classified as automation', ...
     'Computer classified as automation', 'Location', 'North')
 legend('boxoff')
+title('Number of classified patents', 'FontWeight', 'bold')
 set(gca, 'TickDir', 'out')
+yLimits = get(gca,'YLim');
+ygrid_lines = [yLimits(1):20:yLimits(end)];
+ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
+ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
+handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 subplot(3,1,2)
-plot(plottime, classifstat_5year.manautom, 'Color', 'red')
+plot(plottime, classifstat_5year.manautom, 'Color', color1_pick, ...
+    'Marker', 'o', 'MarkerSize', 2, 'Color', color1_pick, ...
+    'MarkerFaceColor', color1_pick)
 hold on
-plot(plottime, classifstat_5year.compautom, 'Color', 'green')
+plot(plottime, classifstat_5year.compautom, 'Color', color2_pick, ...
+    'Marker', 'o', 'MarkerSize', 2, 'Color', color2_pick, ...
+    'MarkerFaceColor', color2_pick)
 box off
-legend('Share manually classified as automation', ...
-    'Share computer classified as automation', 'Location', 'North')
+legend('manually classified', ...
+    'computer-classified', 'Location', 'North')
 legend('boxoff')
 ylim([0, 1])
-put_in_title = horzcat('Correlation: ', num2str(round(corr(...
-    classifstat_5year.manautom', classifstat_5year.compautom')*100)/100));
-title(put_in_title)
+title('Share classified as automation patents', 'FontWeight', 'bold')
 set(gca, 'TickDir', 'out')
 
 yLimits = get(gca,'YLim');
 ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
 ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
-handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', 0.9);
+handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 subplot(3,1,3)
-h_gline = plot(plottime, repmat(0.8, ...
-    length(plottime), 1), 'Color', my_gray , ...
-    'linewidth', 0.5);
-uistack(h_gline, 'bottom');
-hold on
-
-h_gline = plot(plottime, repmat(0.6, ...
-    length(plottime), 1), 'Color', my_gray , ...
-    'linewidth', 0.5);
-uistack(h_gline, 'bottom');
-hold on
-
-h_gline = plot(plottime, repmat(0.4, ...
-    length(plottime), 1), 'Color', my_gray , ...
-    'linewidth', 0.5);
-uistack(h_gline, 'bottom');
-hold on
-
-h_gline = plot(plottime, repmat(0.2, ...
-    length(plottime), 1), 'Color', my_gray , ...
-    'linewidth', 0.5);
-uistack(h_gline, 'bottom');
-hold on
-
 plot(plottime, classifstat_5year.agreerate, ...
-    'Marker', 'o', 'Color', my_dark_gray, 'MarkerFaceColor', my_dark_gray, ...
+    'Marker', 'o', 'Color', color4_pick, 'MarkerFaceColor', color4_pick, ...
     'MarkerSize', 3)
-title('Agreement rate')
+title('Agreement rate', 'FontWeight', 'bold')
 box off
 ylim([0, 1])
 set(gca, 'TickDir', 'out')
 xlim([year_start, year_end])
-
-
 yLimits = get(gca,'YLim');
-ygrid_lines = [yLimits(1):1:yLimits(end)];
+ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
 ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
-handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', 0.9);
+handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 1000 600]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 1000 800]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
