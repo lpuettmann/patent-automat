@@ -62,8 +62,7 @@ pos_manclass_automat = find(indic_automat);
 pos_pat_1match = find(pat_1match);
 
 %% Calculate the overall agreement rate
-agree_rate = sum(indic_automat == pat_1match) / nr_codpt;
-
+classifstat.total_agree_rate = sum(indic_automat == pat_1match) / nr_codpt;
 complete_class = union(pos_pat_1match, pos_manclass_automat);
 overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
 differ_class = setdiff(complete_class, overlap_class);
@@ -90,13 +89,12 @@ fprintf('  \n')
 
 fprintf('Number patents manually coded: %d.\n', ...
     nr_codpt)
-fprintf('Of those manually classified as automation patents: %d (%3.2f).\n', ...
+fprintf('\tOf those manually classified as automation patents: %d (%3.2f).\n', ...
    sum_automat, share_automat)
-fprintf('Of those automatically classified as automation patents: %d (%3.2f).\n', ...
+fprintf('\tOf those automatically classified as automation patents: %d (%3.2f).\n', ...
    sum(pat_1match), sum(pat_1match) / nr_codpt)
-
 fprintf('Overall agreement: %d/%d (%3.2f).\n', ...
-    sum(indic_automat == pat_1match), nr_codpt, agree_rate)
+    sum(indic_automat == pat_1match), nr_codpt, classifstat.total_agree_rate)
 fprintf('Same classifications: %d/%d (%3.2f).\n', length(overlap_class), ...
     length(complete_class), length(overlap_class) / length(complete_class))
 fprintf('manual1_automatic0: %d.\n', length(manual1_automatic0))
