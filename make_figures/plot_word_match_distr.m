@@ -10,11 +10,13 @@ addpath('../functions')
 year_start = 1976;
 year_end = 2015;
 
+find_str = 'automat'; 
+
 % load_file_name = horzcat('../word_match_distr_', num2str(year_start), ...
 %     '-', num2str(year_end), '.mat');
 % load(load_file_name)
 
-load('D:\US_PatentsData\patent-automat\word_match_distr_1976-2015.mat')
+load('../word_match_distr_1976-2015.mat')
 
 
 %%
@@ -82,10 +84,19 @@ fprintf(FID,' & \\textbf{Count} & \\textbf{Share (\\%%)}\\tabularnewline[0.1cm]\
 fprintf(FID,'\\midrule \\addlinespace[0.5em]\n');
 
 for w=1:length(nr_word_matches)
-    fprintf(FID,'%s & %d & %3.1f \\tabularnewline[0.1cm]\n', word_name{w}, nr_word_matches(w), nr_word_share(w)*100);
+    if w <= cutoff_par
+        print_string = word_name{w};
+        print_string = print_string(length(find_str)+1:end);
+        fprintf(FID,'\\textcolor{mymediumgray}{%s}%s & %d & %3.1f \\tabularnewline[0.1cm]\n', ...
+            find_str, print_string, nr_word_matches(w), nr_word_share(w)*100);
+    else
+        fprintf(FID,'%s & %d & %3.1f \\tabularnewline[0.1cm]\n', ...
+            word_name{w}, nr_word_matches(w), nr_word_share(w)*100);
+    end
 end
 
-fprintf(FID,' & \\textbf{%d} & \\textbf{100} \\tabularnewline[0.1cm]\n', sum(nr_word_matches));
+fprintf(FID,' & \\textbf{%d} & \\textbf{100} \\tabularnewline[0.1cm]\n', ...
+    sum(nr_word_matches));
 
 fprintf(FID,'\\bottomrule\n');
 fprintf(FID,'\\end{tabular}\n');

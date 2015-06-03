@@ -42,7 +42,7 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 color2_pick = [0.000,0.639,0.561];
-% color2_pick = [0.3, 0.3, 0.3]; % dark gray
+% % color2_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806];
 my_dark_gray = [0.3, 0.3, 0.3];
 
@@ -70,7 +70,13 @@ hold on
 h_scatter = scatter(1:length(matches_per_patent_weekly), ...
     matches_per_patent_weekly, rescale_markers, ...
     'Marker', 'o', 'MarkerEdgeColor', color2_pick);
-% 
+
+% h_scatter = scatter(1:length(matches_per_patent_weekly), ...
+%     matches_per_patent_weekly, ...
+%     'Marker', 'o', 'MarkerEdgeColor', color2_pick);
+
+
+
 % h_trend = plot(1:length(matches_per_patent_weekly), plot_trend, ...
 %     'Color', color2_pick, 'Linewidth', 1.6);
 
