@@ -61,6 +61,11 @@ pat_1match = (nr_keyword_find > 0); % the plus converts logical to double
 pos_manclass_automat = find(indic_automat);
 pos_pat_1match = find(pat_1match);
 
+
+%% Calculate area under curve (AUROC)
+% -------------------------------------------------------------------
+auc = calculate_auc(indic_automat, pat_1match)
+
 %% Calculate the overall agreement rate
 classifstat.total_agree_rate = sum(indic_automat == pat_1match) / nr_codpt;
 complete_class = union(pos_pat_1match, pos_manclass_automat);
@@ -135,6 +140,10 @@ fprintf(FID, '&  & %d & %d & %d \\tabularnewline\n', nr_codpt - sum(pat_1match),
 
 
 fprintf(FID,'\\end{tabular}\n');
+fprintf(FID,'\\begin{tablenotes}\n');
+fprintf(FID,'\\small\n');
+fprintf(FID,'\\item \\textit{Note:} area under curve (AUC) = %3.3f.\n', auc);
+fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');
 fprintf(FID,'\\end{small}\n');
 fprintf(FID,'\\end{table}\n');
@@ -187,6 +196,4 @@ save(save_name, 'classifstat');
 fprintf('Saved: %s.\n', save_name)
 
 
-%% Calculate area under curve (AUROC)
-% -------------------------------------------------------------------
-auc = calculate_auc(indic_automat, pat_1match)
+
