@@ -186,3 +186,7 @@ save_name = 'classifstat.mat';
 save(save_name, 'classifstat');    
 fprintf('Saved: %s.\n', save_name)
 
+
+%% Calculate area under curve (AUROC)
+% -------------------------------------------------------------------
+auc = calculate_auc(indic_automat, pat_1match)
