@@ -41,6 +41,9 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
+    if length(week_start:week_end) ~= length(filenames)
+        warning('Should be same number of years as weeks.')
+    end
     
     % Load patent_index for year
     % -------------------------------------------------------------------

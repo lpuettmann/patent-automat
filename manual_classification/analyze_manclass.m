@@ -64,7 +64,8 @@ pos_pat_1match = find(pat_1match);
 
 %% Calculate area under curve (AUROC)
 % -------------------------------------------------------------------
-auc = calculate_auc(indic_automat, pat_1match)
+classifstat.auc = calculate_auc(indic_automat, pat_1match)
+
 
 %% Calculate the overall agreement rate
 classifstat.total_agree_rate = sum(indic_automat == pat_1match) / nr_codpt;
@@ -72,10 +73,14 @@ complete_class = union(pos_pat_1match, pos_manclass_automat);
 overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
 differ_class = setdiff(complete_class, overlap_class);
 
+classifstat.precision = length(overlap_class) / sum(pat_1match);
+classifstat.recall = length(overlap_class) / sum_automat;
+
 manual1_automatic0 = setdiff(pos_manclass_automat, pos_pat_1match);
 automatic1_manual0 = setdiff(pos_pat_1match, pos_manclass_automat);
 
 patents_automatic1_manual0 = manclass_data(automatic1_manual0, :);
+
 
 
 %% Save to .mat file
@@ -133,19 +138,33 @@ fprintf(FID,'\\begin{tabular}{ll|ll|l}\n');
 fprintf(FID, '& \\multicolumn{4}{c}{Computerized} \\tabularnewline[0.1cm]\n');
 fprintf(FID, '& & No & Yes &   \\tabularnewline\n');
 fprintf(FID, '\\cline{2-5}\n');
-fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & %d & %d & %d \\tabularnewline\n', nr_codpt - sum_automat - length(automatic1_manual0), length(automatic1_manual0), nr_codpt - sum_automat);
-fprintf(FID, '& Yes & %d & %d & %d \\tabularnewline\n', length(manual1_automatic0), sum_automat - length(manual1_automatic0), sum_automat);
+fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & %d & %d & %d \\tabularnewline\n', ...
+    nr_codpt - sum_automat - length(automatic1_manual0), ...
+    length(automatic1_manual0), nr_codpt - sum_automat);
+fprintf(FID, '& Yes & %d & %d & %d \\tabularnewline\n', ...
+    length(manual1_automatic0), sum_automat - ...
+    length(manual1_automatic0), sum_automat);
 fprintf(FID, '\\cline{2-5}\n');
-fprintf(FID, '&  & %d & %d & %d \\tabularnewline\n', nr_codpt - sum(pat_1match), sum(pat_1match), nr_codpt);
-
+fprintf(FID, '&  & %d & %d & %d \\tabularnewline\n', nr_codpt - ...
+    sum(pat_1match), sum(pat_1match), nr_codpt);
 
 fprintf(FID,'\\end{tabular}\n');
-fprintf(FID,'\\begin{tablenotes}\n');
-fprintf(FID,'\\small\n');
-fprintf(FID,'\\item \\textit{Note:} area under curve (AUC) = %3.3f.\n', auc);
-fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');
 fprintf(FID,'\\end{small}\n');
+
+fprintf(FID,'\\floatfoot{');
+fprintf(FID,'\\begin{minipage}{0.3\\textwidth}');
+fprintf(FID,' \\textit{Statistics:}\\\\\n');
+fprintf(FID,'Agreement rate = $\\frac{%d}{%d}$ = %3.2f\\\\\n', ...
+    sum(indic_automat == pat_1match), nr_codpt, ...
+    classifstat.total_agree_rate);
+fprintf(FID,'Precision = $\\frac{%d}{%d}$ = %3.2f\\\\\n', ...
+    length(overlap_class), sum(pat_1match), classifstat.precision);
+fprintf(FID,'Recall = $\\frac{%d}{%d}$ = %3.2f\\\\\n', ...
+    length(overlap_class),  sum_automat, classifstat.recall);
+fprintf(FID,'AUC = %3.3f\n', classifstat.auc);
+fprintf(FID,'\\end{minipage}}');
+
 fprintf(FID,'\\end{table}\n');
 fclose(FID); 
 
