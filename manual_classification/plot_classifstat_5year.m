@@ -123,7 +123,7 @@ subplot(3,1,3)
 plot(plottime, classifstat_5year.agreerate, ...
     'Marker', 'o', 'Color', color4_pick, 'MarkerFaceColor', color4_pick, ...
     'MarkerSize', 3)
-title('Agreement rate', 'FontWeight', 'bold')
+title('Accuracy', 'FontWeight', 'bold')
 box off
 ylim([0, 1])
 set(gca, 'TickDir', 'out')

@@ -87,7 +87,7 @@ evalbeta_squared = (1 - evalalpha) / evalalpha; % beta squared
 
 classifstat.fmeasure = ((evalbeta_squared + 1) * classifstat.precision * ...
     classifstat.recall) / (evalbeta_squared * classifstat.precision + ...
-    classifstat.recall)
+    classifstat.recall);
 
 
 manual1_automatic0 = setdiff(pos_manclass_automat, pos_pat_1match);
@@ -102,27 +102,6 @@ patents_automatic1_manual0 = manclass_data(automatic1_manual0, :);
 save_name = 'patents_automatic1_manual0.mat';
 save(save_name, 'patents_automatic1_manual0');    
 fprintf('Saved: %s.\n', save_name)
-
-
-
-%% Print overview table
-% -------------------------------------------------------------------
-fprintf('___________________________________________________________\n');
-fprintf('<strong>Comparison of manual and automatical patent classification</strong>\n');
-fprintf('  \n')
-
-fprintf('Number patents manually coded: %d.\n', ...
-    nr_codpt)
-fprintf('\tOf those manually classified as automation patents: %d (%3.2f).\n', ...
-   sum_automat, share_automat)
-fprintf('\tOf those automatically classified as automation patents: %d (%3.2f).\n', ...
-   sum(pat_1match), sum(pat_1match) / nr_codpt)
-fprintf('Overall agreement: %d/%d (%3.2f).\n', ...
-    sum(indic_automat == pat_1match), nr_codpt, classifstat.accuracy)
-fprintf('Same classifications: %d/%d (%3.2f).\n', length(overlap_class), ...
-    length(complete_class), length(overlap_class) / length(complete_class))
-fprintf('manual1_automatic0: %d.\n', length(manual1_automatic0))
-fprintf('automatic1_manual0: %d.\n', length(automatic1_manual0))
 
 
 fprintf('Differing classifications: %d/%d (%3.2f).\n', length(differ_class), ...
