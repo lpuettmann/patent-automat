@@ -1,24 +1,28 @@
 \begin{table}
 \begin{small}
 \begin{threeparttable}
-\caption{{\normalsize Contingency table}}
+\caption{{\normalsize Comparison of classification algorithms}}
 \label{table:contingency_classifications}
-\begin{tabular}{ll|ll|ll|ll|ll}
+\begin{tabular}{llllllllll}
+\multicolumn{9}{c}{\textit{Contingency table}} \tabularnewline
+\midrule&  &  & &  & &  &  &  \tabularnewline[-0.3cm]
 & & \multicolumn{7}{c}{Computerized} \tabularnewline[0.1cm]
+\cline{3-9}
 & & \multicolumn{3}{c}{$A_1$} & & \multicolumn{3}{c}{$A_2$} \tabularnewline[0.1cm]
-& & No & Yes & & & No & Yes &  \tabularnewline
+& & \multicolumn{1}{|l}{No}  & \multicolumn{1}{l|}{Yes} & & & \multicolumn{1}{|l}{No} & \multicolumn{1}{l|}{Yes} &  \tabularnewline
 \cline{2-5} \cline{7-9}
-\parbox[t]{2mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Manual}}} & No & 227 & 44 & 271 & & 217 & 35 & 252 \tabularnewline
-& Yes & 40 & 47 & 87 & & 39 & 47 & 86 \tabularnewline
+\parbox[t]{2mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Manual}}} & No & \multicolumn{1}{|l}{227} & \multicolumn{1}{l|}{44} & 271 & & \multicolumn{1}{|l}{217} & \multicolumn{1}{l|}{35} & 252 \tabularnewline
+& Yes & \multicolumn{1}{|l}{40} & \multicolumn{1}{l|}{47} & 87 & & \multicolumn{1}{|l}{39} & \multicolumn{1}{l|}{47} & 86 \tabularnewline
 \cline{2-5} \cline{7-9}
-&  & 267 & 91 & 358 & & 256 & 82 & 338 \tabularnewline
-\end{tabular}
+&  & \multicolumn{1}{|l}{267} & \multicolumn{1}{l|}{91} & 358 & & \multicolumn{1}{|l}{256} & \multicolumn{1}{l|}{82} & 338 \tabularnewline
+&  &  & &  & &  &  &  \tabularnewline[0.3cm]
+\cline{3-5} \cline{7-9}
+& Accuracy & \multicolumn{3}{r}{$\frac{47 + 227}{358} = 0.77$} & & \multicolumn{3}{r}{$\frac{47 + 217}{338} = 0.78$}  \tabularnewline
+& Precision & \multicolumn{3}{r}{$\frac{47}{91} = 0.52$} & & \multicolumn{3}{r}{$\frac{47}{82} = 0.57$} \tabularnewline
+& Recall & \multicolumn{3}{r}{$\frac{47}{87} = 0.54$} & & \multicolumn{3}{r}{$\frac{47}{86} = 0.55$} \tabularnewline
+& $F_{\beta = 1}$ & \multicolumn{3}{r}{0.53} & & \multicolumn{3}{r}{0.56} \tabularnewline
+& AUC & \multicolumn{3}{r}{0.69} & & \multicolumn{3}{r}{0.70} \tabularnewline
+\bottomrule\end{tabular}
 \end{threeparttable}
 \end{small}
-\floatfoot{\begin{minipage}{0.3\textwidth} \textit{Statistics:}\\
-Accuracy = $\frac{47 + 227}{358}$ = 0.77\\
-Precision = $\frac{47}{91}$ = 0.52\\
-Recall = $\frac{47}{87}$ = 0.54\\
-$F_{\beta = 1}$ = 0.53\\
-AUC = 0.689
-\end{minipage}}\end{table}
+\end{table}

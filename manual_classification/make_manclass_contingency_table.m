@@ -17,42 +17,37 @@ FID = fopen(printname, 'w');
 fprintf(FID,'\\begin{table}\n');
 fprintf(FID,'\\begin{small}\n');
 fprintf(FID,'\\begin{threeparttable}\n');
-fprintf(FID,'\\caption{{\\normalsize Contingency table}}\n');
+fprintf(FID,'\\caption{{\\normalsize Comparison of classification algorithms}}\n');
 fprintf(FID,'\\label{table:contingency_classifications}\n');
-fprintf(FID,'\\begin{tabular}{ll|ll|ll|ll|ll}\n');
-
+fprintf(FID,'\\begin{tabular}{llllllllll}\n');
+fprintf(FID, '\\multicolumn{9}{c}{\\textit{Contingency table}} \\tabularnewline\n');
+fprintf(FID, '\\midrule');
+fprintf(FID, '&  &  & &  & &  &  &  \\tabularnewline[-0.3cm]\n');
 fprintf(FID, '& & \\multicolumn{7}{c}{Computerized} \\tabularnewline[0.1cm]\n');
+fprintf(FID, '\\cline{3-9}\n');
 fprintf(FID, '& & \\multicolumn{3}{c}{$A_1$} & & \\multicolumn{3}{c}{$A_2$} \\tabularnewline[0.1cm]\n');
-fprintf(FID, '& & No & Yes & & & No & Yes &  \\tabularnewline\n');
+fprintf(FID, '& & \\multicolumn{1}{|l}{No}  & \\multicolumn{1}{l|}{Yes} & & & \\multicolumn{1}{|l}{No} & \\multicolumn{1}{l|}{Yes} &  \\tabularnewline\n');
 fprintf(FID, '\\cline{2-5} \\cline{7-9}\n');
-fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & %d & %d & %d & & %d & %d & %d \\tabularnewline\n', conttab.val(1,:,1), conttab.val(1,:,2));
-fprintf(FID, '& Yes & %d & %d & %d & & %d & %d & %d \\tabularnewline\n', conttab.val(2,:,1), conttab.val(2,:,2));
+fprintf(FID, '\\parbox[t]{2mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual}}} & No & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d & & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d \\tabularnewline\n', conttab.val(1,:,1), conttab.val(1,:,2));
+fprintf(FID, '& Yes & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d & & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d \\tabularnewline\n', conttab.val(2,:,1), conttab.val(2,:,2));
 fprintf(FID, '\\cline{2-5} \\cline{7-9}\n');
-fprintf(FID, '&  & %d & %d & %d & & %d & %d & %d \\tabularnewline\n', conttab.val(3,:,1), conttab.val(3,:,2));
-
+fprintf(FID, '&  & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d & & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d \\tabularnewline\n', conttab.val(3,:,1), conttab.val(3,:,2));
+fprintf(FID, '&  &  & &  & &  &  &  \\tabularnewline[0.3cm]\n');
+fprintf(FID, '\\cline{3-5} \\cline{7-9}\n');
+fprintf(FID, '& Accuracy & \\multicolumn{3}{r}{$\\frac{%d + %d}{%d} = %3.2f$} & & \\multicolumn{3}{r}{$\\frac{%d + %d}{%d} = %3.2f$}  \\tabularnewline\n', conttab.stats{1,:,1}, conttab.stats{1,:,2});
+fprintf(FID, '& Precision & \\multicolumn{3}{r}{$\\frac{%d}{%d} = %3.2f$} & & \\multicolumn{3}{r}{$\\frac{%d}{%d} = %3.2f$} \\tabularnewline\n', conttab.stats{2,:,1}, conttab.stats{2,:,2});
+fprintf(FID, '& Recall & \\multicolumn{3}{r}{$\\frac{%d}{%d} = %3.2f$} & & \\multicolumn{3}{r}{$\\frac{%d}{%d} = %3.2f$} \\tabularnewline\n', conttab.stats{3,:,1}, conttab.stats{3,:,2});
+% Only print the beta once
+fprintf(FID, '& $F_{\\beta = %d}$ & \\multicolumn{3}{r}{%3.2f} & & \\multicolumn{3}{r}{%3.2f} \\tabularnewline\n', conttab.stats{4,:,1}(1), conttab.stats{4,:,1}(2), conttab.stats{4,:,2}(2));
+fprintf(FID, '& AUC & \\multicolumn{3}{r}{%3.2f} & & \\multicolumn{3}{r}{%3.2f} \\tabularnewline\n', conttab.stats{5,:,1}, conttab.stats{5,:,2});
+fprintf(FID, '\\bottomrule');
 fprintf(FID,'\\end{tabular}\n');
 fprintf(FID,'\\end{threeparttable}\n');
 fprintf(FID,'\\end{small}\n');
-
-fprintf(FID,'\\floatfoot{');
-fprintf(FID,'\\begin{minipage}{0.3\\textwidth}');
-fprintf(FID,' \\textit{Statistics:}\\\\\n');
-fprintf(FID,'Accuracy = $\\frac{%d + %d}{%d}$ = %3.2f\\\\\n', ...
-    conttab.stats{1});
-fprintf(FID,'Precision = $\\frac{%d}{%d}$ = %3.2f\\\\\n', conttab.stats{2});
-    
-fprintf(FID,'Recall = $\\frac{%d}{%d}$ = %3.2f\\\\\n', conttab.stats{3});
-    
-fprintf(FID,'$F_{\\beta = %d}$ = %3.2f\\\\\n', conttab.stats{4});
-fprintf(FID,'AUC = %3.3f\n', conttab.stats{5});
-fprintf(FID,'\\end{minipage}}');
-
 fprintf(FID,'\\end{table}\n');
 fclose(FID); 
 
-fprintf('___________________________________________________________\n');
 fprintf('Saved: %s.\n', printname)
 
 
 run ../copy_selected_files
-warning('Automatically copy file over to project paper directory.')
