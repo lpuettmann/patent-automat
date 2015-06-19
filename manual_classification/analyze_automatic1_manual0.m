@@ -4,14 +4,18 @@ clc
 
 addpath('../cleaned_matches');
 
-load('patents_automatic1_manual0.mat')
 
-% Sort data after years. This is important as we'll later loop through
-[~, ix_sort] = sort(patents_automatic1_manual0(:,2));
-patents_automatic1_manual0 = patents_automatic1_manual0(ix_sort, :);
+%% Load stats on classifications
+load('classifstat.mat')
 
-patent_numbers = patents_automatic1_manual0(:, 1);
-patent_years = patents_automatic1_manual0(:, 2);
+
+
+%% Sort data after years. This is important as we'll later loop through
+[~, ix_sort] = sort(classifstat.patents_automatic1_manual0(:,2));
+classifstat.patents_automatic1_manual0 = classifstat.patents_automatic1_manual0(ix_sort, :);
+
+patent_numbers = classifstat.patents_automatic1_manual0(:, 1);
+patent_years = classifstat.patents_automatic1_manual0(:, 2);
 
 
 year_start = 1976;
@@ -64,7 +68,7 @@ if not(length(patent_years) == length(all_technr))
     warning('Should have same length.')
 end
 
-patents_automatic1_manual0 = [patents_automatic1_manual0, all_technr];
+classifstat.patents_automatic1_manual0 = [classifstat.patents_automatic1_manual0, all_technr];
 
 
 %%
