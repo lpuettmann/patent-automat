@@ -38,9 +38,10 @@ iter = ix_year - year_start + 1;
 
 choose_file_open = filenames{iter};
 
-% Load the patent text
+
 unique_file_identifier = fopen(choose_file_open, 'r');  
 
+%% Load the patent text
 tic
 open_file_aux = textscan(unique_file_identifier, '%s', ...
     'delimiter', '\n');
@@ -51,19 +52,24 @@ file_str = open_file_aux{1,1};
 
 
 %% Inspect files
+
+%% Print first lines of document
 clc
+disp('-------------------------------------------------------------------')
+pick_line2startshow = 1;
+nr_lines2show = 500;
+disp( file_str(pick_line2startshow:pick_line2startshow+nr_lines2show, :) );
+disp('-------------------------------------------------------------------')
 
-% Print first lines of document
-% disp( file_str(1:50, :) );
 
-
+%%
 nr_lines = size(file_str, 1);
 fprintf('Number of lines in document: %d (%3.1f million).\n', nr_lines, ...
     nr_lines / 1000000)
 
 
 % As a test, extract some lines from the document
-explore_lines = round(nr_lines * 1);
+explore_lines = round(nr_lines * 0.1);
 search_corpus = file_str(1:explore_lines, :);
 
 % 60.6 seconds for 28. mio lines, 55817 occurences. 
