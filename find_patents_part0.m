@@ -44,28 +44,39 @@ unique_file_identifier = fopen(choose_file_open, 'r');
 tic
 open_file_aux = textscan(unique_file_identifier, '%s', ...
     'delimiter', '\n');
-fprintf('Time to *textscan* "%s": %3.1fs.\n', choose_file_open, toc)
+fprintf('Time to *textscan* "%s": %3.1f seconds.\n', choose_file_open, toc)
 
 file_str = open_file_aux{1,1};
 
 
 
 %% Inspect files
+clc
 
-% Print first 100 lines of document
-disp( file_str(1:100, :) )
+% Print first lines of document
+% disp( file_str(1:50, :) );
 
+
+nr_lines = size(file_str, 1);
+fprintf('Number of lines in document: %d (%3.1f million).\n', nr_lines, ...
+    nr_lines / 1000000)
 
 
 % As a test, extract some lines from the document
-search_corpus = file_str(1:50000, :);
+explore_lines = round(nr_lines * 1);
+search_corpus = file_str(1:explore_lines, :);
+
+% 60.6 seconds for 28. mio lines, 55817 occurences. 
 
 
-
-
-
+tic
 [indic_find, nr_patents, ix_find] = count_nr_patents(...
-    search_corpus, 'PATN'); 
+    search_corpus, '*** BRS DOCUMENT BOUNDARY ***'); 
+fprintf('Time to count patents: %3.2f seconds.\n', toc)
+
+fprintf('Number of occurences of keyphrase found: %d.\n', nr_patents)
+
+
 
 
 
