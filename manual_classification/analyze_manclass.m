@@ -9,17 +9,17 @@ year_start = 1976;
 year_end = 2015;
 
 
-% Load previously extracted data
-load('manclass_data.mat')
-
 
 % Iterate through classification algorithm set-ups
 % ========================================================================
 
-nr_alg = 2;
+conttab.nr_alg = 3; % number of algorithms to compare
 
-for i=1:nr_alg
+for i=1:conttab.nr_alg
 
+    % Load previously extracted data
+    load('manclass_data.mat')
+    
     if i==2
         % Delete those patents with technology numbers some industries
         delete_technr = [430, % Radiation Imagery Chemistry
@@ -53,6 +53,8 @@ for i=1:nr_alg
         fprintf(' ')
 
         manclass_data(delete_pat_pos, :) = [];
+    else
+        manclass_data = manclass_data;
     end
 
     % Transform variables
@@ -67,9 +69,15 @@ for i=1:nr_alg
 
     % Compare manual classification with automated keyword search
     nr_keyword_find = manclass_data(:, 7); % extract number of keyword matches
-    % Find patents with at least 1 match
-    classifstat.pat_1match = (nr_keyword_find > 0); % the plus converts logical to double 
-
+    
+    if i==3
+        % Find patents with at least 2 matches
+        classifstat.pat_1match = (nr_keyword_find > 1); % the plus converts logical to double 
+    else
+        % Find patents with at least 1 match
+        classifstat.pat_1match = (nr_keyword_find > 0); % the plus converts logical to double 
+    end
+    
     pos_manclass_automat = find(indic_automat);
     pos_pat_1match = find(classifstat.pat_1match);
 
