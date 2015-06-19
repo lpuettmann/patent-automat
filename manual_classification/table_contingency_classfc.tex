@@ -1,0 +1,23 @@
+\begin{table}
+\begin{small}
+\begin{threeparttable}
+\caption{{\normalsize Contingency table}}
+\label{table:contingency_classifications}
+\begin{tabular}{ll|ll|l}
+& \multicolumn{4}{c}{Computerized} \tabularnewline[0.1cm]
+& & No & Yes &   \tabularnewline
+\cline{2-5}
+\parbox[t]{2mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Manual}}} & No & 217 & 35 & 252 \tabularnewline
+& Yes & 39 & 47 & 86 \tabularnewline
+\cline{2-5}
+&  & 256 & 82 & 338 \tabularnewline
+\end{tabular}
+\end{threeparttable}
+\end{small}
+\floatfoot{\begin{minipage}{0.3\textwidth} \textit{Statistics:}\\
+Accuracy = $\frac{47 + 217}{338}$ = 0.78\\
+Precision = $\frac{47}{82}$ = 0.57\\
+Recall = $\frac{47}{86}$ = 0.55\\
+$F_{\beta = 1}$ = 0.56\\
+AUC = 0.704
+\end{minipage}}\end{table}
