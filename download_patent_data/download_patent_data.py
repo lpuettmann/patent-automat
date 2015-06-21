@@ -9,9 +9,12 @@ from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 
 # Define parameters
 # ----------------------------------------------------------------
-savepath = 'D:\\' # set the desired path here for the files
+savepath = '/Users/Lukas/econ/PatentData/1976' # set the desired path here for the files
 #savepath = 'D:\\2015' # set the desired path here for the files
 fname = ["ipg150106.zip", "ipg150113.zip"]
+#fname = ["pftaps19760106_wk01.zip", "pftaps19760113_wk02.zip"]
+
+
 
 
 # Download the files from Google Patents
@@ -37,22 +40,16 @@ driver.get(url)
 #print(links)
 
 
-#print('Enter loop:')
+print('Enter loop:')
 
 #for f in fname:
-	#filename = driver.find_element_by_xpath('//a[contains(text(), f)]') # use loop to list all zip files
-	#filename.click()
-	#print('Finished loop for: {}.'.format(f))
+# 	filename = driver.find_element_by_xpath('//a[contains(text(), "{filename}")]'.format(filename=f))
+# 	filename.click()
+# 	print('Finished loop for: {}.'.format(f))
 
-# print(filename)
 
-# print('Try it out again')
-# filename.click()
-
-#filename = driver.find_element_by_xpath('//a[contains(text(), "ipg150106.zip")]') # use loop to list all zip files
-#filename.click()
-
-#filename = driver.find_element_by_xpath('//a[contains(text(), "ipg150113.zip")]') # use loop to list all zip files
-#filename.click()
+for f in fname:
+    filename = driver.find_element_by_partial_link_text(f)
+    filename.click()
 
 print('End.')
