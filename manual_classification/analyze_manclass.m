@@ -72,10 +72,10 @@ for i=1:conttab.nr_alg
     
     if i==3
         % Find patents with at least 2 matches
-        classifstat.pat_1match = (nr_keyword_find > 1); % the plus converts logical to double 
+        classifstat.pat_1match = (nr_keyword_find > 1);
     else
         % Find patents with at least 1 match
-        classifstat.pat_1match = (nr_keyword_find > 0); % the plus converts logical to double 
+        classifstat.pat_1match = (nr_keyword_find > 0);
     end
     
     pos_manclass_automat = find(indic_automat);

@@ -2,6 +2,10 @@
 from selenium import webdriver 
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 
+#import urllib.request
+#import re
+
+
 
 # Define parameters
 # ----------------------------------------------------------------
@@ -21,9 +25,19 @@ profile.set_preference("browser.download.dir", savepath) # choose folder to down
 profile.set_preference("browser.helperApps.neverAsk.saveToDisk",'application/octet-stream')
 
 driver = webdriver.Firefox(firefox_profile=profile)
-driver.get('https://www.google.com/googlebooks/uspto-patents-grants-text.html#2015')
 
-print('Enter loop:')
+url = 'https://www.google.com/googlebooks/uspto-patents-grants-text.html#2015'
+driver.get(url)
+
+
+#html = urllib.request.urlopen(url).read()
+#print(html)
+
+#links = re.findall('<a href="(.*)">', html)
+#print(links)
+
+
+#print('Enter loop:')
 
 #for f in fname:
 	#filename = driver.find_element_by_xpath('//a[contains(text(), f)]') # use loop to list all zip files
@@ -35,8 +49,8 @@ print('Enter loop:')
 # print('Try it out again')
 # filename.click()
 
-filename = driver.find_element_by_xpath('//a[contains(text(), "ipg150106.zip")]') # use loop to list all zip files
-filename.click()
+#filename = driver.find_element_by_xpath('//a[contains(text(), "ipg150106.zip")]') # use loop to list all zip files
+#filename.click()
 
 #filename = driver.find_element_by_xpath('//a[contains(text(), "ipg150113.zip")]') # use loop to list all zip files
 #filename.click()
