@@ -13,7 +13,7 @@ addpath('patent_index');
 % Define keyword to look for
 find_str = 'automat'; 
 
-year_start = 1977;
+year_start = 1976;
 year_end = 1977;
 
 
@@ -133,7 +133,7 @@ for ix_year = year_start:year_end
             % Find the words surrounding the keyword match
             match_fullword = get_fullword_matches(nr_keyword_find, ...
                 check_keyword_find, patent_text_corpus, ...
-                line_hit_keyword_find) ;
+                line_hit_keyword_find);
                         
             % Stack weekly information underneath
             % ------------------------------------------------------------
