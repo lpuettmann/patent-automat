@@ -29,3 +29,10 @@ To run:
 6. Run `analyze_word_distribution.m` which counts the occurences of frequent words in the found matches. This saves `word_match_distr_1976-2015.mat` which can be visualized and transferred to a `.tex` table by running `plot_word_match_distr.m` in directory *make_figures*.
 7. Run `prepare_conversion_table.m` which loads and prepares the table which allows to link patent's technologoy classification number to manufacturing sectors. It saves `conversion_table.mat` to *conversion_patent2industry*. 
 8. Run `match_pat2industry.m` which for 26 manufacturing sectors check which patents are linked to it.
+
+
+Necessary software:
+---------------------------
+We wrote and tested this in Matlab R2013b. No toolboxes are used.
+
+
