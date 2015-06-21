@@ -15,7 +15,7 @@ addpath('patent_index');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 1977;
+year_end = 2001;
 
 
 
@@ -173,17 +173,13 @@ for ix_year = year_start:year_end
             patent_keyword_appear(1,:) = [];
         end 
         
-%         weekly_nr_keywordNAM(ix_week) = sum(nr_keywordNAM);
         
         % Close file again. It can cause errors if you open too many
         % (around 512) files at once.
         fclose(unique_file_identifier);
 
         check_open_files
-        
-%         fprintf('\tNumber of keyword matches in NAM section: %d.\n', ...
-%             sum(nr_keywordNAM))
-%         fprintf('\tCompare to %d patents.\n', nr_patents)
+
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
         disp('-----------------------------------------------------------')
     end
