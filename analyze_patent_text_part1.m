@@ -17,12 +17,16 @@ find_str = 'automat';
 year_start = 1976;
 year_end = 1976;
 
+nr_lines4previouspatent = 1; 
+
+
+%% Initalize
+patent_keyword_appear = []; 
+save_line_keywordNAM = [];
 
 
 %% Go
 % ========================================================================
-save_line_keywordNAM = []; % initalize
-
 for ix_year = year_start:year_end
     tic
 
@@ -113,7 +117,7 @@ for ix_year = year_start:year_end
             start_text_corpus = ix_find(ix_patent);
 
             if ix_patent < nr_patents
-                end_text_corpus = ix_find(ix_patent+1)-1; % this number is hard-coded
+                end_text_corpus = ix_find(ix_patent+1) - nr_lines4previouspatent;
             else
                 end_text_corpus = length(search_corpus);
             end
@@ -139,6 +143,13 @@ for ix_year = year_start:year_end
                                                 line_keywordNAM];
             end
     
+            patent_text_corpus(indic_NAM) = []; % delete NAM lines
+            
+            if size(patent_text_corpus) ~= (length(start_text_corpus:...
+                    end_text_corpus) - sum(indic_NAM))
+                warning('Should be equal.')
+            end
+            
             
             % Search for keyword
             % ------------------------------------------------------------
@@ -162,20 +173,9 @@ for ix_year = year_start:year_end
         end
 
         % Save information for all weeks
-        % ----------------------------------------------------------------
-        % On first iteration: have to newly define this variable
-        if ix_week == week_start 
-            patent_keyword_appear = repmat({''}, 1, ...
-                size(nr_keyword_appear, 2));
-        end        
-
+        % ----------------------------------------------------------------  
         patent_keyword_appear = [patent_keyword_appear;
-                                 nr_keyword_appear];
-
-        if ix_week == week_end % last iteration: delete first row
-            patent_keyword_appear(1,:) = [];
-        end 
-        
+                                 nr_keyword_appear];        
         
         % Close file again. It can cause errors if you open too many
         % (around 512) files at once.
