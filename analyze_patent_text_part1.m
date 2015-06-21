@@ -140,7 +140,7 @@ for ix_year = year_start:year_end
             if not(isempty(line_keywordNAM))
                 save_line_keywordNAM = [save_line_keywordNAM;
                                         patent_number(ix_patent), ...
-                                                line_keywordNAM];
+                                        ix_year, line_keywordNAM];                                                
             end
     
             patent_text_corpus(indic_NAM) = []; % delete NAM lines
@@ -157,7 +157,7 @@ for ix_year = year_start:year_end
             
             % Get the start of the keyword match on every line
             line_hit_keyword_find = delete_empty_cells(check_keyword_find);
-   
+            
             % Count the number of appearances of the keyword
             nr_keyword_find = count_elements_cell(line_hit_keyword_find);
                        
@@ -178,7 +178,7 @@ for ix_year = year_start:year_end
                                  nr_keyword_appear];        
         
         % Close file again. It can cause errors if you open too many
-        % (around 512) files at once.
+        % (more than abound 512) files at once.
         fclose(unique_file_identifier);
 
         check_open_files
@@ -202,9 +202,3 @@ for ix_year = year_start:year_end
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
-
-
-
-%% End
-% ======================================================================
-disp('*** end ***')
