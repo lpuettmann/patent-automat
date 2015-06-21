@@ -71,18 +71,18 @@ for ix_year = year_start:year_end
         if ix_year == 2001 % special case: problem with 80 numel text file
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                   ix_year, ix_week)
-            trunc4_corpus
+            count_nr_patents_trunccorpus
         
         % Something is wrong in year 1978
         elseif ix_year == 1978 && (ix_week == 25 | ix_week == 26)  
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                   ix_year, ix_week)
-            trunc4_corpus
+            count_nr_patents_trunccorpus
             
           elseif ix_year == 1979 && (ix_week == 11 | ix_week == 12)
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                   ix_year, ix_week)
-            trunc4_corpus
+            count_nr_patents_trunccorpus
             
           % I can probably delete the following special case: 
           % The problem was with the empty lines in week 50
@@ -91,17 +91,17 @@ for ix_year = year_start:year_end
                  | ix_week == 50) 
              fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                  ix_year, ix_week)
-            trunc4_corpus
+            count_nr_patents_trunccorpus
             
         elseif ix_year == 1997 && (ix_week >= 38) 
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                   ix_year, ix_week)
-            trunc4_corpus
+            count_nr_patents_trunccorpus
             
         elseif ix_year == 1998
             fprintf('*** Enter special case, year: %d, week: %d.\n', ...
                   ix_year, ix_week)
-            trunc4_corpus
+            count_nr_patents_trunccorpus
             
         else
             [indic_find, nr_patents, ix_find] = count_nr_patents(...

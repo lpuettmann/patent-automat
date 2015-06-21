@@ -53,7 +53,7 @@ for ix_year = year_start:year_end
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Start searching through patent grant texts for year %d:\n', ix_year)
+    fprintf('Search through patent grant texts for year %d:\n', ix_year)
 
     for ix_week = week_start:week_end
         
