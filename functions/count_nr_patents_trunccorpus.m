@@ -1,5 +1,5 @@
 function [indic_find, nr_patents, ix_find] = ...
-    count_nr_patents_trunccorpus(search_corpus, 'PATN', nr_trunc)
+    count_nr_patents_trunccorpus(search_corpus, find_str, nr_trunc)
 
 search_corpus_trunc = search_corpus;
 
@@ -10,4 +10,4 @@ for i=1:length(search_corpus_trunc)
     end
 end
 [indic_find, nr_patents, ix_find] = count_nr_patents(...
-    search_corpus_trunc, 'PATN');
+    search_corpus_trunc, find_str);

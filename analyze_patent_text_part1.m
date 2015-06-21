@@ -1,7 +1,8 @@
 close all
 clear all
 
-
+fclose('all')
+clc
 
 %% Add path to functions
 addpath('functions');
@@ -118,14 +119,30 @@ for ix_year = year_start:year_end
 
             patent_text_corpus = search_corpus(start_text_corpus:...
                 end_text_corpus, :);
-           
+            
+            
+            % Delete name section (NAM) of inventor and of patent citations
+            % ------------------------------------------------------------
+            [indic_NAM, ~, ~] = ...
+                count_nr_patents_trunccorpus(patent_text_corpus, 'NAM', ...
+                3);
+            
+            nan_lines = patent_text_corpus(indic_NAM);
+            check_NAMkeyword = regexpi(nan_lines, find_str);
+
+            line_keywordNAM = nan_lines(not(cellfun('isempty', ...
+                check_NAMkeyword)));
+            if not(isempty(line_keywordNAM))
+                disp(line_keywordNAM)
+            end
+    
+            
             % Search for keyword
             % ------------------------------------------------------------
             check_keyword_find = regexpi(patent_text_corpus, find_str);
             
             % Get the start of the keyword match on every line
-            line_hit_keyword_find = check_keyword_find(~cellfun('isempty', ...
-                check_keyword_find));
+            line_hit_keyword_find = delete_empty_cells(check_keyword_find);
    
             % Count the number of appearances of the keyword
             nr_keyword_find = count_elements_cell(line_hit_keyword_find);
@@ -156,6 +173,7 @@ for ix_year = year_start:year_end
             patent_keyword_appear(1,:) = [];
         end 
         
+%         weekly_nr_keywordNAM(ix_week) = sum(nr_keywordNAM);
         
         % Close file again. It can cause errors if you open too many
         % (around 512) files at once.
@@ -163,7 +181,11 @@ for ix_year = year_start:year_end
 
         check_open_files
         
+%         fprintf('\tNumber of keyword matches in NAM section: %d.\n', ...
+%             sum(nr_keywordNAM))
+%         fprintf('\tCompare to %d patents.\n', nr_patents)
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
+        disp('-----------------------------------------------------------')
     end
     
     
