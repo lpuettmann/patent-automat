@@ -21,6 +21,8 @@ year_end = 1976;
 
 %% Go
 % ========================================================================
+save_line_keywordNAM = []; % initalize
+
 for ix_year = year_start:year_end
     tic
 
@@ -42,9 +44,7 @@ for ix_year = year_start:year_end
 
     filenames = ifmac_truncate_more(filenames);
     
-    if length(week_start:week_end) ~= length(filenames)
-        warning('Should be same number of years as weeks.')
-    end
+    check_filenames_format(filenames, ix_year, week_start, week_end)
     
     % Load patent_index for year
     % -------------------------------------------------------------------
@@ -134,7 +134,9 @@ for ix_year = year_start:year_end
             line_keywordNAM = nan_lines(not(cellfun('isempty', ...
                 check_NAMkeyword)));
             if not(isempty(line_keywordNAM))
-                disp(line_keywordNAM)
+                save_line_keywordNAM = [save_line_keywordNAM;
+                                        patent_number(ix_patent), ...
+                                                line_keywordNAM];
             end
     
             
