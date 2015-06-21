@@ -15,7 +15,7 @@ addpath('patent_index');
 find_str = 'automat'; 
 
 year_start = 1976;
-year_end = 2001;
+year_end = 1976;
 
 
 
@@ -30,8 +30,7 @@ for ix_year = year_start:year_end
     week_end = set_weekend(ix_year); 
     
     % Build path to data
-    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
-        num2str(ix_year));
+    build_data_path = set_data_path(ix_year);
     addpath(build_data_path);
 
     
@@ -41,6 +40,8 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
+    filenames = ifmac_truncate_more(filenames);
+    
     if length(week_start:week_end) ~= length(filenames)
         warning('Should be same number of years as weeks.')
     end
