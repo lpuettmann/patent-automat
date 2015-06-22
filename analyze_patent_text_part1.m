@@ -144,16 +144,15 @@ for ix_year = year_start:year_end
                         line_keywordNAM(j)];            
                 end
             end
-    
+            
             patent_text_corpus(indic_NAM) = []; % delete NAM lines
             
             if size(patent_text_corpus) ~= (length(start_text_corpus:...
                     end_text_corpus) - sum(indic_NAM))
                 warning('Should be equal.')
             end
-            
-            
-            % Search for keyword
+    
+             % Search for keyword
             % ------------------------------------------------------------
             check_keyword_find = regexpi(patent_text_corpus, find_str);
             
