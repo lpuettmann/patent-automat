@@ -29,7 +29,7 @@ for a=1:length(adj_stem)
 end
 
 % Put all expressions in a dictionary to search for
-find_dictionary = {keywords{:}, match_regexp{:}}
+find_dictionary = {keywords{:}, match_regexp{:}};
 
 % Save the terms in a simple way to refer back to them later
 patent_keyword_appear.dictionary = {keywords{:}, adj_stem{:}};
