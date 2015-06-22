@@ -124,23 +124,25 @@ for ix_year = year_start:year_end
 
             patent_text_corpus = search_corpus(start_text_corpus:...
                 end_text_corpus, :);
-            
-            
+                        
             % Delete name section (NAM) of inventor and of patent citations
             % ------------------------------------------------------------
-            [indic_NAM, ~, ~] = ...
-                count_nr_patents_trunccorpus(patent_text_corpus, 'NAM', ...
-                3);
+            indic_NAM = count_nr_occur_trunccorpus(patent_text_corpus, ...
+                'NAM', 3);
             
             nan_lines = patent_text_corpus(indic_NAM);
             check_NAMkeyword = regexpi(nan_lines, find_str);
-
+            NAMkeyword_count = count_elements_cell(check_NAMkeyword);
+            
             line_keywordNAM = nan_lines(not(cellfun('isempty', ...
                 check_NAMkeyword)));
+            
             if not(isempty(line_keywordNAM))
-                save_line_keywordNAM = [save_line_keywordNAM;
-                                        patent_number(ix_patent), ...
-                                        ix_year, line_keywordNAM];                                                
+                for j=1:length(line_keywordNAM)
+                    save_line_keywordNAM = [save_line_keywordNAM;
+                        patent_number(ix_patent), ix_year, ...
+                        line_keywordNAM(j)];            
+                end
             end
     
             patent_text_corpus(indic_NAM) = []; % delete NAM lines
@@ -170,6 +172,7 @@ for ix_year = year_start:year_end
             % ------------------------------------------------------------
             nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
             nr_keyword_appear{ix_patent, 5} = match_fullword;
+            nr_keyword_appear{ix_patent, 6} = NAMkeyword_count;
         end
 
         % Save information for all weeks
