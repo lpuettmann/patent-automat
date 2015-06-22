@@ -17,7 +17,7 @@ FID = fopen(printname, 'w');
 fprintf(FID,'\\begin{table}\n');
 fprintf(FID,'\\begin{small}\n');
 fprintf(FID,'\\begin{threeparttable}\n');
-fprintf(FID,'\\caption{{\\normalsize Comparison of classification algorithms with manual codingm}}\n');
+fprintf(FID,'\\caption{{\\normalsize Comparison of classification algorithms with manual coding}}\n');
 fprintf(FID,'\\label{table:contingency_classifications}\n');
 fprintf(FID,'\\begin{tabular}{lrllllllllllll}\n');
 fprintf(FID, '\\toprule');
@@ -60,4 +60,4 @@ fclose(FID);
 fprintf('Saved: %s.\n', printname)
 
 
-run '../copy_selected_files.m'
+%run '../copy_selected_files.m'
