@@ -1,32 +1,41 @@
 close all
 clear all
+clc
 
 fclose('all');
-clc
+
 
 %% Add path to functions
 addpath('functions');
 addpath('patent_index');
 
 
-%% Set some inputs
-adj_stem = sprintf(['detect|mov|adjust|identif|standardiz|standardis|',...
+%% Define dictionary to search for
+
+% Words with simple expressions to look for
+keywords = {'automat', 'robot', ...
+    'movable arm', 'lab(o|(ou))r efficien\w*', 'algorithm', 'software', ...
+    'autonomous', 'adaptive'};
+
+% Link adjectives to verbs
+adj_stem = {'independent', 'continuous', 'responsive'};
+verb_stem = sprintf(['detect|mov|adjust|identif|standardiz|standardis|',...
     'determin|generat|advanc|record|respond|analyze|analyse|operat|', ...
     'learn|start|regulat|sens|programm|process']);
 
-match_regexp = {horzcat('\w*independent(ly|-| )(', adj_stem, ')\w*'), ...
-    horzcat('\w*continuous(ly|-| )(', adj_stem, ')\w*')};
+for a=1:length(adj_stem)
+    match_regexp{a} = horzcat('\w*', adj_stem{a}, '(ly|-| )(', ...
+        verb_stem, ')\w*');
+end
 
-% Define keyword to look for
-patent_keyword_appear.find_dictionary = {'automat', 'robot', ...
-    'movable arm', 'labor efficiency', 'algorithm', 'software', ...
-    'autonomous', 'adaptive', 'responsive', match_regexp{1}, ...
-    match_regexp{2}};
+% Put all expressions in a dictionary to search for
+find_dictionary = {keywords{:}, match_regexp{:}}
+
+% Save the terms in a simple way to refer back to them later
+patent_keyword_appear.dictionary = {keywords{:}, adj_stem{:}};
 
 
-
-%%
-
+%% Set some inputs
 year_start = 1976;
 year_end = 2001;
 
@@ -120,7 +129,7 @@ for ix_year = year_start:year_end
             num2cell(repmat(ix_week, nr_patents, 1))];
         
         % Initialize matrix to count number of keyword appearances
-        weekly_keyword_appear = zeros(nr_patents,length(patent_keyword_appear.find_dictionary));
+        weekly_keyword_appear = zeros(nr_patents,length(find_dictionary));
         
         for ix_patent=1:nr_patents
 
@@ -168,8 +177,8 @@ for ix_year = year_start:year_end
             end
     
             
-            for f=1:length(patent_keyword_appear.find_dictionary)
-                find_str = patent_keyword_appear.find_dictionary{f};
+            for f=1:length(find_dictionary)
+                find_str = find_dictionary{f};
             
                 % Search for keyword
                 % ------------------------------------------------------------
@@ -202,7 +211,6 @@ for ix_year = year_start:year_end
         check_open_files
 
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
-        disp('-----------------------------------------------------------')
     end
     
     
@@ -227,5 +235,3 @@ for ix_year = year_start:year_end
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
-
-sum(patent_keyword_appear.matches)
