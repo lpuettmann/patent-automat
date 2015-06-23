@@ -25,6 +25,11 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
+
+find_dictionary = {'automat', 'robot', ...
+    'movable arm', 'labour efficien', 'algorithm', 'software', ...
+    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
+
 nr_worddict = size(allyr_patstats.total_matches_week, 2);
 
 color1_pick = [0.7900, 0.3800, 0.500]; % red
@@ -45,7 +50,7 @@ for k = 1:size(allyr_patstats.total_matches_week, 2)
     scatter(1:length(plot_series), plot_series, ...
         'Marker', 'o', 'MarkerEdgeColor', color1_pick)
     
-    title(allyr_patstats.dictionary(k))
+    title(find_dictionary(k))
     
     xlim([1 length(plot_series)])
     set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels

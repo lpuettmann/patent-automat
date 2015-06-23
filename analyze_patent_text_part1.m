@@ -9,7 +9,7 @@ fclose('all');
 %% Define dictionary to search for
 
 % Words with simple expressions to look for
-keywords = {'automat', 'robot', ...
+simple_keywords = {'automat', 'robot', ...
     'movable arm', 'lab(o|(ou))r efficien\w*', 'algorithm', 'software', ...
     'autonomous', 'adaptive'};
 
@@ -25,7 +25,9 @@ for a=1:length(adj_stem)
 end
 
 % Put all expressions in a dictionary to search for
-find_dictionary = {keywords{:}, match_regexp{:}};
+find_dictionary = {'automat', 'robot', ...
+    'movable arm', 'labour efficien', 'algorithm', 'software', ...
+    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
 
 % Save the terms in a simple way to refer back to them later
 patent_keyword_appear.dictionary = {keywords{:}, adj_stem{:}};
