@@ -10,11 +10,11 @@ set(0, 'DefaultAxesFontName', 'Palatino')
 
 %% Define parameters
 year_start = 1976;
-year_end = 2015;
+year_end = 1990;
 
 
 %% Load summary data
-build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+build_load_filename = horzcat('allyr_patstats_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
 load(build_load_filename)
 
@@ -25,6 +25,8 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
+nr_worddict = size(allyr_patstats.total_matches_week, 2);
+
 color1_pick = [0.7900, 0.3800, 0.500]; % red
 % color1_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806]; % light gray
@@ -32,30 +34,36 @@ my_gray = [0.806, 0.806, 0.806]; % light gray
 
 figureHandle = figure;
 
-plot_series = allyear_total_matches_week;
-% plot_series = allyear_total_automix;
-
-scatter(1:length(plot_series), plot_series, ...
-    'Marker', 'o', 'MarkerEdgeColor', color1_pick)
-
-
-
 set(gca,'FontSize',11) % change default font size of axis labels
-% title('Number weekly matches in U.S. Patents', 'FontSize', 18)
+
+
+for k = 1:size(allyr_patstats.total_matches_week, 2)
+
+    subplot(4, 3, k)
+    plot_series = allyr_patstats.total_matches_week(:, k);
+
+    scatter(1:length(plot_series), plot_series, ...
+        'Marker', 'o', 'MarkerEdgeColor', color1_pick)
+    
+    title(allyr_patstats.dictionary(k))
+    
+    xlim([1 length(plot_series)])
+    set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
+    set(gca, 'xticklabel',{}) % turn x-axis labels off
+    % gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
+    set(gca, 'xticklabel', my_xaxis_labels); 
+end
+
 
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-xlim([1 length(allyear_total_matches_week)])
-set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
-set(gca, 'xticklabel',{}) % turn x-axis labels off
-% gridxy(get(gca,'xtick'), get(gca,'ytick'), 'color', my_gray, 'linewidth', 1) % make grey grid lines
-set(gca, 'xticklabel', my_xaxis_labels); 
+
 
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 1500 900]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');

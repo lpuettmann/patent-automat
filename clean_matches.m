@@ -79,7 +79,7 @@ for ix_year = year_start:year_end
     %% Define new data structure to hold the results "patsearch_results"
     patsearch_results = patent_keyword_appear;
     
-%     patsearch_results.length_pattext = length_pattext;
+    patsearch_results.length_pattext = length_pattext;
     
     % Delete patents that start with letter
     patsearch_results.patentnr(save_row_delete) = [];
@@ -87,7 +87,7 @@ for ix_year = year_start:year_end
     patsearch_results.week(save_row_delete) = [];
     patsearch_results.NAMkeyword_count(save_row_delete) = [];
     patsearch_results.matches(save_row_delete, :) = []; % matrix not vector
-%     patsearch_results.length_pattext(save_row_delete) = [];
+    patsearch_results.length_pattext(save_row_delete) = [];
     
     if nr_patents_yr - length(save_row_delete) ~= size(...
             patsearch_results.patentnr, 1)

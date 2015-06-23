@@ -32,8 +32,8 @@ patent_keyword_appear.dictionary = {keywords{:}, adj_stem{:}};
 
 
 %% Set some inputs
-year_start = 1977;
-year_end = 197;
+year_start = 1976;
+year_end = 2001;
 
 nr_lines4previouspatent = 1; 
 

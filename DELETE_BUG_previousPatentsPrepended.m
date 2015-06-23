@@ -4,7 +4,7 @@ clc
 
 
 
-year_start = 1976;
+year_start = 1977;
 year_end = 1990;
 
 
