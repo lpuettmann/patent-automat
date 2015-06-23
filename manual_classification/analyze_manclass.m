@@ -2,11 +2,10 @@ close all
 clear all
 clc
 
-addpath('../functions')
 
 % Parameters
 year_start = 1976;
-year_end = 2015;
+year_end = 1990;
 
 
 
@@ -18,7 +17,7 @@ conttab.nr_alg = 3; % number of algorithms to compare
 for i=1:conttab.nr_alg
 
     % Load previously extracted data
-    load('manclass_data.mat')
+    load('manclassData.mat')
     
     if i==2
         % Delete those patents with technology numbers some industries
@@ -31,12 +30,15 @@ for i=1:conttab.nr_alg
                         % 606, % Surgery
                          800]; % Multicellar Living Organisms
 
-        technr = manclass_data(:, 8);
+        technr = manclassData.classnr;
         delete_pat_pos = find(ismember(technr, delete_technr));
 
-        del_pat = manclass_data(delete_pat_pos, :);
-        del_pat_manual1 = find(del_pat(:, 3));
-        del_pat_automatic1 = find(del_pat(:, 7)>0);
+        del_pat_manual1 = manclassData.patentnr(delete_pat_pos(find(...
+            manclassData.manClass(delete_pat_pos))));
+        
+        del_pat_automatic1 = manclassData.patentnr(delete_pat_pos(find(...
+            manclassData.matches(delete_pat_pos) > 0)));
+       
         del_pat_manual1_automatic1 = intersect(del_pat_manual1, del_pat_automatic1);
         del_pat_manual1_automatic0 = setdiff(del_pat_manual1, del_pat_automatic1);
         del_pat_automatic1_manual0 = setdiff(del_pat_automatic1, del_pat_manual1);
@@ -45,46 +47,52 @@ for i=1:conttab.nr_alg
         fprintf('<strong>Discarded technologies</strong>\n');
         fprintf(' \n')
         fprintf('Delete %d/%d (%3.2f) patents.\n', length(delete_pat_pos), ...
-            size(manclass_data, 1), length(delete_pat_pos)/size(manclass_data, 1))
+            size(manclassData.patentnr, 1), length(delete_pat_pos)/...
+            size(manclassData.patentnr, 1))
         fprintf('Of those: \n')
         fprintf('\t %d = manual: 1, automatic: 1.\n', length(del_pat_manual1_automatic1))
         fprintf('\t %d = manual: 1, automatic: 0.\n', length(del_pat_manual1_automatic0))
         fprintf('\t %d = automatic: 1, manual: 0.\n', length(del_pat_automatic1_manual0))
         fprintf(' ')
 
-        manclass_data(delete_pat_pos, :) = [];
-    else
-        manclass_data = manclass_data;
+        % Delete entries for patents with those technologies
+        manclassData.indic_automat(delete_pat_pos) = [];
+        manclassData.indic_automat(delete_pat_pos) = [];
+        manclassData.patentnr(delete_pat_pos) = [];
+        manclassData.classnr(delete_pat_pos) = [];
+        manclassData.manclassData.year(delete_pat_pos) = [];
+        manclassData.coderID(delete_pat_pos) = [];
+        manclassData.coderDate(delete_pat_pos) = [];
+        manclassData.matches(delete_pat_pos) = [];
+        manclassData.manClass(delete_pat_pos) = [];
+        manclassData.manCognitive(delete_pat_pos) = [];
+        manclassData.manManual(delete_pat_pos) = [];
     end
 
+    
     % Transform variables
-
-    % Figure out how many patents have been classified yet
-    indic_automat = manclass_data(:, 3);
-
-    classifstat.nr_codpt = length(indic_automat);
-    classifstat.sum_automat = sum(indic_automat);
+    classifstat.nr_codpt = length(manclassData.indic_automat);
+    classifstat.sum_automat = sum(manclassData.indic_automat);
     share_automat = classifstat.sum_automat / classifstat.nr_codpt;
 
 
     % Compare manual classification with automated keyword search
-    nr_keyword_find = manclass_data(:, 7); % extract number of keyword matches
-    
     if i==3
         % Find patents with at least 2 matches
-        classifstat.pat_1match = (nr_keyword_find > 1);
+        classifstat.pat_1match = (manclassData.matches > 1);
     else
         % Find patents with at least 1 match
-        classifstat.pat_1match = (nr_keyword_find > 0);
+        classifstat.pat_1match = (manclassData.matches > 0);
     end
     
-    pos_manclass_automat = find(indic_automat);
+    pos_manclass_automat = find(manclassData.indic_automat);
     pos_pat_1match = find(classifstat.pat_1match);
 
 
     % Calculate area under curve (AUROC)
     % -------------------------------------------------------------------
-    classifstat.auc = calculate_auc(indic_automat, classifstat.pat_1match);
+    classifstat.auc = calculate_auc(manclassData.indic_automat, ...
+        classifstat.pat_1match);
 
 
     % Calculate the overall agreement rate
@@ -94,7 +102,7 @@ for i=1:conttab.nr_alg
     %   Manning, Raghavan, Schütze "Introduction to Information Retrieval",
     %   first edition (2008), section "8. Evaluation in information retrieval"
 
-    classifstat.accuracy = sum(indic_automat == classifstat.pat_1match) / classifstat.nr_codpt;
+    classifstat.accuracy = sum(manclassData.indic_automat == classifstat.pat_1match) / classifstat.nr_codpt;
     complete_class = union(pos_pat_1match, pos_manclass_automat);
     classifstat.overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
     differ_class = setdiff(complete_class, classifstat.overlap_class);
@@ -114,13 +122,9 @@ for i=1:conttab.nr_alg
     classifstat.automatic1_manual0 = setdiff(pos_pat_1match, pos_manclass_automat);
 
 
-    classifstat.patents_automatic1_manual0 = manclass_data(...
-        classifstat.automatic1_manual0, :);
-
-
     % Analyze those patents that were manually classified as automation patents
-    matches_manclasspt = nr_keyword_find(pos_manclass_automat);
-    matches_rest = nr_keyword_find(not(indic_automat));
+    matches_manclasspt = manclassData.matches(pos_manclass_automat);
+    matches_rest = manclassData.matches(not(manclassData.indic_automat));
 
 
 

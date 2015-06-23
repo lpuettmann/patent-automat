@@ -2,120 +2,63 @@ close all
 clear all
 clc
 
-addpath('../functions')
-addpath('../cleaned_matches')
-
 % Load excel file
-[manclass_data, ~, ~] = xlsread('manclass_consolidated.xlsx');
+[manclass_dataRaw, ~, ~] = xlsread('manclass_consolidated.xlsx');
 
 % Figure out how many patents have been classified yet
-indic_automat = manclass_data(:, 3);
+manclassData.indic_automat = manclass_dataRaw(:, 3);
+
 
 
 %% Make some checks
-if length(unique(manclass_data(:, 1))) ~= length(manclass_data(:, 1))
-    warning('There are duplicate patents.')
+if length(unique(manclass_dataRaw(:, 1))) ~= length(manclass_dataRaw(:, 1))
+    warning('There are duplicate patents:')
+    [duplN, duplBin] = histc(manclass_dataRaw(:, 1), ...
+        unique(manclass_dataRaw(:, 1)));
+    duplMultiple = find(duplN > 1);
+    duplIndex = manclass_dataRaw(find(ismember(duplBin, duplMultiple)), 1)
 end
-
-if any(not((indic_automat == 1) | (indic_automat == 0)))
+    
+if any(not((manclassData.indic_automat == 1) | (manclassData.indic_automat == 0)))
     warning('There should be only 0 and 1 here.')
 end
 
-if any(not((indic_automat == 1) | (indic_automat == 0)))
+if any(not((manclassData.indic_automat == 1) | (manclassData.indic_automat == 0)))
     warning('There should be only 0 and 1 here.')
 end
 
-if not(isempty(find(isnan(indic_automat), 1) - 1))
+if not(isempty(find(isnan(manclassData.indic_automat), 1) - 1))
     warning('There are not classified patents.')
 end
 
 % Check if there any NaN's left in the vector of classifications
-if any(isnan(indic_automat))
+if any(isnan(manclassData.indic_automat))
     fprintf('Some patents not classified (NaN): %d.\n', ...
-        find(isnan(indic_automat)))
+        find(isnan(manclassData.indic_automat)))
 end
 
 
-%% Extract those patents that don't have tech class numbers yet
-indic_pat_no_technr = isnan(manclass_data(:,8));
-
-pat_no_technr = manclass_data(find(indic_pat_no_technr), :);
-pat_with_technr = manclass_data(find(not(indic_pat_no_technr)), :);
-
-
-%% Sort data by years. IMPORTANT: We'll later loop through them.
-[~, ix_sort] = sort(pat_no_technr(:,2));
-pat_no_technr = pat_no_technr(ix_sort, :);
-
-patent_numbers = pat_no_technr(:, 1);
-patent_years = pat_no_technr(:, 2);
-
-year_start = 1976;
-year_end = 2015;
-nr_years = length(year_start:year_end);
-
-all_technr = [];
-
-ix_extract_start = 1;
-
-
-%% Extract the technology numbers for patents
-for ix_year=year_start:year_end
-    
-    % Load matches
-    % -------------------------------------------------------------
-    load_file_name = horzcat('patsearch_results_', num2str(ix_year));
-    load(load_file_name)
-    
-    patentyr_numbers = patsearch_results(:, 1);
-    patentyr_technr = patsearch_results(:, 3);
-    
-    nr_yearlength = length(find(patent_years == ix_year));
-    
-    ix_extract_stop = ix_extract_start + nr_yearlength - 1;
-    
-    extract_patyrnr = patent_numbers(ix_extract_start:ix_extract_stop);
-    
-    if length(extract_patyrnr) ~= nr_yearlength
-        warning('Check if length is right.')
-    end
-    
-    j_technr = zeros(nr_yearlength,1);
-    
-    for j=1:length(extract_patyrnr)
-        extract_me = extract_patyrnr(j,:);
-        extract_me = num2str(extract_me);
-        ix_pos_ex = find(strcmp(patentyr_numbers, extract_me));
-        j_technr(j) = str2num(patentyr_technr{ix_pos_ex});
-    end
-    all_technr = [all_technr; j_technr];
-    
-    ix_extract_start = ix_extract_stop + 1;
-    
-    fprintf('Year finished: %d.\n', ix_year)
+% Check if tech classification numbers are missing
+if any(isnan(manclass_dataRaw(:,8)))
+    warning('Some tech classification numbers (''OCL'') are missing.')
 end
 
+%% Save data in a structure
+manclassData.patentnr = manclass_dataRaw(:, 1);
+manclassData.classnr = manclass_dataRaw(:, 8);
+manclassData.year = manclass_dataRaw(:, 2);
+manclassData.coderID = manclass_dataRaw(:, 9);
+manclassData.coderDate = manclass_dataRaw(:, 10);
+manclassData.matches = manclass_dataRaw(:, 7);
+manclassData.manClass = manclass_dataRaw(:, 3);
+manclassData.manCognitive = manclass_dataRaw(:, 4);
+manclassData.manManual = manclass_dataRaw(:, 5);
 
-%% Check that extracted series have right size
-if not(length(patent_years) == length(all_technr))
-    warning('Should have same length.')
-end
-
-pat_no_technr(:, 8) = all_technr;
-
-% Reattach those patents that already before had their tech classes
-if not(size(pat_no_technr, 2) == size(pat_with_technr, 2))
-    warning('Should be equal.')
-end
-
-manclass_data = [pat_no_technr;
-                pat_with_technr];
-            
 
 %% Save to .mat file
 % -------------------------------------------------------------------
-save_name = 'manclass_data.mat';
-save(save_name, 'manclass_data');    
+save_name = 'manclassData.mat';
+save(save_name, 'manclassData');    
 fprintf('Saved: %s.\n', save_name)
 
 
