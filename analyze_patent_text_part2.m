@@ -3,12 +3,6 @@ clear all
 
 
 
-
-%% Add path to functions
-addpath('functions');
-addpath('patent_index');
-
-
 %% Set some inputs
 
 % Define keyword to look for

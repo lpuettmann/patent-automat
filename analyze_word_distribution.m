@@ -1,12 +1,8 @@
-
 clc
 clear all
 close all
 
 
-
-addpath('matches');
-addpath('functions');
 
 %%
 year_start = 1976;

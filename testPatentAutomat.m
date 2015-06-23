@@ -1,7 +1,6 @@
 function testPatentAutomat()
 
-addpath('test')
-addpath('functions')
+
 
 run(test_count_nr_patents);
 run(test_count_elements_cell);

@@ -3,8 +3,6 @@ close all
 clc
 
 
-addpath('functions')
-
 
 % Close all previously openned files
 check_open_files

@@ -2,7 +2,6 @@ close all
 clear all
 clc
 
-addpath('matches')
 
 
 year_start = 1976;

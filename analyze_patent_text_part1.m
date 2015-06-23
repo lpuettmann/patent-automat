@@ -5,10 +5,6 @@ clc
 fclose('all');
 
 
-%% Add path to functions
-addpath('functions');
-addpath('patent_index');
-
 
 %% Define dictionary to search for
 

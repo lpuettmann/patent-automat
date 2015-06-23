@@ -4,11 +4,6 @@ clc
 
 
 
-%% Add path to functions
-addpath('functions');
-
-
-
 %% Set some inputs
 year_start = 2003;
 year_end = 2003;

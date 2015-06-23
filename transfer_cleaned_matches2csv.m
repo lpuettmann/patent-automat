@@ -4,11 +4,6 @@ clc
 
 
 
-%% Add path to functions
-addpath('cleaned_matches');
-addpath('functions'); % (for cell2csv)
-
-
 %%
 year_start = 1976;
 year_end = 2015;

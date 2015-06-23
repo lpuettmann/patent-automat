@@ -4,10 +4,6 @@ clear all
 
 
 
-%% Add path to functions
-addpath('functions');
-
-
 
 %% Set some inputs
 year_start = 2015;
