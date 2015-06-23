@@ -60,10 +60,3 @@ manclassData.manManual = manclass_dataRaw(:, 5);
 save_name = 'manclassData.mat';
 save(save_name, 'manclassData');    
 fprintf('Saved: %s.\n', save_name)
-
-
-
-
-
-
-
