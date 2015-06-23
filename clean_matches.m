@@ -7,14 +7,10 @@ close all
 
 tic
 
-addpath('matches');
-addpath('functions');
-addpath('patent_index');
-
 
 %%
 year_start = 1976;
-year_end = 2015;
+year_end = 1990;
 
 
 %%

@@ -4,18 +4,31 @@ clc
 
 addpath('matches')
 
-ix_year = 1976;
 
-load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
-load(load_file_name)
+year_start = 1976;
+year_end = 1990;
 
 
-%%
-tableMatches = table(sum(patent_keyword_appear.matches,1)', 'RowNames', ...
-    patent_keyword_appear.dictionary, 'Variablenames', ...
-    {'number_of_matches'});
+for ix_year = year_start:year_end
+    
+    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+    load(load_file_name)
+    
+        
+    tableMatches = table(sum(patent_keyword_appear.matches,1)', ...
+        'RowNames', patent_keyword_appear.dictionary, 'Variablenames', ...
+        {'number_of_matches'});
+    
+    fprintf('\tYear: %d', ix_year)
+    disp(tableMatches)
+    disp('--------------------------------------------------------------')
+end
 
-disp(tableMatches)
+
+
+
+
+
 
 
 
