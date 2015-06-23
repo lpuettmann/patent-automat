@@ -38,15 +38,15 @@ year_end = 197;
 nr_lines4previouspatent = 1; 
 
 
-%% Initalize
-patent_metadata = []; 
-nr_keyword_appear = []; 
-save_line_keywordNAM = [];
-
-
-%% Go
+%% Loop through: 1. year, 2. weekly files, 3. patent texts
 % ========================================================================
 for ix_year = year_start:year_end
+    
+    % Initalize
+    patent_metadata = []; 
+    nr_keyword_appear = []; 
+    save_line_keywordNAM = [];  
+    
     tic
 
     week_start = 1;
