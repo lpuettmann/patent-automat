@@ -53,14 +53,13 @@ for i=1:conttab.nr_alg
         fprintf('\t %d = manual: 1, automatic: 1.\n', length(del_pat_manual1_automatic1))
         fprintf('\t %d = manual: 1, automatic: 0.\n', length(del_pat_manual1_automatic0))
         fprintf('\t %d = automatic: 1, manual: 0.\n', length(del_pat_automatic1_manual0))
-        fprintf(' ')
+        disp(' ')
 
         % Delete entries for patents with those technologies
         manclassData.indic_automat(delete_pat_pos) = [];
-        manclassData.indic_automat(delete_pat_pos) = [];
         manclassData.patentnr(delete_pat_pos) = [];
         manclassData.classnr(delete_pat_pos) = [];
-        manclassData.manclassData.year(delete_pat_pos) = [];
+        manclassData.year(delete_pat_pos) = [];
         manclassData.coderID(delete_pat_pos) = [];
         manclassData.coderDate(delete_pat_pos) = [];
         manclassData.matches(delete_pat_pos) = [];
@@ -102,7 +101,7 @@ for i=1:conttab.nr_alg
     %   Manning, Raghavan, Schütze "Introduction to Information Retrieval",
     %   first edition (2008), section "8. Evaluation in information retrieval"
 
-    classifstat.accuracy = sum(manclassData.indic_automat == classifstat.pat_1match) / classifstat.nr_codpt;
+    classifstat.accuracy = sum(manclassData.manClass == classifstat.pat_1match) / classifstat.nr_codpt;
     complete_class = union(pos_pat_1match, pos_manclass_automat);
     classifstat.overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
     differ_class = setdiff(complete_class, classifstat.overlap_class);
@@ -135,10 +134,10 @@ for i=1:conttab.nr_alg
     for ix_year=year_start:year_end
         t = ix_year - year_start + 1;
 
-        yr_pos = find(ix_year == manclass_data(:, 2));
+        yr_pos = find(ix_year == manclassData.year);
 
-        yr_indic_automat = manclass_data(yr_pos, 3);
-        yr_pat_1match = manclass_data(yr_pos, end)>0;
+        yr_indic_automat = manclassData.manClass(yr_pos);
+        yr_pat_1match = manclassData.matches(yr_pos)>0;
 
         classifstat.number(t) = length(yr_pos);
         classifstat.summanclass(t) = sum(yr_indic_automat);
@@ -147,17 +146,6 @@ for i=1:conttab.nr_alg
             length(yr_pos);
         classifstat.manautom(t) = sum(yr_indic_automat) / length(yr_pos);
         classifstat.compautom(t) = sum(yr_pat_1match) / length(yr_pos);
-    end
-
-
-    % Plausibility checks
-    % -------------------------------------------------------------------
-    if abs(mean(classifstat.manautom) - share_automat) > 0.1 * mean(classifstat.manautom)
-        warning('Quite different.')
-    end
-
-    if abs(mean(classifstat.compautom) - (sum(classifstat.pat_1match) / classifstat.nr_codpt)) > 0.1 * mean(classifstat.compautom)
-        warning('Quite different.')
     end
 
 
@@ -179,6 +167,9 @@ for i=1:conttab.nr_alg
         [length(classifstat.overlap_class),  classifstat.sum_automat, classifstat.recall];
         [sqrt(classifstat.evalbeta_squared), classifstat.fmeasure];
         classifstat.auc};
+
+    fprintf('Finished algorithm: %d.\n', i)
+    disp('.............................................................')
 end
 
 % Save to .mat file
