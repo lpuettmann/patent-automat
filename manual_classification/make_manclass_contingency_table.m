@@ -1,6 +1,6 @@
 close all
 clear all
-clc
+
 
 
 %% Load stats on classifications

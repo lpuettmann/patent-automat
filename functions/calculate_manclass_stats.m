@@ -22,6 +22,11 @@ if (min(size(correctClass)) > 1) | (min(size(estimatClass)) > 1)
     error('Should be vector.')
 end
 
+if (isnan(correctClass)) | (isnan(estimatClass))
+    error('Missing values.')
+end
+
+
 classifstat.nr_codpt = length(correctClass);
 classifstat.sum_automat = sum(correctClass);
 share_automat = classifstat.sum_automat / classifstat.nr_codpt;

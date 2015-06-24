@@ -11,7 +11,7 @@ year_end = 2001;
 % Load previously extracted data
 load('manclassData.mat')
 
-% Delete patents from some years 
+% % Delete patents from some years 
 % ixDelete = 252;
 % 
 % % Delete entries for patents with those technologies
@@ -30,11 +30,13 @@ load('manclassData.mat')
 % Iterate through classification algorithm set-ups
 % ========================================================================
 ix_keyword = 1;
+fprintf('Chosen keyword: <strong>%s</strong>.\n', manclassData.dictionary{ix_keyword})
+
 conttab.nr_alg = 3; % number of algorithms to compare
 
 
 for i=1:conttab.nr_alg
-
+   
     if i==2
         % Delete those patents with technology numbers some industries
         delete_technr = [430, % Radiation Imagery Chemistry
