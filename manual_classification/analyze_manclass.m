@@ -12,25 +12,25 @@ year_end = 2001;
 load('manclassData.mat')
 
 % Delete patents from some years 
-ixDelete = 252;
-
-% Delete entries for patents with those technologies
-manclassData.manAutomat(ixDelete:end) = [];
-manclassData.patentnr(ixDelete:end) = [];
-manclassData.classnr(ixDelete:end) = [];
-manclassData.year(ixDelete:end) = [];
-manclassData.coderID(ixDelete:end) = [];
-manclassData.coderDate(ixDelete:end) = [];
-manclassData.matches(ixDelete:end, :) = []; % this is a matrix
-manclassData.manCognitive(ixDelete:end) = [];
-manclassData.manManual(ixDelete:end) = [];
+% ixDelete = 252;
+% 
+% % Delete entries for patents with those technologies
+% manclassData.manAutomat(ixDelete:end) = [];
+% manclassData.patentnr(ixDelete:end) = [];
+% manclassData.classnr(ixDelete:end) = [];
+% manclassData.year(ixDelete:end) = [];
+% manclassData.coderID(ixDelete:end) = [];
+% manclassData.coderDate(ixDelete:end) = [];
+% manclassData.matches(ixDelete:end, :) = []; % this is a matrix
+% manclassData.manCognitive(ixDelete:end) = [];
+% manclassData.manManual(ixDelete:end) = [];
 
 
 
 % Iterate through classification algorithm set-ups
 % ========================================================================
 ix_keyword = 1;
-conttab.nr_alg = 1; % number of algorithms to compare
+conttab.nr_alg = 3; % number of algorithms to compare
 
 
 for i=1:conttab.nr_alg
@@ -98,7 +98,7 @@ for i=1:conttab.nr_alg
     % Calculate metrics that evaluate the precision of the classification
     % algorithm
     classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
-        computerClass, 0.5)
+        computerClass, 0.5);
     
 
     % Errors over time
@@ -132,10 +132,10 @@ for i=1:conttab.nr_alg
     % -------------------------------------------------------------------
     conttab.val(:,:,i) = [classifstat.nr_codpt - classifstat.sum_automat - length(classifstat.automatic1_manual0), length(classifstat.automatic1_manual0), classifstat.nr_codpt - classifstat.sum_automat;
         length(classifstat.manual1_automatic0), classifstat.sum_automat - length(classifstat.manual1_automatic0), classifstat.sum_automat;
-        classifstat.nr_codpt - sum(classifstat.computerClass), sum(classifstat.computerClass), classifstat.nr_codpt];
+        classifstat.nr_codpt - sum(computerClass), sum(computerClass), classifstat.nr_codpt];
 
     conttab.stats(:,:,i) = {[length(classifstat.overlap_class), classifstat.nr_codpt - classifstat.sum_automat - length(classifstat.automatic1_manual0), classifstat.nr_codpt, classifstat.accuracy];
-        [length(classifstat.overlap_class), sum(classifstat.computerClass), classifstat.precision];
+        [length(classifstat.overlap_class), sum(computerClass), classifstat.precision];
         [length(classifstat.overlap_class),  classifstat.sum_automat, classifstat.recall];
         [sqrt(classifstat.evalbeta_squared), classifstat.fmeasure];
         classifstat.auc};

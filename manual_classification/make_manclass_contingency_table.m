@@ -56,3 +56,6 @@ fprintf(FID,'\\end{table}\n');
 fclose(FID); 
 
 fprintf('Saved: %s.\n', printname)
+
+
+run copy_selected_files.m
