@@ -1,74 +1,65 @@
-
 close all
 clear all
 clc
 
-addpath('../cleaned_matches');
 
-
-% Load excel file
-[manclass_data, txt, ~] = xlsread('manclass_FULL_v1.xlsx');
-
-% Sort data after years. This is important as we'll later loop through
-[~, ix_sort] = sort(manclass_data(:,2));
-manclass_data = manclass_data(ix_sort, :);
-
-patent_data = manclass_data(:,1:2);
+load('manclassData.mat')
 
 year_start = 1976;
-year_end = 2015;
+year_end = 2001;
+
+
+% Sort data after years. This is important as we'll later loop through
+[~, ix_sort] = sort(manclassData.year);
+if any(not(diff(ix_sort) == 1))
+    error('Patents should already be ordered by year.')
+end
+
+
 nr_years = length(year_start:year_end);
 
 all_matches = [];
 
-ix_extract_start = 1;
+
+% Get the dictionary of words
+load('patsearch_results_1976.mat')
+
+manclassData.matches = nan(size(manclassData.patentnr,1), ...
+    length(patsearch_results.dictionary));
+
+manclassData.dictionary = patsearch_results.dictionary;
 
 
 for ix_year=year_start:year_end
     
-    % Load matches
+    % Load matches for year
     % -------------------------------------------------------------
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
     
-    patentyr_numbers = patsearch_results(:, 1);
-    patentyr_matches = patsearch_results(:, 2);
     
-    nr_yearlength = length(find(manclass_data(:, 2) == ix_year));
-    
-    ix_extract_stop = ix_extract_start + nr_yearlength - 1;
-    
-    extract_patyrnr = patent_data(ix_extract_start:ix_extract_stop, 1);
-    
-    if length(extract_patyrnr) ~= nr_yearlength
-        warning('Check right length.')
-    end
-    
-    j_matches = zeros(nr_yearlength,1);
+    % Find hand-coded patents for this year
+    % -------------------------------------------------------------
+    extract_patyrnr = manclassData.patentnr(find(manclassData.year == ...
+        ix_year));
     
     for j=1:length(extract_patyrnr)
-        extract_me = extract_patyrnr(j,:);
-        extract_me = num2str(extract_me);
-        ix_pos_ex = find(strcmp(patentyr_numbers, extract_me));
-        j_matches(j) = patentyr_matches{ix_pos_ex};
+        extract_me = extract_patyrnr(j);
+        extract_meStr = num2str(extract_me);
+        ix_pos_ex = find(strcmp(patsearch_results.patentnr, extract_meStr));
+        j_matches = patsearch_results.matches(ix_pos_ex,:);
+        
+        % Insert found matches into the structure for hand-coded patents
+        ixManclassData = find(manclassData.patentnr == extract_me);
+        manclassData.matches(ixManclassData, :) = j_matches;
     end
-    all_matches = [all_matches; j_matches];
-    
-    ix_extract_start = ix_extract_stop + 1;
-    
-    fprintf('Year finished: %d.\n', ix_year)
+        
+    fprintf('Found matches for hand-coded patents in year: %d.\n', ix_year)
 end
 
 
-%%
-if not(size(manclass_data,1) == size(all_matches, 1))
-    warning('Should be same size.')
-end
-
-manclass_data = [manclass_data, all_matches];
-
-xlswrite('new_manclass_FULL.xlsx', manclass_data)
-
-
-
-
+%% Save to .mat file
+% -------------------------------------------------------------------
+save_name = 'manclassData.mat';
+save(save_name, 'manclassData');    
+fprintf('Saved: %s.\n', save_name)

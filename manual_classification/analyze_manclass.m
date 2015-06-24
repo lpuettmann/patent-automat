@@ -5,19 +5,37 @@ clc
 
 % Parameters
 year_start = 1976;
-year_end = 1990;
+year_end = 2001;
+
+
+% Load previously extracted data
+load('manclassData.mat')
+
+% Delete patents from some years 
+ixDelete = 252;
+
+% Delete entries for patents with those technologies
+manclassData.manAutomat(ixDelete:end) = [];
+manclassData.patentnr(ixDelete:end) = [];
+manclassData.classnr(ixDelete:end) = [];
+manclassData.year(ixDelete:end) = [];
+manclassData.coderID(ixDelete:end) = [];
+manclassData.coderDate(ixDelete:end) = [];
+manclassData.matches(ixDelete:end, :) = []; % this is a matrix
+manclassData.manCognitive(ixDelete:end) = [];
+manclassData.manManual(ixDelete:end) = [];
 
 
 
 % Iterate through classification algorithm set-ups
 % ========================================================================
-
+ix_keyword = 1;
 conttab.nr_alg = 3; % number of algorithms to compare
+
 
 for i=1:conttab.nr_alg
 
-    % Load previously extracted data
-    load('manclassData.mat')
+
     
     if i==2
         % Delete those patents with technology numbers some industries
@@ -34,7 +52,7 @@ for i=1:conttab.nr_alg
         delete_pat_pos = find(ismember(technr, delete_technr));
 
         del_pat_manual1 = manclassData.patentnr(delete_pat_pos(find(...
-            manclassData.manClass(delete_pat_pos))));
+            manclassData.manAutomat(delete_pat_pos))));
         
         del_pat_automatic1 = manclassData.patentnr(delete_pat_pos(find(...
             manclassData.matches(delete_pat_pos) > 0)));
@@ -56,41 +74,40 @@ for i=1:conttab.nr_alg
         disp(' ')
 
         % Delete entries for patents with those technologies
-        manclassData.indic_automat(delete_pat_pos) = [];
+        manclassData.manAutomat(delete_pat_pos) = [];
         manclassData.patentnr(delete_pat_pos) = [];
         manclassData.classnr(delete_pat_pos) = [];
         manclassData.year(delete_pat_pos) = [];
         manclassData.coderID(delete_pat_pos) = [];
         manclassData.coderDate(delete_pat_pos) = [];
-        manclassData.matches(delete_pat_pos) = [];
-        manclassData.manClass(delete_pat_pos) = [];
+        manclassData.matches(delete_pat_pos, :) = [];
         manclassData.manCognitive(delete_pat_pos) = [];
         manclassData.manManual(delete_pat_pos) = [];
     end
 
     
     % Transform variables
-    classifstat.nr_codpt = length(manclassData.indic_automat);
-    classifstat.sum_automat = sum(manclassData.indic_automat);
+    classifstat.nr_codpt = length(manclassData.manAutomat);
+    classifstat.sum_automat = sum(manclassData.manAutomat);
     share_automat = classifstat.sum_automat / classifstat.nr_codpt;
 
 
     % Compare manual classification with automated keyword search
     if i==3
         % Find patents with at least 2 matches
-        classifstat.pat_1match = (manclassData.matches > 1);
+        classifstat.pat_1match = (manclassData.matches(:, ix_keyword) > 1);
     else
         % Find patents with at least 1 match
-        classifstat.pat_1match = (manclassData.matches > 0);
+        classifstat.pat_1match = (manclassData.matches(:, ix_keyword) > 0);
     end
     
-    pos_manclass_automat = find(manclassData.indic_automat);
+    pos_manclass_automat = find(manclassData.manAutomat);
     pos_pat_1match = find(classifstat.pat_1match);
 
 
     % Calculate area under curve (AUROC)
     % -------------------------------------------------------------------
-    classifstat.auc = calculate_auc(manclassData.indic_automat, ...
+    classifstat.auc = calculate_auc(manclassData.manAutomat, ...
         classifstat.pat_1match);
 
 
@@ -101,7 +118,7 @@ for i=1:conttab.nr_alg
     %   Manning, Raghavan, Schütze "Introduction to Information Retrieval",
     %   first edition (2008), section "8. Evaluation in information retrieval"
 
-    classifstat.accuracy = sum(manclassData.manClass == classifstat.pat_1match) / classifstat.nr_codpt;
+    classifstat.accuracy = sum(manclassData.manAutomat == classifstat.pat_1match) / classifstat.nr_codpt;
     complete_class = union(pos_pat_1match, pos_manclass_automat);
     classifstat.overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
     differ_class = setdiff(complete_class, classifstat.overlap_class);
@@ -123,7 +140,7 @@ for i=1:conttab.nr_alg
 
     % Analyze those patents that were manually classified as automation patents
     matches_manclasspt = manclassData.matches(pos_manclass_automat);
-    matches_rest = manclassData.matches(not(manclassData.indic_automat));
+    matches_rest = manclassData.matches(not(manclassData.manAutomat));
 
 
 
@@ -136,7 +153,7 @@ for i=1:conttab.nr_alg
 
         yr_pos = find(ix_year == manclassData.year);
 
-        yr_indic_automat = manclassData.manClass(yr_pos);
+        yr_indic_automat = manclassData.manAutomat(yr_pos);
         yr_pat_1match = manclassData.matches(yr_pos)>0;
 
         classifstat.number(t) = length(yr_pos);
