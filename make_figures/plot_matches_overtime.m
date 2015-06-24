@@ -10,7 +10,7 @@ set(0, 'DefaultAxesFontName', 'Palatino')
 
 %% Define parameters
 year_start = 1976;
-year_end = 1990;
+year_end = 2001;
 
 
 %% Load summary data

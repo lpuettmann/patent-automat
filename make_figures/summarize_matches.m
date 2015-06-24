@@ -9,7 +9,7 @@ tic
 %% Define parameters
 % ========================================================================
 year_start = 1976;
-year_end = 1990;
+year_end = 2001;
 nr_years = length(year_start:year_end);
 week_start = 1;
 

@@ -4,8 +4,8 @@ clc
 
 
 
-year_start = 1977;
-year_end = 1990;
+year_start = 1976;
+year_end = 2001;
 
 
 for ix_year = year_start:year_end
