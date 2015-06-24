@@ -30,13 +30,11 @@ manclassData.manManual(ixDelete:end) = [];
 % Iterate through classification algorithm set-ups
 % ========================================================================
 ix_keyword = 1;
-conttab.nr_alg = 3; % number of algorithms to compare
+conttab.nr_alg = 1; % number of algorithms to compare
 
 
 for i=1:conttab.nr_alg
 
-
-    
     if i==2
         % Delete those patents with technology numbers some industries
         delete_technr = [430, % Radiation Imagery Chemistry
@@ -86,74 +84,30 @@ for i=1:conttab.nr_alg
     end
 
     
-    % Transform variables
-    classifstat.nr_codpt = length(manclassData.manAutomat);
-    classifstat.sum_automat = sum(manclassData.manAutomat);
-    share_automat = classifstat.sum_automat / classifstat.nr_codpt;
-
-
+    
     % Compare manual classification with automated keyword search
     if i==3
         % Find patents with at least 2 matches
-        classifstat.pat_1match = (manclassData.matches(:, ix_keyword) > 1);
+        computerClass = (manclassData.matches(:, ix_keyword) > 1);
     else
         % Find patents with at least 1 match
-        classifstat.pat_1match = (manclassData.matches(:, ix_keyword) > 0);
+        computerClass = (manclassData.matches(:, ix_keyword) > 0);
     end
     
-    pos_manclass_automat = find(manclassData.manAutomat);
-    pos_pat_1match = find(classifstat.pat_1match);
 
-
-    % Calculate area under curve (AUROC)
-    % -------------------------------------------------------------------
-    classifstat.auc = calculate_auc(manclassData.manAutomat, ...
-        classifstat.pat_1match);
-
-
-    % Calculate the overall agreement rate
-
-    % For  definitions of evaluation measures (accuracy, precision, recall,
-    % fmeasure...), see:
-    %   Manning, Raghavan, Schütze "Introduction to Information Retrieval",
-    %   first edition (2008), section "8. Evaluation in information retrieval"
-
-    classifstat.accuracy = sum(manclassData.manAutomat == classifstat.pat_1match) / classifstat.nr_codpt;
-    complete_class = union(pos_pat_1match, pos_manclass_automat);
-    classifstat.overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
-    differ_class = setdiff(complete_class, classifstat.overlap_class);
-
-    classifstat.precision = length(classifstat.overlap_class) / sum(classifstat.pat_1match);
-    classifstat.recall = length(classifstat.overlap_class) / classifstat.sum_automat;
-
-    classifstat.evalalpha = 1/2; % alpha
-    classifstat.evalbeta_squared = (1 - classifstat.evalalpha) / classifstat.evalalpha; % beta squared
-
-    classifstat.fmeasure = ((classifstat.evalbeta_squared + 1) * classifstat.precision * ...
-        classifstat.recall) / (classifstat.evalbeta_squared * classifstat.precision + ...
-        classifstat.recall);
-
-
-    classifstat.manual1_automatic0 = setdiff(pos_manclass_automat, pos_pat_1match);
-    classifstat.automatic1_manual0 = setdiff(pos_pat_1match, pos_manclass_automat);
-
-
-    % Analyze those patents that were manually classified as automation patents
-    matches_manclasspt = manclassData.matches(pos_manclass_automat);
-    matches_rest = manclassData.matches(not(manclassData.manAutomat));
-
-
+    % Calculate metrics that evaluate the precision of the classification
+    % algorithm
+    classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
+        computerClass, 0.5)
+    
 
     % Errors over time
-    % -------------------------------------------------------------------
-
-    % Extract
     for ix_year=year_start:year_end
         t = ix_year - year_start + 1;
 
         yr_pos = find(ix_year == manclassData.year);
 
-        yr_indic_automat = manclassData.manAutomat(yr_pos);
+        yr_indic_automat = computerClass(yr_pos);
         yr_pat_1match = manclassData.matches(yr_pos)>0;
 
         classifstat.number(t) = length(yr_pos);
@@ -165,6 +119,7 @@ for i=1:conttab.nr_alg
         classifstat.compautom(t) = sum(yr_pat_1match) / length(yr_pos);
     end
 
+        
 
     % Save to .mat file
     % -------------------------------------------------------------------
@@ -177,10 +132,10 @@ for i=1:conttab.nr_alg
     % -------------------------------------------------------------------
     conttab.val(:,:,i) = [classifstat.nr_codpt - classifstat.sum_automat - length(classifstat.automatic1_manual0), length(classifstat.automatic1_manual0), classifstat.nr_codpt - classifstat.sum_automat;
         length(classifstat.manual1_automatic0), classifstat.sum_automat - length(classifstat.manual1_automatic0), classifstat.sum_automat;
-        classifstat.nr_codpt - sum(classifstat.pat_1match), sum(classifstat.pat_1match), classifstat.nr_codpt];
+        classifstat.nr_codpt - sum(classifstat.computerClass), sum(classifstat.computerClass), classifstat.nr_codpt];
 
     conttab.stats(:,:,i) = {[length(classifstat.overlap_class), classifstat.nr_codpt - classifstat.sum_automat - length(classifstat.automatic1_manual0), classifstat.nr_codpt, classifstat.accuracy];
-        [length(classifstat.overlap_class), sum(classifstat.pat_1match), classifstat.precision];
+        [length(classifstat.overlap_class), sum(classifstat.computerClass), classifstat.precision];
         [length(classifstat.overlap_class),  classifstat.sum_automat, classifstat.recall];
         [sqrt(classifstat.evalbeta_squared), classifstat.fmeasure];
         classifstat.auc};
