@@ -1,6 +1,7 @@
 function classifstat = calculate_manclass_stats(correctClass, ...
     estimatClass, alpha)
-% Analyze the quality of a classification algorithm.
+% Analyze the quality of a classification algorithm. These can be reported
+% in a contingency table (also called confusion matrix).
 %
 % IN:
 %       correctClass: vector of 0 and 1 indicating the correct
@@ -26,32 +27,43 @@ if (isnan(correctClass)) | (isnan(estimatClass))
     error('Missing values.')
 end
 
+if any( not((correctClass == 0) | (correctClass == 1)) | ...
+        not((estimatClass == 0) | (estimatClass == 1)) )
+    error('There should be only 0 and 1 in vectors.')
+end
 
+% Number of classified cases
 classifstat.nr_codpt = length(correctClass);
-classifstat.sum_automat = sum(correctClass);
-share_automat = classifstat.sum_automat / classifstat.nr_codpt;
 
-pos_manclass_automat = find(correctClass);
-pos_pat_1match = find(estimatClass);
+tp = sum( (correctClass==1) & (estimatClass == 1) );
+fp = sum( (correctClass==0) & (estimatClass == 1) );
+tn = sum( (correctClass==0) & (estimatClass == 0) );
+fn =  sum( (correctClass==1) & (estimatClass == 0) );
+
+% Overall agreement rate
+classifstat.accuracy = (tp + tn) / classifstat.nr_codpt;
+
+classifstat.precision = tp / (tp + fp);
+classifstat.recall = tp / (tp + fn);
+
+classifstat.evalalpha = alpha; % weighting measure
+classifstat.evalbeta_squared = (1 - classifstat.evalalpha) / ...
+    classifstat.evalalpha; % beta squared
+
+classifstat.fmeasure = ((classifstat.evalbeta_squared + 1) * ...
+    classifstat.precision * classifstat.recall) / ...
+    (classifstat.evalbeta_squared * classifstat.precision + ...
+    classifstat.recall);
 
 % Calculate area under (receiver operating) curve (AUROC)
 classifstat.auc = calculate_auc(correctClass, estimatClass);
 
-% Calculate the overall agreement rate
-classifstat.accuracy = sum(correctClass == estimatClass) / classifstat.nr_codpt;
-complete_class = union(pos_pat_1match, pos_manclass_automat);
-classifstat.overlap_class = intersect(pos_pat_1match, pos_manclass_automat);
-differ_class = setdiff(complete_class, classifstat.overlap_class);
+% Calculate Matthews correlation coefficient
+classifstat.matthewscorrcoeff = (tp * tn - fp * fn) / sqrt((tp + fp)*...
+    (tp + fn)*(tn + fp)*(tn + fn));
 
-classifstat.precision = length(classifstat.overlap_class) / sum(estimatClass);
-classifstat.recall = length(classifstat.overlap_class) / classifstat.sum_automat;
-
-classifstat.evalalpha = alpha; % weighting measure
-classifstat.evalbeta_squared = (1 - classifstat.evalalpha) / classifstat.evalalpha; % beta squared
-
-classifstat.fmeasure = ((classifstat.evalbeta_squared + 1) * classifstat.precision * ...
-    classifstat.recall) / (classifstat.evalbeta_squared * classifstat.precision + ...
-    classifstat.recall);
-
-classifstat.manual1_automatic0 = setdiff(pos_manclass_automat, pos_pat_1match);
-classifstat.automatic1_manual0 = setdiff(pos_pat_1match, pos_manclass_automat);
+% Save in struct
+classifstat.true_positive = tp;
+classifstat.false_positive = fp;
+classifstat.true_negative = tn;
+classifstat.false_negative = fn;
