@@ -7,30 +7,10 @@ fclose('all');
 
 
 %% Define dictionary to search for
-
-% Words with simple expressions to look for
-simple_keywords = {'automat', 'robot', ...
-    'movable arm', 'lab(o|(ou))r efficien\w*', 'algorithm', 'software', ...
-    'autonomous', 'adaptive'};
-
-% Link adjectives to verbs
-adj_stem = {'independent', 'continuous', 'responsive'};
-verb_stem = sprintf(['detect|mov|adjust|identif|standardiz|standardis|',...
-    'determin|generat|advanc|record|respond|analyze|analyse|operat|', ...
-    'learn|start|regulat|sens|programm|process']);
-
-for a=1:length(adj_stem)
-    match_regexp{a} = horzcat('\w*', adj_stem{a}, '(ly|-| )(', ...
-        verb_stem, ')\w*');
-end
-
-% Put all expressions in a dictionary to search for
-find_dictionary = {simple_keywords{:}, match_regexp{:}};
-
-% Save the terms in a simple way to refer back to them later
-patent_keyword_appear.dictionary = {'automat', 'robot', ...
-    'movable arm', 'labour efficien', 'algorithm', 'software', ...
-    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
+find_dictionary = {'automat', 'robot', ...
+    'movable arm', 'algorithm', 'software', ...
+    'autonomous', 'adaptive'}
+patent_keyword_appear.dictionary = find_dictionary;
 
 
 %% Set some inputs
