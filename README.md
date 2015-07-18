@@ -11,7 +11,7 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 Before running:
 ---------------------------
 1. Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
-2. Run `testPatentAutomat.m` to use Matlab's xUnit testing framework.
+2. Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly.
 
 
 To run:
@@ -45,6 +45,6 @@ To run:
 
 Necessary software:
 ---------------------------
-We wrote and tested this in Matlab R2013b. No toolboxes are used (apart from `hpfilter` from the Econometrics Toolbox for some non-essential plots).
+We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used (apart from `hpfilter` from the Econometrics Toolbox for some non-essential plots).
 
 
