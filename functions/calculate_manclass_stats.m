@@ -1,7 +1,7 @@
 function classifstat = calculate_manclass_stats(correctClass, ...
     estimatClass, alpha)
-% Analyze the quality of a classification algorithm. These can be reported
-% in a contingency table (also called confusion matrix).
+% Analyze the quality of a binary classification algorithm. These can be 
+% reported in a contingency table (also called confusion matrix).
 %
 % IN:
 %       correctClass: vector of 0 and 1 indicating the correct
@@ -14,7 +14,7 @@ function classifstat = calculate_manclass_stats(correctClass, ...
 %       classifstat: structure holdind the statistics
 %
 %   For  definitions of evaluation measures (accuracy, precision, recall,
-%   fmeasure...), see:
+%   fmeasure ...), see:
 %   Manning, Raghavan, Schütze "Introduction to Information Retrieval",
 %   first edition (2008), section "8. Evaluation in information retrieval"
 
