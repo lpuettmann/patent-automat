@@ -25,12 +25,12 @@ for a=1:length(adj_stem)
 end
 
 % Put all expressions in a dictionary to search for
-find_dictionary = {'automat', 'robot', ...
-    'movable arm', 'labour efficien', 'algorithm', 'software', ...
-    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
+find_dictionary = {simple_keywords{:}, match_regexp{:}};
 
 % Save the terms in a simple way to refer back to them later
-patent_keyword_appear.dictionary = {keywords{:}, adj_stem{:}};
+patent_keyword_appear.dictionary = {'automat', 'robot', ...
+    'movable arm', 'labour efficien', 'algorithm', 'software', ...
+    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
 
 
 %% Set some inputs

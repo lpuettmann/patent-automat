@@ -172,10 +172,3 @@ for ix_year = year_start:year_end
         ix_year, round(year_loop_time), round(year_loop_time/60))
     disp('---------------------------------------------------------------')
 end
-
-
-
-%% End
-% ======================================================================
-toc
-disp('*** end ***')

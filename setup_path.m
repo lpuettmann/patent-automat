@@ -3,7 +3,7 @@ function setup_path
 %
 %   Author: Ben Hamner (ben@benhamner.com)
 %
-%   Adjusted by Lukas Puettmann (06/2015):
+%   Adjusted by Lukas Puettmann:
 %       - adjust for path delimiters on different operating systems.
 %       - add comments
 %       - don't use savepath
