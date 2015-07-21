@@ -258,7 +258,6 @@ for ix_year = year_start:year_end
     end
     
     % Save to .mat file
-    % -------------------------------------------------------------------
     save_patix2mat(pat_ix, ix_year)
     
     print_finish_summary(toc, ix_year)

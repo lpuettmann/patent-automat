@@ -2,6 +2,7 @@ function indic_find = count_nr_occur_trunccorpus(corpus, searchphrase, ...
     nr_trunc)
 
 corpus_trunc = corpus;
+nr_trunc = numel(searchphrase);
 
 for i=1:length(corpus_trunc)
     if numel(corpus_trunc{i}) > nr_trunc

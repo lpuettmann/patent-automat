@@ -18,9 +18,8 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-    week_end = 2
-    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
-        num2str(ix_year));
+
+    build_data_path = set_data_path(ix_year);
     addpath(build_data_path);
 
 
@@ -181,7 +180,6 @@ for ix_year = year_start:year_end
     end
 
     % Save to .mat file
-    % -------------------------------------------------------------------
     save_patix2mat(pat_ix, ix_year)
     
     print_finish_summary(toc, ix_year)

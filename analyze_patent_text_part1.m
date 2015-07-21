@@ -30,7 +30,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year 
     week_end = set_weekend(ix_year); 
-    
+    week_end = 2
     % Build path to data
     build_data_path = set_data_path(ix_year);
     addpath(build_data_path);
@@ -67,9 +67,7 @@ for ix_year = year_start:year_end
         nr_patents = length(patent_number);        
 
         % Load the patent text
-        % ----------------------------------------------------------------
         choose_file_open = filenames{ix_week};
-        
         unique_file_identifier = fopen(choose_file_open, 'r');   
 
         if unique_file_identifier == -1
@@ -121,8 +119,7 @@ for ix_year = year_start:year_end
                         
             % Delete name section (NAM) of inventor and of patent citations
             % ------------------------------------------------------------
-            indic_NAM = count_nr_occur_trunccorpus(patent_text_corpus, ...
-                'NAM', 3);
+            indic_NAM = count_nr_occur_trunccorpus(patent_text_corpus, 'NAM');
             
             nan_lines = patent_text_corpus(indic_NAM);
             check_NAMkeyword = regexpi(nan_lines, 'automat');
@@ -186,25 +183,14 @@ for ix_year = year_start:year_end
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
     
-    
     patent_keyword_appear.patentnr = patent_metadata(:,1);
     patent_keyword_appear.classnr = patent_metadata(:,2);
     patent_keyword_appear.week = patent_metadata(:,3);
     patent_keyword_appear.NAMkeyword_count = patent_metadata(:,4);
     patent_keyword_appear.matches = nr_keyword_appear;
     
-    
     % Save to .mat file
-    % -------------------------------------------------------------------
-    save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('matches', save_name);
-    save(matfile_path_save, 'patent_keyword_appear');    
-    fprintf('Saved: %s.\n', save_name)
+    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
         
-    
-    year_loop_time = toc;
-    disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds (%d minutes).\n', ...
-        ix_year, round(year_loop_time), round(year_loop_time/60))
-    disp('---------------------------------------------------------------')
+    print_finish_summary(toc, ix_year)
 end

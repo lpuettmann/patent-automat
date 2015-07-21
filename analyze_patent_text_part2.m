@@ -12,7 +12,7 @@ patent_keyword_appear.dictionary = find_dictionary;
 year_start = 2002;
 year_end = 2004;
 
-nr_lines4previouspatent = 1; 
+nr_lines4previouspatent = 2; 
 
 
 %% Loop through: 1. year, 2. weekly files, 3. patent texts
@@ -21,7 +21,7 @@ for ix_year = year_start:year_end
     
     % Initalize
     patent_metadata = []; 
-    nr_keyword_appear = []; 
+    nr_keyword_appear = [];  
     save_line_keywordNAM = [];  
     
     tic
@@ -55,7 +55,7 @@ for ix_year = year_start:year_end
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
-    fprintf('Start searching through patent grant texts for year %d:\n', ix_year)
+    fprintf('Search through patent grant texts for year %d:\n', ix_year)
     
     for ix_week = week_start:week_end
         
@@ -63,13 +63,11 @@ for ix_year = year_start:year_end
         % ----------------------------------------------------------------
         patent_number = pat_ix{ix_week, 1};
         ix_find = pat_ix{ix_week, 2};
+        show_row_NAM = pat_ix{ix_week, 3};
         nr_patents = length(patent_number);   
         
-        
-        choose_file_open = filenames{ix_week};
-
-
         % Load the patent text
+        choose_file_open = filenames{ix_week};
         unique_file_identifier = fopen(choose_file_open, 'r');   
 
         if unique_file_identifier == -1
@@ -83,24 +81,22 @@ for ix_year = year_start:year_end
 
         % Extract patent text
         % ----------------------------------------------------------------
-        nr_keyword_appear = patent_number;
+        weekly_metadata = patent_number;
 
         % Get empty cells next to the WKU patent numbers. 
-        nr_keyword_appear{1,2} = []; % column for keyword matches
+        weekly_metadata{1,2} = []; % column for keyword matches
         
         classification_nr = pat_ix{ix_week, 3};
 
-        % Column for OCL classifications
-        nr_keyword_appear(:,3) = classification_nr; 
-
+        % Column for (OCL) technology classifications
+        weekly_metadata(:,3) = classification_nr; 
 
         % Insert the current week for later reference
-        nr_keyword_appear = [nr_keyword_appear, ...
+        weekly_metadata = [weekly_metadata, ...
             num2cell(repmat(ix_week, nr_patents, 1))];
         
-        % Make a cell which saves which words are found
-        nr_keyword_appear = [nr_keyword_appear, ...
-            num2cell(repmat(' ', nr_patents, 1))];
+        % Initialize matrix to count number of keyword appearances
+        weekly_keyword_appear = zeros(nr_patents,length(find_dictionary));
         
         for ix_patent=1:nr_patents
 
@@ -109,7 +105,7 @@ for ix_year = year_start:year_end
             start_text_corpus = ix_find(ix_patent);
 
             if ix_patent < nr_patents
-                end_text_corpus = ix_find(ix_patent+1) - 10; % this number is hard-coded
+                end_text_corpus = ix_find(ix_patent+1) - nr_lines4previouspatent; 
             else
                 end_text_corpus = length(search_corpus);
             end
@@ -117,65 +113,80 @@ for ix_year = year_start:year_end
             patent_text_corpus = search_corpus(start_text_corpus:...
                 end_text_corpus, :);
 
-            % Search for keyword
+            % Delete name section (NAM) of inventor and of patent citations
             % ------------------------------------------------------------
-            check_keyword_find = regexpi(patent_text_corpus, find_str);
+            indic_NAM = count_nr_occur_trunccorpus(patent_text_corpus, '<NAM>');
             
-            % Get the start of the keyword match on every line
-            line_hit_keyword_find = check_keyword_find(~cellfun('isempty', ...
-                check_keyword_find));
+            nan_lines = patent_text_corpus(indic_NAM);
+            check_NAMkeyword = regexpi(nan_lines, 'automat');
             
-              % Count the number of appearances of the keyword
-            nr_keyword_find = count_elements_cell(line_hit_keyword_find);
+            % Count number of appearances of keyword on NAM lines and save
+            weekly_metadata{ix_patent, 4} = count_elements_cell(...
+                check_NAMkeyword);
             
-            % Find the words surrounding the keyword match
-            match_fullword = get_fullword_matches(nr_keyword_find, ...
-                check_keyword_find, patent_text_corpus, ...
-                line_hit_keyword_find) ;
+            line_keywordNAM = nan_lines(not(cellfun('isempty', ...
+                check_NAMkeyword)));
             
-            % Stack weekly information underneath
-            % ------------------------------------------------------------
-            nr_keyword_appear{ix_patent, 2} = nr_keyword_find;
-            nr_keyword_appear{ix_patent, 5} = match_fullword;
+            if not(isempty(line_keywordNAM))
+                for j=1:length(line_keywordNAM)
+                    save_line_keywordNAM = [save_line_keywordNAM;
+                        patent_number(ix_patent), ix_year, ...
+                        line_keywordNAM(j)];            
+                end
+            end
+            
+            patent_text_corpus(indic_NAM) = []; % delete NAM lines
+            
+            if size(patent_text_corpus) ~= (length(start_text_corpus:...
+                    end_text_corpus) - sum(indic_NAM))
+                warning('Should be equal.')
+            end
+    
+            
+            for f=1:length(find_dictionary)
+                find_str = find_dictionary{f};
+            
+                % Search for keyword
+                % ------------------------------------------------------------
+                check_keyword_find = regexpi(patent_text_corpus, find_str);
+
+                % Get the start of the keyword match on every line
+                line_hit_keyword_find = delete_empty_cells(check_keyword_find);
+
+                % Count the number of appearances of the keyword
+                nr_keyword_find = count_elements_cell(line_hit_keyword_find);
+                
+                % Stack weekly information underneath
+                % ------------------------------------------------------------
+                weekly_keyword_appear(ix_patent, f) = nr_keyword_find;
+            end
         end
-        
-        
+    
         % Save information for all weeks
-        % ----------------------------------------------------------------
-        % On first iteration: have to newly define this variable
-        if ix_week == week_start 
-            patent_keyword_appear = repmat({''}, 1, ...
-                size(nr_keyword_appear, 2));
-        end        
-
-        patent_keyword_appear = [patent_keyword_appear;
-                                 nr_keyword_appear];
-
-        if ix_week == week_end % last iteration: delete first row
-            patent_keyword_appear(1,:) = [];
-        end 
-        
+        % ----------------------------------------------------------------  
+        patent_metadata = [patent_metadata;
+                          weekly_metadata];   
+                      
+        nr_keyword_appear = [nr_keyword_appear;
+                            weekly_keyword_appear];
         
         % Close file again. It can cause errors if you open too many
-        % (around 512) files at once.
+        % (more than abound 512) files at once.
         fclose(unique_file_identifier);
 
         check_open_files
-        
-        fprintf('Week finished: %d/%d.\n', ix_week, week_end)   
-    end
 
+        fprintf('Week finished: %d/%d.\n', ix_week, week_end)
+    end
+    
+    patent_keyword_appear.patentnr = patent_metadata(:,1);
+    patent_keyword_appear.classnr = patent_metadata(:,2);
+    patent_keyword_appear.week = patent_metadata(:,3);
+    patent_keyword_appear.NAMkeyword_count = patent_metadata(:,4);
+    patent_keyword_appear.matches = nr_keyword_appear;
     
     % Save to .mat file
-    % -------------------------------------------------------------------
-    save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('matches', save_name);
-    save(matfile_path_save, 'patent_keyword_appear');    
-    fprintf('Saved: %s.\n', save_name)
+    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
     
-    year_loop_time = toc;
-    disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
-        ix_year, round(year_loop_time), round(year_loop_time/60))
-    disp('---------------------------------------------------------------')
+	print_finish_summary(toc, ix_year)
 end
