@@ -5,7 +5,7 @@ function check_filenames_format(filenames, ix_year, ...
 
 % Check that there is an equal number of files and weeks in the year.
 if length(week_start:week_end) ~= length(filenames)
-    warning('Should be same number of years as weeks.')
+    warning('Should be same number of files as weeks.')
 end
 
 

@@ -10,5 +10,5 @@ elseif and(isunix, not(ismac))
     build_data_path = horzcat('/home/lukas/PatentProject/patent_data_save/', ...
         num2str(ix_year));
 else
-    error('Not sure where the data is.')
+    error('Not sure about the path where the data is.')
 end

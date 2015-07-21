@@ -1,4 +1,9 @@
+*.xsl
+*.mod
+*.dtd
+*.ent
 *.m~
+
 *.dvi
 *.aux
 *.nav

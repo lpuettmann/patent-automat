@@ -10,8 +10,7 @@ year_end = 2001;
 
 
 
-%% Go
-% ========================================================================
+%%
 for ix_year = year_start:year_end
     tic
     
@@ -20,8 +19,7 @@ for ix_year = year_start:year_end
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
 
-    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
-        num2str(ix_year));
+    build_data_path = set_data_path(ix_year);
     addpath(build_data_path);
 
 
@@ -33,9 +31,7 @@ for ix_year = year_start:year_end
 
     filenames = ifmac_truncate_more(filenames);
 
-    if length(week_start:week_end) ~= length(filenames)
-        warning('Should be same number of years as weeks.')
-    end
+    check_filenames_format(filenames, ix_year, week_start, week_end)
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
@@ -245,38 +241,25 @@ for ix_year = year_start:year_end
             end
         end
 
-        
-        % Define patent index. It consists of the patent's WKU number, its
-        % index position in the file and its tech classification. Save 
-        % information for each week in a cell array.
-        % -------------------------------------------------------------------      
+        % Define patent index.
         pat_ix{ix_week, 1} = patent_number;
         pat_ix{ix_week, 2} = ix_find;
         pat_ix{ix_week, 3} = trunc_tech_class;
         pat_ix{ix_week, 4} = fdate;
-        
+
         
         % Close file again. It can cause errors if you open too many
         % (around 512) files at once.
         fclose(unique_file_identifier);
 
-        check_open_files
+        check_open_files()
         
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
     
     % Save to .mat file
     % -------------------------------------------------------------------
-    save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('patent_index', save_name);
-    save(matfile_path_save, 'pat_ix');    
-    fprintf('Saved: %s.\n', save_name)
+    save_patix2mat(pat_ix, ix_year)
     
-    year_loop_time = toc;
-    disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds (%d minutes)\n', ...
-        ix_year, round(year_loop_time), round(year_loop_time/60))
-    disp('---------------------------------------------------------------')
-    
+    print_finish_summary(toc, ix_year)
 end
-

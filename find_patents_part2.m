@@ -5,13 +5,12 @@ clc
 
 
 %% Set some inputs
-year_start = 2003;
-year_end = 2003;
+year_start = 2002;
+year_end = 2002;
 
 
 
-%% Go
-% ========================================================================
+%%
 for ix_year = year_start:year_end
     tic 
 
@@ -19,7 +18,7 @@ for ix_year = year_start:year_end
 
     % Determine if there are 52 or 53 weeks in year
     week_end = set_weekend(ix_year); 
-
+    week_end = 2
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
     addpath(build_data_path);
@@ -33,9 +32,7 @@ for ix_year = year_start:year_end
 
     filenames = ifmac_truncate_more(filenames);
     
-    if length(week_start:week_end) ~= length(filenames)
-        warning('Should be same number of years as weeks.')
-    end
+    check_filenames_format(filenames, ix_year, week_start, week_end)
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
@@ -57,10 +54,8 @@ for ix_year = year_start:year_end
 
 
         % Look for patents
-        find_str = '<B110><DNUM><PDAT>';
-        indic_find = regexp(search_corpus, find_str);
-        indic_find = ~cellfun(@isempty,indic_find); % make logical array
-
+        find_str = '<?xml version="1.0" encoding="UTF-8"?>';
+        indic_find = strcmp(search_corpus, find_str);
         ix_find = find(indic_find);
 
         if length(ix_find) ~= length(unique(ix_find))
@@ -74,10 +69,19 @@ for ix_year = year_start:year_end
                 nr_patents)
         end 
 
+        pnr_find_str = '<B110><DNUM><PDAT>';
+        indic_class_pnr = regexp(search_corpus, pnr_find_str);
+        indic_class_pnr = ~cellfun(@isempty, indic_class_pnr); % make logical array
+        ix_pnr = find( indic_class_pnr );
+        
+        if not( nr_patents == length(ix_pnr))
+            warning('Number of patents should when searching for both terms.')
+        end
+        
         patent_number = repmat({''}, nr_patents, 1);
-
+        
         for i=1:nr_patents
-            patent_nr_line = search_corpus(ix_find(i), :);
+            patent_nr_line = search_corpus(ix_pnr(i), :);
             patent_nr_line = patent_nr_line{1};
             patent_nr_end = regexp(patent_nr_line, '</PDAT>'); 
             patent_number{i} = patent_nr_line(19:patent_nr_end-1);
@@ -87,7 +91,6 @@ for ix_year = year_start:year_end
             end
         end
 
-
         % Test if there are any spaces in WKU numbers
         test_contains_space = strfind(patent_number, ' ');
         show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
@@ -96,7 +99,6 @@ for ix_year = year_start:year_end
             disp(patent_number(show_ix_contains_space))
         end
 
-
         % Test if all WKU numbers are 8 digits long
         test_is9long = cellfun(@length, patent_number);
         test_vector_nines = repmat(8, nr_patents, 1); % don't do this every time
@@ -104,12 +106,10 @@ for ix_year = year_start:year_end
             warning('Not all patent WKU numbers are 8s characters long')
         end
 
-
         % Test number of WKU numbers equal number of index positions
         if length(patent_number) ~= length(ix_find)
             warning('Should be the same.')
         end   
-
         
         
         % Look up OCL (tech classification)
@@ -156,17 +156,15 @@ for ix_year = year_start:year_end
                 trunc_tech_class{i} = pick(1:3);
             else
                 trunc_tech_class{i} = pick;
-                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ix_year, i, pick)
+                fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ...
+                    ix_year, i, pick)
             end
         end
         
         % Look up filing date
         fdate = lookup_fdate(search_corpus);
             
-        % Define patent index. It consists of the patent's WKU number, its
-        % index position in the file and its tech classification. Save 
-        % information for each week in a cell array.
-        % -------------------------------------------------------------------
+        % Define patent index.
         pat_ix{ix_week, 1} = patent_number;
         pat_ix{ix_week, 2} = ix_find;
         pat_ix{ix_week, 3} = trunc_tech_class;
@@ -177,22 +175,14 @@ for ix_year = year_start:year_end
         % (around 512) files at once.
         fclose(unique_file_identifier);
 
-        check_open_files
+        check_open_files()
         
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
 
     % Save to .mat file
     % -------------------------------------------------------------------
-    save_name = horzcat('patent_index_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('patent_index', save_name);
-    save(matfile_path_save, 'pat_ix');    
-    fprintf('Saved: %s.\n', save_name)
+    save_patix2mat(pat_ix, ix_year)
     
-    year_loop_time = toc;
-    disp('---------------------------------------------------------------')
-    fprintf('Year %d finished, time: %d seconds (%d minutes).\n', ...
-        ix_year, round(year_loop_time), round(year_loop_time/60))
-    disp('---------------------------------------------------------------')
+    print_finish_summary(toc, ix_year)
 end
-

@@ -2,14 +2,9 @@ close all
 clear all
 clc
 
-fclose('all');
-
-
 
 %% Define dictionary to search for
-find_dictionary = {'automat', 'robot', ...
-    'movable arm', 'algorithm', 'software', ...
-    'autonomous', 'adaptive'}
+find_dictionary = define_dictionary();
 patent_keyword_appear.dictionary = find_dictionary;
 
 

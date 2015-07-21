@@ -1,21 +1,29 @@
 close all
 clear all
+clc
 
+
+%% Define dictionary to search for
+find_dictionary = define_dictionary();
+patent_keyword_appear.dictionary = find_dictionary;
 
 
 %% Set some inputs
+year_start = 2002;
+year_end = 2004;
 
-% Define keyword to look for
-find_str = 'automat'; 
-
-year_start = 2003;
-year_end = 2003;
+nr_lines4previouspatent = 1; 
 
 
-
-%% Go
+%% Loop through: 1. year, 2. weekly files, 3. patent texts
 % ========================================================================
 for ix_year = year_start:year_end
+    
+    % Initalize
+    patent_metadata = []; 
+    nr_keyword_appear = []; 
+    save_line_keywordNAM = [];  
+    
     tic
 
     week_start = 1;
@@ -24,8 +32,7 @@ for ix_year = year_start:year_end
     week_end = set_weekend(ix_year); 
 
     % Build path to data
-    build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
-        num2str(ix_year));
+    build_data_path = set_data_path(ix_year);
     addpath(build_data_path);
 
 
@@ -35,9 +42,9 @@ for ix_year = year_start:year_end
     filenames = {liststruct.name};
     filenames = filenames(3:end)'; % truncate first elements . and ..
 
-    if length(week_start:week_end) ~= length(filenames)
-        warning('Should be same number of years as weeks.')
-    end
+    filenames = ifmac_truncate_more(filenames);
+    
+    check_filenames_format(filenames, ix_year, week_start, week_end)
     
     % Load patent_index for year
     % -------------------------------------------------------------------

@@ -34,9 +34,7 @@ for ix_year = year_start:year_end
 
     filenames = ifmac_truncate_more(filenames);
 
-    if length(week_start:week_end) ~= length(filenames)
-        warning('Should be same number of years as weeks.')
-    end
+    check_filenames_format(filenames, ix_year, week_start, week_end)
     
     % Iterate through files of weekly patent grant text data
     % -------------------------------------------------------------------
