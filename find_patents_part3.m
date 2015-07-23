@@ -51,23 +51,30 @@ for ix_year = year_start:year_end
 
 
         % Look for patents
-        find_str = '<us-patent-grant lang=';
-        indic_find = regexp(search_corpus, find_str);
-        indic_find = ~cellfun(@isempty,indic_find); % make logical array
-
+        find_str = '<?xml version="1.0" encoding="UTF-8"?>';
+        indic_find = strcmp(search_corpus, find_str);
         ix_find = find(indic_find);
 
-        if length(ix_find) ~= length(unique(ix_find))
+        nr_patents = length(ix_find);
+        
+        if nr_patents ~= length(unique(ix_find))
             warning('Elements in ix_find should all be different.')
         end
-
-        nr_patents = length(ix_find);
 
         if nr_patents < 100
             warning('The number of patents (= %d) is implausibly small', ...
                 nr_patents)
         end 
 
+        pnr_find_str = '<us-patent-grant lang=';
+        indic_class_pnr = regexp(search_corpus, pnr_find_str);
+        indic_class_pnr = ~cellfun(@isempty, indic_class_pnr); % make logical array
+        ix_pnr = find( indic_class_pnr );
+        
+        if not( nr_patents == length(ix_pnr))
+            warning('Number of patents should when searching for both terms.')
+        end        
+        
         patent_number = repmat({''}, nr_patents, 1);
 
         for i=1:nr_patents

@@ -1,11 +1,10 @@
 close all
 clear all
-clc
 
 
 %% Set some inputs
 year_start = 2002;
-year_end = 2002;
+year_end = 2004;
 
 
 %%
@@ -54,12 +53,12 @@ for ix_year = year_start:year_end
         find_str = '<?xml version="1.0" encoding="UTF-8"?>';
         indic_find = strcmp(search_corpus, find_str);
         ix_find = find(indic_find);
+        
+        nr_patents = length(ix_find);
 
-        if length(ix_find) ~= length(unique(ix_find))
+        if nr_patents ~= length(unique(ix_find))
             warning('Elements in ix_find should all be different.')
         end
-
-        nr_patents = length(ix_find);
 
         if nr_patents < 100
             warning('The number of patents (= %d) is implausibly small', ...

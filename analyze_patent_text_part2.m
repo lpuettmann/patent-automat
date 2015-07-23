@@ -1,6 +1,5 @@
 close all
 clear all
-clc
 
 
 %% Define dictionary to search for

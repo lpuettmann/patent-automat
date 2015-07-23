@@ -3,11 +3,9 @@ clear all
 clc
 
 
-
 %% Set some inputs
 year_start = 1976;
 year_end = 2001;
-
 
 
 %%
