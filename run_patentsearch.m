@@ -8,15 +8,16 @@ fclose('all');
 % Set paths to all underlying directories
 setup_path
 
+
 %% Make patent index
-year_start = 2001;
-year_end = 2002;
+year_start = 2005;
+year_end = 2005;
 
 for ix_year = year_start:year_end
     tic
-    
+ 
     % Search for keywords in the patent grant texts
-    patix = find_patents_part(ix_year);
+    pat_ix = make_patent_index(ix_year);
     
     % Print how long the year took
     print_finish_summary(toc, ix_year)
@@ -26,10 +27,9 @@ for ix_year = year_start:year_end
 end
 
 break
-
 %% Search for keywords
 year_start = 1976;
-year_end = 2001;
+year_end = 2004;
 
 for ix_year = year_start:year_end
     tic
@@ -44,5 +44,5 @@ for ix_year = year_start:year_end
     print_finish_summary(toc, ix_year)
     
     % Save to .mat file
-    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+%     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end

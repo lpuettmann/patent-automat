@@ -1,25 +1,34 @@
-function patix = find_patents_part(ix_year)
+function pat_ix = make_patent_index(ix_year)
 
 % Customize some settings for different file types
-if ix_year < 2002
+if (ix_year < 2002) && (ix_year > 1975)
     indic_filetype = 1;
+    nr_trunc = 4;
     patent_findstr = 'PATN';
+    nr_lines4previouspatent = 1;
+    class_nr_findstr = 'OCL';
     
 elseif (ix_year >=2002) && (ix_year < 2005)
     indic_filetype = 2;
     patent_findstr = '<?xml version="1.0" encoding="UTF-8"?>';
+    pnr_find_str = '<B110><DNUM><PDAT>';
+    class_nr_findstr = '<B521><PDAT>';
     
-elseif ix_year >=2005
+elseif (ix_year >=2005) && (ix_year < 2016)
     indic_filetype = 3;
-    error('Not written yet for years 2005+.')
+    patent_findstr = '<!DOCTYPE us-patent-grant';
+    pnr_find_str = '<us-patent-grant lang=';
+    nr_lines4previouspatent = 1;
+    class_nr_findstr = '<classification-national>';
+    
+else
+    warning('The codes are not designed for year: %d.', ix_year)
 end
 
 week_start = 1;
 
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
-
-week_end = 2;
 
 build_data_path = set_data_path(ix_year);
 addpath(build_data_path);
@@ -33,6 +42,7 @@ filenames = filenames(3:end)'; % truncate first elements . and ..
 
 filenames = ifmac_truncate_more(filenames);
 check_filenames_format(filenames, ix_year, week_start, week_end)
+
 
 % Iterate through files of weekly patent grant text data
 % -------------------------------------------------------------------
@@ -57,21 +67,27 @@ for ix_week = week_start:week_end
     % ----------------------------------------------------------------
     switch indic_filetype
         case 1
-            nr_trunc = 4;
             [indic_find, nr_patents, ix_find] = special_cases_part1(...
-                search_corpus, patent_findstr, nr_trunc)
+                search_corpus, patent_findstr, nr_trunc, ix_year, ix_week);
         
         case 2
             indic_find = strcmp(search_corpus, patent_findstr);
             ix_find = find(indic_find);
             nr_patents = length(ix_find);
-        
+            
         case 3
-            error('Not written yet for years 2005+.')
+            indic_find = regexp(search_corpus, patent_findstr);             
+            emptyIndex = cellfun(@isempty, indic_find);
+            indic_find(emptyIndex) = {0};
+            indic_find = cell2mat(indic_find);
+            % Subtract 1, as the patent text starts one line before the
+            % phrase we're looking for here.
+            ix_find = find(indic_find) - 1;
+            nr_patents = length(ix_find);  
     end
         
 
-    if nr_patents ~= length(unique(ix_find))
+    if nr_patents ~= length( unique(ix_find) )
         warning('Elements in ix_find should all be different.')
     end
 
@@ -80,26 +96,26 @@ for ix_week = week_start:week_end
             nr_patents)
     end    
 
-    % Get the lines on which the patent number is
+    % Get the lines with the patent numbers
     switch indic_filetype
         case 1
             % For the first filetype 1976-2015, the patent number always
             % appears one below where the new patent grant texts starts.
             ix_pnr = ix_find + 1; 
-        case 2
-            pnr_find_str = '<B110><DNUM><PDAT>';
+            
+        case {2, 3}
             indic_class_pnr = regexp(search_corpus, pnr_find_str);
             indic_class_pnr = ~cellfun(@isempty, indic_class_pnr); % make logical array
             ix_pnr = find( indic_class_pnr );
     end
     
-            
-    if not( nr_patents == length(ix_pnr))
-        warning('Number of patents should when searching for both terms.')
+    if not( nr_patents == length(ix_pnr) )
+        warning('Number of patents should be equal when searching for both terms.')
     end
-        
-        
     
+    if not( length(indic_class_pnr) == size(search_corpus, 1))
+        warning('Should be equal.')
+    end
     
     % Pre-define empty cell array to hold patent numbers
     patent_number = repmat({''}, nr_patents, 1);
@@ -120,15 +136,22 @@ for ix_week = week_start:week_end
                 else % default standard case, no line between PATN and WKU
                     patent_number{i} = patent_nr_line(6:14);
                 end
+                
             case 2
                 patent_nr_end = regexp(patent_nr_line, '</PDAT>'); 
                 patent_number{i} = patent_nr_line(19:patent_nr_end-1);
+                
+            case 3
+                patent_nr_start = regexp(patent_nr_line, 'file="US');
+                patent_nr_trunc = patent_nr_line(patent_nr_start+8:end); % WATCH OUT: 8 is hard-coded
+                patent_nr_end = regexp(patent_nr_trunc, '-'); 
+                patent_nr_end = patent_nr_end(1);
+                patent_number{i} = patent_nr_trunc(1:patent_nr_end-1);
         end
         
         if numel(patent_number) < 2
             warning('There seems something wrong with the patent number.')
         end
-            
     end
     
     % Test if there are any spaces in WKU numbers
@@ -149,8 +172,8 @@ for ix_week = week_start:week_end
                 patent_number(show_ix_contains_space) = [];
                 ix_find(show_ix_contains_space) = [];
                 nr_patents = nr_patents - 1;
-            elseif ix_year == 2001 && (ix_week == 10 | ix_week == 26 ...
-                    | ix_week == 40 | ix_week==52) 
+            elseif ix_year == 2001 && (ix_week == 10 || ix_week == 26 ...
+                    || ix_week == 40 || ix_week==52) 
                 fprintf('Delete patent number %d.\n', ...
                     show_ix_contains_space)
                 patent_number(show_ix_contains_space) = [];
@@ -173,10 +196,8 @@ for ix_week = week_start:week_end
     
     switch indic_filetype
         case 2
-            % Look up OCL (tech classification)
-            % ------------------------------------------------------------
-            find_class_str = '<B521><PDAT>';
-            indic_class_find = regexp(search_corpus, find_class_str);
+            % Look up tech classification number
+            indic_class_find = regexp(search_corpus, class_nr_findstr);
             indic_class_find = ~cellfun(@isempty, indic_class_find); % make logical array
             ix_class_find = find(indic_class_find);
 
@@ -191,7 +212,7 @@ for ix_week = week_start:week_end
             end
 
             if nr_class < 100
-                warning(['Number of classifications (= %d) is implausibly small'], ...
+                warning('Number of classifications (= %d) is implausibly small', ...
                     nr_class)
             end 
     end
@@ -201,7 +222,7 @@ for ix_week = week_start:week_end
     trunc_tech_class = repmat({''}, nr_patents, 1);
 
     switch indic_filetype
-        case 1
+        case {1, 3}
            fdate = repmat({''}, nr_patents, 1); % save filing date
 
                 for ix_patent=1:nr_patents
@@ -211,7 +232,8 @@ for ix_week = week_start:week_end
                     start_text_corpus = ix_find(ix_patent);
 
                     if ix_patent < nr_patents
-                        end_text_corpus = ix_find(ix_patent+1)-1;
+                        end_text_corpus = ix_find(ix_patent+1) - ...
+                            nr_lines4previouspatent;
                     else
                         end_text_corpus = length(search_corpus);
                     end
@@ -219,48 +241,87 @@ for ix_week = week_start:week_end
                     patent_text_corpus = search_corpus(...
                         start_text_corpus:end_text_corpus, :);
 
-                    lines_extracted = patent_text_corpus(3:20,:);
-                    ix_fdate = strfind(lines_extracted, 'APD');
-                    ix_fdate = find(~cellfun(@isempty, ix_fdate));
+                    switch indic_filetype
+                        case 1
+                            lines_extracted = patent_text_corpus(3:20,:);
+                            ix_fdate = strfind(lines_extracted, 'APD');
+                            ix_fdate = find(~cellfun(@isempty, ix_fdate));
 
-                    if isempty(ix_fdate)
-                        fprintf('APD (filing date) not found (%d, %d, %d).\n', ...
-                            ix_year, ix_week, ix_patent)
+                            if isempty(ix_fdate)
+                                fprintf('APD (filing date) not found (%d, %d, %d).\n', ...
+                                    ix_year, ix_week, ix_patent)
+                            end
+
+                            line_fdate = lines_extracted{ix_fdate,:};
+                            fdate_extract = line_fdate(6:11); % don't save the filing day
+                            
+                            % Look up OCL (tech classification)
+                            ix_find_OCL = strfind(patent_text_corpus, class_nr_findstr);
+                            all_OCL_matches = find(~cellfun(@isempty,ix_find_OCL));
+
+                            % only look at first OCL match
+                            row_OCL_class = patent_text_corpus{all_OCL_matches(1)}; 
+
+                            % extract tech class number from string
+                            class_number = row_OCL_class(6:numel(row_OCL_class));
+
+                            % get rid of leading and trailing whitespace
+                            class_number = strtrim(class_number);
+                            
+                        case 2
+                            warning('Should never be reached.')
+                            
+                        case 3
+                            % Search for technology classification number
+                            class_nr_findstr = '<classification-national>';
+                            indic_class_find = regexp(patent_text_corpus, class_nr_findstr);
+                            indic_class_find = ~cellfun(@isempty, indic_class_find); % make logical array
+                            ix_class_find = find(indic_class_find);
+
+                            % Two lines below the first appearance of the search string 
+                            % is where we find our tech classificiation
+                            class_nr_ix = ix_class_find(1) + 2;
+                            class_nr_line = patent_text_corpus(class_nr_ix, :);
+                            class_nr_line = class_nr_line{1};
+                            % Classificiations differ in length, so have to find end
+                            % where the classification stops.
+                            class_find_end = regexp(class_nr_line, '</main-classification>'); 
+                            class_number{ix_patent} = class_nr_line(22:class_find_end-1);
+                            
+                            % Look up filing date
+                            find_fdate_str1 = '</doc-number>';
+                            find_fdate_str2 = '<date>';
+
+                            indic_fdate_find1 = strfind(patent_text_corpus, find_fdate_str1);
+                            indic_fdate_find1 = ~cellfun(@isempty, indic_fdate_find1);
+                            ix_fdate_find1 = find(indic_fdate_find1);
+                            nextline = patent_text_corpus(ix_fdate_find1+1);
+
+                            indic_fdate_find = strfind(nextline, find_fdate_str2);
+                            indic_fdate_find = ~cellfun(@isempty, indic_fdate_find);
+                            ix_fdate_find = find(indic_fdate_find);
+                            extract_lines = nextline(ix_fdate_find);
+                            fdate_line = extract_lines{1}; % take the first occurence
+                            fdate_extract = fdate_line(7:12);
                     end
-
-                    line_fdate = lines_extracted{ix_fdate,:};
-                    fdate_extract = line_fdate(6:11); % don't save the filing day
-
+                    
                     check_fdate_formatting(fdate_extract, patent_number, ix_patent)          
 
                     % Stack information for all patents in a week under each other
-                    fdate{ix_patent} = fdate_extract;
-
-                    % Look up OCL (tech classification)
-                    % ------------------------------------------------------------
-                    ix_find_OCL = strfind(patent_text_corpus, 'OCL');
-                    all_OCL_matches = find(~cellfun(@isempty,ix_find_OCL));
-
-                    % only look at first OCL match
-                    row_OCL_class = patent_text_corpus{all_OCL_matches(1)}; 
-
-                    % extract tech class number from string
-                    patent_OCL_class = row_OCL_class(6:numel(row_OCL_class));
-
-                    % get rid of leading and trailing whitespace
-                    patent_OCL_class = strtrim(patent_OCL_class);
-
-                    % Stack weekly information underneath
-                    % only keep first 3 digits
-                    % ------------------------------------------------------------
-                    if numel(patent_OCL_class)>=3
-                        trunc_tech_class{ix_patent} = patent_OCL_class(1:3);
-                    else
-                        trunc_tech_class{ix_patent} = patent_OCL_class;
-                        fprintf('Patent %s has too short tech class: %s.\n', ...
-                            patent_number{ix_patent}, patent_OCL_class)
-                    end
+                    fdate{ix_patent} = fdate_extract; % not fdate{ix_patent,1} ???
                 end
+                
+                % Stack weekly information underneath
+                % only keep first 3 digits
+                % ------------------------------------------------------------
+                if numel(class_number)>=3
+                    trunc_tech_class{ix_patent} = class_number(1:3);
+                else
+                    trunc_tech_class{ix_patent} = class_number;
+                    fprintf('Patent %s has too short tech class: %s.\n', ...
+                        patent_number{ix_patent}, class_number)
+                end              
+                
         
         case 2
             for i=1:nr_class
@@ -286,6 +347,9 @@ for ix_week = week_start:week_end
                         ix_year, i, pick)
                 end
             end
+            
+            % Look up filing date
+            fdate = lookup_fdate(search_corpus);
     end
     
     % Define patent index.

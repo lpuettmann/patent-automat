@@ -1,6 +1,5 @@
 close all
 clear all
-clc
 
 
 %% Set some inputs
@@ -100,7 +99,6 @@ for ix_year = year_start:year_end
             disp(patent_number(show_ix_contains_space))
         end
 
-
         % Test if all WKU numbers are 8 digits long
         test_is9long = cellfun(@length, patent_number);
         test_vector_nines = repmat(8, nr_patents, 1); % don't do this every time
@@ -108,13 +106,11 @@ for ix_year = year_start:year_end
             warning('Not all patent WKU numbers are 9 characters long')
         end
 
-
         % Test number of WKU numbers equal number of index positions
         if length(patent_number) ~= length(ix_find)
             warning('Should be the same.')
         end   
-
-        
+       
         
         % To find patent technology classification, iterate through
         % patents.

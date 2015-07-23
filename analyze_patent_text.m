@@ -5,14 +5,20 @@ function patent_keyword_appear = analyze_patent_text(ix_year, ...
 patent_keyword_appear.dictionary = find_dictionary;
 
 % Customize some settings for different file types
-if ix_year < 2002
-
+if (ix_year < 2002) && (ix_year > 1975)
+    nr_lines4previouspatent = 1;
+    nan_sect_str = 'NAM';
     
-elseif (ix_year >=2002) & (ix_year < 2005)
-
+elseif (ix_year >=2002) && (ix_year < 2005)
+    nr_lines4previouspatent = 2;
+    nan_sect_str = '<NAM>';  
     
-elseif ix_year >=2005
+elseif (ix_year >=2005) && (ix_year < 2016)
+    nr_lines4previouspatent = 1;
     error('Not written yet for years 2005+.')
+    
+else
+    warning('The codes are not designed for year: %d.', ix_year)
 end
    
 % Initalize
