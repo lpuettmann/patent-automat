@@ -9,12 +9,11 @@ tic
 
 
 %%
-year_start = 1976;
-year_end = 2001;
+year_start = 2002;
+year_end = 2004;
 
 
 %%
-
 for ix_year = year_start:year_end
 
     % Load matches
@@ -166,5 +165,3 @@ for ix_year = year_start:year_end
 end
 
 toc
-disp('Finished.')
-
