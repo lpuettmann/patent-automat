@@ -1,6 +1,5 @@
 close all
 clear all
-clc
 
 
 %% Set some inputs
@@ -47,12 +46,8 @@ for ix_year = year_start:year_end
 
         open_file_aux = textscan(unique_file_identifier, '%s', ...
             'delimiter', '\n');
-        file_str = open_file_aux{1,1};
-
-
-        % Define new search corpus as we might change some things about this
-        search_corpus = file_str; 
-        
+        search_corpus = open_file_aux{1,1};
+       
 
         % Count number of patents in a given week
         % ----------------------------------------------------------------
@@ -255,8 +250,7 @@ for ix_year = year_start:year_end
         fprintf('Week finished: %d/%d.\n', ix_week, week_end)
     end
     
-    % Save to .mat file
-    save_patix2mat(pat_ix, ix_year)
+
     
     print_finish_summary(toc, ix_year)
 end

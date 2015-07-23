@@ -1,6 +1,5 @@
 close all
 clear all
-clc
 
 
 %% Define dictionary to search for
@@ -24,13 +23,13 @@ for ix_year = year_start:year_end
     nr_keyword_appear = []; 
     save_line_keywordNAM = [];  
     
-    tic
+
 
     week_start = 1;
 
     % Determine if there are 52 or 53 weeks in year 
     week_end = set_weekend(ix_year); 
-    week_end = 2
+
     % Build path to data
     build_data_path = set_data_path(ix_year);
     addpath(build_data_path);
@@ -76,11 +75,7 @@ for ix_year = year_start:year_end
 
         open_file_aux = textscan(unique_file_identifier, '%s', ...
             'delimiter', '\n');
-        file_str = open_file_aux{1,1};
-
-
-        % Define new search corpus as we might change some things about this
-        search_corpus = file_str; 
+        search_corpus = open_file_aux{1,1};
              
         
         % Extract patent text
@@ -191,6 +186,4 @@ for ix_year = year_start:year_end
     
     % Save to .mat file
     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
-        
-    print_finish_summary(toc, ix_year)
 end

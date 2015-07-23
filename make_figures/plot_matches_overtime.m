@@ -32,8 +32,8 @@ find_dictionary = {'automat', 'robot', ...
 
 nr_worddict = size(allyr_patstats.total_matches_week, 2);
 
-color1_pick = [0.7900, 0.3800, 0.500]; % red
-% color1_pick = [0.3, 0.3, 0.3]; % dark gray
+% color1_pick = [0.7900, 0.3800, 0.500]; % red
+color1_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
 

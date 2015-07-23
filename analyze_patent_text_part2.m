@@ -88,7 +88,7 @@ for ix_year = year_start:year_end
         classification_nr = pat_ix{ix_week, 3};
 
         % Column for (OCL) technology classifications
-        weekly_metadata(:,3) = classification_nr; 
+        weekly_metadata(:,2) = classification_nr; 
 
         % Insert the current week for later reference
         weekly_metadata = [weekly_metadata, ...
