@@ -235,7 +235,7 @@ for ix_week = week_start:week_end
                 % Stack weekly information underneath
                 % only keep first 3 digits
                 % ------------------------------------------------------------
-                if numel(class_number)>=3
+                if numel(class_number(:))>=3
                     trunc_tech_class{ix_patent} = class_number(1:3);
                 else
                     trunc_tech_class{ix_patent} = class_number;
