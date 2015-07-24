@@ -248,7 +248,7 @@ for ix_week = week_start:week_end
             for i=1:nr_class
                 class_nr_line = search_corpus(ix_class_find(i), :);
                 class_nr_line = class_nr_line{1};
-                % Classificiations differ in length, so have to find end
+                % Classifications differ in length, so have to find end
                 % where the classification stops.
                 class_find_end = regexp(class_nr_line, '</PDAT>'); 
                 class_number{i} = class_nr_line(13:class_find_end-1);

@@ -87,21 +87,15 @@ for ix_week = week_start:week_end
     % Extract patent text
     % ----------------------------------------------------------------
     weekly_metadata = patent_number;
-
-    % Get empty cells next to the WKU patent numbers. 
-    weekly_metadata{1,2} = []; % column for keyword matches
-
-    classification_nr = pat_ix{ix_week, 3};
-
-    % Column for (OCL) technology classifications
-    weekly_metadata(:,3) = classification_nr; 
+    
+    % Column for technology classification numbers
+    weekly_metadata(:, 2) = pat_ix{ix_week, 3};
 
     % Insert the current week for later reference
-    weekly_metadata = [weekly_metadata, ...
-        num2cell(repmat(ix_week, nr_patents, 1))];
+    weekly_metadata = [weekly_metadata, num2cell(repmat(ix_week, nr_patents, 1))];
 
     % Initialize matrix to count number of keyword appearances
-    weekly_keyword_appear = zeros(nr_patents,length(find_dictionary));
+    weekly_keyword_appear = zeros(nr_patents, length(find_dictionary));
 
     for ix_patent=1:nr_patents
 
@@ -148,7 +142,6 @@ for ix_week = week_start:week_end
                 end_text_corpus) - sum(indic_NAM))
             warning('Should be equal.')
         end
-
 
         for f=1:length(find_dictionary)
             find_str = find_dictionary{f};
