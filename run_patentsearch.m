@@ -10,8 +10,8 @@ setup_path
 
 
 %% Make patent index
-year_start = 2005;
-year_end = 2005;
+year_start = 2014;
+year_end = 2014;
 
 for ix_year = year_start:year_end
     tic

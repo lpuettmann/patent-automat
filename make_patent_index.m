@@ -70,10 +70,7 @@ for ix_week = week_start:week_end
     
     % Get the lines with the patent numbers
     ix_pnr = get_patent_number_line(ix_find, search_corpus, ftset, nr_patents);
-    
-    % Pre-define empty cell array to hold patent numbers
-    patent_number = repmat({''}, nr_patents, 1);
-    
+        
     % Extract patent numbers
     patent_number = extract_patent_number(nr_patents, search_corpus, ...
         ix_pnr, ftset);
@@ -107,9 +104,9 @@ for ix_week = week_start:week_end
     end
         
     % Test if all WKU numbers are 9 digits long
-    test_is9long = cellfun(@length, patent_number);
+    pnr_len = cellfun(@length, patent_number);
     test_vector_nines = repmat(9, nr_patents, 1); % don't do this every time
-    if min(test_is9long == test_vector_nines) < 1
+    if min(pnr_len == test_vector_nines) < 1
         warning('Not all patent WKU numbers are 9 characters long')
     end
 
@@ -193,7 +190,7 @@ for ix_week = week_start:week_end
                             class_number = strtrim(class_number);
                             
                         case 2
-                            warning('Should never be reached.')
+                            error('Should never be reached.')
                             
                         case 3
                             % Search for technology classification number
