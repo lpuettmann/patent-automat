@@ -10,12 +10,14 @@ switch ftset.indic_filetype
         indic_class_pnr = regexp(search_corpus, ftset.pnr_find_str);
         indic_class_pnr = ~cellfun(@isempty, indic_class_pnr); % make logical array
         ix_pnr = find( indic_class_pnr );
+        
+        if not( length(indic_class_pnr) == size(search_corpus, 1))
+            warning('Should be equal.')
+        end
 end
 
 if not( nr_patents == length(ix_pnr) )
     warning('Number of patents should be equal when searching for both terms.')
 end
 
-if not( length(indic_class_pnr) == size(search_corpus, 1))
-    warning('Should be equal.')
-end
+

@@ -28,7 +28,7 @@ for ix_year = year_start:year_end
     save_patix2mat(pat_ix, ix_year)
 end
 
-break
+
 %% Search for keywords
 for ix_year = year_start:year_end
     tic
