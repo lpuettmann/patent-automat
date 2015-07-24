@@ -18,7 +18,7 @@ elseif (ix_year >=2002) && (ix_year < 2005)
 elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.indic_filetype = 3;
     ftset.nr_lines4previouspatent = 1;
-
+    ftset.nan_sect_str = {'<name>', '<first-name>', '<last-name>'};  
     
 else
     warning('The codes are not designed for year: %d.', ix_year)
@@ -35,7 +35,7 @@ week_start = 1;
 
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
-
+week_end = 1
 % Build path to data
 build_data_path = set_data_path(ix_year);
 addpath(build_data_path);
@@ -110,7 +110,8 @@ for ix_week = week_start:week_end
         start_text_corpus = ix_find(ix_patent);
 
         if ix_patent < nr_patents
-            end_text_corpus = ix_find(ix_patent+1) - ftset.nr_lines4previouspatent; 
+            end_text_corpus = ix_find(ix_patent+1) - ...
+                ftset.nr_lines4previouspatent; 
         else
             end_text_corpus = length(search_corpus);
         end

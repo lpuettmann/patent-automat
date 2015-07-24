@@ -29,7 +29,7 @@ week_start = 1;
 
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
-week_end = 1
+
 build_data_path = set_data_path(ix_year);
 addpath(build_data_path);
 

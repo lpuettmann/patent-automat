@@ -86,7 +86,6 @@ for ix_year = year_start:year_end
         % Column for OCL classifications
         nr_keyword_appear(:,3) = classification_nr; 
 
-
         % Insert the current week for later reference
         nr_keyword_appear = [nr_keyword_appear, ...
             num2cell(repmat(ix_week, nr_patents, 1))];

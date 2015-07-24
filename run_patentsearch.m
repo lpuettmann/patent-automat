@@ -15,18 +15,18 @@ year_end = 2014;
 
 
 %% Make patent index
-for ix_year = year_start:year_end
-    tic
- 
-    % Search for keywords in the patent grant texts
-    pat_ix = make_patent_index(ix_year);
-    
-    % Print how long the year took
-    print_finish_summary(toc, ix_year)
-    
-    % Save to .mat file
-    save_patix2mat(pat_ix, ix_year)
-end
+% for ix_year = year_start:year_end
+%     tic
+%  
+%     % Search for keywords in the patent grant texts
+%     pat_ix = make_patent_index(ix_year);
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+%     % Save to .mat file
+%     save_patix2mat(pat_ix, ix_year)
+% end
 
 
 %% Search for keywords
