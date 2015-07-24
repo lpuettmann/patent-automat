@@ -152,7 +152,8 @@ for ix_week = week_start:week_end
 
     for ix_patent=1:nr_patents
         fdatepick = fdate{ix_patent};
-        check_fdate_formatting(fdatepick, patent_number) 
+        patnrpick = patent_number{ix_patent};        
+        check_fdate_formatting(fdatepick, patnrpick) 
     end 
 
     % Define patent index.
