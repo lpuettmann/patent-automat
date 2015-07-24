@@ -1,4 +1,4 @@
-function fdate = lookup_fdate(search_corpus, ftset)
+function fdate = lookup_fdate(search_corpus, ftset, ix_find)
 % Look up filing date
 
 indic_fdate_find = regexp(search_corpus, ftset.fdate_findstr);
@@ -9,17 +9,14 @@ fdate = repmat({''}, length(ix_fdate_find), 1);
 
 switch ftset.indic_filetype
     case 1
-            lines_extracted = patent_text_corpus(3:20,:);
-            ix_fdate = strfind(lines_extracted, ftset.fdate_findstr);
-            ix_fdate = find(~cellfun(@isempty, ix_fdate));
-
-            if isempty(ix_fdate)
-                fprintf('Filing date (APD) not found (%d, %d, %d).\n', ...
-                    ix_year, ix_week, ix_patent)
-            end
-
-            line_fdate = lines_extracted{ix_fdate,:};
-            fdate_extract = line_fdate(6:11); % don't save the filing day
+        for i=1:nr_patents
+            patl = ix_find(i);
+            showLarger = find((patl < ix_fdate_find));
+            firstLarger = showLarger(1);
+            ix_fdate = ix_fdate_find(firstLarger);
+            line_fdate = search_corpus{ix_fdate, :};
+            fdate{i} = line_fdate(6:11); % don't save the filing day
+        end        
         
     case 2
         for i=1:length(ix_fdate_find)
