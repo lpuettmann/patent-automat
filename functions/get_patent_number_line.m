@@ -1,4 +1,4 @@
-function ix_pnr = get_patent_number_line(ix_find, search_corpus, ftset) 
+function ix_pnr = get_patent_number_line(ix_find, search_corpus, ftset, nr_patents) 
 
 switch ftset.indic_filetype
     case 1
@@ -8,11 +8,11 @@ switch ftset.indic_filetype
 
     case {2, 3}
         indic_class_pnr = regexp(search_corpus, ftset.pnr_find_str);
-        indic_class_pnr = ~cellfun(@isempty, ftset.indic_class_pnr); % make logical array
-        ix_pnr = find( ftset.indic_class_pnr );
+        indic_class_pnr = ~cellfun(@isempty, indic_class_pnr); % make logical array
+        ix_pnr = find( indic_class_pnr );
 end
 
-if not( length(ix_find) == length(ix_pnr) )
+if not( nr_patents == length(ix_pnr) )
     warning('Number of patents should be equal when searching for both terms.')
 end
 
