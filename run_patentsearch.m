@@ -9,10 +9,12 @@ fclose('all');
 setup_path
 
 
-%% Make patent index
+%% Choose years
 year_start = 2014;
 year_end = 2014;
 
+
+%% Make patent index
 for ix_year = year_start:year_end
     tic
  
@@ -23,14 +25,11 @@ for ix_year = year_start:year_end
     print_finish_summary(toc, ix_year)
     
     % Save to .mat file
-%     save_patix2mat(pat_ix, ix_year)
+    save_patix2mat(pat_ix, ix_year)
 end
 
-break
-%% Search for keywords
-year_start = 1976;
-year_end = 2004;
 
+%% Search for keywords
 for ix_year = year_start:year_end
     tic
     

@@ -6,16 +6,19 @@ patent_keyword_appear.dictionary = find_dictionary;
 
 % Customize some settings for different file types
 if (ix_year < 2002) && (ix_year > 1975)
-    nr_lines4previouspatent = 1;
-    nan_sect_str = 'NAM';
+    ftset.indic_filetype = 1;
+    ftset.nr_lines4previouspatent = 1;
+    ftset.nan_sect_str = 'NAM';
     
 elseif (ix_year >=2002) && (ix_year < 2005)
-    nr_lines4previouspatent = 2;
-    nan_sect_str = '<NAM>';  
+    ftset.indic_filetype = 2;
+    ftset.nr_lines4previouspatent = 2;
+    ftset.nan_sect_str = '<NAM>';  
     
 elseif (ix_year >=2005) && (ix_year < 2016)
-    nr_lines4previouspatent = 1;
-    error('Not written yet for years 2005+.')
+    ftset.indic_filetype = 3;
+    ftset.nr_lines4previouspatent = 1;
+
     
 else
     warning('The codes are not designed for year: %d.', ix_year)
@@ -107,7 +110,7 @@ for ix_week = week_start:week_end
         start_text_corpus = ix_find(ix_patent);
 
         if ix_patent < nr_patents
-            end_text_corpus = ix_find(ix_patent+1) - nr_lines4previouspatent; 
+            end_text_corpus = ix_find(ix_patent+1) - ftset.nr_lines4previouspatent; 
         else
             end_text_corpus = length(search_corpus);
         end
@@ -118,7 +121,7 @@ for ix_week = week_start:week_end
         % Delete name section (NAM) of inventor and of patent citations
         % ------------------------------------------------------------
         indic_NAM = count_nr_occur_trunccorpus(patent_text_corpus, ...
-            nan_sect_str);
+            ftset.nan_sect_str);
 
         nan_lines = patent_text_corpus(indic_NAM);
         check_NAMkeyword = regexpi(nan_lines, 'automat');
