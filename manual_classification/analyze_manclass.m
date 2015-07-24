@@ -39,7 +39,9 @@ for i=1:conttab.nr_alg
    
     if i==2
         % Delete those patents with technology numbers some industries
-        delete_technr = [430, % Radiation Imagery Chemistry
+        delete_technr = [423,
+                        424,
+                        430, % Radiation Imagery Chemistry
                          431, % Combustion
                          435, % Chemistry: Molecular Biology and Microbiology
                          514, % Drug, Bio-affecting and Body Treating Compositions
@@ -47,6 +49,7 @@ for i=1:conttab.nr_alg
                         % 600, % Surgery
                         % 606, % Surgery
                          800]; % Multicellar Living Organisms
+                         % also exlude all 530-588
 
         technr = manclassData.classnr;
         delete_pat_pos = find(ismember(technr, delete_technr));
