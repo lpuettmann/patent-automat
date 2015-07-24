@@ -1,9 +1,11 @@
-function [ix_find, nr_patents] = look4patents(search_corpus, ftset, ix_year, ix_week)
+function [ix_find, nr_patents] = look4patents(search_corpus, ftset, ...
+    ix_year, ix_week)
 
 switch ftset.indic_filetype
     case 1
         [indic_find, nr_patents, ix_find] = special_cases_part1(...
-            search_corpus, ftset.patent_findstr, ftset.nr_trunc, ix_year, ix_week);
+            search_corpus, ftset.patent_findstr, ftset.nr_trunc, ...
+            ix_year, ix_week);
 
     case 2
         indic_find = strcmp(search_corpus, ftset.patent_findstr);
