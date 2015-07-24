@@ -8,12 +8,12 @@ patent_keyword_appear.dictionary = find_dictionary;
 if (ix_year < 2002) && (ix_year > 1975)
     ftset.indic_filetype = 1;
     ftset.nr_lines4previouspatent = 1;
-    ftset.nan_sect_str = 'NAM';
+    ftset.nan_sect_str = {'NAM'}; % curly brackets are important
     
 elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.indic_filetype = 2;
     ftset.nr_lines4previouspatent = 2;
-    ftset.nan_sect_str = '<NAM>';  
+    ftset.nan_sect_str = {'<NAM>'}; % curly brackets are important
     
 elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.indic_filetype = 3;
@@ -35,7 +35,7 @@ week_start = 1;
 
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
-week_end = 1
+
 % Build path to data
 build_data_path = set_data_path(ix_year);
 addpath(build_data_path);
@@ -92,7 +92,8 @@ for ix_week = week_start:week_end
     weekly_metadata(:, 2) = pat_ix{ix_week, 3};
 
     % Insert the current week for later reference
-    weekly_metadata = [weekly_metadata, num2cell(repmat(ix_week, nr_patents, 1))];
+    weekly_metadata = [weekly_metadata, num2cell(repmat(ix_week, ...
+        nr_patents, 1))];
 
     % Initialize matrix to count number of keyword appearances
     weekly_keyword_appear = zeros(nr_patents, length(find_dictionary));
@@ -128,11 +129,6 @@ for ix_week = week_start:week_end
         end
 
         patent_text_corpus(indic_NAM) = []; % delete NAM lines
-
-        if size(patent_text_corpus) ~= (length(start_text_corpus:...
-                end_text_corpus) - sum(indic_NAM))
-            warning('Should be equal.')
-        end
 
         for f=1:length(find_dictionary)
             find_str = find_dictionary{f};

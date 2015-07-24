@@ -1,7 +1,9 @@
 function indic_find = count_nr_occur_trunccorpus(corpus, searchdict)
 
 for i=1:length(searchdict)
+    
     searchphrase = searchdict{i};
+   
     nr_trunc = numel(searchphrase);
 
     corpus_trunc = corpus;

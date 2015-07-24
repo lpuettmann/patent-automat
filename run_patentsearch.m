@@ -10,12 +10,13 @@ setup_path
 
 
 %% Choose years
-year_start = 2014;
-year_end = 2014;
+year_start = 1976;
+year_end = 2015;
+yearperiod = year_start:year_end;
 
 
 %% Make patent index
-for ix_year = year_start:year_end
+for ix_year = yearperiod
     tic
  
     % Search for keywords in the patent grant texts
@@ -28,20 +29,23 @@ for ix_year = year_start:year_end
     save_patix2mat(pat_ix, ix_year)
 end
 
+disp(' ')
+disp('=================================================================')
+
 
 %% Search for keywords
-for ix_year = year_start:year_end
+for ix_year = yearperiod
     tic
     
     % Define dictionary to search for
     find_dictionary = define_dictionary();
     
     % Search for keywords in the patent grant texts
-    analyze_patent_text(ix_year, find_dictionary);
+    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
     
     % Print how long the year took
     print_finish_summary(toc, ix_year)
     
     % Save to .mat file
-%     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end
