@@ -12,7 +12,7 @@ for i=1:nr_patents
             if numel(patent_nr_line) < 2
                  fprintf('~~~ Correct for empty string after patent number %d/%d\n', ...
                      i, nr_patents)
-                 patent_nr_line = search_corpus(ix_pnr + 1, :); % jump over empty line
+                 patent_nr_line = search_corpus(ix_pnr(i) + 1, :); % jump over empty line
                  patent_nr_line = patent_nr_line{1};
                  patent_number{i} = patent_nr_line(6:14);
             else % default standard case, no line between PATN and WKU
