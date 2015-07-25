@@ -64,7 +64,7 @@ for i=1:length(cleaned_patent_tech_class)
         trunc_tech_class{i} = pick(1:3);
     else
         trunc_tech_class{i} = pick;
-        fprintf('Patent in year %d with index %d has too short tech class: %s.\n', ...
-            ix_year, i, pick)
+        fprintf('Patent with index %d has too short tech class: %s.\n', ...
+            i, pick)
     end
 end
