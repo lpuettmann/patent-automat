@@ -1,16 +1,5 @@
-close all
-clear all
-clc
+function transfer_cleaned_matches2csv(year_start, year_end)
 
-
-
-%%
-year_start = 1976;
-year_end = 2015;
-
-
-
-%%
 patsearch_allyears = []; % initialize
 
 for ix_year = year_start:year_end
@@ -76,7 +65,6 @@ tic
 save(horzcat('patsearch_allyears', '.mat'), 'patsearch_allyears');
 time_file_write = toc;
 fprintf('Save file (%3.2fs): %s.mat.\n', time_file_write, save_name)
-
 
 
 % Transfer results to cell array to make use of cell2csv

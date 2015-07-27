@@ -1,14 +1,4 @@
-close all
-clear all
-clc
-
-
-
-% Define parameters
-year_start = 1976;
-year_end = 2001;
-
-
+function plot_matches_over_nrpatents_weekly(year_start, year_end)
 
 % Set font
 set(0,'DefaultTextFontName','Palatino')
@@ -32,18 +22,17 @@ color2_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806];
 my_dark_gray = [0.3, 0.3, 0.3];
 
+dim_subplot = [5, 4];
 
+if (dim_subplot(1)*dim_subplot(2)) < length(allyr_patstats.dictionary)
+    warning('Not enough subplots for all dictionary words.')
+end
 
 figureHandle = figure;
 
-
-find_dictionary = {'automat', 'robot', ...
-    'movable arm', 'labour efficien', 'algorithm', 'software', ...
-    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
-
 for k = 1:size(allyr_patstats.total_matches_week, 2)
 
-    subplot(4, 3, k)
+    subplot(dim_subplot(1), dim_subplot(2), k)
     
     % Calculate matches over number patents for each week
     plot_series = allyr_patstats.total_matches_week(:, k) ./ ...
@@ -53,7 +42,7 @@ for k = 1:size(allyr_patstats.total_matches_week, 2)
         plot_series, ...
         'Marker', 'o', 'MarkerEdgeColor', color2_pick);
     
-    title(find_dictionary(k));
+    title(allyr_patstats.dictionary(k));
         
     uistack(h_scatter, 'top');
     set(gca,'TickDir','out')  
@@ -85,7 +74,7 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('match_over_nrpatents_weekly_', num2str(year_start), '-',  num2str(year_end),'.pdf');
+print_pdf_name = horzcat('output/match_over_nrpatents_weekly_', num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
 hold off

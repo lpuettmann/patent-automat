@@ -10,8 +10,8 @@ setup_path
 
 
 %% Choose years
-year_start = 1984;
-year_end = 1984;
+year_start = 1976;
+year_end = 1997;
 yearperiod = year_start:year_end;
 
 
@@ -55,4 +55,15 @@ end
 clean_matches
 
 
-%
+%% Summarize matches
+summarize_matches
+
+
+%% Transfer matches to CSV (for use in Stata)
+transfer_cleaned_matches2csv
+
+
+%% Plot 
+plot_matches_overtime(year_start, year_end)
+plot_matches_over_nrpatents_weekly(year_start, year_end)
+

@@ -1,16 +1,9 @@
-close all
-clear all
-clc
+function plot_matches_overtime(year_start, year_end)
 
 
 %% Set font
 set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
-
-
-%% Define parameters
-year_start = 1976;
-year_end = 1997;
 
 
 %% Load summary data
@@ -24,33 +17,32 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
-
-
-find_dictionary = {'automat', 'robot', ...
-    'movable arm', 'labour efficien', 'algorithm', 'software', ...
-    'autonomous', 'adaptive', 'independent', 'continuous', 'responsive'};
-
 nr_worddict = size(allyr_patstats.total_matches_week, 2);
 
 % color1_pick = [0.7900, 0.3800, 0.500]; % red
 color1_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
+dim_subplot = [5, 4];
+
+if (dim_subplot(1)*dim_subplot(2)) < length(allyr_patstats.dictionary)
+    warning('Not enough subplots for all dictionary words.')
+end
 
 figureHandle = figure;
 
-set(gca,'FontSize',11) % change default font size of axis labels
+set(gca,'FontSize', 11) % change default font size of axis labels
 
 
 for k = 1:size(allyr_patstats.total_matches_week, 2)
 
-    subplot(4, 3, k)
+    subplot(dim_subplot(1), dim_subplot(2), k)
     plot_series = allyr_patstats.total_matches_week(:, k);
 
     scatter(1:length(plot_series), plot_series, ...
         'Marker', 'o', 'MarkerEdgeColor', color1_pick)
     
-    title(find_dictionary(k))
+    title(allyr_patstats.dictionary(k))
     
     xlim([1 length(plot_series)])
     set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
@@ -63,7 +55,6 @@ end
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-
 
 
 % Reposition the figure
@@ -79,5 +70,5 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('keyword_matches_weekly_', num2str(year_start), '-',  num2str(year_end),'.pdf');
+print_pdf_name = horzcat('output/keyword_matches_weekly_', num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')

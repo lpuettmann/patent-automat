@@ -116,13 +116,13 @@ allyr_patstats.dictionary = patsearch_results.dictionary;
 % ========================================================================
 save_name = horzcat('patsumstats_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
-matfile_path_save = fullfile('make_figures', save_name);
+matfile_path_save = fullfile('output', save_name);
 save(matfile_path_save, 'patsumstats')
 fprintf('Saved: %s.\n', save_name)
 
 save_name = horzcat('allyr_patstats_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
-matfile_path_save = fullfile('make_figures', save_name);
+matfile_path_save = fullfile('output', save_name);
 save(matfile_path_save, 'allyr_patstats')
 fprintf('Saved: %s.\n', save_name)
 
