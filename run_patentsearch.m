@@ -49,3 +49,10 @@ for ix_year = yearperiod
     % Save to .mat file
     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end
+
+
+%% Clean matches
+clean_matches
+
+
+%
