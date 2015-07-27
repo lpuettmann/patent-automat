@@ -12,11 +12,11 @@ setup_path
 %% Choose years
 year_start = 1976;
 year_end = 1997;
-yearperiod = year_start:year_end;
+years = year_start:year_end;
 
 
 %% Make patent index
-for ix_year = yearperiod
+for ix_year = years
     tic
  
     % Search for keywords in the patent grant texts
@@ -34,7 +34,7 @@ disp('=================================================================')
 
 
 %% Search for keywords
-for ix_year = yearperiod
+for ix_year = years
     tic
     
     % Define dictionary to search for
@@ -52,11 +52,11 @@ end
 
 
 %% Clean matches
-clean_matches
+clean_matches(year_start, year_end)
 
 
 %% Summarize matches
-summarize_matches
+summarize_matches(year_start, year_end)
 
 
 %% Transfer matches to CSV (for use in Stata)

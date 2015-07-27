@@ -1,21 +1,10 @@
-close all
-clear all
-clc
+function summarize_matches(year_start, year_end)
 
-tic
-
-
-
-%% Define parameters
-% ========================================================================
-year_start = 1976;
-year_end = 1997;
 nr_years = length(year_start:year_end);
 week_start = 1;
 
 
-%% Make some initializations
-% ========================================================================
+% Make initializations
 % Pre-define some vectors to initialize them for the loops
 allyr_patstats.total_matches_week = []; 
 
@@ -26,10 +15,6 @@ allyr_patstats.nr_patents_per_week = [];
 
 aux_ix_save = 1; % where to save data in vector
 
-
-
-%% Loop through data for all years
-% ========================================================================
 
 for ix_year=year_start:year_end
 
@@ -125,6 +110,5 @@ save_name = horzcat('allyr_patstats_', num2str(year_start), '-', ...
 matfile_path_save = fullfile('output', save_name);
 save(matfile_path_save, 'allyr_patstats')
 fprintf('Saved: %s.\n', save_name)
-
 
 toc

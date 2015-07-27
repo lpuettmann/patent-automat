@@ -1,19 +1,9 @@
+function clean_matches(year_start, year_end)
 % Take matches of keywords in patents and delete those with patent numbers
 % starting with a letter. Clean patent numbers.
 
-clc
-clear all
-close all
-
 tic
 
-
-%%
-year_start = 1976;
-year_end = 1997;
-
-
-%%
 for ix_year = year_start:year_end
 
     % Load matches
@@ -45,14 +35,13 @@ for ix_year = year_start:year_end
         warning('Should be equal.')
     end
         
-    
-    %% 
+
     fprintf('Average line length of patents: %3.1f.\n', mean(length_pattext))
     patclean_stats.yearmean_len_pattxt(ix_year - year_start + 1) = ...
         mean(length_pattext);
     
     
-    %% Find numbers starting with a letter
+    % Find numbers starting with a letter
     % Number of patents per ix_year
     nr_patents_yr = size(patent_keyword_appear.patentnr, 1);
 
@@ -75,7 +64,7 @@ for ix_year = year_start:year_end
     save_row_delete = save_row_delete';
     
     
-    %% Define new data structure to hold the results "patsearch_results"
+    % Define new data structure to hold the results "patsearch_results"
     patsearch_results = patent_keyword_appear;
     
     patsearch_results.length_pattext = length_pattext;
@@ -109,13 +98,12 @@ for ix_year = year_start:year_end
         length(save_row_delete)/nr_patents_yr;
     
 
-    %%
     fprintf('Patent numbers that start with a letter: %d/%d = %s percent.\n', ...
         length(save_row_delete), nr_patents_yr, ...
         num2str(length(save_row_delete)/nr_patents_yr*100))
   
     
-    %% Delete first (and last [for some]) letter of patent numbers
+    % Delete first (and last [for some]) letter of patent numbers
     patent_number_cleaned =  repmat({''}, size(patsearch_results.patentnr, ...
         1), 1);
     for ix_patent = 1:size(patsearch_results.patentnr, 1)
@@ -135,7 +123,7 @@ for ix_year = year_start:year_end
     patsearch_results.patentnr = patent_number_cleaned;
     
     
-    %% Clean technology classification (OCL) numbers
+    % Clean technology classification (OCL) numbers
     tech_class_nr = patsearch_results.classnr;
     tech_class_nr = strtrim(tech_class_nr); % remove leading and trailing whitespace
     tech_class_nr = strtok(tech_class_nr); % keep string until first whitespace
@@ -152,7 +140,7 @@ for ix_year = year_start:year_end
     patsearch_results.classnr = tech_class_nr;
     
 
-    %% Save
+    % Save
     save_name = horzcat('patsearch_results_', num2str(ix_year), '.mat');
     matfile_path_save = fullfile('cleaned_matches', save_name);
     save(matfile_path_save, 'patsearch_results');    
@@ -160,7 +148,7 @@ for ix_year = year_start:year_end
     disp('----------')
     
 
-    %% Clear variables from memory that could cause problems
+    % Clear variables from memory that could cause problems
     keep year_start year_end patclean_stats
 end
 
