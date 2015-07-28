@@ -8,20 +8,15 @@ for ix_year = year_start:year_end
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
 
-
     % Extract columns and prepare them
     % ---------------------------------------------------------------------
 
     % Patent numbers
-    patent_nr = patsearch_results(:, 1);
+    patent_nr = patsearch_results.patentnr;
     patent_nr = str2double(patent_nr);
 
-    % Keyword matches
-    nr_keyword_matches = patsearch_results(:, 2);
-    nr_keyword_matches = cell2mat(nr_keyword_matches);
-
     % Prepare tech class numbers
-    tech_class_nr = patsearch_results(:, 3);
+    tech_class_nr = patsearch_results.classnr;
     tech_class_nr = strtrim(tech_class_nr); % remove leading and trailing whitespace
     tech_class_nr = strtok(tech_class_nr); % keep string until first whitespace
 
@@ -36,16 +31,16 @@ for ix_year = year_start:year_end
     tech_class_nr = str2double(tech_class_nr);
 
     % Week patent was granted in
-    patent_week = cell2mat(patsearch_results(:, 4));
+    patent_week = cell2mat(patsearch_results.week);
 
     % Make new column of year patent was granted in
     % ---------------------------------------------------------------------
-    patent_year = repmat(ix_year, size(patsearch_results(:, 1),1), 1);
+    patent_year = repmat(ix_year, length(patent_nr), 1);
 
     % Save individual year data
     % ---------------------------------------------------------------------
-    patsearch_year = [patent_nr, nr_keyword_matches, tech_class_nr, ...
-        patent_week, patent_year];
+    patsearch_year = [patent_nr, patent_year, patent_week, ...
+        tech_class_nr, patsearch_results.matches];
     
     % Save all years underneath
     % ---------------------------------------------------------------------
@@ -62,7 +57,7 @@ save_name = 'patsearch_allyears';
 
 % Save to .mat file
 tic
-save(horzcat('patsearch_allyears', '.mat'), 'patsearch_allyears');
+save(horzcat('output/patsearch_allyears', '.mat'), 'patsearch_allyears');
 time_file_write = toc;
 fprintf('Save file (%3.2fs): %s.mat.\n', time_file_write, save_name)
 
@@ -72,7 +67,7 @@ patsearch_allyears = num2cell(patsearch_allyears);
 
 % Save to .csv file
 tic
-cell2csv(horzcat('patsearch_allyears', '.csv'), patsearch_allyears);
+cell2csv(horzcat('output/patsearch_allyears', '.csv'), patsearch_allyears);
 time_file_write = toc;
 fprintf('Save file (%3.2fs): %s.csv.\n', time_file_write, save_name)
 

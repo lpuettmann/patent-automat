@@ -208,6 +208,3 @@ save_name = horzcat('word_match_distr_', num2str(year_start), '-', ...
 save(save_name, 'word_match_distr', 'rest_matches', 'matches_notassigned');    
 fprintf('Saved: %s.\n', save_name)
 
-
-
-

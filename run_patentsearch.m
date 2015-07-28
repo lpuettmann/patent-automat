@@ -29,9 +29,6 @@ for ix_year = years
     save_patix2mat(pat_ix, ix_year)
 end
 
-disp(' ')
-disp('=================================================================')
-
 
 %% Search for keywords
 for ix_year = years
@@ -60,7 +57,7 @@ summarize_matches(year_start, year_end)
 
 
 %% Transfer matches to CSV (for use in Stata)
-transfer_cleaned_matches2csv
+transfer_cleaned_matches2csv(year_start, year_end)
 
 
 %% Plot 
