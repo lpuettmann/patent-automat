@@ -4,8 +4,11 @@ function clean_matches(year_start, year_end)
 
 tic
 
-for ix_year = year_start:year_end
+patclean_stats.weekmean_len_pattxt = [];
 
+for ix_year = year_start:year_end
+    ix_iter = ix_year - year_start + 1;
+    
     % Load matches
     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
     load(load_file_name)
@@ -26,6 +29,7 @@ for ix_year = year_start:year_end
     end
     
     length_pattext = [];
+    weekmean_len_pattxt = zeros(length(week_start:week_end), 1);
     
     for ix_week=week_start:week_end
         ix_find = pat_ix{ix_week, 2};
@@ -34,6 +38,7 @@ for ix_year = year_start:year_end
         % I didn't save the length of the weekly file, opening it again here would
         % take a long time)
         wly_lenpattext = [wly_lenpattext; round(mean(wly_lenpattext))];
+        weekmean_len_pattxt(ix_week) = mean(wly_lenpattext);
         length_pattext = [length_pattext; wly_lenpattext];
     end
     
@@ -41,12 +46,11 @@ for ix_year = year_start:year_end
         warning('Should be equal.')
     end
         
-
-    fprintf('Average line length of patents: %3.1f.\n', mean(length_pattext))
-    patclean_stats.yearmean_len_pattxt(ix_year - year_start + 1) = ...
-        mean(length_pattext);
-    
-    
+    patclean_stats.yearmean_len_pattxt(ix_iter) = mean(length_pattext);
+    patclean_stats.weekmean_len_pattxt = [...
+        patclean_stats.weekmean_len_pattxt;
+        weekmean_len_pattxt];
+           
     % Find numbers starting with a letter
     % Number of patents per ix_year
     nr_patents_yr = size(patent_keyword_appear.patentnr, 1);
@@ -98,16 +102,10 @@ for ix_year = year_start:year_end
     
     
     % Save some information on the deleted named patents
-    patclean_stats.patent_nr_letter(ix_year-year_start+1) = ...
-        length(save_row_delete);
-    patclean_stats.share_w_letter(ix_year-year_start+1) = ...
-        length(save_row_delete)/nr_patents_yr;
+    patclean_stats.patent_nr_letter(ix_iter) = length(save_row_delete);
+    patclean_stats.share_w_letter(ix_iter) = length(save_row_delete) / ...
+        nr_patents_yr;
     
-
-    fprintf('Patent numbers that start with a letter: %d/%d = %s percent.\n', ...
-        length(save_row_delete), nr_patents_yr, ...
-        num2str(length(save_row_delete)/nr_patents_yr*100))
-  
     
     % Delete first (and last [for some]) letter of patent numbers
     patent_number_cleaned =  repmat({''}, size(patsearch_results.patentnr, ...
@@ -157,5 +155,8 @@ for ix_year = year_start:year_end
     % Clear variables from memory that could cause problems
     keep year_start year_end patclean_stats
 end
+
+save('output/patclean_stats.mat', 'patclean_stats');    
+fprintf('Saved: %s.\n', 'patclean_stats.mat')
 
 toc

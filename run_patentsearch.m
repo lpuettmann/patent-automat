@@ -49,7 +49,7 @@ years = year_start:year_end;
 
 
 %% Clean matches
-% clean_matches(year_start, year_end)
+clean_matches(year_start, year_end)
 
 
 %% Transfer matches to CSV (for use in Stata)
