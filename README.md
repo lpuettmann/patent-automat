@@ -10,27 +10,27 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 
 Before running:
 ---------------------------
-1. **This one is a must:** Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
-2. **This one is optional:** Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly.
+1. **Obligatory:** Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
+2. **Optional:** Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly.
 
 
 To run:
 ---------------------------
-1. Run `run_patentsearch.m`. It performs the step 1. above and then iterates through years for the following:
-	1. Search through weekly patent grant text files and save where each new patent starts. Also save the first 3 digits of the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. This saves `.mat` files `patent_index_[year].mat` to folder *patent_index*. 
-	2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices. Also save a list of the words surrounding the matches. This saves `.mat` files `patent_keyword_appear_[year].mat` to folder *matches*.
-2. Run `clean_matches.m`. This deletes those patents whose numbers start with a letter. It also deletes the previously saved list of words that were found for every patent. It then extracts the patent number from by deleting the first or last letter, depending on year formatting. This saves `.mat` files `patsearch_results_[year].mat` to folder *cleaned_matches*.
-3. In folder *make_figures*, run scripts to visualize findings.
-	1. Run `summarize_matches.m` first.
-	2. Make the visualizations you like. The most important ones are probably the following:
-		* `plot_matches_overtime.m` 
-		* `plot_matches_over_nrpatents_weekly.m` 
-		* `plot_summary_statistics_overtime.m` 
-4. Run `transfer_cleaned_matches2csv.m`. This takes `patsearch_results_[year].mat`, cleans the numbers some more and then saves the results from the patent search for all years in an .csv to be exported to Stata.
-5. Run `analyze_word_distribution.m` which counts the occurences of frequent words in the found matches. This saves `word_match_distr_1976-2015.mat` which can be visualized and transferred to a `.tex` table by running `plot_word_match_distr.m` in directory *make_figures*.
-6. Run `prepare_conversion_table.m` which loads and prepares the table which allows to link patent's technologoy classification number to manufacturing sectors. It saves `conversion_table.mat` to *conversion_patent2industry*. 
-7. Run `match_pat2industry.m` which for 26 manufacturing sectors check which patents are linked to it.
-8. *manual classification* contains the files for testing the performance of the classification algorithm.
+Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then executes the following:
+1. Search through weekly patent grant text files and save where each new patent starts. Also save the first 3 digits of the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. This saves `.mat` files `patent_index_[year].mat` to folder *patent_index*. 
+2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices. Also save a list of the words surrounding the matches. This saves `.mat` files `patent_keyword_appear_[year].mat` to folder *matches*.
+3. Run `clean_matches.m`. This deletes those patents whose numbers start with a letter. It also deletes the previously saved list of words that were found for every patent. It then extracts the patent number from by deleting the first or last letter, depending on year formatting. This saves `.mat` files `patsearch_results_[year].mat` to folder *cleaned_matches*.
+4. In folder *make_figures*, run scripts to visualize findings.
+		1. Run `summarize_matches.m` first.
+		2. Make the visualizations you like. The most important ones are probably the following:
+			* `plot_matches_overtime.m` 
+			* `plot_matches_over_nrpatents_weekly.m` 
+			* `plot_summary_statistics_overtime.m` 
+5. Run `transfer_cleaned_matches2csv.m`. This takes `patsearch_results_[year].mat`, cleans the numbers some more and then saves the results from the patent search for all years in an .csv to be exported to Stata.
+6. Run `analyze_word_distribution.m` which counts the occurences of frequent words in the found matches. This saves `word_match_distr_1976-2015.mat` which can be visualized and transferred to a `.tex` table by running `plot_word_match_distr.m` in directory *make_figures*.
+7. Run `prepare_conversion_table.m` which loads and prepares the table which allows to link patent's technologoy classification number to manufacturing sectors. It saves `conversion_table.mat` to *conversion_patent2industry*. 
+8. Run `match_pat2industry.m` which for 26 manufacturing sectors check which patents are linked to it.
+9. *manual classification* contains the files for testing the performance of the classification algorithm.
 	1. Use `draw_patents4manclass.m` to draw a random sample of patents and send information about that patent to an excel file `manclass_v[version number].xlsx`.
 	2. Follow the instructions from the `manual_coding_handbook.tex` (which is also in this directory) to manually classify patents.
 	3. Run `prepare_manclass.m` to test the format of the coded files and add this data to the structure `manclassData.mat`.

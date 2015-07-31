@@ -56,12 +56,10 @@ years = year_start:year_end;
 % summarize_matches(year_start, year_end)
 
 
-%% Transfer matches to CSV (for use in Stata)
-%transfer_cleaned_matches2csv(year_start, year_end)
-
-
 %% Plot 
 % plot_matches_overtime(year_start, year_end)
 % plot_matches_over_nrpatents_weekly(year_start, year_end)
 
 
+%% Transfer matches to CSV (for use in Stata)
+%transfer_cleaned_matches2csv(year_start, year_end)
