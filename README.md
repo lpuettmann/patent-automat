@@ -16,7 +16,11 @@ Before running:
 
 To run:
 ---------------------------
-Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then executes the following:
+Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then executes the steps explained below.
+
+
+Individual steps:
+---------------------------
 1. Search through weekly patent grant text files and save where each new patent starts. Also save the first 3 digits of the technology classification number (sometimes called OCU). As the file formatting changes, we currently run the analysis separately for periods with different formatting. This saves `.mat` files `patent_index_[year].mat` to folder *patent_index*. 
 2. Search for keyword through (the same) weekly patent grant text files. It draws on the  previously constructed patent indices. Also save a list of the words surrounding the matches. This saves `.mat` files `patent_keyword_appear_[year].mat` to folder *matches*.
 3. Run `clean_matches.m`. This deletes those patents whose numbers start with a letter. It also deletes the previously saved list of words that were found for every patent. It then extracts the patent number from by deleting the first or last letter, depending on year formatting. This saves `.mat` files `patsearch_results_[year].mat` to folder *cleaned_matches*.
