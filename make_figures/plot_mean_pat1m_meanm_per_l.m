@@ -14,9 +14,13 @@ year_end = 2015;
 
 
 %% Load summary data
-build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+build_load_filename = horzcat('allyr_patstats_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
 load(build_load_filename)
+
+
+%% Load cleaning match statistics
+load('patclean_stats')
 
 
 %% Make time series plot of matches per week
@@ -28,11 +32,15 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
 color1_pick = [5,48,97]./ 255; 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
+pick_word = 1;
+
+nr_pat1m = allyr_patstats.total_pat1m_week(:, pick_word)
+
+plot_series = nr_pat1m ./ patclean_stats.weekmean_len_pattxt;
+
+[plot_trend, ~] = hpfilter(plot_series, 100000);
 
 figureHandle = figure;
-
-plot_series = allyear_total_mean_pat1m_meanm_per_l;
-[plot_trend, ~] = hpfilter(plot_series, 100000);
 
 scatter(1:length(plot_series), plot_series, ...
     'Marker', 'o', 'MarkerEdgeColor', color1_pick)
@@ -47,8 +55,8 @@ title('Mean matches per line for patents with at least one match', 'FontSize', 1
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-xlim([1 length(allyear_total_matches_week)])
-set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+xlim([1 length(plot_series)])
+set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 
@@ -66,6 +74,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('meanmatches_per_line_pat1m', num2str(year_start), '-', ...
-    num2str(year_end),'.pdf');
-print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+% print_pdf_name = horzcat('meanmatches_per_line_pat1m', num2str(year_start), '-', ...
+%     num2str(year_end),'.pdf');
+% print(figureHandle, print_pdf_name, '-dpdf', '-r0')

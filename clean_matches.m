@@ -149,13 +149,15 @@ for ix_year = year_start:year_end
     matfile_path_save = fullfile('cleaned_matches', save_name);
     save(matfile_path_save, 'patsearch_results');    
     fprintf('Saved: %s.\n', save_name)
-    disp('----------')
+    disp('__________')
     
 
     % Clear variables from memory that could cause problems
     keep year_start year_end patclean_stats
 end
 
+
+% Save some statistics about cleaning the matches
 save('output/patclean_stats.mat', 'patclean_stats');    
 fprintf('Saved: %s.\n', 'patclean_stats.mat')
 

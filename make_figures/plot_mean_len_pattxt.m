@@ -1,6 +1,4 @@
-close all
-clear all
-clc
+function plot_mean_len_pattxt(year_start, year_end)
 
 
 %% Set font
@@ -8,15 +6,14 @@ set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
 
 
-%% Define parameters
-year_start = 1976;
-year_end = 2015;
-
-
 %% Load summary data
-build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+build_load_filename = horzcat('allyr_patstats_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
 load(build_load_filename)
+
+
+%% Load cleaning match statistics
+load('patclean_stats')
 
 
 %% Make time series plot of matches per week
@@ -25,14 +22,17 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
 
-color1_pick = [0.3, 0.3, 0.3]; % dark gray
+color1_pick = [5,48,97]./ 255; 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
+pick_word = 1;
+
+plot_series = allyr_patstats.total_matches_week(:, pick_word) ./ ... 
+    patclean_stats.weekmean_len_pattxt;
+
+[plot_trend, ~] = hpfilter(plot_series, 100000);
 
 figureHandle = figure;
-
-plot_series = allyear_mean_len_pattxt;
-[plot_trend, ~] = hpfilter(plot_series, 100000);
 
 scatter(1:length(plot_series), plot_series, ...
     'Marker', 'o', 'MarkerEdgeColor', color1_pick)
@@ -42,13 +42,13 @@ h_trend = plot(1:length(plot_series), plot_trend, ...
 
 
 set(gca,'FontSize',11) % change default font size of axis labels
-title('Average patent line length', 'FontSize', 18)
+title('Mean matches per line for patents with at least one match', 'FontSize', 18)
 
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-xlim([1 length(allyear_total_matches_week)])
-set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+xlim([1 length(plot_series)])
+set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 
@@ -66,6 +66,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('mean_len_pattxt', num2str(year_start), '-', ...
+print_pdf_name = horzcat('output/mean_len_pattxt', num2str(year_start), '-', ...
     num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
