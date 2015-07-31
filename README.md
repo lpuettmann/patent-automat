@@ -40,6 +40,6 @@ To run:
 
 Necessary software:
 ---------------------------
-We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used (apart from `hpfilter` from the Econometrics Toolbox for some non-essential plots).
+We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used (apart from `hpfilter` from the Econometrics Toolbox for some non-essential plots). The tests rely on Matlab's xUnit Framework which are included in Matlab from version R2013a (March 2013) onwards or else can be downloaded [here](http://de.mathworks.com/matlabcentral/fileexchange/22846-matlab-xunit-test-framework).
 
 

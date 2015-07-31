@@ -16,9 +16,15 @@ for ix_year = year_start:year_end
     build_load_filename = horzcat('patent_index_', num2str(ix_year), ...
         '.mat');
     load(build_load_filename)
-   
+      
     week_start = 1;
     week_end = set_weekend(ix_year); 
+  
+    if not( size(pat_ix, 1) == week_end )
+        warning('pat_ix (length = %d) should have length %d.', ...
+            size(pat_ix, 1), week_end)
+    end
+    
     length_pattext = [];
     
     for ix_week=week_start:week_end
