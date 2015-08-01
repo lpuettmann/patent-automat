@@ -66,7 +66,13 @@ years = year_start:year_end;
 % plot_mean_len_pattxt(year_start, year_end)
 % plot_pat1m_over_nrlines(year_start, year_end)
 % plot_nr_pat1m(year_start, year_end)
-plot_error_nr_patents % compares number of yearly patents 1976-2014
+% plot_error_nr_patents % compares number of yearly patents 1976-2014
+
+% Plot the classified automation patents
+% pick_k = 1; % 1: "automat"
+% plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
+% plot_pat1m_overtime(year_start, year_end, pick_k)
+
 
 
 

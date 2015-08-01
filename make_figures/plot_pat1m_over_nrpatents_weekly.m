@@ -32,7 +32,7 @@ my_gray = [0.806, 0.806, 0.806]; % light gray
 
 figureHandle = figure;
 
-set(gca,'FontSize', 12) % change default font size of axis labels
+set(gca,'FontSize', 24) % change default font size of axis labels
 
 h_gline = plot(1:length(plot_series), repmat(0.1, ...
     length(plot_series), 1), 'Color', my_gray , ...
