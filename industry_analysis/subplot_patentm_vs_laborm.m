@@ -1,29 +1,10 @@
-close all
-clear all
-clc
+function subplot_patentm_vs_laborm(year_start, year_end, ... 
+    manufacturing_ind_data, pat2ind)
+
 
 %% Choose labor market and patent match statistic
 ix_patentmetric  = 3;
 ix_labormvar = 5;
-
-addpath('../functions')
-
-
-%% Load data
-load('manufacturing_ind_data.mat');
-
-
-
-%% Make subplots 
-
-
-year_start = 1976;
-year_end = 2014;
-
-
-% Load summary data
-load('../conversion_patent2industry/industry_sumstats.mat')
-
 
 
 %% Plot settings
@@ -57,14 +38,14 @@ fprintf('Chosen labor market variable: %s.\n', choose_labormvar)
 
 
 %% Loop through subplots
-for ix_industry=1:size(industry_sumstats, 1)
+for ix_industry=1:size(pat2ind.industry_sumstats, 1)
 
-    eval(horzcat('laborm_pick = idata.laborm.', ...
+    eval(horzcat('laborm_pick = manufacturing_ind_data.idata.laborm.', ...
         choose_labormvar, '(:, ix_industry);'));
           
    % Extract patent match data for industry
-    industry_name = industry_sumstats{ix_industry, 2, 1};
-    sumstats = extract_sumstats(industry_sumstats, ix_industry);
+    industry_name = pat2ind.industry_sumstats{ix_industry, 2, 1};
+    sumstats = extract_sumstats(pat2ind.industry_sumstats, ix_industry);
     industry_nr_pat = sumstats(:, 1);
     industry_nr_matches = sumstats(:, 2);
     industry_pat_1match = sumstats(:, 3);
@@ -123,10 +104,11 @@ for ix_industry=1:size(industry_sumstats, 1)
     box off
     set(gca,'TickDir','out') 
     leave_xaxis_bottomonly(ix_industry, dim_subplot, ...
-        size(industry_sumstats, 1), 'labels')
+        size(pat2ind.industry_sumstats, 1), 'labels')
 end
 
-legend(regexprep(choose_labormvar,'_',' '), 'Automation statistic', 'Location', 'NorthEastOutside')
+legend(regexprep(choose_labormvar,'_',' '), 'Automation statistic', ...
+    'Location', 'NorthEastOutside')
 legend boxoff  
 
 % Change position and size
@@ -138,7 +120,7 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 
 % Export to pdf
-print_pdf_name = horzcat('subplot_patmatchindustry_vs_', ...
+print_pdf_name = horzcat('output/subplot_patmatchindustry_vs_', ...
     choose_labormvar, '.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 

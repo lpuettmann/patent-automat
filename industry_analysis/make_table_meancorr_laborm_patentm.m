@@ -1,15 +1,10 @@
-close all
-clear all
-clc
+function make_table_meancorr_laborm_patentm(manufacturing_ind_data)
 
-
-%% Load data
-load('manufacturing_ind_data.mat');
 
 %% Make table of correlations
 
 % Take mean of correlations
-meancorr = nanmean(corr_laborm_patentm, 3);
+meancorr = nanmean(manufacturing_ind_data.corr_laborm_patentm, 3);
 
 meancorr = meancorr(:, [5, 10, 4, 2, 8, 6, 9, 1, 3, 7]);
 
@@ -18,7 +13,7 @@ stdcorr = nan(size(meancorr));
 
 for ix_row=1:size(stdcorr,1)
     for ix_column=1:size(stdcorr,2)
-        extractvec = squeeze(corr_laborm_patentm(ix_row, ix_column, :));
+        extractvec = squeeze(manufacturing_ind_data.corr_laborm_patentm(ix_row, ix_column, :));
         stdcorr(ix_row, ix_column) = nanstd(extractvec);
     end
 end
@@ -39,7 +34,7 @@ for ix_val=1:length(meancorr(:))
 end
 
 % Print to .txt file in Latex format
-printname = 'table_meancorr_laborm_patentm.tex';
+printname = 'output/table_meancorr_laborm_patentm.tex';
 
 FID = fopen(printname, 'w');
 

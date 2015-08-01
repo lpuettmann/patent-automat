@@ -1,31 +1,9 @@
-close all
-clear all
-clc
-
-tic
-
-addpath('conversion_patent2industry')
-addpath('cleaned_matches')
-
-% Load industry names
-[~, ind_code_table] = xlsread('industry_names.xlsx');
-
-
-load('conversion_table.mat')
-industry_list = unique(naics_class_list);
-
-
-year_start = 1976;
-year_end = 2014;
-
-
-load('conversion_patent2industry/linked_pat_ix.mat', ...
-    'linked_pat_ix');
-
+function [nr_appear_allyear, share_patents_linked] = analyze_pat2indlink( ...
+    year_start, year_end, industry_list, linked_pat_ix)
 
 
 %% Analyze how many patents were linked to how many industries 
-nr_appear_allyear = 0;
+nr_appear_allyear = [];
 
 for ix_year = year_start:year_end
     ix_iter = ix_year - year_start + 1;
@@ -41,7 +19,7 @@ for ix_year = year_start:year_end
    
     % Import info about patents in that year
     load(horzcat('patsearch_results_', num2str(ix_year), '.mat'))
-    nr_patents = size(patsearch_results, 1);
+    nr_patents = size(patsearch_results.patentnr, 1);
     
     
     % Check which patents are linked
@@ -52,7 +30,7 @@ for ix_year = year_start:year_end
         warning('Should be equal.')
     end
 
-    share_patents_linked(ix_iter,1) = length(patents_linked)/nr_patents;
+    share_patents_linked(ix_iter,1) = length(patents_linked) / nr_patents;
 
     fprintf('[Year %d] -- # linked patents: %d (%3.2f), # not linked patents: %d (%3.2f).\n', ...
         ix_year, length(patents_linked), share_patents_linked(ix_iter,1), ...
@@ -65,19 +43,3 @@ for ix_year = year_start:year_end
     nr_appear_allyear = [nr_appear_allyear;
                         nr_appear];
 end
-
-nr_appear_allyear(1) = [];
-
-
-save('conversion_patent2industry/share_patents_linked.mat', ...
-    'share_patents_linked');
-
-
-save('conversion_patent2industry/nr_appear_allyear.mat', ...
-    'nr_appear_allyear');
-
-
-length(nr_appear_allyear)
-
-
-toc

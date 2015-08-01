@@ -74,11 +74,24 @@ years = year_start:year_end;
 % plot_pat1m_overtime(year_start, year_end, pick_k)
 
 
+%% Link patents to industries
+% pat2ind = conversion_patent2industry();
+% save('output/pat2ind', 'pat2ind')
 
 
+%% Industry-level analysis
+% load('pat2ind')
+
+% manufacturing_ind_data = analyze_industries(1976, ...
+%     2014, pat2ind);
+
+% make_table_meancorr_laborm_patentm(manufacturing_ind_data)
+
+% subplot_patentm_vs_laborm(1976, 2014, ... 
+%     manufacturing_ind_data, pat2ind)
 
 
-
+%% Compare classification with manually coded patents
 
 
 

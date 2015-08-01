@@ -1,17 +1,8 @@
-close all
-clear all
-clc
+function conversion_table = prepare_conversion_table(fname, lnumber)
 
-addpath('conversion_patent2industry')
+fid = fopen(fname, 'r'); % open the file
 
-tic
-
-fileName = 'Naics_co13.csv';
-
-
-fid = fopen(fileName, 'r'); % open the file
-
-lineArray = cell(203074, 1); % initialize
+lineArray = cell(lnumber, 1); % initialize
                           
 lineIndex = 1; % index of cell to place the next line in
 nextLine = fgetl(fid); % read the first line from the file
@@ -43,10 +34,6 @@ if ~(length(tech_class_list)==length(naics_class_list))
     warning('tech_class_list and naics_class_list should have same length.')
 end
 
-
-save_name = 'conversion_table.mat';
-matfile_path_save = fullfile('conversion_patent2industry', save_name);
-save(matfile_path_save, 'naics_class_list', 'tech_class_list');    
-fprintf('Saved: %s.\n', save_name)
-
-fprintf('Finished, time = %dm.\n', round(toc/60))
+% Save in structure
+conversion_table.tech_class_list = tech_class_list;
+conversion_table.naics_class_list = naics_class_list;

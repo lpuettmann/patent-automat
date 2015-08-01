@@ -1,15 +1,9 @@
-close all
-clear all
-clc
+function manufacturing_ind_data = analyze_industries(year_start, ...
+    year_end, pat2ind)
 
-addpath('../functions')
-
-year_start = 1976;
-year_end = 2014;
-
-
-% Load summary data
-load('../conversion_patent2industry/industry_sumstats.mat')
+if year_end == 2015
+    warning('Are you sure about year_end = 2015? Should probably be 2014')
+end
 
 
 % Load excel file
@@ -23,7 +17,6 @@ industry_data = industry_data_raw(:, 3:end);
 % Get industry data
 naics_otaf = industry_data_raw(:, 2);
 naics_list = unique(naics_otaf);
-
 
 
 %% Make new labor market series: share of employees of total manufacturing 
@@ -65,11 +58,11 @@ for ix_labormvar=1:length(var_list)
 
 
     % Iterate through manufacturing industries
-    for ix_industry=1:size(industry_sumstats, 1)
+    for ix_industry=1:size(pat2ind.industry_sumstats, 1)
 
         % Extract patent match data for industry
-        industry_name = industry_sumstats{ix_industry, 2, 1};
-        sumstats = extract_sumstats(industry_sumstats, ix_industry);
+        industry_name = pat2ind.industry_sumstats{ix_industry, 2, 1};
+        sumstats = extract_sumstats(pat2ind.industry_sumstats, ix_industry);
         industry_nr_pat = sumstats(:, 1);
         industry_nr_matches = sumstats(:, 2);
         industry_pat_1match = sumstats(:, 3);
@@ -88,7 +81,7 @@ for ix_labormvar=1:length(var_list)
             patent_metric_pick = patent_metrics(:, ix_patentmetric);
 
             % Extract labor market data for industry
-            industry_nr = industry_sumstats{ix_industry, 1, 1};
+            industry_nr = pat2ind.industry_sumstats{ix_industry, 1, 1};
 
             % Check if industry number is pure numeric or mixed with plus or minus
             if str2num(industry_nr) > 0 % All good, continue.
@@ -192,7 +185,7 @@ for ix_labormvar=1:length(var_list)
             laborm_pickmat = zeros(size(laborm_pick)); 
         end
         laborm_pickmat = [laborm_pickmat, laborm_pick];
-        if ix_industry==size(industry_sumstats, 1)
+        if ix_industry==size(pat2ind.industry_sumstats, 1)
             % Delete first column in last iteration
             laborm_pickmat = laborm_pickmat(:, 2:end); 
         end
@@ -200,10 +193,10 @@ for ix_labormvar=1:length(var_list)
     
     % Save industry labor market series in a structure
     eval(horzcat('idata.laborm.', labormvar, ' = laborm_pickmat;'));
-
 end
 
-
-save('manufacturing_ind_data.mat', 'idata', ...
-    'corr_laborm_patentm', 'labormarket_change', 'patent_metric_change');
-
+% Save in structure
+manufacturing_ind_data.idata = idata;
+manufacturing_ind_data.corr_laborm_patentm = corr_laborm_patentm;
+manufacturing_ind_data.labormarket_change = labormarket_change;
+manufacturing_ind_data.patent_metric_change = patent_metric_change;

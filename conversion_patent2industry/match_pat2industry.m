@@ -1,22 +1,10 @@
-close all
-clear all
-clc
-
-tic
+function [industry_list, linked_pat_ix, industry_sumstats] = ...
+    match_pat2industry(pick_k, year_start, year_end, ind_code_table, ...
+    conversion_table)
 
 
-addpath('../cleaned_matches')
+industry_list = unique(conversion_table.naics_class_list);
 
-% Load industry names
-[~, ind_code_table] = xlsread('industry_names.xlsx');
-
-
-load('conversion_table.mat')
-industry_list = unique(naics_class_list);
-
-
-year_start = 1976;
-year_end = 2014;
 
 % Initialize
 linked_pat_ix = repmat({''}, length(year_start:year_end), ...
@@ -34,7 +22,7 @@ for ix_year = year_start:year_end
     load(horzcat('patsearch_results_', num2str(ix_year), '.mat'))  
 
     % Count how many patents map into the industry
-    classification_nr = patsearch_results(:, 3);
+    classification_nr = patsearch_results.classnr;
 
     
     
@@ -46,11 +34,12 @@ for ix_year = year_start:year_end
         industry_name = industry_name{1};
 
         % Find industry number in the naics list
-        positions_table = find(strcmp(naics_class_list, industry_nr));
+        positions_table = find(strcmp(conversion_table.naics_class_list, ...
+            industry_nr));
 
         % Get the set of patent tech classifications that are matched into the
         % respective industry.
-        tc2ind = tech_class_list(positions_table);
+        tc2ind = conversion_table.tech_class_list(positions_table);
         tc2ind = unique(tc2ind); % delete duplicates (and sort)
 
 
@@ -74,11 +63,12 @@ for ix_year = year_start:year_end
         linked_pat_ix{ix_iter, ix_industry} = patix2ind;
         
         % Find keyword matches of the patents that map to the industry
-        nr_keyword_appear = cell2mat(patsearch_results(:, 2));
+        nr_keyword_appear = patsearch_results.matches(:, pick_k);
         industry_keyword_matches = nr_keyword_appear(patix2ind);
         
         % Save industry keyword matches for all industries
-        all_industry_keyword_matches{ix_iter, ix_industry} = industry_keyword_matches;
+        all_industry_keyword_matches{ix_iter, ix_industry} = ...
+            industry_keyword_matches;
         
         % Calculate our custom automation index
         industry_automix = sum(log(1 + industry_keyword_matches));
@@ -96,12 +86,3 @@ for ix_year = year_start:year_end
     
     fprintf('Finished year: %d.\n', ix_year)
 end
-
-save('linked_pat_ix.mat', ...
-    'linked_pat_ix');
-save('industry_sumstats.mat', ...
-    'industry_sumstats');
-
-
-
-toc
