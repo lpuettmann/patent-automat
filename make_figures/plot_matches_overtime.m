@@ -27,6 +27,7 @@ dim_subplot = [5, 4];
 
 if (dim_subplot(1)*dim_subplot(2)) < length(allyr_patstats.dictionary)
     warning('Not enough subplots for all dictionary words.')
+    return
 end
 
 figureHandle = figure;

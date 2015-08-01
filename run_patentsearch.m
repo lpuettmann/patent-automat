@@ -57,7 +57,7 @@ years = year_start:year_end;
 
 
 %% Summarize matches for visualizations
-% summarize_matches(year_start, year_end)
+% summarize_matches4viz(year_start, year_end)
 
 
 %% Make some visualizations 
