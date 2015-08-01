@@ -1,12 +1,9 @@
-close all
-clear all
-clc
+function plot_nr_pat1m(year_start, year_end)
 
 
 %% Set font
 set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
-
 
 %% Define parameters
 year_start = 1976;
@@ -14,7 +11,7 @@ year_end = 2015;
 
 
 %% Load summary data
-build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+build_load_filename = horzcat('allyr_patstats_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
 load(build_load_filename)
 
@@ -31,7 +28,7 @@ my_gray = [0.806, 0.806, 0.806]; % light gray
 
 figureHandle = figure;
 
-plot_series = allyear_total_nr_pat1m;
+plot_series = allyr_patstats.total_pat1m_week(:, 1);
 [plot_trend, ~] = hpfilter(plot_series, 100000);
 
 scatter(1:length(plot_series), plot_series, ...
@@ -47,8 +44,8 @@ title('Number of patents with at least one match', 'FontSize', 18)
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-xlim([1 length(allyear_total_matches_week)])
-set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+xlim([1 length(plot_series)])
+set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 
@@ -66,6 +63,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('number_pat1m', num2str(year_start), '-', ...
+print_pdf_name = horzcat('output/number_pat1m', num2str(year_start), '-', ...
     num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')

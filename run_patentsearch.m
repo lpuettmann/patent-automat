@@ -56,13 +56,24 @@ years = year_start:year_end;
 %transfer_cleaned_matches2csv(year_start, year_end)
 
 
-%% Summarize matches
+%% Summarize matches for visualizations
 % summarize_matches(year_start, year_end)
 
 
-%% Plot 
+%% Make some visualizations 
 % plot_matches_overtime(year_start, year_end)
 % plot_matches_over_nrpatents_weekly(year_start, year_end)
 % plot_mean_len_pattxt(year_start, year_end)
-plot_pat1m_over_nrlines(year_start, year_end)
+% plot_pat1m_over_nrlines(year_start, year_end)
+% plot_nr_pat1m(year_start, year_end)
+plot_error_nr_patents % compares number of yearly patents 1976-2014
+
+
+
+
+
+
+
+
+
 
