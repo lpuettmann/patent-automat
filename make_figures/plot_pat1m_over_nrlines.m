@@ -1,6 +1,4 @@
-close all
-clear all
-clc
+function plot_pat1m_over_nrlines(year_start, year_end)
 
 
 %% Set font
@@ -8,15 +6,14 @@ set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
 
 
-%% Define parameters
-year_start = 1976;
-year_end = 2015;
-
-
 %% Load summary data
-build_load_filename = horzcat('total_matches_week_', num2str(year_start), ...
+build_load_filename = horzcat('allyr_patstats_', num2str(year_start), ...
     '-', num2str(year_end), '.mat');
 load(build_load_filename)
+
+
+%% Load cleaning match statistics
+load('patclean_stats')
 
 
 %% Make time series plot of matches per week
@@ -28,12 +25,15 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
 color1_pick = [5,48,97]./ 255; 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
+pick_word = 1;
 
-figureHandle = figure;
+nr_pat1m = allyr_patstats.total_pat1m_week(:, pick_word);
 
-plot_series = allyear_total_mean_matches_per_line;
+plot_series = nr_pat1m ./ patclean_stats.weekmean_len_pattxt;
+
 [plot_trend, ~] = hpfilter(plot_series, 100000);
 
+figureHandle = figure;
 
 scatter(1:length(plot_series), plot_series, ...
     'Marker', 'o', 'MarkerEdgeColor', color1_pick)
@@ -43,20 +43,20 @@ h_trend = plot(1:length(plot_series), plot_trend, ...
 
 
 set(gca,'FontSize',11) % change default font size of axis labels
-title('Mean matches per line', 'FontSize', 18)
+title('Number of automation patents (>= 1 automat match) divided by average patent length, weekly', 'FontSize', 18)
 
 set(gca,'TickDir','out')  
 box off
 set(gcf, 'Color', 'w');
-xlim([1 length(allyear_total_matches_week)])
-set(gca, 'XTick', ix_new_year) % Set the x-axis tick labels
+xlim([1 length(plot_series)])
+set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
 set(gca, 'xticklabel', my_xaxis_labels); 
 
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 1400 800]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
@@ -67,6 +67,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('mean_matches_per_line_', num2str(year_start), ...
-    '-',  num2str(year_end),'.pdf');
+print_pdf_name = horzcat('output/pat1m_over_nrlines_', num2str(year_start), '-', ...
+    num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')

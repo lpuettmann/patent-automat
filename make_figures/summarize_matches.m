@@ -31,16 +31,14 @@ for ix_year=year_start:year_end
     pat1m = +(nr_keyword_per_patent > 1);
     
     patent_week = cell2mat(patsearch_results.week);
-   
     
     if size(patent_week, 1) ~= size(nr_keyword_per_patent, 1)
         warning('Number of patents not equal to number of week identifiers')
     end
 
     total_matches_week = zeros(week_end, length(patsearch_results.dictionary));
-    total_pat1m_week = zeros(week_end, length(patsearch_results.dictionary));
+    total_pat1m_week = zeros(week_end, length(patsearch_results.dictionary));  
     nr_patents_per_week = zeros(week_end, 1);
-    
     
     for ix_week=week_start:week_end
         keywords_week = nr_keyword_per_patent(patent_week==ix_week, :);
@@ -86,5 +84,5 @@ allyr_patstats.dictionary = patsearch_results.dictionary;
 % ========================================================================
 save_name = horzcat('output/allyr_patstats_', num2str(year_start), '-', ...
     num2str(year_end), '.mat');
-save(matfile_path_save, 'allyr_patstats')
+save(save_name, 'allyr_patstats')
 fprintf('Saved: %s.\n', save_name)
