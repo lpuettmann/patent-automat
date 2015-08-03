@@ -8,17 +8,14 @@ patent_keyword_appear.dictionary = find_dictionary;
 if (ix_year < 2002) && (ix_year > 1975)
     ftset.indic_filetype = 1;
     ftset.nr_lines4previouspatent = 1;
-    ftset.nan_sect_str = {'NAM'}; % curly brackets are important
     
 elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.indic_filetype = 2;
     ftset.nr_lines4previouspatent = 2;
-    ftset.nan_sect_str = {'<NAM>'}; % curly brackets are important
     
 elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.indic_filetype = 3;
     ftset.nr_lines4previouspatent = 1;
-    ftset.nan_sect_str = {'<name>', '<first-name>', '<last-name>'};  
     
 else
     warning('The codes are not designed for year: %d.', ix_year)
@@ -105,31 +102,6 @@ for ix_week = week_start:week_end
         patent_text_corpus = get_patent_text_corpus(ix_find, ix_patent, ...
             nr_patents, ftset, search_corpus);
 
-        % Delete name section (NAM) of inventor and of patent citations
-        % ------------------------------------------------------------
-        indic_NAM = count_nr_occur_trunccorpus(patent_text_corpus, ...
-            ftset.nan_sect_str);
-
-        nan_lines = patent_text_corpus(indic_NAM);
-        check_NAMkeyword = regexpi(nan_lines, 'automat');
-
-        % Count number of appearances of keyword on NAM lines and save
-        weekly_metadata{ix_patent, 4} = count_elements_cell(...
-            check_NAMkeyword);
-
-        line_keywordNAM = nan_lines(not(cellfun('isempty', ...
-            check_NAMkeyword)));
-
-        if not(isempty(line_keywordNAM))
-            for j=1:length(line_keywordNAM)
-                save_line_keywordNAM = [save_line_keywordNAM;
-                    patent_number(ix_patent), ix_year, ...
-                    line_keywordNAM(j)];            
-            end
-        end
-
-        patent_text_corpus(indic_NAM) = []; % delete NAM lines
-
         for f=1:length(find_dictionary)
             find_str = find_dictionary{f};
 
@@ -169,5 +141,4 @@ end
 patent_keyword_appear.patentnr = patent_metadata(:,1);
 patent_keyword_appear.classnr = patent_metadata(:,2);
 patent_keyword_appear.week = patent_metadata(:,3);
-patent_keyword_appear.NAMkeyword_count = patent_metadata(:,4);
 patent_keyword_appear.matches = nr_keyword_appear;

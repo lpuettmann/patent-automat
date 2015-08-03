@@ -7,7 +7,7 @@ fclose('all');
 
 % Set paths to all underlying directories
 setup_path
-
+break
 
 %% Choose years
 year_start = 1976;
@@ -30,22 +30,22 @@ years = year_start:year_end;
 % end
 % 
 % 
-% %% Search for keywords
-% for ix_year = years
-%     tic
-%     
-%     % Define dictionary to search for
-%     find_dictionary = define_dictionary();
-%     
-%     % Search for keywords in the patent grant texts
-%     patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
-%     
-%     % Print how long the year took
-%     print_finish_summary(toc, ix_year)
-%     
-%     % Save to .mat file
+%% Search for keywords
+for ix_year = years
+    tic
+    
+    % Define dictionary to search for
+    find_dictionary = define_dictionary();
+    
+    % Search for keywords in the patent grant texts
+    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+    
+    % Print how long the year took
+    print_finish_summary(toc, ix_year)
+    
+    % Save to .mat file
 %     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
-% end
+end
 
 
 %% Clean matches
@@ -92,6 +92,7 @@ years = year_start:year_end;
 
 
 %% Compare classification with manually coded patents
+
 
 
 
