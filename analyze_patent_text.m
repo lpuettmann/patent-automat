@@ -100,15 +100,20 @@ for ix_week = week_start:week_end
 
         % Get start and end of patent text
         % ------------------------------------------------------------
-        patent_text_corpus = get_patent_text_corpus(ix_patentfind, ix_patent, ...
-            nr_patents, ftset, search_corpus);
+        patent_text_corpus = get_patent_text_corpus(ix_patentfind, ...
+            ix_patent, nr_patents, ftset, search_corpus);
         
         patxt_trunc = truncate_corpus(patent_text_corpus, ftset.nr_trunc);
 
         % Get title
         [~, nr_find, ix_find] = count_occurences(patxt_trunc, 'TTL ');
-        check_if1occurence(nr_find)
-
+        if nr_find > 1
+            % If shows up more than once, keep only first occurence as the
+            % title occurs near the top of the patent.
+            ix_find = ix_find(1);
+        elseif nr_find == 0
+            warning('No string found.')
+        end
 
         title_line = patent_text_corpus{ix_find, :};
         title_str = title_line(6:end);
@@ -116,11 +121,16 @@ for ix_week = week_start:week_end
         % Get abstract
         [~, nr_find, ix_abstractstart] = count_occurences(patxt_trunc, ...
             'ABST');
-        check_if1occurence(nr_find)
+        if nr_find > 1
+            warning('More than 1 string ''ABST'' in patent: %s.', ...
+                patent_number{ix_patent})
+        elseif nr_find == 0
+            warning('No string found.')
+        end
 
         
         if not( strcmp( patxt_trunc{ix_abstractstart + 1}, 'PAL ' ))
-            warning('Abstract strangely formatted for patent: %d.', ...
+            warning('''PAL'' not found for patent: %s.', ...
                 patent_number{ix_patent})
         end
 
@@ -129,12 +139,11 @@ for ix_week = week_start:week_end
             'PARN');
         [~, nr_PAC, ix_PAC] = count_occurences(patxt_trunc, 'PAC ');
         
-        if (nr_bodyfind == 0) && (nr_continuationfind == 0) && ...
-                (nr_PAC == 0)
-            warning('No ''BSUM'', no ''PARN'' and no ''PAC'' for patent %s.', ...
-                patent_number{ix_patent})
+        if (nr_bodyfind == 0) && (nr_continuationfind == 0) && (nr_PAC == 0)          
+            % If we cannot determine where the abstract ends, then just
+            % take the first 10 lines.
+            ix_abstractend = ix_abstractstart + 11;
             
-            ix_abstractend = ix_abstractstart + 10;
         else
             minpos_continuation = ix_continuation( ix_continuation > ... 
                 ix_abstractstart );
@@ -156,7 +165,7 @@ for ix_week = week_start:week_end
         end
         
         if isnan( ix_abstractend )
-            warning('You likely did not find ''PARN'' or ''BSUM'' for this patent.')
+            warning('Problem with position of abstract.')
         end
         
         abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
