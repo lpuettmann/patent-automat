@@ -124,54 +124,62 @@ for ix_week = week_start:week_end
         if nr_find > 1
             warning('More than 1 string ''ABST'' in patent: %s.', ...
                 patent_number{ix_patent})
-        elseif nr_find == 0
-            warning('No string found.')
         end
-
         
-        if not( strcmp( patxt_trunc{ix_abstractstart + 1}, 'PAL ' ))
-            warning('''PAL'' not found for patent: %s.', ...
-                patent_number{ix_patent})
-        end
-
-        [~, nr_bodyfind, ix_bodystart] = count_occurences(patxt_trunc, 'BSUM');     
-        [~, nr_continuationfind, ix_continuation] = count_occurences(patxt_trunc, ...
-            'PARN');
-        [~, nr_PAC, ix_PAC] = count_occurences(patxt_trunc, 'PAC ');
-        
-        if (nr_bodyfind == 0) && (nr_continuationfind == 0) && (nr_PAC == 0)          
-            % If we cannot determine where the abstract ends, then just
-            % take the first 10 lines.
-            ix_abstractend = ix_abstractstart + 11;
             
+        if nr_find == 0
+            abstract_str = ' ';
         else
-            minpos_continuation = ix_continuation( ix_continuation > ... 
-                ix_abstractstart );
-            minpos_bodystart = ix_bodystart( ix_bodystart > ix_abstractstart);
-            minpos_PAC = ix_PAC( ix_PAC > ix_abstractstart);
+            dict_abstract_end = {'BSUM', 'PARN', 'PAC '};
 
-            if isempty( minpos_continuation )
-                minpos_continuation = NaN;
-            end
-            if isempty( minpos_bodystart )
-                minpos_bodystart = NaN;
-            end
-            if isempty( minpos_PAC )
-                minpos_PAC = NaN;
+            for d=1:length(dict_abstract_end)
+                find_str = dict_abstract_end{d};
+                [~, nr_absEnd(d), ix_absEnd{d}] = ...
+                    count_occurences(patxt_trunc, find_str);
             end
 
-            ix_abstractend = nanmin( nanmin( minpos_continuation, ...
-                minpos_bodystart), minpos_PAC );
+            if max(nr_absEnd) == 0       
+                % If we cannot determine where the abstract ends, then just
+                % take the first 10 lines or until end of patent.
+                
+                shortEndAbs = min(size(patent_text_corpus( ... 
+                    ix_abstractstart + 1:end, :), 1), 11);
+                ix_abstractend = ix_abstractstart + shortEndAbs;
+
+            else
+
+                min_absEnd = [];
+                for i=1:length(dict_abstract_end)
+                    pick_absEnd = ix_absEnd{i};
+                    min_absEnd = [min_absEnd;
+                                    pick_absEnd(pick_absEnd > ...
+                                    ix_abstractstart)];
+                end
+
+                if isempty( min_absEnd )
+                    warning('Should not be empty.')
+                end
+
+                ix_abstractend = min(min_absEnd);
+            end
+
+            if isnan( ix_abstractend )
+                warning('ix_abstractend is Nan.')
+            elseif isempty( ix_abstractend )
+                ('ix_abstractend is empty.')
+            end
+
+            abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
+                ix_abstractend - 1, :);
         end
-        
-        if isnan( ix_abstractend )
-            warning('Problem with position of abstract.')
-        end
-        
-        abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
-            ix_abstractend - 1, :);
 
-        body_str = patent_text_corpus(ix_bodystart + 1 : end);
+        [~, ~, ix_bodystart] = count_occurences(patxt_trunc, 'BSUM');
+        
+        if isempty( ix_bodystart )
+            body_str = ' ';
+        else
+            body_str = patent_text_corpus(ix_bodystart + 1 : end);
+        end
 
         patparts = {title_str, abstract_str, body_str};
         
@@ -219,7 +227,7 @@ for ix_week = week_start:week_end
 
     check_open_files
 
-    fprintf('Week finished: %d/%d.\n', ix_week, week_end)
+    fprintf('[%d] Week finished: %d/%d.\n', ix_year, ix_week, week_end)
 end
 
 patent_keyword_appear.patentnr = patent_metadata(:,1);
