@@ -7,11 +7,9 @@ switch ftset.indic_filetype
         ix_pnr = ix_find + 1; 
 
     case {2, 3}
-        indic_class_pnr = regexp(search_corpus, ftset.pnr_find_str);
-        indic_class_pnr = ~cellfun(@isempty, indic_class_pnr); % make logical array
-        ix_pnr = find( indic_class_pnr );
-        
-        if not( length(indic_class_pnr) == size(search_corpus, 1))
+        ix_pnr = get_ix_cellarray_str(search_corpus, ftset.pnr_find_str)
+      
+        if not( length(ix_pnr) == size(search_corpus, 1))
             warning('Should be equal.')
         end
 end

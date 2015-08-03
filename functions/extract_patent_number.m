@@ -21,7 +21,7 @@ for i=1:nr_patents
 
         case 2
             patent_nr_end = regexp(patent_nr_line, '</PDAT>'); 
-            patent_number{i} = patent_nr_line(19:patent_nr_end-1);
+            patent_number{i} = patent_nr_line(19:patent_nr_end - 1);
 
         case 3
             patent_nr_start = regexp(patent_nr_line, 'file="US');

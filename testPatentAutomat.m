@@ -7,3 +7,4 @@ run(test_get_fullword_matches);
 run(test_auc);
 run(test_calculate_manclass_stats);
 run(test_set_weekend);
+run(test_get_ix_cellarray_str);

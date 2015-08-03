@@ -13,6 +13,7 @@ if (ix_year < 2002) && (ix_year > 1975)
 elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.indic_filetype = 2;
     ftset.nr_lines4previouspatent = 2;
+    ftset.nr_trunc = 7;
     
 elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.indic_filetype = 3;
@@ -30,7 +31,7 @@ save_line_keywordNAM = [];
 tic
 
 week_start = 1;
-week_start = 12
+
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
 
@@ -106,7 +107,16 @@ for ix_week = week_start:week_end
         patxt_trunc = truncate_corpus(patent_text_corpus, ftset.nr_trunc);
 
         % Get title
-        [~, nr_find, ix_find] = count_occurences(patxt_trunc, 'TTL ');
+        switch ftset.indic_filetype
+            case 1
+                [~, nr_find, ix_find] = count_occurences(patxt_trunc, 'TTL ');
+                
+            case 2
+                ix_find = get_ix_cellarray_str(patent_text_corpus, ...
+                    '<B540><STEXT><PDAT>');
+                nr_find = length(ix_find);
+        end
+        
         if nr_find > 1
             % If shows up more than once, keep only first occurence as the
             % title occurs near the top of the patent.
@@ -116,58 +126,82 @@ for ix_week = week_start:week_end
         end
 
         title_line = patent_text_corpus{ix_find, :};
-        title_str = title_line(6:end);
-
+        
+        switch ftset.indic_filetype
+            case 1
+                title_str = title_line(6:end);
+                
+            case 2
+                line_nr_end = regexp(title_line, '</PDAT>'); 
+                title_str = title_line(20:line_nr_end - 1);
+        end
+        
+        
         % Get abstract
-        [~, nr_find, ix_abstractstart] = count_occurences(patxt_trunc, ...
-            'ABST');
+        switch ftset.indic_filetype
+            case 1
+                [~, nr_find, ix_abstractstart] = count_occurences( ...
+                    patxt_trunc, 'ABST');
+                
+            case 2
+                ix_abstractstart = get_ix_cellarray_str( ...
+                    patent_text_corpus, '<SDOAB>');
+        end
+        
         if nr_find > 1
             % If shows up more than once, keep only first occurence as the
             % abstract occurs near the top of the patent.
             ix_abstractstart = ix_abstractstart(1);
         end
-        
             
         if nr_find == 0
             abstract_str = ' ';
         else
-            dict_abstract_end = {'BSUM', 'PARN', 'PAC '};
+            switch ftset.indic_filetype
+                case 1
+                    dict_abstract_end = {'BSUM', 'PARN', 'PAC '};
 
-            for d=1:length(dict_abstract_end)
-                find_str = dict_abstract_end{d};
-                [~, nr_absEnd(d), ix_absEnd{d}] = ...
-                    count_occurences(patxt_trunc, find_str);
-            end
+                    for d=1:length(dict_abstract_end)
+                        find_str = dict_abstract_end{d};
+                        [~, nr_absEnd(d), ix_absEnd{d}] = ...
+                            count_occurences(patxt_trunc, find_str);
+                    end
 
-            if max(nr_absEnd) == 0       
-                % If we cannot determine where the abstract ends, then just
-                % take the first 10 lines or until end of patent.
-                
-                shortEndAbs = min(size(patent_text_corpus( ... 
-                    ix_abstractstart + 1:end, :), 1), 11);
-                ix_abstractend = ix_abstractstart + shortEndAbs;
+                    if max(nr_absEnd) == 0       
+                        % If we cannot determine where the abstract ends, then just
+                        % take the first 10 lines or until end of patent.
 
-            else
+                        shortEndAbs = min(size(patent_text_corpus( ... 
+                            ix_abstractstart + 1:end, :), 1), 11);
+                        ix_abstractend = ix_abstractstart + shortEndAbs;
 
-                min_absEnd = [];
-                for i=1:length(dict_abstract_end)
-                    pick_absEnd = ix_absEnd{i};
-                    min_absEnd = [min_absEnd;
-                                    pick_absEnd(pick_absEnd > ...
-                                    ix_abstractstart)];
-                end
+                    else
 
-                if isempty( min_absEnd )
-                    warning('Should not be empty.')
-                end
+                        min_absEnd = [];
+                        for i=1:length(dict_abstract_end)
+                            pick_absEnd = ix_absEnd{i};
+                            min_absEnd = [min_absEnd;
+                                            pick_absEnd(pick_absEnd > ...
+                                            ix_abstractstart)];
+                        end
 
-                ix_abstractend = min(min_absEnd);
-            end
+                        if isempty( min_absEnd )
+                            warning('Should not be empty.')
+                        end
 
-            if isnan( ix_abstractend )
-                warning('ix_abstractend is Nan.')
-            elseif isempty( ix_abstractend )
-                ('ix_abstractend is empty.')
+                        ix_abstractend = min(min_absEnd);
+                    end
+
+                    if isnan( ix_abstractend )
+                        warning('ix_abstractend is Nan.')
+                    elseif isempty( ix_abstractend )
+                        ('ix_abstractend is empty.')
+                    end
+                    
+                case 2
+                    ix_abstractend = get_ix_cellarray_str( ...
+                        patent_text_corpus, '/SDOAB>');
+              
             end
 
             abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
