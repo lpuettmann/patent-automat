@@ -30,7 +30,7 @@ save_line_keywordNAM = [];
 tic
 
 week_start = 1;
-
+week_start = 12
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
 
@@ -122,8 +122,9 @@ for ix_week = week_start:week_end
         [~, nr_find, ix_abstractstart] = count_occurences(patxt_trunc, ...
             'ABST');
         if nr_find > 1
-            warning('More than 1 string ''ABST'' in patent: %s.', ...
-                patent_number{ix_patent})
+            % If shows up more than once, keep only first occurence as the
+            % abstract occurs near the top of the patent.
+            ix_abstractstart = ix_abstractstart(1);
         end
         
             

@@ -167,5 +167,5 @@ for ix_week = week_start:week_end
     fclose(unique_file_identifier);
     check_open_files()
 
-    fprintf('Week finished: %d/%d.\n', ix_week, week_end)
+    fprintf('[%d] Week finished: %d/%d.\n', ix_year, ix_week, week_end)
 end    
