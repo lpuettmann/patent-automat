@@ -12,7 +12,7 @@ setup_path
 %% Choose years
 year_start = 1976;
 year_end = 2015;
-years = year_start:year_end;
+years = 1976;
 
 
 %% Make patent index

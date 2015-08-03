@@ -65,7 +65,7 @@ for ix_week = week_start:week_end
     % Get the index position of patent and the WKU number
     % ----------------------------------------------------------------
     patent_number = pat_ix{ix_week, 1};
-    ix_find = pat_ix{ix_week, 2};
+    ix_patentfind = pat_ix{ix_week, 2};
     show_row_NAM = pat_ix{ix_week, 3};
     nr_patents = length(patent_number);   
 
@@ -100,28 +100,99 @@ for ix_week = week_start:week_end
 
         % Get start and end of patent text
         % ------------------------------------------------------------
-        patent_text_corpus = get_patent_text_corpus(ix_find, ix_patent, ...
+        patent_text_corpus = get_patent_text_corpus(ix_patentfind, ix_patent, ...
             nr_patents, ftset, search_corpus);
         
         patxt_trunc = truncate_corpus(patent_text_corpus, ftset.nr_trunc);
 
+        % Get title
+        [~, nr_find, ix_find] = count_occurences(patxt_trunc, 'TTL ');
+        check_if1occurence(nr_find)
 
-        for f=1:length(find_dictionary)
-            find_str = find_dictionary{f};
 
-            % Search for keyword
-            % ------------------------------------------------------------
-            check_keyword_find = regexpi(patent_text_corpus, find_str);
+        title_line = patent_text_corpus{ix_find, :};
+        title_str = title_line(6:end);
 
-            % Get the start of the keyword match on every line
-            line_hit_keyword_find = delete_empty_cells(check_keyword_find);
+        % Get abstract
+        [~, nr_find, ix_abstractstart] = count_occurences(patxt_trunc, ...
+            'ABST');
+        check_if1occurence(nr_find)
 
-            % Count the number of appearances of the keyword
-            nr_keyword_find = count_elements_cell(line_hit_keyword_find);
+        
+        if not( strcmp( patxt_trunc{ix_abstractstart + 1}, 'PAL ' ))
+            warning('Abstract strangely formatted for patent: %d.', ...
+                patent_number{ix_patent})
+        end
 
-            % Stack weekly information underneath
-            % ------------------------------------------------------------
-            weekly_keyword_appear(ix_patent, f) = nr_keyword_find;
+        [~, nr_bodyfind, ix_bodystart] = count_occurences(patxt_trunc, 'BSUM');     
+        [~, nr_continuationfind, ix_continuation] = count_occurences(patxt_trunc, ...
+            'PARN');
+        [~, nr_PAC, ix_PAC] = count_occurences(patxt_trunc, 'PAC ');
+        
+        if (nr_bodyfind == 0) && (nr_continuationfind == 0) && ...
+                (nr_PAC == 0)
+            warning('No ''BSUM'', no ''PARN'' and no ''PAC'' for patent %s.', ...
+                patent_number{ix_patent})
+            
+            ix_abstractend = ix_abstractstart + 10;
+        else
+            minpos_continuation = ix_continuation( ix_continuation > ... 
+                ix_abstractstart );
+            minpos_bodystart = ix_bodystart( ix_bodystart > ix_abstractstart);
+            minpos_PAC = ix_PAC( ix_PAC > ix_abstractstart);
+
+            if isempty( minpos_continuation )
+                minpos_continuation = NaN;
+            end
+            if isempty( minpos_bodystart )
+                minpos_bodystart = NaN;
+            end
+            if isempty( minpos_PAC )
+                minpos_PAC = NaN;
+            end
+
+            ix_abstractend = nanmin( nanmin( minpos_continuation, ...
+                minpos_bodystart), minpos_PAC );
+        end
+        
+        if isnan( ix_abstractend )
+            warning('You likely did not find ''PARN'' or ''BSUM'' for this patent.')
+        end
+        
+        abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
+            ix_abstractend - 1, :);
+
+        body_str = patent_text_corpus(ix_bodystart + 1 : end);
+
+        patparts = {title_str, abstract_str, body_str};
+        
+        for i=1:length(patparts)
+            patpart_corpus = patparts{i};
+            
+            for f=1:length(find_dictionary)
+                find_str = find_dictionary{f};
+
+                % Search for keyword
+                % ---------------------------------------------------------
+                check_keyword_find = regexpi(patpart_corpus, find_str);
+
+                if iscell(check_keyword_find)
+                    % Get the start of the keyword match on every line
+                    line_hit_keyword_find = delete_empty_cells( ...
+                        check_keyword_find);
+                    
+                    % Count the number of appearances of the keyword
+                    nr_keyword_find = count_elements_cell( ...
+                        line_hit_keyword_find);
+                else
+                    nr_keyword_find = length(check_keyword_find);
+                end
+
+
+                % Stack weekly information underneath
+                % ---------------------------------------------------------
+                weekly_keyword_appear(ix_patent, f, i) = nr_keyword_find;
+            end
         end
     end
 
@@ -145,4 +216,6 @@ end
 patent_keyword_appear.patentnr = patent_metadata(:,1);
 patent_keyword_appear.classnr = patent_metadata(:,2);
 patent_keyword_appear.week = patent_metadata(:,3);
-patent_keyword_appear.matches = nr_keyword_appear;
+patent_keyword_appear.title_matches = nr_keyword_appear(:, :, 1);
+patent_keyword_appear.abstract_matches = nr_keyword_appear(:, :, 2);
+patent_keyword_appear.body_matches = nr_keyword_appear(:, :, 3);

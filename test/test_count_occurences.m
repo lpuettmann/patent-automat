@@ -10,7 +10,7 @@ function testIndicatorFind(testCase)
                 'that I choose myself.computer'};     
     find_str = 'testKeyword';
     
-    [indic_find, ~, ~] = test_count_occurences(file_str, find_str);
+    [indic_find, ~, ~] = count_occurences(file_str, find_str);
     actSolution = indic_find;
     expSolution = logical([0; 1; 0; 0]);    
     
@@ -28,7 +28,7 @@ function testNrFind(testCase)
                 'testKeyword';};     
     find_str = 'testKeyword';
     
-    [~, nr_find, ~] = test_count_occurences(file_str, find_str);
+    [~, nr_find, ~] = count_occurences(file_str, find_str);
     actSolution = nr_find;
     expSolution = 3;    
     
@@ -46,7 +46,7 @@ function testIxFind(testCase)
                 'testKeyword';};     
     find_str = 'testKeyword';
     
-    [~, ~, ix_find] = test_count_occurences(file_str, find_str);
+    [~, ~, ix_find] = count_occurences(file_str, find_str);
     actSolution = ix_find;
     expSolution = [2; 4; 6];    
     
@@ -61,7 +61,7 @@ function testZeroMatches(testCase)
                 'that I choose myself.computer'};
     find_str = 'testKeyword';
     
-    [indic_find, ~, ~] = test_count_occurences(file_str, find_str);
+    [indic_find, ~, ~] = count_occurences(file_str, find_str);
     actSolution = indic_find;
     expSolution = logical([0; 0; 0]);    
     
@@ -78,7 +78,7 @@ function testAllMatches(testCase)
                 'testKeyword'};
     find_str = 'testKeyword';
     
-    [~, nr_find, ~] = test_count_occurences(file_str, find_str);
+    [~, nr_find, ~] = count_occurences(file_str, find_str);
     actSolution = nr_find;
     expSolution = 5;    
     
@@ -91,7 +91,7 @@ function testEmptyCorpusstring(testCase)
     file_str = {''};
     find_str = 'testKeyword';
     
-    [~, nr_find, ~] = test_count_occurences(file_str, find_str);
+    [~, nr_find, ~] = count_occurences(file_str, find_str);
     actSolution = nr_find;
     expSolution = 0;    
     
@@ -112,7 +112,7 @@ function testEmptySearchstring(testCase)
     % The file test_count_occurences will issue a warning for such a short
     % string. Turn this off temporarily.
     warning('off', 'all')
-    [~, nr_find, ~] = test_count_occurences(file_str, find_str);
+    [~, nr_find, ~] = count_occurences(file_str, find_str);
    warning('on', 'all')
     
     actSolution = nr_find;
@@ -135,7 +135,7 @@ function testLongString(testCase)
             'nulla, sit amet egestas dolor tempor nec.'}; 
     find_str = 'AllThingsNotHere';
     
-    [~, nr_find, ~] = test_count_occurences(file_str, find_str);
+    [~, nr_find, ~] = count_occurences(file_str, find_str);
     
     actSolution = nr_find;
     expSolution = 0;    
