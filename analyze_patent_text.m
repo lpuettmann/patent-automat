@@ -4,10 +4,11 @@ function patent_keyword_appear = analyze_patent_text(ix_year, ...
 % Save dictionary (to keep all information at one place)
 patent_keyword_appear.dictionary = find_dictionary;
 
-% Customize some settings for different file types
+% Customize file type settings (ftset)
 if (ix_year < 2002) && (ix_year > 1975)
     ftset.indic_filetype = 1;
     ftset.nr_lines4previouspatent = 1;
+    ftset.nr_trunc = 4;
     
 elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.indic_filetype = 2;
@@ -101,6 +102,9 @@ for ix_week = week_start:week_end
         % ------------------------------------------------------------
         patent_text_corpus = get_patent_text_corpus(ix_find, ix_patent, ...
             nr_patents, ftset, search_corpus);
+        
+        patxt_trunc = truncate_corpus(patent_text_corpus, ftset.nr_trunc);
+
 
         for f=1:length(find_dictionary)
             find_str = find_dictionary{f};

@@ -1,4 +1,4 @@
-function [indic_find, nr_find, ix_find] = count_occurences(file_str, find_str)
+function [indic_find, nr_find, ix_find] = count_nr_patents(file_str, find_str)
 
 if numel(find_str) < 1
     warning('find_str in count_nr_patents implausibly short.')

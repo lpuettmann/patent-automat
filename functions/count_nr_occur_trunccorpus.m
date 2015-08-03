@@ -5,14 +5,8 @@ for i=1:length(searchdict)
     searchphrase = searchdict{i};
    
     nr_trunc = numel(searchphrase);
-
-    corpus_trunc = corpus;
-    for j=1:length(corpus_trunc)
-        if numel(corpus_trunc{j}) > nr_trunc
-            row_shorten = corpus_trunc{j};
-            corpus_trunc{j} = row_shorten(1:nr_trunc);
-        end
-    end
+    
+    corpus_trunc = truncate_corpus(corpus, nr_trunc);
 
     indic_findMat(:, i) = strcmp(corpus_trunc, searchphrase);
 end
