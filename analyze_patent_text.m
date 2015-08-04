@@ -9,14 +9,26 @@ if (ix_year < 2002) && (ix_year > 1975)
     ftset.indic_filetype = 1;
     ftset.nr_lines4previouspatent = 1;
     ftset.nr_trunc = 4;
+    ftset.indic_titlefind = 'TTL ';
+    ftset.indic_abstractfind = '</PDAT>';
+    ftset.indic_abstractend = {'BSUM', 'PARN', 'PAC '};
+    ftset.indic_bodyfind = 'BSUM';
     
 elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.indic_filetype = 2;
     ftset.nr_lines4previouspatent = 2;
+    ftset.indic_titlefind = '<B540><STEXT><PDAT>';
+    ftset.indic_abstractfind = '<SDOAB>';
+    ftset.indic_abstractend = '/SDOAB>';
+    ftset.indic_bodyfind = '<SDODE>';
     
 elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.indic_filetype = 3;
     ftset.nr_lines4previouspatent = 1;
+    ftset.indic_titlefind = '<invention-title';
+    ftset.indic_abstractfind = '<abstract id="abstract">';
+    ftset.indic_abstractend = '</abstract>';
+    ftset.indic_bodyfind = '<description id="description">';
     
 else
     warning('The codes are not designed for year: %d.', ix_year)
@@ -103,18 +115,23 @@ for ix_week = week_start:week_end
         patent_text_corpus = get_patent_text_corpus(ix_patentfind, ...
             ix_patent, nr_patents, ftset, search_corpus);
         
-        
 
         % Get title
         switch ftset.indic_filetype
             case 1
                 patxt_trunc = truncate_corpus(patent_text_corpus, ...
                     ftset.nr_trunc);
-                [~, nr_find, ix_find] = count_occurences(patxt_trunc, 'TTL ');
+                [~, nr_find, ix_find] = count_occurences(patxt_trunc, ...
+                    ftset.indic_titlefind);
                 
             case 2
                 ix_find = get_ix_cellarray_str(patent_text_corpus, ...
-                    '<B540><STEXT><PDAT>');
+                    ftset.indic_titlefind);
+                nr_find = length(ix_find);
+                
+            case 3
+                ix_find = get_ix_cellarray_str(patent_text_corpus, ...
+                    ftset.indic_titlefind);
                 nr_find = length(ix_find);
         end
         
@@ -135,6 +152,19 @@ for ix_week = week_start:week_end
             case 2
                 line_nr_end = regexp(title_line, '</PDAT>'); 
                 title_str = title_line(20:line_nr_end - 1);
+                
+            case 3
+                line_nr_start = regexp(title_line, '>'); 
+                line_nr_start = line_nr_start(1);
+                line_nr_end = regexp(title_line, '</invention-title>'); 
+                title_str = title_line(line_nr_start + 1 : line_nr_end ... 
+                    - 1);
+                
+                if not( isempty( regexp(title_str(1), '>') ) )
+                    warning('Title string starts with ''>'' in patent %s (%d, week %d)', ...
+                        patent_number{ix_patent}, ix_year, ix_week)
+                    title_str
+                end
         end
         
         
@@ -142,12 +172,12 @@ for ix_week = week_start:week_end
         switch ftset.indic_filetype
             case 1
                 [~, nr_find, ix_abstractstart] = count_occurences( ...
-                    patxt_trunc, 'ABST');
+                    patxt_trunc, ftset.indic_abstractfind);
                 
-            case 2
+            case {2, 3}
                 ix_abstractstart = get_ix_cellarray_str( ...
-                    patent_text_corpus, '<SDOAB>');
-        end
+                    patent_text_corpus, ftset.indic_abstractfind);
+       end
         
         if nr_find > 1
             % If shows up more than once, keep only first occurence as the
@@ -160,7 +190,7 @@ for ix_week = week_start:week_end
         else
             switch ftset.indic_filetype
                 case 1
-                    dict_abstract_end = {'BSUM', 'PARN', 'PAC '};
+                    dict_abstract_end = ftset.indic_abstractend;
 
                     for d=1:length(dict_abstract_end)
                         find_str = dict_abstract_end{d};
@@ -199,9 +229,9 @@ for ix_week = week_start:week_end
                         ('ix_abstractend is empty.')
                     end
                     
-                case 2
+                case {2, 3}
                     ix_abstractend = get_ix_cellarray_str( ...
-                        patent_text_corpus, '/SDOAB>');
+                        patent_text_corpus, ftset.indic_abstractend);
             end
 
             abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
@@ -211,11 +241,11 @@ for ix_week = week_start:week_end
         switch ftset.indic_filetype
             case 1
                 [~, ~, ix_bodystart] = count_occurences(patxt_trunc, ...
-                    'BSUM');
+                    ftset.indic_bodyfind);
                 
-            case 2
+            case {2, 3}
                 [~, ~, ix_bodystart] = count_occurences(patent_text_corpus, ...
-                    '<SDODE>');
+                    ftset.indic_bodyfind);
         end
         
         if isempty( ix_bodystart )

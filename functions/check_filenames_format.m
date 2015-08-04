@@ -35,6 +35,6 @@ year_str = num2str(ix_year);
 
 indic_year_str_show_up = regexp(filenames, year_str(end-1:end));
 
-if any(cellfun('isempty', indic_year_str_show_up))
+if any( cellfun('isempty', indic_year_str_show_up) )
     warning('The last two number of the year (e.g. 89 or 1989) should show up in the filenames. They don''t in this case.')
 end
