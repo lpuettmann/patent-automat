@@ -10,8 +10,8 @@ setup_path
 
 
 %% Choose years
-year_start = 2002;
-year_end = 2015;
+year_start = 1976;
+year_end = 2001;
 years = year_start:year_end;
 
 
@@ -31,26 +31,25 @@ years = year_start:year_end;
 
 
 %% Search for keywords
-parfor ix_year = years
-    tic
-    
-    % Define dictionary to search for
-    find_dictionary = define_dictionary();
-    
-    % Search for keywords in the patent grant texts
-    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
-    
-    % Print how long the year took
-    print_finish_summary(toc, ix_year)
-    
-%     Save to .mat file
-    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
-end
-
-
-%% Clean matches
-year_start = 1976;
-clean_matches(year_start, year_end)
+% parfor ix_year = years
+%     tic
+%     
+%     % Define dictionary to search for
+%     find_dictionary = define_dictionary();
+%     
+%     % Search for keywords in the patent grant texts
+%     patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+% %     Save to .mat file
+%     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+% end
+% 
+% 
+% %% Clean matches
+% clean_matches(year_start, year_end)
 
 
 %% Check matches for plausibility
@@ -58,7 +57,7 @@ clean_matches(year_start, year_end)
 
 
 %% Transfer matches to CSV (for use in Stata)
-transfer_cleaned_matches2csv(year_start, year_end)
+% transfer_cleaned_matches2csv(year_start, year_end)
 
 
 %% Summarize matches for visualizations
@@ -99,4 +98,23 @@ transfer_cleaned_matches2csv(year_start, year_end)
 
 
 %% Compare classification with manually coded patents
+manclassData = prepare_manclass('manclass_consolidated_v7.xlsx')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

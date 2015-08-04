@@ -30,7 +30,7 @@ Individual steps:
 7. Run `match_pat2industry.m` which for 26 manufacturing sectors check which patents are linked to it.
 8. *manual classification* contains the files for testing the performance of the classification algorithm.
 	1. Use `draw_patents4manclass.m` to draw a random sample of patents and send information about that patent to an excel file `manclass_v[version number].xlsx`.
-	2. Follow the instructions from the `manual_coding_handbook.tex` (which is also in this directory) to manually classify patents.
+	2. Follow the instructions from the `manual_coding_handbook.tex` to manually classify patents.
 	3. Run `prepare_manclass.m` to test the format of the coded files and add this data to the structure `manclassData.mat`.
 	4. Run `analyze_manclass.m` to apply different classification algorithms on this test set and calculate a number of performance metrics.
 	5. Run `make_manclass_contingency_table.m` to produce a `.tex` table with the results.

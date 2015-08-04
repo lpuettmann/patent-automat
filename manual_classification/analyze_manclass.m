@@ -1,15 +1,5 @@
-close all
-clear all
-clc
+function conttab = analyze_manclass(year_start, year_end, manclassData)
 
-
-% Parameters
-year_start = 1976;
-year_end = 2001;
-
-
-% Load previously extracted data
-load('manclassData.mat')
 
 % % Delete patents from some years 
 % ixDelete = 252;
@@ -148,9 +138,3 @@ for i=1:conttab.nr_alg
     fprintf('Finished algorithm: %d.\n', i)
     disp('.............................................................')
 end
-
-% Save to .mat file
-% -------------------------------------------------------------------
-save_name = 'conttab.mat';
-save(save_name, 'conttab');    
-fprintf('Saved: %s.\n', save_name)

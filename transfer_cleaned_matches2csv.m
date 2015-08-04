@@ -37,10 +37,15 @@ for ix_year = year_start:year_end
     % ---------------------------------------------------------------------
     patent_year = repmat(ix_year, length(patent_nr), 1);
 
+    % Put matches next to each other
+    % ---------------------------------------------------------------------
+    patent_matches = [patsearch_results.title_matches, ...
+        patsearch_results.abstract_matches, patsearch_results.body_matches];
+    
     % Save individual year data
     % ---------------------------------------------------------------------
     patsearch_year = [patent_nr, patent_year, patent_week, ...
-        tech_class_nr, patsearch_results.matches];
+        tech_class_nr, patent_matches];
     
     % Save all years underneath
     % ---------------------------------------------------------------------
