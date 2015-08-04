@@ -1,13 +1,6 @@
-close all
-clear all
+function make_manclass_contingency_table(conttab)
 
-
-
-%% Load stats on classifications
-load('conttab.mat')
-
-
-%% Print to .txt file in Latex format
+% Print to .txt file in Latex format
 printname = 'table_contingency_classfc.tex';
 
 FID = fopen(printname, 'w');

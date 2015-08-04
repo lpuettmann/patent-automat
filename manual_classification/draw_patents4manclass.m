@@ -3,10 +3,6 @@ clear all
 clc
 
 
-
-addpath('../cleaned_matches');
-addpath('../functions');
-
 tic
 
 

@@ -1,17 +1,9 @@
-close all
-clear all
-clc
-
-
-load('manclassData.mat')
-
-year_start = 1976;
-year_end = 2001;
-
+function automclassData = compile_automclass4codedpats(manclassData, ...
+    year_start, year_end)
 
 % Sort data after years. This is important as we'll later loop through
-[~, ix_sort] = sort(manclassData.year);
-if any(not(diff(ix_sort) == 1))
+[~, ix_sort] = sort(manclassData.indic_year);
+if any( not( diff(ix_sort) == 1 ) )
     error('Patents should already be ordered by year.')
 end
 
@@ -40,7 +32,7 @@ for ix_year=year_start:year_end
     
     % Find hand-coded patents for this year
     % -------------------------------------------------------------
-    extract_patyrnr = manclassData.patentnr(find(manclassData.year == ...
+    extract_patyrnr = manclassData.patentnr(find(manclassData.indic_year == ...
         ix_year));
     
     for j=1:length(extract_patyrnr)

@@ -14,9 +14,8 @@ manManual = manclass_dataRaw(:, 5);
 indic_NotSure = manclass_dataRaw(:, 6);
 % Column 7 are comments on why not sure
 % Column 8 are comments on content of patent
-classnr = manclass_dataRaw(:, 10);
-coderID = manclass_dataRaw(:, 11);
-coderDate = manclass_dataRaw(:, 12);
+coderID = manclass_dataRaw(:, 9);
+coderDate = manclass_dataRaw(:, 10);
 
 
 %% Make some checks
@@ -47,12 +46,6 @@ if any(isnan(manAutomat))
 end
 
 
-% Check if tech classification numbers are missing
-if any(isnan(classnr))
-    warning('Some tech classification numbers (''OCL'') are missing.')
-end
-
-
 %% Sort patents by year
 [~, ix_sort] = sort( indic_year );
 manclass_dataRaw = manclass_dataRaw(ix_sort, :);
@@ -65,6 +58,5 @@ manclassData.manAutomat = manAutomat;
 manclassData.manCognitive = manCognitive;
 manclassData.manManual = manManual;
 manclassData.indic_NotSure = indic_NotSure;
-manclassData.classnr = classnr;
 manclassData.coderID = coderID;
 manclassData.coderDate = coderDate;

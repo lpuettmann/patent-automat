@@ -97,9 +97,19 @@ years = year_start:year_end;
 %     manufacturing_ind_data, pat2ind)
 
 
+%% Draw patents to classify manually
+% draw_patents4manclass
+
+
 %% Compare classification with manually coded patents
 manclassData = prepare_manclass('manclass_consolidated_v7.xlsx')
 
+
+
+
+% conttab = analyze_manclass(year_start, year_end, manclassData, ...
+%     automclassData)
+% make_manclass_contingency_table
 
 
 
