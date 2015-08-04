@@ -83,8 +83,9 @@ for ix_year = year_start:year_end
     patsearch_results.patentnr(save_row_delete) = [];
     patsearch_results.classnr(save_row_delete) = [];
     patsearch_results.week(save_row_delete) = [];
-    patsearch_results.NAMkeyword_count(save_row_delete) = [];
-    patsearch_results.matches(save_row_delete, :) = []; % matrix not vector
+    patsearch_results.title_matches(save_row_delete, :) = []; % matrix not vector
+    patsearch_results.abstract_matches(save_row_delete, :) = []; % matrix not vector
+    patsearch_results.body_matches(save_row_delete, :) = []; % matrix not vector
     patsearch_results.length_pattext(save_row_delete) = [];
     
     if nr_patents_yr - length(save_row_delete) ~= size(...
@@ -92,12 +93,26 @@ for ix_year = year_start:year_end
         warning('Should be equal.')
     end
     
-    if nr_patents_yr - length(save_row_delete) ~= size(...
-            patsearch_results.matches, 1)
-        warning('Should be equal.')
+    if length(patent_keyword_appear.dictionary) ~= size(...
+            patsearch_results.title_matches, 2)
+        warning('title_matches does not have the right size for all dictionary words.')
     elseif length(patent_keyword_appear.dictionary) ~= size(...
-            patsearch_results.matches, 2)
-        warning('Should be equal.')
+            patsearch_results.abstract_matches, 2)
+        warning('abstract_matches does not have the right size for all dictionary words.')
+    elseif length(patent_keyword_appear.dictionary) ~= size(...
+            patsearch_results.body_matches, 2)
+        warning('body_matches does not have the right size for all dictionary words.')
+    end
+    
+    if size(patsearch_results.patentnr, 1) ~= size(...
+            patsearch_results.title_matches, 1)
+        warning('title_matches does not have the right size for all patents.')
+    elseif size(patsearch_results.patentnr, 1) ~= size(...
+            patsearch_results.abstract_matches, 1)
+        warning('abstract_matches does not have the right size for all patents.')
+    elseif size(patsearch_results.patentnr, 1) ~= size(...
+            patsearch_results.body_matches, 1)
+        warning('body_matches does not have the right size for all patents.')
     end
     
     
@@ -149,8 +164,6 @@ for ix_year = year_start:year_end
     matfile_path_save = fullfile('cleaned_matches', save_name);
     save(matfile_path_save, 'patsearch_results');    
     fprintf('Saved: %s.\n', save_name)
-    disp('__________')
-    
 
     % Clear variables from memory that could cause problems
     keep year_start year_end patclean_stats

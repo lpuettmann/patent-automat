@@ -13,7 +13,6 @@ if (ix_year < 2002) && (ix_year > 1975)
 elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.indic_filetype = 2;
     ftset.nr_lines4previouspatent = 2;
-    ftset.nr_trunc = 7;
     
 elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.indic_filetype = 3;
@@ -104,11 +103,13 @@ for ix_week = week_start:week_end
         patent_text_corpus = get_patent_text_corpus(ix_patentfind, ...
             ix_patent, nr_patents, ftset, search_corpus);
         
-        patxt_trunc = truncate_corpus(patent_text_corpus, ftset.nr_trunc);
+        
 
         % Get title
         switch ftset.indic_filetype
             case 1
+                patxt_trunc = truncate_corpus(patent_text_corpus, ...
+                    ftset.nr_trunc);
                 [~, nr_find, ix_find] = count_occurences(patxt_trunc, 'TTL ');
                 
             case 2
@@ -201,14 +202,21 @@ for ix_week = week_start:week_end
                 case 2
                     ix_abstractend = get_ix_cellarray_str( ...
                         patent_text_corpus, '/SDOAB>');
-              
             end
 
             abstract_str = patent_text_corpus(ix_abstractstart + 1 : ...
                 ix_abstractend - 1, :);
         end
 
-        [~, ~, ix_bodystart] = count_occurences(patxt_trunc, 'BSUM');
+        switch ftset.indic_filetype
+            case 1
+                [~, ~, ix_bodystart] = count_occurences(patxt_trunc, ...
+                    'BSUM');
+                
+            case 2
+                [~, ~, ix_bodystart] = count_occurences(patent_text_corpus, ...
+                    '<SDODE>');
+        end
         
         if isempty( ix_bodystart )
             body_str = ' ';

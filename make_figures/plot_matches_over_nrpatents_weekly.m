@@ -1,4 +1,4 @@
-function plot_matches_over_nrpatents_weekly(year_start, year_end)
+function plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
 
 % Set font
 set(0,'DefaultTextFontName','Palatino')
@@ -21,8 +21,6 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
 color2_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806];
 my_dark_gray = [0.3, 0.3, 0.3];
-
-dim_subplot = [5, 4];
 
 if (dim_subplot(1)*dim_subplot(2)) < length(allyr_patstats.dictionary)
     warning('Not enough subplots for all dictionary words.')

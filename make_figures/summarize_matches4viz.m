@@ -27,7 +27,8 @@ for ix_year=year_start:year_end
     
     % Add all weekly total matches together
     % -------------------------------------------------------------
-    nr_keyword_per_patent = patsearch_results.matches;
+    nr_keyword_per_patent = patsearch_results.title_matches + ...
+        patsearch_results.abstract_matches + patsearch_results.body_matches;
     pat1m = +(nr_keyword_per_patent > 1);
     
     patent_week = cell2mat(patsearch_results.week);
@@ -65,7 +66,7 @@ for ix_year=year_start:year_end
     aux_ix_save = aux_ix_save + 1;
     
     
-    fprintf('Year %d completed.\n', ix_year)
+    fprintf('Summarizing year %d completed.\n', ix_year)
 end
 
 

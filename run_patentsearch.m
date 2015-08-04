@@ -11,8 +11,8 @@ setup_path
 
 %% Choose years
 year_start = 1976;
-year_end = 2015;
-years = 2002;
+year_end = 2001;
+years = 2002:2004;
 
 
 %% Make patent index
@@ -30,7 +30,7 @@ years = 2002;
 % end
 % 
 % 
-%% Search for keywords
+% Search for keywords
 for ix_year = years
     tic
     
@@ -61,14 +61,16 @@ end
 
 
 %% Make some visualizations 
-% plot_matches_overtime(year_start, year_end)
-% plot_matches_over_nrpatents_weekly(year_start, year_end)
+% dim_subplot = [6, 5];
+% 
+% plot_matches_overtime(year_start, year_end, dim_subplot)
+% plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
 % plot_mean_len_pattxt(year_start, year_end)
 % plot_pat1m_over_nrlines(year_start, year_end)
 % plot_nr_pat1m(year_start, year_end)
 % plot_error_nr_patents % compares number of yearly patents 1976-2014
-
-% Plot the classified automation patents
+% 
+% % Plot the classified automation patents
 % pick_k = 1; % 1: "automat"
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)

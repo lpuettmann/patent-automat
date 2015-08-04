@@ -143,3 +143,21 @@ function testLongString(testCase)
     verifyEqual(testCase, actSolution, expSolution)
 end
 
+
+function testCheckNotCaseinsensitiv(testCase)
+
+    file_str = {'FindMe';
+                'this is be casdfasdf ';
+                'will parse for some selffindme-defined keywords';
+                'FINDME';
+                'that I choose myself.computer';
+                'hithere over aaaaaa';}; 
+    find_str = 'FindMe';
+
+    [~, ~, ix_find] = count_occurences(file_str, find_str);
+    
+    actSolution = ix_find;
+    expSolution = 1;    
+    
+    verifyEqual(testCase, actSolution, expSolution)
+end

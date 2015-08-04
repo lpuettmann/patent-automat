@@ -1,4 +1,4 @@
-function plot_matches_overtime(year_start, year_end)
+function plot_matches_overtime(year_start, year_end, dim_subplot)
 
 
 %% Set font
@@ -22,8 +22,6 @@ nr_worddict = size(allyr_patstats.total_matches_week, 2);
 % color1_pick = [0.7900, 0.3800, 0.500]; % red
 color1_pick = [0.3, 0.3, 0.3]; % dark gray
 my_gray = [0.806, 0.806, 0.806]; % light gray
-
-dim_subplot = [5, 4];
 
 if (dim_subplot(1)*dim_subplot(2)) < length(allyr_patstats.dictionary)
     warning('Not enough subplots for all dictionary words.')
