@@ -10,15 +10,7 @@ end
 
 
 % Check that we deleted all '.' or '..' or '.DS_Store'
-file_beginning = cellfun(@(x) x(1:3), filenames, 'UniformOutput', false);
-
-if any(strcmp(file_beginning, '.'))
-    warning('One of the files starts with ''.''.')
-elseif any(strcmp(file_beginning, '..'))
-    warning('One of the files starts with ''..''.')
-elseif any(strcmp(file_beginning, '.DS'))
-    warning('There is probably still a ''.DS_Store'' among the files.')
-end
+check_filestart_dot(filenames)
 
 
 % Check if file endings are either .txt or .xml (case-insensitive)
