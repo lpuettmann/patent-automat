@@ -1,0 +1,46 @@
+\begin{table}
+\begin{small}
+\begin{threeparttable}
+\caption{{\normalsize Evaluation of different classification algorithms}}
+\label{table:table_compare_classalg}
+\begin{tabular}{rllllllllll}
+\toprule 
+ & \textbf{automat} & \textbf{robot} & \textbf{movable arm} & \textbf{algorithm} & \textbf{manual} & \textbf{software} & \textbf{computer} & \textbf{program} & \textbf{digital} & \textbf{autonomous}  \tabularnewline 
+\midrule 
+Accuracy & 0.79 & 0.76 & 0.76 & 0.78 & 0.71 & 0.77 & 0.76 & 0.72 & 0.76 & 0.77  \tabularnewline 
+Precision & 0.56 & 0.75 & 0.33 & 0.63 & 0.37 & 0.53 & 0.49 & 0.40 & 0.49 & 1.00  \tabularnewline 
+Recall & 0.56 & 0.03 & 0.01 & 0.19 & 0.27 & 0.22 & 0.36 & 0.30 & 0.35 & 0.03  \tabularnewline 
+F-measure & 0.56 & 0.06 & 0.02 & 0.29 & 0.31 & 0.31 & 0.42 & 0.34 & 0.41 & 0.06  \tabularnewline 
+AUC & 0.71 & 0.51 & 0.50 & 0.58 & 0.56 & 0.58 & 0.62 & 0.58 & 0.62 & 0.51  \tabularnewline 
+Matthew's C.C. & 0.42 & 0.11 & 0.02 & 0.25 & 0.14 & 0.23 & 0.27 & 0.17 & 0.27 & 0.15  \tabularnewline 
+\tabularnewline 
+ & \textbf{adaptive} & \textbf{self-adjust} & \textbf{self-generat} & \textbf{detect} & \textbf{independent} & \textbf{motor} & \textbf{engine} & \textbf{communicat} & \textbf{semi-conductor} & \textbf{semiconductor}  \tabularnewline 
+\midrule 
+Accuracy & 0.76 & 0.75 & 0.76 & 0.71 & 0.66 & 0.73 & 0.68 & 0.73 & 0.75 & 0.70  \tabularnewline 
+Precision & 0.50 & 0.00 & 1.00 & 0.42 & 0.29 & 0.42 & 0.24 & 0.43 & 0.17 & 0.27  \tabularnewline 
+Recall & 0.05 & 0.00 & 0.01 & 0.50 & 0.30 & 0.34 & 0.15 & 0.45 & 0.01 & 0.14  \tabularnewline 
+F-measure & 0.09 & NaN & 0.02 & 0.46 & 0.29 & 0.38 & 0.19 & 0.44 & 0.02 & 0.19  \tabularnewline 
+AUC & 0.52 & 0.50 & 0.50 & 0.64 & 0.54 & 0.60 & 0.50 & 0.63 & 0.50 & 0.51  \tabularnewline 
+Matthew's C.C. & 0.09 & -0.05 & 0.09 & 0.27 & 0.07 & 0.21 & 0.00 & 0.26 & -0.02 & 0.03  \tabularnewline 
+\tabularnewline 
+ & \textbf{chip} & \textbf{bus} & \textbf{circuit} & \textbf{circuitry} & \textbf{antigen} & \textbf{antigenic} & \textbf{chromatography} & \textbf{Bessen-Hunt} & \textbf{Always 'No'} & \textbf{Always 'Yes'}  \tabularnewline 
+\midrule 
+Accuracy & 0.69 & 0.68 & 0.66 & 0.74 & 0.75 & 0.76 & 0.71 & 0.78 & 0.76 & 0.24  \tabularnewline 
+Precision & 0.20 & 0.33 & 0.36 & 0.41 & 0.00 & 0.00 & 0.10 & 0.57 & NaN & 0.24  \tabularnewline 
+Recall & 0.10 & 0.30 & 0.53 & 0.19 & 0.00 & 0.00 & 0.03 & 0.29 & 0.00 & 1.00  \tabularnewline 
+F-measure & 0.13 & 0.31 & 0.43 & 0.26 & NaN & NaN & 0.04 & 0.38 & NaN & 0.39  \tabularnewline 
+AUC & 0.49 & 0.55 & 0.62 & 0.55 & 0.49 & 0.50 & 0.47 & 0.61 & 0.50 & 0.50  \tabularnewline 
+Matthew's C.C. & -0.04 & 0.11 & 0.21 & 0.14 & -0.07 & -0.04 & -0.09 & 0.28 & NaN & NaN  \tabularnewline 
+\bottomrule 
+\end{tabular} 
+\begin{tablenotes}
+\small
+\item\textit{Note:} Every column is a different classification algorithms.
+\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. 
+\item AUC: Area under (the receiver operating) curve.
+\item Matthew's C.C.: Matthew's correlation coefficient.
+\item\textit{Source:} USPTO, Google and own calculations.
+\end{tablenotes}
+\end{threeparttable}
+\end{small}
+\end{table}

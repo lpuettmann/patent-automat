@@ -112,7 +112,7 @@ years = year_start:year_end;
 %     year_end);
 
 % Classify patents based on computerized methods
-computerClass = classify_autom_algorith(automclassData);
+% computerClass = classify_autom_algorith(automclassData);
 
 % Make a contingency table comparing the manual vs. the computer
 % classification of patents
@@ -121,10 +121,30 @@ for i=1:size(computerClass.compAutomat, 2)
     classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
         computerClass.compAutomat(:, i));
     
-    fmeasure(i) = classifstat.fmeasure;
+    classalg_comparison.accuracy(i) = classifstat.accuracy;
+    classalg_comparison.precision(i) = classifstat.precision;
+    classalg_comparison.recall(i) = classifstat.recall;
+    classalg_comparison.fmeasure(i) = classifstat.fmeasure;
+    classalg_comparison.auc(i) = classifstat.auc;
+    classalg_comparison.matthewscorrcoeff(i) = classifstat.matthewscorrcoeff;
 end
 
-plot_bar_fmeasure(fmeasure, computerClass.algorithm_name)
+classalg_comparison.algorithm_name = computerClass.algorithm_name;
+
+% plot_bar_fmeasure(classalg_comparison.fmeasure, computerClass.algorithm_name)
+
+
+classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
+    computerClass.compAutomat(:, 1));
+
+make_contingency_table(classifstat)
+
+
+make_table_compare_classalg(classalg_comparison)
+
+
+
+
 
 
 
