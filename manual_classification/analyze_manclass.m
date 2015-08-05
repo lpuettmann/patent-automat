@@ -20,7 +20,7 @@ function conttab = analyze_manclass(year_start, year_end, manclassData)
 % Iterate through classification algorithm set-ups
 % ========================================================================
 ix_keyword = 1;
-fprintf('Chosen keyword: <strong>%s</strong>.\n', manclassData.dictionary{ix_keyword})
+fprintf('Chosen keyword: <strong>%s</strong>.\n', automclassData.dictionary{ix_keyword})
 
 conttab.nr_alg = 3; % number of algorithms to compare
 

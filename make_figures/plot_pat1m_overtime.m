@@ -54,7 +54,7 @@ set(gca, 'xticklabel', my_xaxis_labels);
 
 set(gca,'TickDir','out')  
 box off
-set(gcf, 'Color', 'w');
+set(gcf, 'Color', 'white');
 
 
 % Reposition the figure

@@ -1,4 +1,4 @@
-clear all
+% clear all
 close all
 clc
 
@@ -102,25 +102,29 @@ years = year_start:year_end;
 
 
 %% Compare classification with manually coded patents
-manclassData = prepare_manclass('manclass_consolidated_v7.xlsx')
 
-automclassData = compile_automclass4codedpats(manclassData, year_start, ...
-    year_end)
+% Load and prepare the manually classified patents
+% manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
 
+% Get keywords and technology numbers for those patents that were manually
+% classified
+% automclassData = compile_automclass4codedpats(manclassData, year_start, ...
+%     year_end);
 
-% conttab = analyze_manclass(year_start, year_end, manclassData, ...
-%     automclassData)
-% make_manclass_contingency_table
+% Classify patents based on computerized methods
+computerClass = classify_autom_algorith(automclassData);
 
+% Make a contingency table comparing the manual vs. the computer
+% classification of patents
 
+for i=1:size(computerClass.compAutomat, 2)
+    classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
+        computerClass.compAutomat(:, i));
+    
+    fmeasure(i) = classifstat.fmeasure;
+end
 
-
-
-
-
-
-
-
+plot_bar_fmeasure(fmeasure, computerClass.algorithm_name)
 
 
 

@@ -47,7 +47,7 @@ title('Number of automation patents (>= 1 automat match) divided by average pate
 
 set(gca,'TickDir','out')  
 box off
-set(gcf, 'Color', 'w');
+set(gcf, 'Color', 'white');
 xlim([1 length(plot_series)])
 set(gca, 'XTick', allyr_patstats.ix_new_year) % Set the x-axis tick labels
 set(gca, 'xticklabel',{}) % turn x-axis labels off
