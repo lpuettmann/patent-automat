@@ -11,7 +11,7 @@ setup_path
 
 %% Choose years
 year_start = 1976;
-year_end = 2001;
+year_end = 2015;
 years = year_start:year_end;
 
 
@@ -104,7 +104,8 @@ years = year_start:year_end;
 %% Compare classification with manually coded patents
 manclassData = prepare_manclass('manclass_consolidated_v7.xlsx')
 
-
+automclassData = compile_automclass4codedpats(manclassData, year_start, ...
+    year_end)
 
 
 % conttab = analyze_manclass(year_start, year_end, manclassData, ...
