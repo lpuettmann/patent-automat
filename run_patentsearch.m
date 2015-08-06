@@ -112,6 +112,7 @@ years = year_start:year_end;
 %     year_end);
 
 % Classify patents based on computerized methods
+clear computerClass classalg_comparison
 computerClass = classify_autom_algorith(automclassData);
 
 % Make a contingency table comparing the manual vs. the computer
@@ -141,8 +142,8 @@ classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
 
 make_contingency_table(classifstat)
 
-
-make_table_compare_classalg(classalg_comparison)
+max_line = 10;
+make_table_compare_classalg(classalg_comparison, max_line)
 
 
 %% Copy tables

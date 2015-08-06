@@ -3,26 +3,60 @@ function computerClass = classify_autom_algorith(automclassData)
     total_matches = automclassData.title_matches + ...
         automclassData.abstract_matches + automclassData.body_matches;
    
+    compAutomat = [];
+    algorithm_name = {'deleteMe'};
+    
     % Classify as automation patents if they have at least one keyword
     % match
-    for ix_keyword=1:length( automclassData.dictionary )
-        compAutomat(:, ix_keyword) = count_matches_greaterNumber( ...
-            total_matches, ix_keyword, 1);
-    end
+%     for ix_keyword=1:length( automclassData.dictionary )
+%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
+%             automclassData.title_matches, ix_keyword, 1)];
+%         name_pick = [automclassData.dictionary{ix_keyword}, '$_c$'];
+%         algorithm_name = [algorithm_name, name_pick];
+%     end
 
+    % Take matches in title
+%     for ix_keyword=1:length( automclassData.dictionary )
+%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
+%             automclassData.title_matches, ix_keyword, 1)];
+%         name_pick = [automclassData.dictionary{ix_keyword}, '$_t$'];
+%         algorithm_name = [algorithm_name, name_pick];
+%     end
+    
+    % Take matches in abstract
+%     for ix_keyword=1:length( automclassData.dictionary )
+%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
+%             automclassData.abstract_matches, ix_keyword, 1)];
+%         name_pick = [automclassData.dictionary{ix_keyword}, '$_a$'];
+%         algorithm_name = [algorithm_name, name_pick];
+%     end
+
+    % Take matches in patent body
+    for ix_keyword=1:length( automclassData.dictionary )
+        compAutomat = [compAutomat, count_matches_greaterNumber( ...
+            automclassData.body_matches, ix_keyword, 1)];
+        name_pick = [automclassData.dictionary{ix_keyword}, '$_b$'];
+        algorithm_name = [algorithm_name, name_pick];
+    end
+    
     % Bessen-Hunt classification of software patents
     bh_software_patents = bessen_hunt(automclassData, 1);
     compAutomat = [compAutomat, bh_software_patents];
+    algorithm_name = [algorithm_name, 'Bessen-Hunt'];
+
     
     % "Guessing" algorithms
     always_No = zeros(size(automclassData.title_matches, 1), 1);
     always_Yes = ones(size(automclassData.title_matches, 1), 1);
     compAutomat = [compAutomat, always_No, always_Yes];
+    algorithm_name = [algorithm_name, 'Always "No"', 'Always "Yes"'];
+
+    
+    algorithm_name = algorithm_name(2:end);
     
     % Save in structure
     computerClass.compAutomat = compAutomat;
-    computerClass.algorithm_name = [automclassData.dictionary, ...
-        'Bessen-Hunt', 'Always ''No''', 'Always ''Yes'''];
+    computerClass.algorithm_name = algorithm_name
 end
     
 
