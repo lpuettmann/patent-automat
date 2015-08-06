@@ -11,7 +11,7 @@ function computerClass = classify_autom_algorith(automclassData)
 %     for ix_keyword=1:length( automclassData.dictionary )
 %         compAutomat = [compAutomat, count_matches_greaterNumber( ...
 %             automclassData.title_matches, ix_keyword, 1)];
-%         name_pick = [automclassData.dictionary{ix_keyword}, '$_c$'];
+%         name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a+b}$'];
 %         algorithm_name = [algorithm_name, name_pick];
 %     end
 
@@ -32,12 +32,22 @@ function computerClass = classify_autom_algorith(automclassData)
 %     end
 
     % Take matches in patent body
+%     for ix_keyword=1:length( automclassData.dictionary )
+%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
+%             automclassData.body_matches, ix_keyword, 1)];
+%         name_pick = [automclassData.dictionary{ix_keyword}, '$_b$'];
+%         algorithm_name = [algorithm_name, name_pick];
+%     end
+    
+    % Take matches in title and abstract
     for ix_keyword=1:length( automclassData.dictionary )
         compAutomat = [compAutomat, count_matches_greaterNumber( ...
-            automclassData.body_matches, ix_keyword, 1)];
-        name_pick = [automclassData.dictionary{ix_keyword}, '$_b$'];
+            automclassData.title_matches + automclassData.abstract_matches, ...
+            ix_keyword, 1)];
+        name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a}$'];
         algorithm_name = [algorithm_name, name_pick];
     end
+    
     
     % Bessen-Hunt classification of software patents
     bh_software_patents = bessen_hunt(automclassData, 1);
