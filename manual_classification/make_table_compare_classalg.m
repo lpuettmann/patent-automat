@@ -9,6 +9,7 @@ splitline = nr_algs / nr_splits;
 
 str_tabularsize = ['\\begin{tabular}{r', repmat('l', 1, splitline), '}\n'];
 num_multiinsert = [repmat('& %3.2f ', 1, splitline), ' \\tabularnewline \n'];
+int_multiinsert = [repmat('& %d ', 1, splitline), ' \\tabularnewline \n'];
 
 % Print to .txt file in Latex format
 printname = 'output/table_compare_classalg.tex';
@@ -29,18 +30,26 @@ for j=1:nr_splits
     
     fprintf(FID, ' ');
     for i= split_start : split_end
-        fprintf(FID, '& \\textbf{%s} ', classalg_comparison.algorithm_name{i});
+        fprintf(FID, '& \\textbf{%s} ', ...
+            classalg_comparison.algorithm_name{i});
     end
     fprintf(FID, ' \\tabularnewline \n');
 
-    fprintf(FID, '\\midrule \n');
-    fprintf(FID, ['Accuracy ', num_multiinsert], classalg_comparison.accuracy(split_start:split_end));
-    fprintf(FID, ['Precision ', num_multiinsert], classalg_comparison.precision(split_start:split_end));
-    fprintf(FID, ['Recall ', num_multiinsert], classalg_comparison.recall(split_start:split_end));
-    fprintf(FID, ['F-measure ', num_multiinsert], classalg_comparison.fmeasure(split_start:split_end));
-    fprintf(FID, ['AUC ', num_multiinsert], classalg_comparison.auc(split_start:split_end));
-    fprintf(FID, ['Matthew''s C.C. ', num_multiinsert], classalg_comparison.matthewscorrcoeff(split_start:split_end));
-
+    fprintf(FID, ['Accuracy ', num_multiinsert], ...
+        classalg_comparison.accuracy(split_start:split_end));
+    fprintf(FID, ['Precision ', num_multiinsert], ...
+        classalg_comparison.precision(split_start:split_end));
+    fprintf(FID, ['Recall ', num_multiinsert], ...
+        classalg_comparison.recall(split_start:split_end));
+    fprintf(FID, ['F-measure ', num_multiinsert], ...
+        classalg_comparison.fmeasure(split_start:split_end));
+    fprintf(FID, ['AUC ', num_multiinsert], ...
+        classalg_comparison.auc(split_start:split_end));
+    fprintf(FID, ['MCC ', num_multiinsert], ...
+        classalg_comparison.matthewscorrcoeff(split_start:split_end));
+    fprintf(FID, ['Number "Yes" ', int_multiinsert], ...
+        classalg_comparison.nr_Yes(split_start:split_end));
+    
     if j == nr_splits
         fprintf(FID, '\\bottomrule \n');
     else
@@ -55,7 +64,7 @@ fprintf(FID, '\\small\n');
 fprintf(FID,'\\item\\textit{Note:} Every column is a different classification algorithms.\n');
 fprintf(FID,'\\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. \n');
 fprintf(FID,'\\item AUC: Area under (the receiver operating) curve.\n');
-fprintf(FID,'\\item Matthew''s C.C.: Matthew''s correlation coefficient.\n');
+fprintf(FID,'\\item MCC: Matthew''s correlation coefficient.\n');
 fprintf(FID,'\\item\\textit{Source:} USPTO, Google and own calculations.\n');
 fprintf(FID, '\\end{tablenotes}\n');
 fprintf(FID, '\\end{threeparttable}\n');
