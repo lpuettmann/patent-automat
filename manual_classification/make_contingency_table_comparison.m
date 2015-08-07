@@ -1,7 +1,7 @@
 function make_manclass_contingency_table(conttab)
 
 % Print to .txt file in Latex format
-printname = 'table_contingency_classfc.tex';
+printname = 'output/table_contingency_classfc.tex';
 
 FID = fopen(printname, 'w');
 
