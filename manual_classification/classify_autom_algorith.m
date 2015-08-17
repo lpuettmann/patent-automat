@@ -9,17 +9,28 @@ function computerClass = classify_autom_algorith(automclassData)
     % Classify as automation patents if they have at least one keyword
     % match
     for ix_keyword=1:length( automclassData.dictionary )
-        compAutomat = [compAutomat, count_matches_greaterNumber( ...
-            automclassData.title_matches, ix_keyword, 1)];
+        compAutomat = [compAutomat, count_matches_greaterZero( ...
+            total_matches, ix_keyword)];
         name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a+b}$'];
         algorithm_name = [algorithm_name, name_pick];
     end
 
-
-   % Anwhere: % "automat" OR "robot" OR "movable arm" OR "autonomous" OR "adaptive"
-   % OR "self-generat" OR in title + abstract "detect" OR "program" OR
-   % "computer"
-       
+    
+    % (Anwhere:) "automat" OR "robot" OR "movable arm" OR "autonomous" OR 
+    % "adaptive" OR "self-generat" OR (in title + abstract) "detect" 
+    % OR "program" OR "computer"
+    anwhere_words = {'automat', 'robot', 'movable arm', 'autonomous', ...
+        'adaptive', 'self-generat'};  
+    mat_classif_1 = multiple_class(automclassData.dictionary, total_matches, anwhere_words);
+    
+    titleabstract_words = {'detect', 'program', 'computer'};
+    mat_classif_2 = multiple_class(automclassData.dictionary, ...
+        automclassData.title_matches + automclassData.abstract_matches, ...
+        titleabstract_words);
+    
+    % Pick those words that contain any of those
+    max([mat_classif_1, mat_classif_2], [], 2) % CONTINUE HERE !!!!!!!!!!!!!!
+    
     
     % Bessen-Hunt classification of software patents
     bh_software_patents = bessen_hunt(automclassData, 1);
@@ -38,15 +49,25 @@ function computerClass = classify_autom_algorith(automclassData)
     
     % Save in structure
     computerClass.compAutomat = compAutomat;
-    computerClass.algorithm_name = algorithm_name
+    computerClass.algorithm_name = algorithm_name;
 end
     
 
-function ix_classif = count_matches_greaterNumber(matches, ...
-    ix_keyword, min_matches)
+function ix_classif = count_matches_greaterZero(matches, ...
+    ix_keyword)
     
-    ix_classif = ( matches(:, ix_keyword) >= min_matches );
+    ix_classif = ( matches(:, ix_keyword) >= 1 );
     ix_classif = +ix_classif; % logical to double (vector)
+end
+
+
+function mat_classif = multiple_class(searchdict, matches, choose_dict)
+    for i=1:length(choose_dict)
+        pick_word = choose_dict{i};
+        ix_pos = find_word_in_dict(searchdict, pick_word);    
+        mat_classif(:, i) = count_matches_greaterZero(matches, ...
+            ix_pos);
+    end
 end
 
 
@@ -78,16 +99,16 @@ function bh_software_patents = bessen_hunt(automclassData, indic_spec)
             warning('''indic_spec'' not well-specified.')
         end
         
-        spec_results(:, i) = count_matches_greaterNumber(spec_matches, ...
-            ix_pos, 1);
+        spec_results(:, i) = count_matches_greaterZero(spec_matches, ...
+            ix_pos);
     end
     
     % Count matches in title
     for i=1:length(searchdict_title)
         pick_word = searchdict_title{i};
         ix_pos = find_word_in_dict(automclassData.dictionary, pick_word);       
-        title_results(:, i) = count_matches_greaterNumber( ...
-            automclassData.title_matches, ix_pos, 1);
+        title_results(:, i) = count_matches_greaterZero( ...
+            automclassData.title_matches, ix_pos);
     end
         
     exclusion_patents = [title_results, spec_results(:, end-2:end)];

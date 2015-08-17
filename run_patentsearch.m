@@ -115,6 +115,11 @@ manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
 load('automclassData')
 computerClass = classify_autom_algorith(automclassData);
 
+
+
+break
+
+
 % Make a contingency table comparing the manual vs. the computer
 % classification of patents
 
