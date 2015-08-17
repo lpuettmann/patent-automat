@@ -104,7 +104,7 @@ years = year_start:year_end;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-% manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
+manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
 
 % Get keywords and technology numbers for those patents that were manually
 % classified

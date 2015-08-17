@@ -8,12 +8,12 @@ function computerClass = classify_autom_algorith(automclassData)
     
     % Classify as automation patents if they have at least one keyword
     % match
-%     for ix_keyword=1:length( automclassData.dictionary )
-%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
-%             automclassData.title_matches, ix_keyword, 1)];
-%         name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a+b}$'];
-%         algorithm_name = [algorithm_name, name_pick];
-%     end
+    for ix_keyword=1:length( automclassData.dictionary )
+        compAutomat = [compAutomat, count_matches_greaterNumber( ...
+            automclassData.title_matches, ix_keyword, 1)];
+        name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a+b}$'];
+        algorithm_name = [algorithm_name, name_pick];
+    end
 
     % Take matches in title
 %     for ix_keyword=1:length( automclassData.dictionary )
