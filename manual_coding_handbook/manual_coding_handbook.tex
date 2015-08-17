@@ -51,6 +51,7 @@
 % --------------------------------------------------------
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \useinnertheme{circles} % changes the appearance of bullet points for both numbers and circles
 
@@ -65,8 +66,8 @@
 \setbeamercolor{button}{bg=beamer@blendedblue}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title {\textbf{Manual Coding Handbook} \\[1cm]
-A New Indicator of Automation \\ Based on Patent Text Search}
+\title {\textbf{Manual Coding Handbook\\[0.15cm]
+for Automation Patents}}
 \author{
 Katja Mann, Lukas P\"uttmann \\  
 \textit{University of Bonn}}
@@ -99,7 +100,7 @@ Katja Mann, Lukas P\"uttmann \\
 
 \begin{frame}\frametitle{What is a patent?}
 	\begin{itemize}	
-		\item Patents guarantee the intellectual property right to an innovation. In the US this right is for 20 years. 
+		\item Patents guarantee the intellectual property right to an innovation. In the US this right is granted for 20 years. 
 		\item People or firms apply for patents in a \textit{patent application} in which they describe, why a patent is new, useful and not trivial.
 		\item The patent office then looks at the application and decides whether to grant the patent.
 		\item If the patent is granted, an official \textit{patent grant text} is written. This is the document we will look at.
@@ -110,6 +111,7 @@ Katja Mann, Lukas P\"uttmann \\
 \begin{frame}\frametitle{Patent grant text ...}
 ... contains most importantly:
 	\begin{itemize}	
+		\item title
 		\item abstract
 		\item detailed description
 	\end{itemize}
@@ -191,14 +193,14 @@ Katja Mann, Lukas P\"uttmann \\
 \href{http://patft.uspto.gov/netahtml/PTO/search-bool.html}{\texttt{\textcolor{myred}{http://patft.uspto.gov/netahtml/PTO/search-bool.html}}}\\[0.1cm]
 	and enter the patent number
 	\item We recommend using Google Patents first, as it has the nicer interface. If you cannot find it (this happens rarely) or if the patent grant text looks incomplete (also rare), please try at the USPTO search interface.
-	\item The right patent might not be the first one in the list. In Google Patents, you might find patents from other countries. You identify the right patent as the one starting with ``US". In the USPTO search interface, the right patent is often the last one in the list (don't ask us why...).
+	\item The right patent might not be the first one in the list. In Google Patents, you might find patents from other countries. You identify the right patent as the one starting with ``US". In the USPTO search interface, the right patent is often the last one in the list.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{Practical issues}
 	\begin{itemize}	
 	\item There are some warning signs, that you might have clicked on the wrong patent: if the main language is not in English (but for example in German or Chinese), then it's probably not an US patent.
-	\item If the date of the patent grant text (also called publication date) is before 1976, then something might be wrong. We are only looking at patents that were granted in 1976 and the years after. The application dates can be earlier, though (sometimes a long time before 1976). 
+	\item If the date of the patent grant text (also called publication date) is before 1976, then something might be wrong. We are only looking at patents that were granted in 1976 and the years after. The application dates can be earlier, though (sometimes long before 1976). 
 	\item If there is a problem and you cannot figure it out, please indicate that in the comment box.
 	\end{itemize}
 \end{frame}
@@ -399,7 +401,7 @@ Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
-	\item \textit{Can I enter something else like 1? if I'm not quite sure?}\\[0.1cm]
+	\item \textit{Can I enter something else like ``1?" if I'm not quite sure?}\\[0.1cm]
 	No, please write your remarks in the comment box if you're not sure. 
 	\end{itemize}
 \end{frame}
@@ -408,7 +410,7 @@ Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Should I read the whole patent?}\\[0.1cm]
-	No, that is likely not necessary (if the text is not very short). We recommend to concentrate on: the title, the abstract (which is a short overview) and the description. The beginning of the description is often most interesting and there is sometimes a section called ``background" which is informative. It also helps to look at the images. It can also help to see which patents were cited (they are likely similar to the one you're looking at) and who applied for it (you might know the firm and infer something from that). You can also use outside knowledge (like Googling a term) if you think that helps. 
+	No, that is likely not necessary (if the text is not very short). We recommend to concentrate on: the title, the abstract (which is a short overview) and the description. The beginning of the description is often most interesting and there is sometimes a section called ``background" which is informative. It also helps to look at the images. It can also help to see which patents were cited (they are likely similar to the one you're looking at) and who applied for it (you might know the firm and infer something from that). You can also use outside knowledge (like Googling a term). 
 	\end{itemize}
 \end{frame}	
 
@@ -439,14 +441,14 @@ Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{What if I don't understand what the patent is about?}\\[0.1cm]
-	No problem, just judge if you think this patent might have something to contribute to automation. If you're not sure \textit{beyond reasonable doubt} (to borrow such a legal term), please indicate this in the comment box.
+	No problem, just judge if you think this patent might have something to contribute to automation. If you're not at least reasonably sure, please indicate this in the comment box.
 	\end{itemize}
 \end{frame}
 	
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{How long should I take for a patent?}\\[0.1cm]
-	There is no clear number here. If it's less 30 seconds on average per patent, it's probably too fast. If it's more than 5 minutes per patent, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's ok (and indeed recommended by us) to take more time for those patents that you think might be automation patents.
+	There is no clear number here. If it's less 30 seconds on average per patent, it's probably too fast. If it's more than 5 minutes per patent on average, it's probably too slow. But the speed will likely differ between people. It's often much faster to see that a patent has \textit{nothing} to do with automation, rather than deciding it is an automation patent. It's recommended by us to take more time for patents that you think might be automation patents.
 	\end{itemize}
 \end{frame}
 
