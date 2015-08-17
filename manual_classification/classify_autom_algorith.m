@@ -15,39 +15,11 @@ function computerClass = classify_autom_algorith(automclassData)
         algorithm_name = [algorithm_name, name_pick];
     end
 
-    % Take matches in title
-%     for ix_keyword=1:length( automclassData.dictionary )
-%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
-%             automclassData.title_matches, ix_keyword, 1)];
-%         name_pick = [automclassData.dictionary{ix_keyword}, '$_t$'];
-%         algorithm_name = [algorithm_name, name_pick];
-%     end
-    
-    % Take matches in abstract
-%     for ix_keyword=1:length( automclassData.dictionary )
-%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
-%             automclassData.abstract_matches, ix_keyword, 1)];
-%         name_pick = [automclassData.dictionary{ix_keyword}, '$_a$'];
-%         algorithm_name = [algorithm_name, name_pick];
-%     end
 
-    % Take matches in patent body
-%     for ix_keyword=1:length( automclassData.dictionary )
-%         compAutomat = [compAutomat, count_matches_greaterNumber( ...
-%             automclassData.body_matches, ix_keyword, 1)];
-%         name_pick = [automclassData.dictionary{ix_keyword}, '$_b$'];
-%         algorithm_name = [algorithm_name, name_pick];
-%     end
-    
-    % Take matches in title and abstract
-    for ix_keyword=1:length( automclassData.dictionary )
-        compAutomat = [compAutomat, count_matches_greaterNumber( ...
-            automclassData.title_matches + automclassData.abstract_matches, ...
-            ix_keyword, 1)];
-        name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a}$'];
-        algorithm_name = [algorithm_name, name_pick];
-    end
-    
+   % Anwhere: % "automat" OR "robot" OR "movable arm" OR "autonomous" OR "adaptive"
+   % OR "self-generat" OR in title + abstract "detect" OR "program" OR
+   % "computer"
+       
     
     % Bessen-Hunt classification of software patents
     bh_software_patents = bessen_hunt(automclassData, 1);
