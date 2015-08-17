@@ -1,4 +1,4 @@
-% clear all
+clear all
 close all
 clc
 
@@ -108,11 +108,11 @@ years = year_start:year_end;
 
 % Get keywords and technology numbers for those patents that were manually
 % classified
-% automclassData = compile_automclass4codedpats(manclassData, year_start, ...
-%     year_end);
+% compile_automclass4codedpats(manclassData, year_start, year_end);
 
+%%
 % Classify patents based on computerized methods
-clear computerClass classalg_comparison
+load('automclassData')
 computerClass = classify_autom_algorith(automclassData);
 
 % Make a contingency table comparing the manual vs. the computer
