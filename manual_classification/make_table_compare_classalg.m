@@ -18,7 +18,7 @@ printname = 'output/table_compare_classalg.tex';
 FID = fopen(printname, 'w');
 
 fprintf(FID, '\\begin{table}\n');
-fprintf(FID, '\\begin{small}\n');
+fprintf(FID, '\\begin{footnotesize}\n');
 fprintf(FID, '\\begin{threeparttable}\n');
 fprintf(FID, '\\caption{{\\normalsize Evaluation of different classification algorithms}}\n');
 fprintf(FID, '\\label{table:table_compare_classalg}\n');
@@ -89,15 +89,17 @@ end
 
 fprintf(FID,'\\end{tabular} \n');
 fprintf(FID, '\\begin{tablenotes}\n');
-fprintf(FID, '\\small\n');
-fprintf(FID,'\\item\\textit{Note:} Every column is a different classification algorithms.\n');
+fprintf(FID, '\\footnotesize\n');
+fprintf(FID,'\\item\\textit{Note:} Classified as automation patents if at least one match of keywords in all parts of patent. ');
+fprintf(FID,'\\item Algorithm1: (anywhere in patent:) ``automat" OR ``robot" OR ``movable arm" OR ``autonomous" OR  ``adaptive" OR ``self-generat" OR (in title + abstract:) ``detect" OR ``program" OR ``computer".\n');
+fprintf(FID,'\\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").\n')
 fprintf(FID,'\\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. \n');
 fprintf(FID,'\\item AUC: Area under (the receiver operating) curve.\n');
 fprintf(FID,'\\item MCC: Matthew''s correlation coefficient.\n');
 fprintf(FID,'\\item\\textit{Source:} USPTO, Google and own calculations.\n');
 fprintf(FID, '\\end{tablenotes}\n');
 fprintf(FID, '\\end{threeparttable}\n');
-fprintf(FID, '\\end{small}\n');
+fprintf(FID, '\\end{footnotesize}\n');
 fprintf(FID, '\\end{table}\n');
 fclose(FID); 
 

@@ -117,9 +117,6 @@ computerClass = classify_autom_algorith(automclassData);
 
 
 
-break
-
-
 % Make a contingency table comparing the manual vs. the computer
 % classification of patents
 
@@ -139,7 +136,7 @@ end
 
 classalg_comparison.algorithm_name = computerClass.algorithm_name;
 
-% plot_bar_fmeasure(classalg_comparison.fmeasure, computerClass.algorithm_name)
+plot_bar_fmeasure(classalg_comparison.fmeasure, computerClass.algorithm_name)
 
 
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
@@ -147,7 +144,7 @@ classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
 
 make_contingency_table(classifstat)
 
-max_line = 10;
+max_line = 9; % choose number of algorithms to put on line for table in paper
 make_table_compare_classalg(classalg_comparison, max_line)
 
 

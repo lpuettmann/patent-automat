@@ -11,7 +11,7 @@ function computerClass = classify_autom_algorith(automclassData)
     for ix_keyword=1:length( automclassData.dictionary )
         compAutomat = [compAutomat, count_matches_greaterZero( ...
             total_matches, ix_keyword)];
-        name_pick = [automclassData.dictionary{ix_keyword}, '$_{t+a+b}$'];
+        name_pick = automclassData.dictionary{ix_keyword};
         algorithm_name = [algorithm_name, name_pick];
     end
 
@@ -29,8 +29,9 @@ function computerClass = classify_autom_algorith(automclassData)
         titleabstract_words);
     
     % Pick those words that contain any of those
-    max([mat_classif_1, mat_classif_2], [], 2) % CONTINUE HERE !!!!!!!!!!!!!!
-    
+    class_pat = max([mat_classif_1, mat_classif_2], [], 2);
+    compAutomat = [compAutomat, class_pat];
+    algorithm_name = [algorithm_name, 'Algorithm1'];
     
     % Bessen-Hunt classification of software patents
     bh_software_patents = bessen_hunt(automclassData, 1);

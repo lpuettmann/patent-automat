@@ -1,6 +1,8 @@
 function plot_bar_fmeasure(fmeasure, algorithm_name)
 
-fmeasure(isnan(fmeasure)) = 0;
+% It's possible for there to be missing values in the F-measure. For the
+% figure, replace these by zero.
+fmeasure( isnan(fmeasure) ) = 0;
 [fmeasure_sorted, ix_sort] = sort(fmeasure, 'descend');
 
 word_dict = algorithm_name(ix_sort);
@@ -18,9 +20,8 @@ my_light_gray = [240, 240, 240] ./ 255;
 nr_words = length(word_dict);
 
 color1_pick = my_dark_gray;
-bar(fmeasure_sorted, 0.7, 'FaceColor', color1_pick, 'EdgeColor', color1_pick, ... 
-    'LineWidth', 1.5)
-
+bar(fmeasure_sorted, 0.7, 'FaceColor', color1_pick, 'EdgeColor', ...
+    color1_pick, 'LineWidth', 1.5)
 
 set(gca, 'TickLength', [0 0]) % turn tick marks off
 

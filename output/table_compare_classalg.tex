@@ -1,46 +1,56 @@
 \begin{table}
-\begin{small}
+\begin{footnotesize}
 \begin{threeparttable}
 \caption{{\normalsize Evaluation of different classification algorithms}}
 \label{table:table_compare_classalg}
-\begin{tabular}{rllllllllll}
+\begin{tabular}{rlllllllll}
 \toprule 
- & \textbf{automat$_{t+a}$} & \textbf{robot$_{t+a}$} & \textbf{movable arm$_{t+a}$} & \textbf{algorithm$_{t+a}$} & \textbf{manual$_{t+a}$} & \textbf{software$_{t+a}$} & \textbf{computer$_{t+a}$} & \textbf{program$_{t+a}$} & \textbf{digital$_{t+a}$} & \textbf{autonomous$_{t+a}$}  \tabularnewline 
-Accuracy & 0.78 & 0.76 & 0.76 & 0.76 & 0.77 & 0.77 & 0.77 & 0.78 & 0.76 & 0.76  \tabularnewline 
-Precision & 0.83 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.62 & 0.79 & 0.47 & NaN  \tabularnewline 
-Recall & 0.10 & 0.02 & 0.01 & 0.02 & 0.03 & 0.03 & 0.08 & 0.10 & 0.08 & 0.00  \tabularnewline 
-F-measure & 0.17 & 0.04 & 0.02 & 0.04 & 0.06 & 0.06 & 0.14 & 0.18 & 0.13 & NaN  \tabularnewline 
-AUC & 0.54 & 0.51 & 0.50 & 0.51 & 0.51 & 0.51 & 0.53 & 0.55 & 0.52 & 0.50  \tabularnewline 
-MCC & 0.23 & 0.12 & 0.09 & 0.12 & 0.15 & 0.15 & 0.15 & 0.23 & 0.11 & NaN  \tabularnewline 
-Number "Yes" & 12 & 2 & 1 & 2 & 3 & 3 & 13 & 14 & 17 & 0  \tabularnewline 
+ & \textbf{automat} & \textbf{robot} & \textbf{movable arm} & \textbf{algorithm} & \textbf{manual} & \textbf{software} & \textbf{computer} & \textbf{program} & \textbf{digital}  \tabularnewline 
+Accuracy & 0.79 & 0.76 & 0.76 & 0.78 & 0.71 & 0.77 & 0.76 & 0.72 & 0.76  \tabularnewline 
+Precision & 0.56 & 0.75 & 0.33 & 0.63 & 0.37 & 0.53 & 0.49 & 0.40 & 0.49  \tabularnewline 
+Recall & 0.56 & 0.03 & 0.01 & 0.19 & 0.27 & 0.22 & 0.36 & 0.30 & 0.35  \tabularnewline 
+F-measure & 0.56 & 0.06 & 0.02 & 0.29 & 0.31 & 0.31 & 0.42 & 0.34 & 0.41  \tabularnewline 
+AUC & 0.71 & 0.51 & 0.50 & 0.58 & 0.56 & 0.58 & 0.62 & 0.58 & 0.62  \tabularnewline 
+MCC & 0.42 & 0.11 & 0.02 & 0.25 & 0.14 & 0.23 & 0.27 & 0.17 & 0.27  \tabularnewline 
+Number "Yes" & 106 & 4 & 3 & 32 & 76 & 43 & 78 & 78 & 76  \tabularnewline 
 \tabularnewline 
- & \textbf{adaptive$_{t+a}$} & \textbf{self-adjust$_{t+a}$} & \textbf{self-generat$_{t+a}$} & \textbf{detect$_{t+a}$} & \textbf{independent$_{t+a}$} & \textbf{motor$_{t+a}$} & \textbf{engine$_{t+a}$} & \textbf{communicat$_{t+a}$} & \textbf{semi-conductor$_{t+a}$} & \textbf{semiconductor$_{t+a}$}  \tabularnewline 
-Accuracy & 0.76 & 0.76 & 0.76 & 0.77 & 0.75 & 0.76 & 0.75 & 0.75 & 0.76 & 0.73  \tabularnewline 
-Precision & 0.50 & 0.00 & 1.00 & 0.62 & 0.38 & 0.50 & 0.31 & 0.41 & 0.00 & 0.07  \tabularnewline 
-Recall & 0.01 & 0.00 & 0.01 & 0.12 & 0.05 & 0.09 & 0.05 & 0.09 & 0.00 & 0.01  \tabularnewline 
-F-measure & 0.02 & NaN & 0.02 & 0.21 & 0.08 & 0.15 & 0.08 & 0.14 & NaN & 0.02  \tabularnewline 
-AUC & 0.50 & 0.50 & 0.50 & 0.55 & 0.51 & 0.53 & 0.51 & 0.52 & 0.50 & 0.49  \tabularnewline 
-MCC & 0.04 & -0.03 & 0.09 & 0.20 & 0.06 & 0.13 & 0.03 & 0.09 & -0.04 & -0.07  \tabularnewline 
-Number "Yes" & 2 & 1 & 1 & 21 & 13 & 18 & 16 & 22 & 2 & 14  \tabularnewline 
+ & \textbf{autonomous} & \textbf{adaptive} & \textbf{self-adjust} & \textbf{self-generat} & \textbf{detect} & \textbf{independent} & \textbf{motor} & \textbf{engine} & \textbf{communicat}  \tabularnewline 
+Accuracy & 0.77 & 0.76 & 0.75 & 0.76 & 0.71 & 0.66 & 0.73 & 0.68 & 0.73  \tabularnewline 
+Precision & 1.00 & 0.50 & 0.00 & 1.00 & 0.42 & 0.29 & 0.42 & 0.24 & 0.43  \tabularnewline 
+Recall & 0.03 & 0.05 & 0.00 & 0.01 & 0.50 & 0.30 & 0.34 & 0.15 & 0.45  \tabularnewline 
+F-measure & 0.06 & 0.09 & NaN & 0.02 & 0.46 & 0.29 & 0.38 & 0.19 & 0.44  \tabularnewline 
+AUC & 0.51 & 0.52 & 0.50 & 0.50 & 0.64 & 0.54 & 0.60 & 0.50 & 0.63  \tabularnewline 
+MCC & 0.15 & 0.09 & -0.05 & 0.09 & 0.27 & 0.07 & 0.21 & 0.00 & 0.26  \tabularnewline 
+Number "Yes" & 3 & 10 & 3 & 1 & 127 & 106 & 86 & 66 & 109  \tabularnewline 
 \tabularnewline 
- & \textbf{chip$_{t+a}$} & \textbf{bus$_{t+a}$} & \textbf{circuit$_{t+a}$} & \textbf{circuitry$_{t+a}$} & \textbf{antigen$_{t+a}$} & \textbf{antigenic$_{t+a}$} & \textbf{chromatography$_{t+a}$} & \textbf{Bessen-Hunt} & \textbf{Always "No"} & \textbf{Always "Yes"}  \tabularnewline 
-Accuracy & 0.76 & 0.75 & 0.71 & 0.75 & 0.76 & 0.76 & 0.76 & 0.78 & 0.76 & 0.24  \tabularnewline 
-Precision & 0.43 & 0.31 & 0.25 & 0.33 & NaN & NaN & 1.00 & 0.57 & NaN & 0.24  \tabularnewline 
-Recall & 0.03 & 0.05 & 0.10 & 0.03 & 0.00 & 0.00 & 0.01 & 0.29 & 0.00 & 1.00  \tabularnewline 
-F-measure & 0.05 & 0.08 & 0.14 & 0.05 & NaN & NaN & 0.02 & 0.38 & NaN & 0.39  \tabularnewline 
-AUC & 0.51 & 0.51 & 0.50 & 0.51 & 0.50 & 0.50 & 0.50 & 0.61 & 0.50 & 0.50  \tabularnewline 
-MCC & 0.06 & 0.03 & 0.01 & 0.03 & NaN & NaN & 0.09 & 0.28 & NaN & NaN  \tabularnewline 
-Number "Yes" & 7 & 16 & 40 & 9 & 0 & 0 & 1 & 53 & 0 & 438  \tabularnewline 
+ & \textbf{semi-conductor} & \textbf{semiconductor} & \textbf{chip} & \textbf{bus} & \textbf{circuit} & \textbf{circuitry} & \textbf{antigen} & \textbf{antigenic} & \textbf{chromatography}  \tabularnewline 
+Accuracy & 0.75 & 0.70 & 0.69 & 0.68 & 0.66 & 0.74 & 0.75 & 0.76 & 0.71  \tabularnewline 
+Precision & 0.17 & 0.27 & 0.20 & 0.33 & 0.36 & 0.41 & 0.00 & 0.00 & 0.10  \tabularnewline 
+Recall & 0.01 & 0.14 & 0.10 & 0.30 & 0.53 & 0.19 & 0.00 & 0.00 & 0.03  \tabularnewline 
+F-measure & 0.02 & 0.19 & 0.13 & 0.31 & 0.43 & 0.26 & NaN & NaN & 0.04  \tabularnewline 
+AUC & 0.50 & 0.51 & 0.49 & 0.55 & 0.62 & 0.55 & 0.49 & 0.50 & 0.47  \tabularnewline 
+MCC & -0.02 & 0.03 & -0.04 & 0.11 & 0.21 & 0.14 & -0.07 & -0.04 & -0.09  \tabularnewline 
+Number "Yes" & 6 & 55 & 51 & 95 & 155 & 49 & 6 & 2 & 30  \tabularnewline 
+\tabularnewline 
+ & \textbf{Algorithm1} & \textbf{Bessen-Hunt} & \textbf{Always "No"} & \textbf{Always "Yes"}  \tabularnewline 
+Accuracy & 0.78 & 0.78 & 0.76 & 0.24 & & & & &  \tabularnewline 
+Precision & 0.53 & 0.57 & NaN & 0.24 & & & & &  \tabularnewline 
+Recall & 0.69 & 0.29 & 0.00 & 1.00 & & & & &  \tabularnewline 
+F-measure & 0.60 & 0.38 & NaN & 0.39 & & & & &  \tabularnewline 
+AUC & 0.75 & 0.61 & 0.50 & 0.50 & & & & &  \tabularnewline 
+MCC & 0.45 & 0.28 & NaN & NaN & & & & &  \tabularnewline 
+Number "Yes" & 137 & 53 & 0 & 438 & & & & &  \tabularnewline 
 \bottomrule 
 \end{tabular} 
 \begin{tablenotes}
-\small
-\item\textit{Note:} Every column is a different classification algorithms.
+\footnotesize
+\item\textit{Note:} Classified as automation patents if at least one match of keywords in all parts of patent. \item Algorithm1: (anywhere in patent:) ``automat" OR ``robot" OR ``movable arm" OR ``autonomous" OR  ``adaptive" OR ``self-generat" OR (in title + abstract:) ``detect" OR ``program" OR ``computer".
+\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").
 \item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. 
 \item AUC: Area under (the receiver operating) curve.
 \item MCC: Matthew's correlation coefficient.
 \item\textit{Source:} USPTO, Google and own calculations.
 \end{tablenotes}
 \end{threeparttable}
-\end{small}
+\end{footnotesize}
 \end{table}
