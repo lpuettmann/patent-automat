@@ -3,16 +3,33 @@
 \begin{threeparttable}
 \caption{{\normalsize Contingency table}}
 \label{table:contingency_table}
-\begin{tabular}{lrlll}
-\toprule & & & &  \tabularnewline[-0.3cm]
- & & \multicolumn{3}{c}{Computerized} \tabularnewline[0.1cm]
- & & \multicolumn{1}{|l}{No}  & \multicolumn{1}{l|}{Yes} \tabularnewline
+\begin{tabular}{lrllll}
+\toprule 
+ & & & &  & \tabularnewline[-0.3cm]
+ & & \multicolumn{3}{c}{Computerized} & \tabularnewline[0.1cm]
+ & & \multicolumn{1}{|l}{No}  & \multicolumn{1}{l|}{Yes} & \tabularnewline
 \cline{3-5} 
-\parbox[t]{0mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Manual}}} & No & \multicolumn{1}{|l}{286} & \multicolumn{1}{l|}{47} & 333 \tabularnewline
- & Yes & \multicolumn{1}{|l}{46} & \multicolumn{1}{l|}{59} & 105 \tabularnewline
+\parbox[t]{0mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Manual}}} & No & \multicolumn{1}{|l}{268} & \multicolumn{1}{l|}{65} & 333 & \tabularnewline
+ & Yes & \multicolumn{1}{|l}{33} & \multicolumn{1}{l|}{72} & 105 & \tabularnewline
  \cline{3-5} 
- &  & \multicolumn{1}{|l}{332} & \multicolumn{1}{l|}{106} & 438 \tabularnewline
-\bottomrule\end{tabular}
+ &  & \multicolumn{1}{|l}{301} & \multicolumn{1}{l|}{137} & 438 & \tabularnewline
+&  &  & & & \tabularnewline[-0.1cm]
+\cline{2-6} 
+\rule{0pt}{12pt} & Accuracy & \multicolumn{3}{r}{$\frac{268 + 72}{438} = 0.78$} &  \tabularnewline
+\rule{0pt}{12pt}& Precision & \multicolumn{3}{r}{$\frac{72}{137} = 0.53$} & \tabularnewline
+\rule{0pt}{12pt}& Recall & \multicolumn{3}{r}{$\frac{72}{105} = 0.69$} &  \tabularnewline
+\rule{0pt}{12pt}& $F_1$ & \multicolumn{3}{r}{0.60} & \tabularnewline
+\rule{0pt}{12pt}& AUC$^2$ & \multicolumn{3}{r}{0.75} & \tabularnewline
+\rule{0pt}{12pt}& MCC$^3$ & \multicolumn{3}{r}{0.45} & \tabularnewline
+\bottomrule\multicolumn{6}{l}{\textit{Note:} Classification based on Algorithm1.} \tabularnewline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item $^1$: $F_1$ is the \textit{balanced F-measure} which is the evenly weightened harmonic mean between Precision and Recall. 
+\item $^2$: Area under (the receiver operating) curve.
+\item $^3$: Matthew's correlation coefficient.
+\item\textit{Source:} USPTO, Google and own calculations.
+\end{tablenotes}
 \end{threeparttable}
 \end{small}
 \end{table}

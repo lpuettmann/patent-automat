@@ -92,7 +92,7 @@ fprintf(FID, '\\begin{tablenotes}\n');
 fprintf(FID, '\\footnotesize\n');
 fprintf(FID,'\\item\\textit{Note:} Classified as automation patents if at least one match of keywords in all parts of patent. ');
 fprintf(FID,'\\item Algorithm1: (anywhere in patent:) ``automat" OR ``robot" OR ``movable arm" OR ``autonomous" OR  ``adaptive" OR ``self-generat" OR (in title + abstract:) ``detect" OR ``program" OR ``computer".\n');
-fprintf(FID,'\\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").\n')
+fprintf(FID,'\\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").\n');
 fprintf(FID,'\\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. \n');
 fprintf(FID,'\\item AUC: Area under (the receiver operating) curve.\n');
 fprintf(FID,'\\item MCC: Matthew''s correlation coefficient.\n');

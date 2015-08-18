@@ -66,18 +66,22 @@ years = year_start:year_end;
 
 %% Make some visualizations 
 % dim_subplot = [6, 5];
-% 
+
 % plot_matches_overtime(year_start, year_end, dim_subplot)
 % plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
 % plot_mean_len_pattxt(year_start, year_end)
 % plot_pat1m_over_nrlines(year_start, year_end)
 % plot_nr_pat1m(year_start, year_end)
 % plot_error_nr_patents % compares number of yearly patents 1976-2014
-% 
-% % Plot the classified automation patents
+
+% Plot the classified automation patents
 % pick_k = 1; % 1: "automat"
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)
+
+% plot_alg1_overtime(year_start, year_end)
+% plot_alg1_over_nrpatents_weekly(year_start, year_end)
+
 
 
 %% Link patents to industries
@@ -136,21 +140,23 @@ end
 
 classalg_comparison.algorithm_name = computerClass.algorithm_name;
 
-plot_bar_fmeasure(classalg_comparison.fmeasure, computerClass.algorithm_name)
+% plot_bar_fmeasure(classalg_comparison.fmeasure, computerClass.algorithm_name)
 
 
+ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
-    computerClass.compAutomat(:, 1));
-
+    computerClass.compAutomat(:, ix_alg))
 make_contingency_table(classifstat)
+
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 max_line = 9; % choose number of algorithms to put on line for table in paper
 make_table_compare_classalg(classalg_comparison, max_line)
 
-
-%% Copy tables
 copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_compare_classalg.tex', ...
     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
 
 
 

@@ -7,6 +7,7 @@ week_start = 1;
 allyr_patstats.total_matches_week = []; 
 allyr_patstats.total_pat1m_week = []; 
 allyr_patstats.nr_patents_per_week = [];
+allyr_patstats.total_alg1_week = [];
 
 % Where new year data starts
 ix_new_year = ones(length(year_start:year_end) + 1, 1); 
@@ -30,6 +31,9 @@ for ix_year=year_start:year_end
     nr_keyword_per_patent = patsearch_results.title_matches + ...
         patsearch_results.abstract_matches + patsearch_results.body_matches;
     pat1m = +(nr_keyword_per_patent > 1);
+    alg1 = classif_alg1(patsearch_results.dictionary, ...
+        patsearch_results.title_matches, ...
+        patsearch_results.abstract_matches, patsearch_results.body_matches);
     
     patent_week = cell2mat(patsearch_results.week);
     
@@ -39,6 +43,7 @@ for ix_year=year_start:year_end
 
     total_matches_week = zeros(week_end, length(patsearch_results.dictionary));
     total_pat1m_week = zeros(week_end, length(patsearch_results.dictionary));  
+    total_alg1_week = zeros(week_end, 1);  
     nr_patents_per_week = zeros(week_end, 1);
     
     for ix_week=week_start:week_end
@@ -47,6 +52,9 @@ for ix_year=year_start:year_end
 
         pat1m_week = pat1m(patent_week==ix_week, :);
         total_pat1m_week(ix_week, :) = sum(pat1m_week, 1);
+        
+        alg1_week = alg1(patent_week==ix_week, :);
+        total_alg1_week(ix_week, :) = sum(alg1_week, 1);
         
         % Count number of patents per week
         nr_patents_per_week(ix_week) = length(keywords_week);
@@ -57,7 +65,11 @@ for ix_year=year_start:year_end
                                         total_matches_week];
 
     allyr_patstats.total_pat1m_week = [allyr_patstats.total_pat1m_week;
-                                        total_pat1m_week];                    
+                                       total_pat1m_week];           
+                                    
+
+    allyr_patstats.total_alg1_week = [allyr_patstats.total_alg1_week;
+                                      total_alg1_week];     
                                     
     allyr_patstats.nr_patents_per_week = [allyr_patstats.nr_patents_per_week;
                                          nr_patents_per_week];
@@ -66,7 +78,7 @@ for ix_year=year_start:year_end
     aux_ix_save = aux_ix_save + 1;
     
     
-    fprintf('Summarizing year %d completed.\n', ix_year)
+    fprintf('Summarized year: %d.\n', ix_year)
 end
 
 
