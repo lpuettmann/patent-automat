@@ -64,7 +64,7 @@ yLimits = get(gca,'YLim');
 xlim([year_start, year_end])
 ygrid_lines = [yLimits(1):5:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
-ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
+% ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
 handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 subplot(3,1,2)
@@ -91,7 +91,7 @@ set(gca, 'TickDir', 'out')
 yLimits = get(gca,'YLim');
 ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
-ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
+% ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
 handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 subplot(3,1,3)
@@ -114,7 +114,7 @@ xlim([year_start, year_end])
 yLimits = get(gca,'YLim');
 ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
-ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
+% ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
 handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 

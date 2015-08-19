@@ -2,7 +2,6 @@ function pat2ind = conversion_patent2industry()
 
 fname = 'Naics_co13.csv';
 lnumber = 203074;
-pick_k = 1;
 fullyear_start = 1976;
 fullyear_end = 2014;
 
@@ -20,7 +19,7 @@ fprintf('Finished, time = %dm.\n', round(toc/60))
 [~, ind_code_table] = xlsread('industry_names.xlsx'); % load industry names
 
 [industry_list, linked_pat_ix, industry_sumstats] = match_pat2industry( ...
-    pick_k, fullyear_start, fullyear_end, ind_code_table, conversion_table);
+    fullyear_start, fullyear_end, ind_code_table, conversion_table);
 
 disp('Finished matching patents with industries.')
 

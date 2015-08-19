@@ -64,16 +64,15 @@ for ix_labormvar=1:length(var_list)
         industry_name = pat2ind.industry_sumstats{ix_industry, 2, 1};
         sumstats = extract_sumstats(pat2ind.industry_sumstats, ix_industry);
         industry_nr_pat = sumstats(:, 1);
-        industry_nr_matches = sumstats(:, 2);
-        industry_pat_1match = sumstats(:, 3);
-        industry_automix = sumstats(:, 4);
-        industry_avg_matches = industry_nr_matches ./ industry_nr_pat;
+        industry_nr_alg1 = sumstats(:, 2);
+        industry_nr_pat1m = sumstats(:, 3);
         
-        % Share of patents classified as automation patents (> 1 keyword match)
-        industry_pat1match_share = industry_pat_1match ./ industry_nr_pat;
+        % Share of patents classified as automation patents
+        industry_nr_alg1_share = industry_nr_alg1 ./ industry_nr_pat;
+        industry_nr_pat1m = industry_nr_pat1m ./ industry_nr_pat;
 
-        patent_metrics = [industry_pat_1match, industry_avg_matches, ...
-            industry_pat1match_share, industry_automix];
+        patent_metrics = [industry_nr_alg1, industry_nr_pat1m, ...
+            industry_nr_alg1_share, industry_nr_pat1m];
         
         % Iterate through metric of the patent matches to compare to labor market
         % outcomes
@@ -176,7 +175,7 @@ for ix_labormvar=1:length(var_list)
         if numel(savename)>50
             savename = savename(1:50);
         end
-        eval(horzcat('idata.patent_metric.', savename, ' = patent_metric_pickmat;'));
+        eval( horzcat('idata.patent_metric.', savename, ' = patent_metric_pickmat;') );
                 
         % Save all industry series for the labor market variable in a
         % matrix

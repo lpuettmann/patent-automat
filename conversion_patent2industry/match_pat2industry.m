@@ -1,5 +1,5 @@
 function [industry_list, linked_pat_ix, industry_sumstats] = ...
-    match_pat2industry(pick_k, year_start, year_end, ind_code_table, ...
+    match_pat2industry(year_start, year_end, ind_code_table, ...
     conversion_table)
 
 
@@ -23,7 +23,6 @@ for ix_year = year_start:year_end
 
     % Count how many patents map into the industry
     classification_nr = patsearch_results.classnr;
-
     
     
     for ix_industry=1:length(industry_list)
@@ -63,26 +62,29 @@ for ix_year = year_start:year_end
         linked_pat_ix{ix_iter, ix_industry} = patix2ind;
         
         % Find keyword matches of the patents that map to the industry
-        nr_keyword_appear = patsearch_results.matches(:, pick_k);
-        industry_keyword_matches = nr_keyword_appear(patix2ind);
+        industry_title_matches = patsearch_results.title_matches(patix2ind, :);
+        industry_abstract_matches = patsearch_results.abstract_matches(patix2ind, :);
+        industry_body_matches = patsearch_results.body_matches(patix2ind, :);
         
-        % Save industry keyword matches for all industries
-        all_industry_keyword_matches{ix_iter, ix_industry} = ...
-            industry_keyword_matches;
-        
-        % Calculate our custom automation index
-        industry_automix = sum(log(1 + industry_keyword_matches));
-        
-        % Patents with at least one keyword match
-        industry_distpatents_w_1m = (industry_keyword_matches>0);
+        % Find patents classified as automation patents by Algorithm1
+        industry_alg1 = classif_alg1(patsearch_results.dictionary, ...
+            industry_title_matches, ...
+            industry_abstract_matches, ...
+            industry_body_matches);
+                      
+        % Find patents classified as automation patents if contain
+        % "automat" at least once.
+        industry_nr_keyword_per_patent = industry_title_matches(:,1) + ...
+            industry_abstract_matches(:,1) + industry_body_matches(:,1);
+        industry_pat1m = +(industry_nr_keyword_per_patent > 1);
 
         % Save yearly summary statistics for industries
-        save_sumstats = [length(patix2ind), sum(industry_keyword_matches), ...
-            sum(industry_distpatents_w_1m), industry_automix];
+        save_sumstats = [length(patix2ind), sum(industry_alg1), ...
+            sum(industry_pat1m)];
 
         industry_sumstats(ix_industry, :, ix_iter) = ...
             {industry_nr, industry_name, save_sumstats};
     end
     
-    fprintf('Finished year: %d.\n', ix_year)
+    fprintf('Linked tech class to industry: %d.\n', ix_year)
 end

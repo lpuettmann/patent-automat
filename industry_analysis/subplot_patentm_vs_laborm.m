@@ -1,10 +1,5 @@
 function subplot_patentm_vs_laborm(year_start, year_end, ... 
-    manufacturing_ind_data, pat2ind)
-
-
-%% Choose labor market and patent match statistic
-ix_patentmetric  = 3;
-ix_labormvar = 5;
+    manufacturing_ind_data, pat2ind, ix_patentmetric, ix_labormvar)
 
 
 %% Plot settings
@@ -47,16 +42,15 @@ for ix_industry=1:size(pat2ind.industry_sumstats, 1)
     industry_name = pat2ind.industry_sumstats{ix_industry, 2, 1};
     sumstats = extract_sumstats(pat2ind.industry_sumstats, ix_industry);
     industry_nr_pat = sumstats(:, 1);
-    industry_nr_matches = sumstats(:, 2);
-    industry_pat_1match = sumstats(:, 3);
-    industry_automix = sumstats(:, 4);
-    industry_avg_matches = industry_nr_matches ./ industry_nr_pat;
+    industry_nr_alg1 = sumstats(:, 2);
+    industry_nr_pat1m = sumstats(:, 3);
 
-    % Share of patents classified as automation patents (> 1 keyword match)
-    industry_pat1match_share = industry_pat_1match ./ industry_nr_pat;
+    % Share of patents classified as automation patents
+    industry_nr_alg1_share = industry_nr_alg1 ./ industry_nr_pat;
+    industry_nr_pat1m = industry_nr_pat1m ./ industry_nr_pat;
     
-    patent_metrics = [industry_pat_1match, industry_avg_matches, ...
-            industry_pat1match_share, industry_automix];
+    patent_metrics = [industry_nr_alg1, industry_nr_pat1m, ...
+        industry_nr_alg1_share, industry_nr_pat1m];
     patent_metric_pick = patent_metrics(:, ix_patentmetric);
 
     
