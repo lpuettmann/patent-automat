@@ -1,4 +1,4 @@
-function compile_automclass4codedpats(manclassData, ...
+function automclassData = compile_automclass4codedpats(manclassData, ...
     year_start, year_end)
 
 % Sort data after years. This is important as we'll later loop through
@@ -67,8 +67,3 @@ end
 if any( isnan( automclassData.body_matches(:) ) )
     warning('There are NaN in body_matches of automclassData.')
 end
-
-% Save to .mat
-save_name = 'output/automclassData.mat';
-save(save_name, 'automclassData');    
-fprintf('Saved: %s.\n', save_name)

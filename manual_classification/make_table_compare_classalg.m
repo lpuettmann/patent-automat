@@ -102,5 +102,3 @@ fprintf(FID, '\\end{threeparttable}\n');
 fprintf(FID, '\\end{small}\n');
 fprintf(FID, '\\end{table}\n');
 fclose(FID); 
-
-fprintf('Saved: %s.\n', printname)

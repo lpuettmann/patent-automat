@@ -83,6 +83,10 @@ years = year_start:year_end;
 % plot_alg1_over_nrpatents_weekly(year_start, year_end)
 
 
+make_table_yearsstats(year_start, year_end)
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
 
 %% Link patents to industries
 % pat2ind = conversion_patent2industry();
@@ -110,9 +114,11 @@ years = year_start:year_end;
 % Load and prepare the manually classified patents
 manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
 
-% Get keywords and technology numbers for those patents that were manually
-% classified
-% compile_automclass4codedpats(manclassData, year_start, year_end);
+% Get keywords and technology numbers for manually classified patents
+% automclassData = compile_automclass4codedpats(manclassData, ...
+%     year_start, year_end);
+% save('output/automclassData.mat', 'automclassData'); % save to .mat
+
 
 %%
 % Classify patents based on computerized methods
@@ -131,6 +137,16 @@ make_contingency_table(classifstat)
 
 copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+compClass_Yes = computerClass.compAutomat(:, ix_alg);
+classifstat_yrly = calculate_classerror_overtime(manclassData, ...
+    compClass_Yes, year_start, year_end);
+
+
+% plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\classifstat_yrly.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+
 
 
 % Compare all algorithms
@@ -154,7 +170,7 @@ choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
 classalg_comparison = comp_evals_algs(choose_compalg_list, ...
     computerClass, manclassData);
 
-plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
+% plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
 
 max_line = 9; % choose number of algorithms to put on line for table in paper
 make_table_compare_classalg(classalg_comparison, max_line)
