@@ -121,35 +121,40 @@ computerClass = classify_autom_algorith(automclassData);
 
 
 
-% Make a contingency table comparing the manual vs. the computer
-% classification of patents
+%% Compare manual vs. computer classification of patents
 
-for i=1:size(computerClass.compAutomat, 2)
-    classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
-        computerClass.compAutomat(:, i));
-    
-    classalg_comparison.accuracy(i) = classifstat.accuracy;
-    classalg_comparison.precision(i) = classifstat.precision;
-    classalg_comparison.recall(i) = classifstat.recall;
-    classalg_comparison.fmeasure(i) = classifstat.fmeasure;
-    classalg_comparison.auc(i) = classifstat.auc;
-    classalg_comparison.matthewscorrcoeff(i) = classifstat.matthewscorrcoeff;
-    classalg_comparison.nr_Yes(i) = classifstat.false_positive + ...
-        classifstat.true_positive;
-end
-
-classalg_comparison.algorithm_name = computerClass.algorithm_name;
-
-% plot_bar_fmeasure(classalg_comparison.fmeasure, computerClass.algorithm_name)
-
-
+% Report contingency table for Algorithm1 only
 ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
-    computerClass.compAutomat(:, ix_alg))
+    computerClass.compAutomat(:, ix_alg));
 make_contingency_table(classifstat)
 
 copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+
+% Compare all algorithms
+% choose_compalg_list = computerClass.algorithm_name; % pick all algorithms
+% classalg_comparison = comp_evals_algs(choose_compalg_list, ...
+%     computerClass, manclassData);
+% 
+% plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
+% 
+% max_line = 9; % choose number of algorithms to put on line for table in paper
+% make_table_compare_classalg(classalg_comparison, max_line)
+% 
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_compare_classalg.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+
+
+% Compare only few algorithms
+choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
+    'Always "No"', 'Always "Yes"'};
+classalg_comparison = comp_evals_algs(choose_compalg_list, ...
+    computerClass, manclassData);
+
+plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
 
 max_line = 9; % choose number of algorithms to put on line for table in paper
 make_table_compare_classalg(classalg_comparison, max_line)
