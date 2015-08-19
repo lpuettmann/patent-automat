@@ -57,9 +57,9 @@ function testNoMatches(testCase)
             
     find_str = 'FindMe';
     ix_find = get_ix_cellarray_str(file_str, find_str);
-    actSolution = isempty(actSolution);
+    actSolution = length(ix_find);
     
-    expSolution = 1;
+    expSolution = 0;
     
     verifyEqual(testCase, actSolution, expSolution);
 end

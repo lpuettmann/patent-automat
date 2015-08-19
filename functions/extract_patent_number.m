@@ -1,4 +1,5 @@
-function patent_number = extract_patent_number(nr_patents, search_corpus, ix_pnr, ftset)
+function patent_number = extract_patent_number(nr_patents, ...
+    search_corpus, ix_pnr, ftset)
 
 % Pre-define empty cell array to hold patent numbers
 patent_number = repmat({''}, nr_patents, 1);
@@ -25,7 +26,7 @@ for i=1:nr_patents
 
         case 3
             patent_nr_start = regexp(patent_nr_line, 'file="US');
-            patent_nr_trunc = patent_nr_line(patent_nr_start + 8 : end); % WATCH OUT: 8 is hard-coded
+            patent_nr_trunc = patent_nr_line(patent_nr_start + 8 : end);
             patent_nr_end = regexp(patent_nr_trunc, '-'); 
             patent_nr_end = patent_nr_end(1);
             patent_number{i} = patent_nr_trunc(1:patent_nr_end-1);

@@ -1,5 +1,5 @@
 function classifstat = calculate_manclass_stats(correctClass, ...
-    estimatClass, evalalphaa)
+    estimatClass, evalalpha)
 % Analyze the quality of a binary classification algorithm. These can be 
 % reported in a contingency table (also called confusion matrix).
 %
