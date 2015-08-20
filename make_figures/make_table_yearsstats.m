@@ -30,7 +30,7 @@ fprintf(FID,'\\begin{small}\n');
 fprintf(FID,'\\begin{threeparttable}\n');
 fprintf(FID,'\\caption{{\\normalsize Overview of yearly classified patents}}\n');
 fprintf(FID,'\\label{table:table_yearsstats}\n');
-fprintf(FID,'\\begin{tabular}{lrrrllrrrllrrr}\n'); 
+fprintf(FID,'\\begin{tabular}{rrrrrrrrrrrrrr}\n'); 
 fprintf(FID,'\\toprule \\addlinespace[0.5em]\n');
 fprintf(FID,' & \\textbf{\\#A} & \\textbf{\\#P} & \\textbf{\\%%} & \\phantom{aaa} & & \\textbf{\\#A} & \\textbf{\\#P} & \\textbf{\\%%} & \\phantom{aaa} & & \\textbf{\\#A} & \\textbf{\\#P} & \\textbf{\\%%}\\tabularnewline[0.1cm]\n');
 fprintf(FID,'\\midrule \\addlinespace[0.5em]\n');

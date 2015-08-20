@@ -83,9 +83,9 @@ dim_subplot = [6, 5];
 % plot_alg1_over_nrpatents_weekly(year_start, year_end)
 
 
-% make_table_yearsstats(year_start, year_end)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+make_table_yearsstats(year_start, year_end)
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
 %% Link patents to industries
@@ -95,24 +95,24 @@ dim_subplot = [6, 5];
 
 
 %% Industry-level analysis
-load('pat2ind')
-
-manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
-
-make_table_meancorr_laborm_patentm(manufacturing_ind_data)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
-
-
-ix_patentmetric = 3;
-ix_labormvar = 5;
-subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
-    ix_patentmetric, ix_labormvar)
-
-
+% load('pat2ind')
+% 
+% manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
+% 
+% make_table_meancorr_laborm_patentm(manufacturing_ind_data)
+% % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
+% %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% 
+% 
+% ix_patentmetric = 3;
+% ix_labormvar = 5;
+% subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
+%     ix_patentmetric, ix_labormvar)
 
 
-break
+
+
+% break
 
 
 
@@ -125,6 +125,7 @@ break
 
 % Load and prepare the manually classified patents
 manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
+
 
 % Get keywords and technology numbers for manually classified patents
 % automclassData = compile_automclass4codedpats(manclassData, ...
@@ -153,6 +154,9 @@ copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automa
 compClass_Yes = computerClass.compAutomat(:, ix_alg);
 classifstat_yrly = calculate_classerror_overtime(manclassData, ...
     compClass_Yes, year_start, year_end);
+
+
+(max( classifstat_yrly.nr_class )- 1  - classifstat_yrly.nr_class)'
 
 
 plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
