@@ -14,8 +14,7 @@ nr_years = length(year_start:year_end);
 week_start = 1;
 
 % Determine how many patents to draw from every year
-nr_draw_pat_yr = [1; 0; 2; 1; 0; 4; 1; 1; 5; 2; 5; 5; 4; 3; 0; 7; 7; ...
-    6; 5; 2; 3; 5; 7; 5; 6; 2; 2; 4; 1; 4; 6; 3; 0; 0; 3; 2; 5; 4; 3; 0];
+nr_draw_pat_yr = repmat(5, nr_years, 1);
 
 assert( length(nr_draw_pat_yr) == length( year_start:year_end ) )
 
@@ -69,7 +68,7 @@ end
 rand_pat = rand_pat(randperm(length(rand_pat)), :);
 
 % Assign a version number
-vnum = 10;
+vnum = 13;
 
 % Create an Excel document which gives the patent number of the drawn
 % patent
