@@ -39,33 +39,12 @@ for ix_year=year_start:year_end
         % These should NOT show up in our patent numbers
         yset.pnumberNotShow = {'ABCD', '-15', '3981025', '3963412', ...
             'RE0288551', '4002274', '4002698', '4003093'};
-        yset.PatentNumber_matchesCheck = {'3931155', '3931341'};
-        yset.title_matchesCheck = ...
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        yset.abstract_matchesCheck = ...
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        yset.body_matchesCheck = ...
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0;
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     elseif ix_year == 1977;
         yset.pnumber = {'4002274', '4002698', '4003093', '4002754', ...
             '4042420', '4042593', '4042642', '4042696', '4002358', '4002405'};
         yset.pnumberNotShow = {'ABCD', '-15', 'D02429616', '3980627', ...
             '3980901'};
-        yset.PatentNumber_matchesCheck = {'4002358', '4002405'};
-        yset.title_matchesCheck = ...
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        yset.abstract_matchesCheck = ...
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-            0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        yset.body_matchesCheck = ...
-            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-             0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 53, 0, 1, 0, 0, 0, 0, 19, 7, 0, 0, 0];
-
     else
         yset.pnumber = {};
         yset.pnumberNotShow = {};
@@ -143,34 +122,6 @@ for ix_year=year_start:year_end
             if not( any( strcmp(patsearch_results.patentnr, pick_pnumber) ) )
                 warning('Patent %s not found in %s.', pick_pnumber, yearfname)
             end
-        end
-
-        % Check specified matches
-        for i=1:length(yset.PatentNumber_matchesCheck)
-            pick_pnumber = yset.PatentNumber_matchesCheck{i};
-            ix_pick = find( +strcmp( patsearch_results.patentnr, ...
-                pick_pnumber) );    
-
-           if isempty( ix_pick )
-               warning('Patent number not found.')
-           end
-
-           if any( not ( patsearch_results.title_matches(ix_pick, :) == ...
-                   yset.title_matchesCheck(i, :) ) )
-               warning('Title matches in patent %s not correct.', pick_pnumber)
-           end
-
-           if any( not ( patsearch_results.abstract_matches(ix_pick, :) == ...
-                   yset.abstract_matchesCheck(i, :) ) )
-               warning('Abstract matches in patent %s not correct.', ...
-                   pick_pnumber)
-           end
-
-           if any( not ( patsearch_results.body_matches(ix_pick, :) == ...
-                   yset.body_matchesCheck(i, :) ) )
-               warning('Matches in patent body in patent %s not correct.', ...
-                   pick_pnumber)
-           end       
         end
     end
     

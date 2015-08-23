@@ -53,8 +53,10 @@ years = year_start:year_end;
 
 
 %% Check matches for plausibility
-% check_cleanedmatches_plausability(year_start, year_end)
+check_cleanedmatches_plausability(year_start, year_end)
 
+
+break
 
 %% Transfer matches to CSV (for use in Stata)
 % transfer_cleaned_matches2csv(year_start, year_end)
