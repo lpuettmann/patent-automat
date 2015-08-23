@@ -53,10 +53,8 @@ years = year_start:year_end;
 
 
 %% Check matches for plausibility
-check_cleanedmatches_plausability(year_start, year_end)
+% check_cleanedmatches_plausability(year_start, year_end)
 
-
-break
 
 %% Transfer matches to CSV (for use in Stata)
 % transfer_cleaned_matches2csv(year_start, year_end)
@@ -67,7 +65,7 @@ break
 
 
 %% Make some visualizations 
-dim_subplot = [6, 5];
+% dim_subplot = [7, 5];
 
 % plot_matches_overtime(year_start, year_end, dim_subplot)
 % plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
@@ -80,44 +78,43 @@ dim_subplot = [6, 5];
 % pick_k = 1; % 1: "automat"
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)
-% 
+
 % plot_alg1_overtime(year_start, year_end)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
 % plot_alg1_over_nrpatents_weekly(year_start, year_end)
-
-
-make_table_yearsstats(year_start, year_end)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% make_table_yearsstats(year_start, year_end)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
 %% Link patents to industries
-% pat2ind = conversion_patent2industry();
-% save('output/pat2ind', 'pat2ind')
+pat2ind = conversion_patent2industry();
+save('output/pat2ind', 'pat2ind')
 
 
 
 %% Industry-level analysis
-% load('pat2ind')
-% 
-% manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
-% 
-% make_table_meancorr_laborm_patentm(manufacturing_ind_data)
-% % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
-% %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
-% 
-% 
-% ix_patentmetric = 3;
-% ix_labormvar = 5;
-% subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
-%     ix_patentmetric, ix_labormvar)
+load('pat2ind')
+
+manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
+
+make_table_meancorr_laborm_patentm(manufacturing_ind_data)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
+ix_patentmetric = 3;
+ix_labormvar = 5;
+subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
+    ix_patentmetric, ix_labormvar)
 
 
-% break
-
-
-
+break
 
 %% Draw patents to classify manually
 % draw_patents4manclass
@@ -158,9 +155,6 @@ classifstat_yrly = calculate_classerror_overtime(manclassData, ...
     compClass_Yes, year_start, year_end);
 
 
-(max( classifstat_yrly.nr_class )- 1  - classifstat_yrly.nr_class)'
-
-
 plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
 copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\classifstat_yrly.pdf', ...
     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
@@ -172,7 +166,7 @@ choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
 classalg_comparison = comp_evals_algs(choose_compalg_list, ...
     computerClass, manclassData);
 
-% plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
+plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
 
 max_line = 9; % choose number of algorithms to put on line for table in paper
 make_table_compare_classalg(classalg_comparison, max_line)
