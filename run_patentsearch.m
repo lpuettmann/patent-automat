@@ -93,27 +93,36 @@ years = year_start:year_end;
 
 
 %% Link patents to industries
-% pat2ind = conversion_patent2industry();
+fyr_start = 1976;
+fyr_end = 2014;
+% pat2ind = conversion_patent2industry(fyr_start, fyr_end);
 % save('output/pat2ind', 'pat2ind')
-% 
-% 
-% 
-% %% Industry-level analysis
-% load('pat2ind')
-% 
-% manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
-% 
-% make_table_meancorr_laborm_patentm(manufacturing_ind_data)
-% % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
-% %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
-% 
-% 
-% ix_patentmetric = 3;
-% ix_labormvar = 5;
-% subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
-%     ix_patentmetric, ix_labormvar)
 
 
+%% Industry-level analysis
+load('pat2ind')
+
+% subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     pat2ind.ind_corresp)
+
+% subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     pat2ind.ind_corresp)
+
+
+manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
+
+make_table_meancorr_laborm_patentm(manufacturing_ind_data)
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+
+ix_patentmetric = 3;
+ix_labormvar = 5;
+subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
+    ix_patentmetric, ix_labormvar)
+
+
+break
 
 %% Draw patents to classify manually
 % draw_patents4manclass

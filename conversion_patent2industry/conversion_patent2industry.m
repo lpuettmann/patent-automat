@@ -1,9 +1,8 @@
-function pat2ind = conversion_patent2industry()
+function pat2ind = conversion_patent2industry(fullyear_start, fullyear_end)
 
 fname = 'Naics_co13.csv';
-lnumber = 203074;
-fullyear_start = 1976;
-fullyear_end = 2014;
+lnumber = 203074; % unfortunately hard-code line number
+
 
 % -------------------------------------------------------------------------
 tic
@@ -11,29 +10,41 @@ tic
 disp('Start preparing conversion table:')
 conversion_table = prepare_conversion_table(fname, lnumber);
 
-disp('Finished preparing conversion table.')
-fprintf('Finished, time = %dm.\n', round(toc/60))
+fprintf('Finished preparing conversion table, time = %d minutes.\n', ...
+    round(toc/60))
 
 
 % -------------------------------------------------------------------------    
 [~, ind_code_table] = xlsread('industry_names.xlsx'); % load industry names
 
-[industry_list, linked_pat_ix, industry_sumstats] = match_pat2industry( ...
-    fullyear_start, fullyear_end, ind_code_table, conversion_table);
+ind_corresp = get_ind_corresp(conversion_table.naics_class_list, ...
+    ind_code_table);
+
+
+% -------------------------------------------------------------------------   
+linked_pat_ix = match_pat2industry(fullyear_start, ...
+    fullyear_end, conversion_table, ind_corresp);
 
 disp('Finished matching patents with industries.')
 
+
+% -------------------------------------------------------------------------
+industry_sumstats = get_industry_sumstats(fullyear_start, fullyear_end, ...
+    linked_pat_ix);
+
+disp('Finished calculating summary statistics for industries.')
  
+
 % -------------------------------------------------------------------------
 [nr_appear_allyear, share_patents_linked] = analyze_pat2indlink( ...
-    fullyear_start, fullyear_end, industry_list, linked_pat_ix);
+    fullyear_start, fullyear_end, linked_pat_ix);
 
 disp('Finished analyzing the patent-industry link.')
 
 
 % Save results in a structure
 pat2ind.conversion_table = conversion_table;
-pat2ind.ind_code_table = ind_code_table;
+pat2ind.ind_corresp = ind_corresp;
 pat2ind.industry_list = industry_list;
 pat2ind.linked_pat_ix = linked_pat_ix;
 pat2ind.industry_sumstats = industry_sumstats;

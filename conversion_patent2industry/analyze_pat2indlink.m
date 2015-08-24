@@ -1,5 +1,5 @@
 function [nr_appear_allyear, share_patents_linked] = analyze_pat2indlink( ...
-    year_start, year_end, industry_list, linked_pat_ix)
+    year_start, year_end, linked_pat_ix)
 
 
 %% Analyze how many patents were linked to how many industries 
@@ -10,7 +10,7 @@ for ix_year = year_start:year_end
 
     % Stack all patent links underneath in long vector
     allind_patix2ind = 0; % initialize
-    for ix_industry=1:length(industry_list)
+    for ix_industry=1:size(linked_pat_ix, 2)
         patix2ind = linked_pat_ix{ix_iter, ix_industry};
         allind_patix2ind = [allind_patix2ind;
                             patix2ind];
