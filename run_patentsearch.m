@@ -122,15 +122,15 @@ years = year_start:year_end;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-% manclassData = prepare_manclass('manclass_consolidated_v8.xlsx')
-manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
+manclassData = prepare_manclass('manclass_consolidated_v9.xlsx');
+% manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
 
 
 
 % Get keywords and technology numbers for manually classified patents
-automclassData = compile_automclass4codedpats(manclassData, ...
-    year_start, year_end);
-save('output/automclassData.mat', 'automclassData'); % save to .mat
+% automclassData = compile_automclass4codedpats(manclassData, ...
+%     year_start, year_end);
+% save('output/automclassData.mat', 'automclassData'); % save to .mat
 
 
 
