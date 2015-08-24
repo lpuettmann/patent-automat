@@ -93,28 +93,27 @@ years = year_start:year_end;
 
 
 %% Link patents to industries
-pat2ind = conversion_patent2industry();
-save('output/pat2ind', 'pat2ind')
+% pat2ind = conversion_patent2industry();
+% save('output/pat2ind', 'pat2ind')
+% 
+% 
+% 
+% %% Industry-level analysis
+% load('pat2ind')
+% 
+% manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
+% 
+% make_table_meancorr_laborm_patentm(manufacturing_ind_data)
+% % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
+% %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% 
+% 
+% ix_patentmetric = 3;
+% ix_labormvar = 5;
+% subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
+%     ix_patentmetric, ix_labormvar)
 
 
-
-%% Industry-level analysis
-load('pat2ind')
-
-manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
-
-make_table_meancorr_laborm_patentm(manufacturing_ind_data)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
-
-
-ix_patentmetric = 3;
-ix_labormvar = 5;
-subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
-    ix_patentmetric, ix_labormvar)
-
-
-break
 
 %% Draw patents to classify manually
 % draw_patents4manclass
@@ -123,13 +122,16 @@ break
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v7.xlsx');
+% manclassData = prepare_manclass('manclass_consolidated_v8.xlsx')
+manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
+
 
 
 % Get keywords and technology numbers for manually classified patents
-% automclassData = compile_automclass4codedpats(manclassData, ...
-%     year_start, year_end);
-% save('output/automclassData.mat', 'automclassData'); % save to .mat
+automclassData = compile_automclass4codedpats(manclassData, ...
+    year_start, year_end);
+save('output/automclassData.mat', 'automclassData'); % save to .mat
+
 
 
 %%

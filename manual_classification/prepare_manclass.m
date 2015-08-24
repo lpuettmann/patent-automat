@@ -5,6 +5,13 @@ function manclassData = prepare_manclass(filename)
 [manclass_dataRaw, ~, ~] = xlsread(filename);
 
 
+
+%% Sort patents by year
+indic_year_unsorted = manclass_dataRaw(:, 2);
+[~, ix_sort] = sort( indic_year_unsorted );
+manclass_dataRaw = manclass_dataRaw(ix_sort, :);
+
+
 %% Extract data
 patentnr = manclass_dataRaw(:, 1);
 indic_year = manclass_dataRaw(:, 2);
@@ -12,10 +19,9 @@ manAutomat = manclass_dataRaw(:, 3);
 manCognitive = manclass_dataRaw(:, 4);
 manManual = manclass_dataRaw(:, 5);
 indic_NotSure = manclass_dataRaw(:, 6);
-% Column 7 are comments on why not sure
-% Column 8 are comments on content of patent
-coderID = manclass_dataRaw(:, 9);
-coderDate = manclass_dataRaw(:, 10);
+% Column 7 are comments, don't import them here
+coderID = manclass_dataRaw(:, 8);
+coderDate = manclass_dataRaw(:, 9);
 
 
 %% Make some checks
@@ -45,10 +51,9 @@ if any(isnan(manAutomat))
         find(isnan(manAutomat)))
 end
 
-
-%% Sort patents by year
-[~, ix_sort] = sort( indic_year );
-manclass_dataRaw = manclass_dataRaw(ix_sort, :);
+if any( diff(indic_year) < 0 )
+    warning('Years should be increasing.')
+end
 
 
 %% Save data in a structure
