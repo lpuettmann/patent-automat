@@ -109,8 +109,10 @@ load('pat2ind')
 %     pat2ind.ind_corresp)
 
 
-idata = analyze_industries(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1), ...
-    pat2ind.ind_corresp(:, 2))
+idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1), ...
+    pat2ind.ind_corresp(:, 2));
+
+check_idata(idata)
 
 
 
