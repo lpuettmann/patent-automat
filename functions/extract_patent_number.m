@@ -1,8 +1,14 @@
 function patent_number = extract_patent_number(nr_patents, ...
     search_corpus, ix_pnr, ftset)
+% Extract the patent numbers from the corpus of patent grant texts 
+% appended after each other. Search for different strings in the texts 
+% depending on the file types. Return a cell array of strings with patent
+% numbers.
 
 % Pre-define empty cell array to hold patent numbers
 patent_number = repmat({''}, nr_patents, 1);
+
+indic_correct4emptystr = []; % initialize empty vector
 
 for i=1:nr_patents
     patent_nr_line = search_corpus(ix_pnr(i), :);
@@ -10,9 +16,12 @@ for i=1:nr_patents
 
     switch ftset.indic_filetype
         case 1
-            if numel(patent_nr_line) < 2
-                 fprintf('~~~ Correct for empty string after patent number %d/%d\n', ...
-                     i, nr_patents)
+            if numel(patent_nr_line) < 2                
+                 % Save for which patents we correct for a  line of empty
+                 % strings after the patent number.
+                 indic_correct4emptystr = [indic_correct4emptystr;
+                                          i];
+                 
                  patent_nr_line = search_corpus(ix_pnr(i) + 1, :); % jump over empty line
                  patent_nr_line = patent_nr_line{1};
                  patent_number{i} = patent_nr_line(6:14);

@@ -115,6 +115,10 @@ idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1), ...
 check_idata(idata)
 
 
+industry_sumstats = pat2ind.industry_sumstats;
+laborm_series = idata.employment;
+make_bivariate_plot(fyr_start, fyr_end, industry_sumstats, laborm_series)
+
 
 
 break
