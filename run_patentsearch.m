@@ -109,7 +109,13 @@ load('pat2ind')
 %     pat2ind.ind_corresp)
 
 
-manufacturing_ind_data = analyze_industries(1976, 2014, pat2ind);
+idata = analyze_industries(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1), ...
+    pat2ind.ind_corresp(:, 2))
+
+
+
+
+break
 
 make_table_meancorr_laborm_patentm(manufacturing_ind_data)
 copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...

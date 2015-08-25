@@ -45,7 +45,6 @@ disp('Finished analyzing the patent-industry link.')
 % Save results in a structure
 pat2ind.conversion_table = conversion_table;
 pat2ind.ind_corresp = ind_corresp;
-pat2ind.industry_list = industry_list;
 pat2ind.linked_pat_ix = linked_pat_ix;
 pat2ind.industry_sumstats = industry_sumstats;
 pat2ind.nr_appear_allyear = nr_appear_allyear;

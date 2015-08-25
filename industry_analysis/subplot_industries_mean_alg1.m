@@ -43,7 +43,7 @@ for ix_industry=1:size(industry_sumstats, 1)
     box off
     set(gca,'TickDir','out') 
     xlim(xax_limit)
-    ylim(yax_limit)
+    %ylim(yax_limit)
     leave_xaxis_bottomonly(ix_industry, dim_subplot, ...
         size(industry_sumstats, 1), 'labels')
 end
