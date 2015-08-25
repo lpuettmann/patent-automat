@@ -117,7 +117,9 @@ check_idata(idata)
 
 industry_sumstats = pat2ind.industry_sumstats;
 laborm_series = idata.employment;
-make_bivariate_plot(fyr_start, fyr_end, industry_sumstats, laborm_series)
+industry_list = pat2ind.ind_corresp(:, 2);
+make_bivariate_plot(fyr_start, fyr_end, industry_sumstats, ...
+    laborm_series, industry_list)
 
 
 
