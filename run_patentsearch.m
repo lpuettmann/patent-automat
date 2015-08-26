@@ -92,11 +92,27 @@ years = year_start:year_end;
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
-%% Link patents to industries
+%% Prepare conversion table
 fyr_start = 1976;
 fyr_end = 2014;
-% pat2ind = conversion_patent2industry(fyr_start, fyr_end);
-% save('output/pat2ind', 'pat2ind')
+
+fname = 'Naics_co13.csv';
+lnumber = 203074; % unfortunately hard-code line number
+tic
+disp('Start preparing conversion table:')
+conversion_table = prepare_conversion_table(fname, lnumber);
+fprintf('Finished preparing conversion table, time = %d minutes.\n', ...
+    round(toc/60))
+save('output/conversion_table', 'conversion_table')
+
+
+%% Link patents to industries
+load('conversion_table')
+pat2ind = conversion_patent2industry(fyr_start, fyr_end, conversion_table);
+save('output/pat2ind', 'pat2ind')
+
+
+break
 
 
 %% Industry-level analysis
