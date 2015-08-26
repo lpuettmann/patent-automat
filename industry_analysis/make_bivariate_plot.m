@@ -22,6 +22,14 @@ nr_colors = size(color_indiv, 1);
 
 colors = [color_indiv; color_indiv; color_indiv]; % we need more colors, so just take the same again
 
+% Use this to leave the first marker unfilled (where does times series start)
+indic_dot = 4; 
+
+% Choose some more settings
+marker_size = 5;
+line_width = 1.5;
+font_size = 16;
+
 figureHandle = figure;
 
 
@@ -51,23 +59,33 @@ for ix_industry = 1:size(laborm_series, 2)
         marker_pick = 'd';
     end
         
-    plot(automat_ishare_mean, ishare_manuf, 'Color', color1_pick, ...
-        'Marker', marker_pick, ...
-        'MarkerSize', 5, 'MarkerFaceColor', color1_pick)
+    plot(automat_ishare_mean(indic_dot:end), ishare_manuf(indic_dot:end), ...
+        'Color', color1_pick, 'Marker', marker_pick, ...
+        'MarkerFaceColor', color1_pick, 'MarkerSize', marker_size, 'LineWidth', line_width)
     hold on
-    ylabel('Share of employees in manufacturing sector employed in industry')
-    xlabel('Share of automation patents')
-    % xlim([0, 1])
+    hStartDot = plot(automat_ishare_mean(1:indic_dot), ishare_manuf(1:indic_dot), 'Color', color1_pick, ...
+        'Marker', marker_pick, 'MarkerSize', marker_size, 'LineWidth', line_width);
+    hold on
+    
+    hAnnotation = get(hStartDot, 'Annotation');
+    hLegendEntry = get(hAnnotation', 'LegendInformation');
+    set(hLegendEntry, 'IconDisplayStyle', 'off')
+    
+    ylabel('Share of employees in manufacturing sector employed in industry', ...
+        'FontSize', font_size)
+    xlabel('Share of automation patents', 'FontSize', font_size)
+    xlim([0, 1])
 end
 hold off
 
 box off
 set(gcf, 'Color', 'w');
-set(gca,'FontSize',12)
+set(gca,'FontSize', 16)
 set(gca, 'TickDir', 'out')
 
-short_industry_list = cellfun(@(s) s(1:20), industry_list, 'uni',false);
-legend(short_industry_list, 'Fontsize', 9, 'Location', 'EastOutside')
+
+short_industry_list = cellfun(@(s) strtrim(s), industry_list, 'uni',false);
+legend(short_industry_list, 'Fontsize', 9, 'Location', 'NorthEast')
 legend boxoff
 
 
