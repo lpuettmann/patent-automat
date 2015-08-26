@@ -1,4 +1,4 @@
-function idata = extract_idata(fyr_start, fyr_end, industry_list, industry_name)
+function idata = extract_idata(fyr_start, fyr_end, industry_list)
 
 if fyr_end == 2015
     warning('Are you sure about fyr_end = 2015? Should probably be 2014')

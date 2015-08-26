@@ -1,11 +1,12 @@
-function pat2ind = conversion_patent2industry(fullyear_start, fullyear_end)
+function pat2ind = conversion_patent2industry(fullyear_start, fullyear_end, ...
+    conversion_table)
 
 
 % -------------------------------------------------------------------------    
 [num, txt] = xlsread('industry_names.xlsx'); % load industry names
 ind_code_table = [txt num2cell(num)];
-ind_corresp = get_ind_corresp(conversion_table.naics_class_list, ...
-    ind_code_table);
+ind_corresp = [ind_code_table(:, 1:2), ind_code_table(:, 4)];
+
 
 % -------------------------------------------------------------------------   
 linked_pat_ix = match_pat2industry(fullyear_start, ...

@@ -96,23 +96,20 @@ years = year_start:year_end;
 fyr_start = 1976;
 fyr_end = 2014;
 
-fname = 'Naics_co13.csv';
-lnumber = 203074; % unfortunately hard-code line number
-tic
-disp('Start preparing conversion table:')
-conversion_table = prepare_conversion_table(fname, lnumber);
-fprintf('Finished preparing conversion table, time = %d minutes.\n', ...
-    round(toc/60))
-save('output/conversion_table', 'conversion_table')
+% fname = 'Naics_co13.csv';
+% lnumber = 203074; % unfortunately hard-code line number
+% tic
+% disp('Start preparing conversion table:')
+% conversion_table = prepare_conversion_table(fname, lnumber);
+% fprintf('Finished preparing conversion table, time = %d minutes.\n', ...
+%     round(toc/60))
+% save('output/conversion_table', 'conversion_table')
 
 
 %% Link patents to industries
-load('conversion_table')
-pat2ind = conversion_patent2industry(fyr_start, fyr_end, conversion_table);
-save('output/pat2ind', 'pat2ind')
-
-
-break
+% load('conversion_table')
+% pat2ind = conversion_patent2industry(fyr_start, fyr_end, conversion_table);
+% save('output/pat2ind', 'pat2ind')
 
 
 %% Industry-level analysis
@@ -125,18 +122,18 @@ load('pat2ind')
 %     pat2ind.ind_corresp)
 
 
-idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1), ...
-    pat2ind.ind_corresp(:, 2));
-
+idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
 check_idata(idata)
 
 
 industry_sumstats = pat2ind.industry_sumstats;
 laborm_series = idata.employment;
 industry_list = pat2ind.ind_corresp(:, 2);
+igroups = pat2ind.ind_corresp(:, 3);
 make_bivariate_plot(fyr_start, fyr_end, industry_sumstats, ...
-    laborm_series, industry_list)
-
+    laborm_series, industry_list, igroups)
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_laborm.pdf', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
 
 break
