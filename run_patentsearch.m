@@ -79,10 +79,10 @@ dim_subplot = [7, 5];
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)
 
-plot_alg1_overtime(year_start, year_end)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-% 
+% plot_alg1_overtime(year_start, year_end)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+%
 % plot_alg1_over_nrpatents_weekly(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
@@ -172,7 +172,6 @@ manclassData = prepare_manclass('manclass_consolidated_v9.xlsx');
 load('automclassData')
 computerClass = classify_autom_algorith(automclassData);
 
-% testchange
 
 %% Compare manual vs. computer classification of patents
 
@@ -180,10 +179,17 @@ computerClass = classify_autom_algorith(automclassData);
 ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
     computerClass.compAutomat(:, ix_alg));
-% make_contingency_table(classifstat)
-% 
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+make_contingency_table(classifstat)
+
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+make_table_evalstats(classifstat)
+
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+
 
 % compClass_Yes = computerClass.compAutomat(:, ix_alg);
 % classifstat_yrly = calculate_classerror_overtime(manclassData, ...
@@ -195,18 +201,18 @@ classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
 % Compare some algorithms
-choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
-    'Always "No"', 'Always "Yes"'};
+% choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
+%     'Always "No"', 'Always "Yes"'};
 % choose_compalg_list = computerClass.algorithm_name; % pick all algorithms
-classalg_comparison = comp_evals_algs(choose_compalg_list, ...
-    computerClass, manclassData);
-
+% classalg_comparison = comp_evals_algs(choose_compalg_list, ...
+%     computerClass, manclassData);
+% 
 % plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
-
-max_line = 9; % choose number of algorithms to put on line for table in paper
-make_table_compare_classalg(classalg_comparison, max_line)
-
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_compare_classalg.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% 
+% max_line = 9; % choose number of algorithms to put on line for table in paper
+% make_table_compare_classalg(classalg_comparison, max_line)
+% 
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_compare_classalg.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
