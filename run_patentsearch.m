@@ -79,9 +79,9 @@ dim_subplot = [7, 5];
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)
 
-% plot_alg1_overtime(year_start, year_end)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+plot_alg1_overtime(year_start, year_end)
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
 % plot_alg1_over_nrpatents_weekly(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
