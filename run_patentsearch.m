@@ -172,7 +172,7 @@ manclassData = prepare_manclass('manclass_consolidated_v9.xlsx');
 load('automclassData')
 computerClass = classify_autom_algorith(automclassData);
 
-
+% testchange
 
 %% Compare manual vs. computer classification of patents
 
