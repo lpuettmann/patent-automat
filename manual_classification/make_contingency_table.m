@@ -14,6 +14,7 @@ fprintf(FID, '\\parbox[t]{0mm}{\\multirow{2}{*}{\\rotatebox[origin=c]{90}{Manual
 fprintf(FID, ' & Yes & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d & \\tabularnewline\n', classifstat.false_negative, classifstat.true_positive, classifstat.false_negative + classifstat.true_positive);
 fprintf(FID, ' \\cline{3-5} \n');
 fprintf(FID, ' &  & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d & \\tabularnewline\n', classifstat.true_negative + classifstat.false_negative, classifstat.false_positive + classifstat.true_positive, classifstat.nr_codpt);
-fprintf(FID, '&  &  & & & \\tabularnewline[-0.1cm]\n');
+fprintf(FID, '  &  &  &  &  & \\tabularnewline\n');
+fprintf(FID, ' & \\multicolumn{5}{l}{\\scriptsize{``No": not automation patent}} &  &  &  & \\tabularnewline\n');
 fprintf(FID,'\\end{tabular}\n');
 fclose(FID); 
