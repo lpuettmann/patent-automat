@@ -11,6 +11,6 @@ fprintf(FID, '\\rule{0pt}{12pt} Precision & $= \\frac{%d}{%d} = %3.2f$ \\tabular
 fprintf(FID, '\\rule{0pt}{12pt} Recall & $= \\frac{%d}{%d} = %3.2f$  \\tabularnewline\n', classifstat.true_positive, classifstat.false_negative + classifstat.true_positive, classifstat.recall);
 fprintf(FID, '\\rule{0pt}{12pt} $F_1$ measure &= %3.2f \\tabularnewline\n', classifstat.fmeasure);
 fprintf(FID, '\\rule{0pt}{12pt} AUROC &= %3.2f \\tabularnewline\n', classifstat.auc);
-fprintf(FID, '\\rule{0pt}{12pt} Matthew''s Corr. Coeff.} & $= %3.2f$ \\tabularnewline\n', classifstat.matthewscorrcoeff);
+fprintf(FID, '\\rule{0pt}{12pt} Matthew''s Corr. Coeff. & $= %3.2f$ \\tabularnewline\n', classifstat.matthewscorrcoeff);
 fprintf(FID,'\\end{tabular}\n');
 fclose(FID); 

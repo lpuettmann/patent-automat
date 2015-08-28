@@ -15,6 +15,6 @@ fprintf(FID, ' & Yes & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d 
 fprintf(FID, ' \\cline{3-5} \n');
 fprintf(FID, ' &  & \\multicolumn{1}{|l}{%d} & \\multicolumn{1}{l|}{%d} & %d & \\tabularnewline\n', classifstat.true_negative + classifstat.false_negative, classifstat.false_positive + classifstat.true_positive, classifstat.nr_codpt);
 fprintf(FID, '  &  &  &  &  & \\tabularnewline\n');
-fprintf(FID, ' & \\multicolumn{5}{l}{\\scriptsize{``No": not automation patent}} &  &  &  & \\tabularnewline\n');
+fprintf(FID, ' & \\multicolumn{5}{l}{``No": not automation patent}  \\tabularnewline\n');
 fprintf(FID,'\\end{tabular}\n');
 fclose(FID); 
