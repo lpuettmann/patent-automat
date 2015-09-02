@@ -52,7 +52,7 @@ box off
 % legend('Total', 'Manual "Yes"', ...
 %     'Computerized "Yes"', 'Location', 'North')
 % legend('boxoff')
-titleHandle = title('Number of manually classified patents', 'FontWeight', 'bold');
+titleHandle = title('(a) Number of manually classified patents', 'FontWeight', 'bold');
 
 set(titleHandle, 'horizontalAlignment', 'left')
 set(titleHandle, 'units', 'normalized')
@@ -78,7 +78,7 @@ box off
 %     'computerized', 'Location', 'North')
 % legend('boxoff')
 ylim([0, 1])
-titleHandle = title('Share classified as automation patents', 'FontWeight', 'bold');
+titleHandle = title('(b) Share classified as automation patents', 'FontWeight', 'bold');
 
 xlim([year_start, year_end])
 set(titleHandle, 'horizontalAlignment', 'left')
@@ -100,7 +100,7 @@ subplot(3,1,3)
 % hold on
 plot(plottime, classifstat_yrly.accuracy, 'Color', color4_pick, ...
     'Linewidth', lwidth)
-titleHandle = title('Accuracy', 'FontWeight', 'bold');
+titleHandle = title('(c) Accuracy', 'FontWeight', 'bold');
 
 set(titleHandle, 'horizontalAlignment', 'left')
 set(titleHandle, 'units', 'normalized')

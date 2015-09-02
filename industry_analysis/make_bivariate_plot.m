@@ -83,7 +83,7 @@ marker_size = 5;
 line_width = 1.5;
 font_size = 16;
 
-marker_list = {'s', 'o', 'd', '^', '>', 'x'};
+marker_list = {'s', 'o', 'd', '^', '>', 'v'};
 
 figureHandle = figure;
 
@@ -132,9 +132,9 @@ for ix_industry = 1:size(laborm_series, 2)
     hLegendEntry = get(hAnnotation', 'LegendInformation');
     set(hLegendEntry, 'IconDisplayStyle', 'off')
     
-    ylabel('Share of employees in manufacturing sector employed in industry', ...
+    ylabel('Industry share of manufacturing sector employment', ...
         'FontSize', font_size)
-    xlabel('Share of automation patents', 'FontSize', font_size)
+    xlabel('Automation patent share', 'FontSize', font_size)
     xlim([0, 1])
 end
 hold off
@@ -152,7 +152,7 @@ legend boxoff
 
 
 % Change position and size
-set(gcf, 'Position', [100 200 1200 800]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 1200 700]) % in vector: left bottom width height
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
 set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...

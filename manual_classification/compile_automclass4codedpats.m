@@ -1,8 +1,8 @@
-function automclassData = compile_automclass4codedpats(manclassData, ...
-    year_start, year_end)
+function automclassData = compile_automclass4codedpats(patentnr, ...
+    indic_year, year_start, year_end)
 
 % Sort data after years. This is important as we'll later loop through
-[~, ix_sort] = sort(manclassData.indic_year);
+[~, ix_sort] = sort(indic_year);
 if any( not( diff(ix_sort) == 1 ) )
     error('Patents should already be ordered by year.')
 end
@@ -16,13 +16,13 @@ all_matches = [];
 % Get the dictionary of words
 load('patsearch_results_1976.mat')
 
-automclassData.title_matches = nan( size(manclassData.patentnr, 1), ...
+automclassData.title_matches = nan( size(patentnr, 1), ...
     length(patsearch_results.dictionary) );
 
-automclassData.abstract_matches = nan( size(manclassData.patentnr, 1), ...
+automclassData.abstract_matches = nan( size(patentnr, 1), ...
     length(patsearch_results.dictionary) );
 
-automclassData.body_matches = nan( size(manclassData.patentnr, 1), ...
+automclassData.body_matches = nan( size(patentnr, 1), ...
     length(patsearch_results.dictionary) );
 
 automclassData.dictionary = patsearch_results.dictionary;
@@ -38,8 +38,8 @@ for ix_year=year_start:year_end
     
     % Find hand-coded patents for this year
     % -------------------------------------------------------------
-    extract_patyrnr = manclassData.patentnr( find( ...
-        manclassData.indic_year == ix_year ) );
+    extract_patyrnr = patentnr( find( ...
+        indic_year == ix_year ) );
     
     for j=1:length(extract_patyrnr)
         extract_me = extract_patyrnr(j);
@@ -47,7 +47,7 @@ for ix_year=year_start:year_end
         ix_pos_ex = find(strcmp(patsearch_results.patentnr, extract_meStr));
               
         % Insert found matches into the structure for hand-coded patents
-        ixManclassData = find( manclassData.patentnr == extract_me );
+        ixManclassData = find( patentnr == extract_me );
         
         automclassData.title_matches(ixManclassData, :) = ...
             patsearch_results.title_matches(ix_pos_ex, :);
