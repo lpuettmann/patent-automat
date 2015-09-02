@@ -132,9 +132,10 @@ Katja Mann, Lukas P\"uttmann \\
 	\begin{itemize}	
 	\item We study all U.S. utility patents 1976-2015.
 	\item We randomly pick an equal number of patents from all years.
-	\item We assign each auditor patents. 50\% of patents are assigned to multiple auditors.
+	\item Every patent is reviewed by an additional auditor.
 	\item The list of patents is given to the auditor in random (not chronological) order.
-	\end{itemize}
+	\item We will not share your classifications with anybody, but instead save them with an anonymous coder ID.
+\end{itemize}
 \end{frame}
 
 
@@ -223,29 +224,42 @@ If Yes (the patent is an automation patent) please also decide:
 	\item Is this is an analytical (automation) patent? We mean by that if it does something cognitive and non-physical.
 	\item Is this is a manual (automation) patent? So is it a physical machine?
 	\end{itemize}
-It can also be both. If you think it's neither, that's ok, but please indicate why in the comment box (we haven't encountered that case yet).
+Some remarks:
+\begin{itemize}
+	\item It can also be both or neither.
+	\item The drawings usually make this easy. A cognitive or software patent usually has flow charts while a manual machine usually has drawings of a physical machine or a plan of electronic circuits.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{The column ``Highly uncertain"}
+\begin{itemize}
+	\item If you're highly doubtful if you made the right decision, please enter 1 into the column ``Highly uncertain". If you're sure, you don't need to enter a 0.
+	\item Even if your not sure and you write a 1 to "Highly uncertain" please still make the decisions on whether the patent is an automation patent and whether it is manual or cognitive.
+	\item So far, we classified around 9\% of patents that we manually coded as "Highly uncertain".
+\end{itemize}
 \end{frame}
 
 
 \begin{frame}\frametitle{Excel table after filling it in}
 \vspace{-1cm}
 \begin{table}
-\begin{small}
+\begin{scriptsize}
   \begin{threeparttable}
-     \begin{tabular}{ccccl}
-        \textbf{Patent number} & \textbf{Classification} & \textbf{Cognitive} & \textbf{Manual} & \textbf{Comment}  \tabularnewline
+     \begin{tabular}{cccccl}
+        \textbf{Pat. num.} & \textbf{Classification} & \textbf{Manual} & \textbf{Cognitive} & \textbf{Highly uncertain}  & \textbf{Comment}  \tabularnewline
         \hline
-        8851703	& 0  &  &  &	\tabularnewline
-        7725116 & 	 &  &  &	Technical problem\tabularnewline
-        8975301 & 0	 &  &  &	\tabularnewline
-        4716621 & 1	 & 1 &  &	\tabularnewline
-        4789151 & 0	 &  &  & 	Not sure\tabularnewline
-        4116621 & 1	 & 1 & 1 &	\tabularnewline
-        6785151 & 0	 &  &  & 	\tabularnewline
+        8851703	& 0  &  & &  &	\tabularnewline
+        7725116 & 	 &  & &  &	Technical problem\tabularnewline
+        8975301 & 0	 &  & &  &	\tabularnewline
+        4716621 & 1	 & 1 & & 1 &	\tabularnewline
+        4789151 & 0	 &  &  & & 	Not sure\tabularnewline
+        4116621 & 1	 & 1 & 1 & &	\tabularnewline
+        6785151 & 0	 &  &  & &	\tabularnewline
         \hline
      \end{tabular}
   \end{threeparttable}
-\end{small}
+\end{scriptsize}
 \end{table}
 \vspace{0.5cm}
 {\small \textcolor{mytextgrey}{Please note that these patents and numbers have not been checked so don't use them as an orientation for your coding. Also the proportion of patents classified as automation patents might not be representative.} }
@@ -260,10 +274,23 @@ It can also be both. If you think it's neither, that's ok, but please indicate w
 \texttt{manclass\textunderscore <FirstnameLastname>\textunderscore <year>-<month>-<day>.xlsx}\\[0.3cm]
 		for example, for Lukas on the 11\textsuperscript{th} of May 2015 that would be:\\[0.1cm]
 \texttt{manclass\textunderscore LukasPuettmann\textunderscore 2015-05-11.xlsx}\\[0.3cm]
-		\item and then send it back to us in an email to\\[0.1cm] \hspace{1cm}\href{mailto:lukas.puettmann@uni-bonn.de}{\texttt{lukas.puettmann@uni-bonn.de}}\\[0.1cm]
+		\item and then send it back to us in an email to \href{mailto:katja.mann@uni-bonn.de}{\texttt{katja.mann@uni-bonn.de}} or \href{mailto:lukas.puettmann@uni-bonn.de}{\texttt{lukas.puettmann@uni-bonn.de}}		
 	\end{itemize}
 \end{frame}
 
+
+\begin{frame}\frametitle{Some empirical probabilities}
+So far, the different fields were marked the following frequencies:
+	\begin{itemize}	
+		\item Automation patent: 27\%, of those:
+		\begin{itemize}
+			\item manual: 42\%
+			\item cognitive: 46\%
+			\item both: 12\%
+			\item neither: 0\% (none so far)
+		\end{itemize}
+	\end{itemize}
+\end{frame}
 
 
 \section{Examples}
@@ -404,7 +431,7 @@ Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Can I enter something else like ``1?" if I'm not quite sure?}\\[0.1cm]
-	No, please write your remarks in the comment box if you're not sure. 
+	No, please write a ``1" into the field ``Highly uncertain" if you're not sure.
 	\end{itemize}
 \end{frame}
 
@@ -428,7 +455,7 @@ Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{Do I need any technical knowledge to judge a patent?}\\[0.1cm]
-	Patent texts are written in a technical language and they can be very complex. We only ask you to classify the patent as an automation patent if you are \textit{reasonably sure} that the patent is an automation patent. If you absolutely cannot figure it out, then consider writing that in the comment box.
+	Patent texts are written in a technical language and they can be very complex. We only ask you to classify the patent as an automation patent if you are \textit{reasonably sure} that the patent is an automation patent. If you absolutely cannot figure it out, then mark ``Highly uncertain" or consider writing that in the comment box.
 	\end{itemize}
 \end{frame}
 
@@ -436,14 +463,14 @@ Sometimes patents don't show up in \href{https://www.google.com/patents}{\texttt
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{How often do you expect me to use the comment box?}\\[0.1cm]
-	Please only use that box to mark if you encounter any problems or if you are absolutely not sure how to classify the patent.
+	Please only use that box to mark if you encounter any problems, if something is unusual or you think there is another reason to tell us about it.
 	\end{itemize}
 \end{frame}	
 
 \begin{frame}\frametitle{FAQs}
 	\begin{itemize}	
 	\item \textit{What if I don't understand what the patent is about?}\\[0.1cm]
-	No problem, just judge if you think this patent might have something to contribute to automation. If you're not at least reasonably sure, please indicate this in the comment box.
+	No problem, just judge if you think this patent might have something to contribute to automation. If you're not at least reasonably sure, please use the filed ``Highly uncertain".
 	\end{itemize}
 \end{frame}
 	
