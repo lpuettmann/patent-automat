@@ -115,28 +115,91 @@ fyr_end = 2014;
 %% Industry-level analysis
 load('pat2ind')
 
-subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    pat2ind.ind_corresp)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_alg1.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-
-subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    pat2ind.ind_corresp)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_mean_alg1.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     pat2ind.ind_corresp)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_alg1.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     pat2ind.ind_corresp)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_mean_alg1.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
 idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
 check_idata(idata)
 
 
-industry_sumstats = pat2ind.industry_sumstats;
-laborm_series = idata.employment;
-industry_list = pat2ind.ind_corresp(:, 2);
-igroups = pat2ind.ind_corresp(:, 3);
-make_bivariate_plot(fyr_start, fyr_end, industry_sumstats, ...
-    laborm_series, industry_list, igroups)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_laborm.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% laborm_series = idata.employment;
+% make_bivariate_employment_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_laborm.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.labor_productivity;
+% make_bivariate_labor_productivity_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_labor_productivity.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.capital;
+% make_bivariate_capital_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_capital.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.labor_cost;
+% make_bivariate_labor_cost_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_labor_cost.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.capital_cost;
+% make_bivariate_capital_cost_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_capital_cost.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.production;
+% make_bivariate_production_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_production.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.output;
+% make_bivariate_output_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_output.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.output_deflator;
+% make_bivariate_output_deflator_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_output_deflator.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.output_deflator;
+% make_bivariate_output_deflator_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_output_deflator.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% 
+% laborm_series = idata.capital_productivity;
+% make_bivariate_capital_productivity_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_capital_productivity.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+
+
+
 
 break
 
