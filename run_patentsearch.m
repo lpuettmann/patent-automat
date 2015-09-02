@@ -129,11 +129,11 @@ idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
 check_idata(idata)
 
 
-% laborm_series = idata.employment;
-% make_bivariate_employment_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_laborm.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+laborm_series = idata.employment;
+make_bivariate_employment_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+    laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_employment.pdf', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
 % 
 % laborm_series = idata.labor_productivity;
