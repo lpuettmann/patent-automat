@@ -25,6 +25,8 @@ automclassData.abstract_matches = nan( size(patentnr, 1), ...
 automclassData.body_matches = nan( size(patentnr, 1), ...
     length(patsearch_results.dictionary) );
 
+automclassData.classnr = nan( size(patentnr, 1), 1);
+
 automclassData.dictionary = patsearch_results.dictionary;
 
 
@@ -56,10 +58,13 @@ for ix_year=year_start:year_end
             patsearch_results.abstract_matches(ix_pos_ex, :);
         
         automclassData.body_matches(ixManclassData, :) = ...
-            patsearch_results.body_matches(ix_pos_ex, :);        
+            patsearch_results.body_matches(ix_pos_ex, :);  
+        
+        automclassData.classnr(ixManclassData) = ...
+            str2num( patsearch_results.classnr{ix_pos_ex} );
     end
         
-    fprintf('Found matches and technology numbers for hand-coded patents in year: %d.\n', ...
+    fprintf('Found matches and tech. numbers for classified patents: %d.\n', ...
         ix_year)
 end
 

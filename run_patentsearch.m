@@ -87,11 +87,11 @@ dim_subplot = [7, 5];
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
-make_table_yearsstats(year_start, year_end)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% make_table_yearsstats(year_start, year_end)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
-break
+
 %% Prepare conversion table
 fyr_start = 1976;
 fyr_end = 2014;
@@ -113,15 +113,15 @@ fyr_end = 2014;
 
 
 %% Industry-level analysis
-load('pat2ind')
-
-max_nr_patlink2ind = max( pat2ind.nr_appear_allyear);
-
-for i=0:max_nr_patlink2ind
-    ix_iter = i + 1;
-    nr_patlink2ind(ix_iter) = sum(pat2ind.nr_appear_allyear == i) ./ ...
-        length(pat2ind.nr_appear_allyear);
-end
+% load('pat2ind')
+% 
+% max_nr_patlink2ind = max( pat2ind.nr_appear_allyear);
+% 
+% for i=0:max_nr_patlink2ind
+%     ix_iter = i + 1;
+%     nr_patlink2ind(ix_iter) = sum(pat2ind.nr_appear_allyear == i) ./ ...
+%         length(pat2ind.nr_appear_allyear);
+% end
 
 
 
@@ -137,8 +137,8 @@ end
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_mean_alg1.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
-idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
-check_idata(idata)
+% idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
+% check_idata(idata)
 
 
 % laborm_series = idata.employment;
@@ -250,12 +250,10 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 
-
-
-
 % Get keywords and technology numbers for manually classified patents
 % automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
 %     manclassData.indic_year, year_start, year_end)
+% automclassData.indic_exclclassnr = check_classnr(automclassData.classnr);
 % save('output/automclassData.mat', 'automclassData'); % save to .mat
 
 
@@ -263,10 +261,15 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 %%
 % Classify patents based on computerized methods
 load('automclassData')
+
+
 computerClass = classify_autom_algorith(automclassData);
 
 
 %% Compare manual vs. computer classification of patents
+
+
+break
 
 % Report contingency table for Algorithm1 only
 ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
