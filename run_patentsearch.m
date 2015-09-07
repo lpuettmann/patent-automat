@@ -87,11 +87,11 @@ dim_subplot = [7, 5];
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
-% make_table_yearsstats(year_start, year_end)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+make_table_yearsstats(year_start, year_end)
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
-
+break
 %% Prepare conversion table
 fyr_start = 1976;
 fyr_end = 2014;
@@ -115,6 +115,18 @@ fyr_end = 2014;
 %% Industry-level analysis
 load('pat2ind')
 
+max_nr_patlink2ind = max( pat2ind.nr_appear_allyear);
+
+for i=0:max_nr_patlink2ind
+    ix_iter = i + 1;
+    nr_patlink2ind(ix_iter) = sum(pat2ind.nr_appear_allyear == i) ./ ...
+        length(pat2ind.nr_appear_allyear);
+end
+
+
+
+
+
 % subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
 %     pat2ind.ind_corresp)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_alg1.pdf', ...
@@ -129,11 +141,11 @@ idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
 check_idata(idata)
 
 
-laborm_series = idata.employment;
-make_bivariate_employment_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_employment.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% laborm_series = idata.employment;
+% make_bivariate_employment_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_employment.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
 % 
 % laborm_series = idata.labor_productivity;
@@ -201,9 +213,6 @@ copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automa
 
 
 
-break
-
-
 % make_table_meancorr_laborm_patentm(manufacturing_ind_data)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
@@ -222,7 +231,7 @@ break
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v9.xlsx');
+manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 % manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
 
 % Use patents classified by Bessen and Hunt (2007) 
@@ -245,10 +254,7 @@ manclassData = prepare_manclass('manclass_consolidated_v9.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
-% automclassData = compile_automclass4codedpats(manclassData, ...
-%     year_start, year_end);
-
-% compile_automclass4codedpats(manclassData.patentnr, ...
+% automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
 %     manclassData.indic_year, year_start, year_end)
 % save('output/automclassData.mat', 'automclassData'); % save to .mat
 

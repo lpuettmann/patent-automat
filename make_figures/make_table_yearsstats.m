@@ -65,7 +65,7 @@ fprintf(FID, '\\bottomrule');
 fprintf(FID,'\\end{tabular}\n');
 fprintf(FID,'\\begin{tablenotes}\n');
 fprintf(FID,'\\small\n');
-fprintf(FID,'\\item\\textit{Note:} \\#A: number of automation patents as classified by Algorithm1, \\#P: total number of patents, $^3$: up to 23.03.2015.\n');
+fprintf(FID,'\\item\\textit{Note:} \\#A: number of automation patents as classified by Algorithm~\\ref{alg:baseline_alg1}, \\#P: total number of patents, $^3$: up to 23.03.2015.\n');
 fprintf(FID,'\\item\\textit{Source:} USPTO, Google and own calculations.\n');
 fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');

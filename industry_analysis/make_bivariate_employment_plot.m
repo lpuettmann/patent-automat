@@ -94,7 +94,7 @@ for ix_industry = 1:size(laborm_series, 2)
     
     % Calculate ratio 
     ishare_manuf = single_laborm_series ./ manuf_employment;
-
+    
     % Extract series of shares of automation patents for specific industry
     single_automat_ishare = automat_ishare_mean_sorted(:, ix_industry);
     
