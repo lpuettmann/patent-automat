@@ -18,7 +18,8 @@ function computerClass = classify_autom_algorith(automclassData)
     
     % Use Algorithm1
    class_pat = classif_alg1(automclassData.dictionary, automclassData.title_matches, ...
-       automclassData.abstract_matches, automclassData.body_matches);
+       automclassData.abstract_matches, automclassData.body_matches, ...
+       automclassData.indic_exclclassnr);
     compAutomat = [compAutomat, class_pat];
     algorithm_name = [algorithm_name, 'Algorithm1'];
     

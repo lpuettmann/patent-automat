@@ -231,8 +231,8 @@ fyr_end = 2014;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
-% manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
+% manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
 
 % Use patents classified by Bessen and Hunt (2007) 
     % patent: patent number
@@ -269,23 +269,21 @@ computerClass = classify_autom_algorith(automclassData);
 %% Compare manual vs. computer classification of patents
 
 
-break
-
 % Report contingency table for Algorithm1 only
 ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
     computerClass.compAutomat(:, ix_alg));
 make_contingency_table(classifstat)
 
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 make_table_evalstats(classifstat)
 
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
-
+break
 
 compClass_Yes = computerClass.compAutomat(:, ix_alg);
 classifstat_yrly = calculate_classerror_overtime(manclassData, ...

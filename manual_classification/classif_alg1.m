@@ -1,5 +1,5 @@
 function class_pat = classif_alg1(searchdict, title_matches, ...
-    abstract_matches, body_matches)
+    abstract_matches, body_matches, indic_exclclassnr)
     % Apply Algorithm1 to classify patents as automation patents
     %
     % (Anwhere:) "automat" OR "robot" OR "movable arm" OR "autonomous" OR 
@@ -20,6 +20,8 @@ function class_pat = classif_alg1(searchdict, title_matches, ...
     % Pick those words that contain any of those
     class_pat = max([mat_classif_1, mat_classif_2], [], 2);
 
+    % Exclude all patents with technology numbers that we chose to exclude
+    class_pat( find( indic_exclclassnr) ) = 0;
 end
 
 
