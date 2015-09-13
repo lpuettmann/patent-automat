@@ -30,7 +30,7 @@ fprintf(FID,'\\begin{small}\n');
 fprintf(FID,'\\begin{threeparttable}\n');
 fprintf(FID,'\\caption{{\\normalsize Overview of yearly classified patents}}\n');
 fprintf(FID,'\\label{table:table_yearsstats}\n');
-fprintf(FID,'\\begin{tabular}{rrrrrrrrrrrrrr}\n'); 
+fprintf(FID,'\\begin{tabular}{lrrrrlrrrrlrrr}\n'); 
 fprintf(FID,'\\toprule \\addlinespace[0.5em]\n');
 fprintf(FID,' & \\textbf{\\#A} & \\textbf{\\#P} & \\textbf{\\%%} & \\phantom{aaa} & & \\textbf{\\#A} & \\textbf{\\#P} & \\textbf{\\%%} & \\phantom{aaa} & & \\textbf{\\#A} & \\textbf{\\#P} & \\textbf{\\%%}\\tabularnewline[0.1cm]\n');
 fprintf(FID,'\\midrule \\addlinespace[0.5em]\n');
@@ -53,7 +53,7 @@ for t=1:13
         addyear2)*100);
 end
  
-fprintf(FID,'& & & & & & & & & & 2015$^3$ & %d & %d & %3.1f  \\tabularnewline[0.1cm]\n', ...
+fprintf(FID,'& & & & & & & & & & 2015$^*$ & %d & %d & %3.1f  \\tabularnewline[0.1cm]\n', ...
     total_alg1_per_year(end), nr_patents_per_year(end), ...
     total_alg1_per_year(end)/nr_patents_per_year(end)*100);
 fprintf(FID,'& & & & & & & & & & \\textbf{Total} & \\textbf{%d} & \\textbf{%d} & \\textbf{%3.1f} \\tabularnewline[0.1cm]\n', ...
@@ -65,7 +65,7 @@ fprintf(FID, '\\bottomrule');
 fprintf(FID,'\\end{tabular}\n');
 fprintf(FID,'\\begin{tablenotes}\n');
 fprintf(FID,'\\small\n');
-fprintf(FID,'\\item\\textit{Note:} \\#A: number of automation patents as classified by Algorithm~\\ref{alg:baseline_alg1}, \\#P: total number of patents, $^3$: up to 23.03.2015.\n');
+fprintf(FID,'\\item\\textit{Note:} \\#A: number of automation patents as classified by Algorithm~\\ref{alg:baseline_alg1}, \\#P: total number of patents, $^*$: up to 23.03.2015.\n');
 fprintf(FID,'\\item\\textit{Source:} USPTO, Google and own calculations.\n');
 fprintf(FID,'\\end{tablenotes}\n');
 fprintf(FID,'\\end{threeparttable}\n');

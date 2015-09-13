@@ -90,7 +90,7 @@ end
 fprintf(FID,'\\end{tabular} \n');
 fprintf(FID, '\\begin{tablenotes}\n');
 fprintf(FID, '\\small\n');
-fprintf(FID,'\\item\\textit{Note:} Classified as automation patents if at least one match of keywords in all parts of patent. ');
+fprintf(FID,'\\item\\textit{Note:} "automat" classifies all patent as automation patent that include "automat" at least once.');
 fprintf(FID,'\\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").\n');
 fprintf(FID,'\\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. \n');
 fprintf(FID,'\\item AUC: Area under (the receiver operating) curve.\n');

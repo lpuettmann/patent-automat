@@ -8,7 +8,7 @@ set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
 
 
-color1_pick = [49, 130, 189] ./ 255;
+color1_pick = [0.3, 0.3, 0.3];
 
 
 
@@ -36,9 +36,7 @@ for ix_industry=1:size(industry_sumstats, 1)
     plotseries = nr_alg1 ./ nr_pat; 
     
     subplot(dim_subplot(1), dim_subplot(2), ix_industry)
-    plot(plottime, plotseries, 'Color', color1_pick, 'Marker', 'o', ...
-        'MarkerEdgeColor', color1_pick, 'MarkerFaceColor', color1_pick, ...
-        'MarkerSize', 1.8)
+    plot(plottime, plotseries, 'Color', color1_pick)
     title(industry_name)
     box off
     set(gca,'TickDir','out') 
