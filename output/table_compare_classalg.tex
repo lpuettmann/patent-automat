@@ -9,7 +9,7 @@
 Accuracy & 0.80 & 0.78 & 0.77 & 0.73 & 0.27 & & & &  \tabularnewline 
 Precision & 0.62 & 0.58 & 0.62 & NaN & 0.27 & & & &  \tabularnewline 
 Recall & 0.67 & 0.57 & 0.32 & 0.00 & 1.00 & & & &  \tabularnewline 
-F-measure & 0.64 & 0.57 & 0.42 & NaN & 0.42 & & & &  \tabularnewline 
+$F_1$-measure & 0.64 & 0.57 & 0.42 & NaN & 0.42 & & & &  \tabularnewline 
 AUC & 0.76 & 0.71 & 0.63 & 0.50 & 0.50 & & & &  \tabularnewline 
 MCC & 0.51 & 0.42 & 0.32 & NaN & NaN & & & &  \tabularnewline 
 Number "Yes" & 162 & 147 & 77 & 0 & 560 & & & &  \tabularnewline 
@@ -17,8 +17,8 @@ Number "Yes" & 162 & 147 & 77 & 0 & 560 & & & &  \tabularnewline
 \end{tabular} 
 \begin{tablenotes}
 \small
-\item\textit{Note:} "automat" classifies all patent as automation patent that include "automat" at least once.\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").
-\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. 
+\item\textit{Note:} "automat" classifies all patents as automation patent that include "automat" at least once.\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").
+\item $F_1$-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. 
 \item AUC: Area under (the receiver operating) curve.
 \item MCC: Matthew's correlation coefficient.
 \item\textit{Source:} USPTO, Google and own calculations.

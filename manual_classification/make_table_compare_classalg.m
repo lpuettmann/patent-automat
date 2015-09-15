@@ -75,7 +75,7 @@ if nr_rem > 0
         classalg_comparison.precision(split_start:split_end));
     fprintf(FID, ['Recall ', num_restinsert], ...
         classalg_comparison.recall(split_start:split_end));
-    fprintf(FID, ['F-measure ', num_restinsert], ...
+    fprintf(FID, ['$F_1$-measure ', num_restinsert], ...
         classalg_comparison.fmeasure(split_start:split_end));
     fprintf(FID, ['AUC ', num_restinsert], ...
         classalg_comparison.auc(split_start:split_end));
@@ -90,9 +90,9 @@ end
 fprintf(FID,'\\end{tabular} \n');
 fprintf(FID, '\\begin{tablenotes}\n');
 fprintf(FID, '\\small\n');
-fprintf(FID,'\\item\\textit{Note:} "automat" classifies all patent as automation patent that include "automat" at least once.');
+fprintf(FID,'\\item\\textit{Note:} "automat" classifies all patents as automation patent that include "automat" at least once.');
 fprintf(FID,'\\item Bessen-Hunt: (anywhere in patent:) ``software" OR (``computer" AND ``program") ANDNOT ((in title:) ``chip" OR ``semiconductor" OR ``bus" OR ``circuit" OR ``circuitry") ANDNOT ((anwhere in patent:) ``antigen" OR ``antigenic" OR ``chromatography").\n');
-fprintf(FID,'\\item F-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. \n');
+fprintf(FID,'\\item $F_1$-measure: balanced F-measure which is the evenly weightened harmonic mean between Precision and Recall. \n');
 fprintf(FID,'\\item AUC: Area under (the receiver operating) curve.\n');
 fprintf(FID,'\\item MCC: Matthew''s correlation coefficient.\n');
 fprintf(FID,'\\item\\textit{Source:} USPTO, Google and own calculations.\n');

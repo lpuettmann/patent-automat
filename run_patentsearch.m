@@ -90,7 +90,7 @@ dim_subplot = [7, 5];
 make_table_yearsstats(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
-break
+
 
 %% Prepare conversion table
 fyr_start = 1976;
@@ -127,17 +127,16 @@ load('pat2ind')
 
 
 
-subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    pat2ind.ind_corresp)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_alg1.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     pat2ind.ind_corresp)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_alg1.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
+% 
+% subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
+%     pat2ind.ind_corresp)
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_mean_alg1.pdf', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
-subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    pat2ind.ind_corresp)
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_mean_alg1.pdf', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-
-break
 
 % idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
 % check_idata(idata)
@@ -282,8 +281,8 @@ make_contingency_table(classifstat)
 
 make_table_evalstats(classifstat)
 
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
 
@@ -309,7 +308,7 @@ plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_na
 max_line = 9; % choose number of algorithms to put on line for table in paper
 make_table_compare_classalg(classalg_comparison, max_line)
 
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_compare_classalg.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_compare_classalg.tex', ...
+    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
