@@ -53,11 +53,13 @@ addpath(build_data_path);
 
 % Get names of files
 % -------------------------------------------------------------------
-liststruct = dir(build_data_path);
+if ix_year < 2002
+    file_paths = [build_data_path, '/*.txt'];
+else
+    file_paths = [build_data_path, '/*.xml']; % not case insensitive (both xml and XML are found)
+end
+liststruct = dir(file_paths);
 filenames = {liststruct.name};
-filenames = filenames(3:end)'; % truncate first elements . and ..
-
-filenames = ifmac_truncate_more(filenames);
 
 check_filenames_format(filenames, ix_year, week_start, week_end)
 
