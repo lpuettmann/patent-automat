@@ -88,8 +88,25 @@ for ix_patent=1:nr_patents
                         
             % Look up IPC tech classification
             % ------------------------------------------------------------
-            indic_ipc_find = regexp(patent_text_corpus, ...
-                ftset.ipc_nr_findstr);
+            switch ftset.indic_filetype
+                case 2
+                     icp_classtxt = patent_text_corpus;
+            
+                case 3
+                    % Extract part of patent text that deals with the IPCs.
+                    classtxt_start = regexp(patent_text_corpus, ...
+                        ftset.ipc_nr_start_str);
+                    classtxt_start = find( ~cellfun(@isempty, ...
+                        classtxt_start) ); 
+                    classtxt_end = regexp(patent_text_corpus, ...
+                        ftset.ipc_nr_end_str);
+                    classtxt_end = find( ~cellfun(@isempty, classtxt_end) ); 
+                    
+                    icp_classtxt = patent_text_corpus(classtxt_start:...
+                        classtxt_end,:);
+            end
+            
+            indic_ipc_find = regexp(icp_classtxt, ftset.ipc_nr_findstr);
             
             % Make logical array
             indic_ipc_find = ~cellfun(@isempty, indic_ipc_find); 
@@ -99,16 +116,29 @@ for ix_patent=1:nr_patents
             ipc_indiv = repmat({''}, length(all_ipc_matches), 1);
             
             for ix_ipc=1:length(all_ipc_matches)
-                row_ipc_class = patent_text_corpus{all_ipc_matches(ix_ipc)}; 
+                row_ipc_class = icp_classtxt{all_ipc_matches(ix_ipc)}; 
                 
                 % Classificiations differ in length, so have to find end
                 % where the classification stops.
                 ipc_find_end = regexp(row_ipc_class, ftset.ipc_nr_linestop);
                 
                 % Extract tech class number from string
-                ipc_extract = strtrim( row_ipc_class(...
-                    ftset.uspc_nr_linestart : ipc_find_end - 1) );
+                switch ftset.indic_filetype
+                    case 2
+                        ipc_extract = strtrim( row_ipc_class(...
+                            ftset.ipc_nr_linestart : ipc_find_end - 1) );
                 
+                    case 3
+                        if ix_ipc == 1
+                            line_start = 22;
+                        else
+                            line_start = 25;
+                        end
+                        
+                        ipc_extract = strtrim( row_ipc_class(...
+                            line_start : ipc_find_end - 1) );
+                end
+                        
                 % Get rid of leading and trailing whitespace
                 ipc_extract = strtrim( ipc_extract );
 

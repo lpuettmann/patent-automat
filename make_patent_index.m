@@ -1,6 +1,6 @@
 function pat_ix = make_patent_index(ix_year)
 
-% Customize some settings for different file types
+% Customize file type settings
 if (ix_year < 2002) && (ix_year > 1975)
     ftset.indic_filetype = 1;
     ftset.nr_trunc = 4;
@@ -26,7 +26,7 @@ elseif (ix_year >=2002) && (ix_year < 2005)
     
     % Use a regular expression to search for one or the other
     ftset.ipc_nr_findstr = '(<B511><PDAT>)|(<B512><PDAT>)';
-    ftset.ipc_nr_linestart = nan;
+    ftset.ipc_nr_linestart = 13;
     ftset.ipc_nr_linestop = '</PDAT>';
     
     ftset.fdate_findstr = '<B220><DATE><PDAT>';
@@ -42,6 +42,12 @@ elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.uspc_nr_findstr = '<classification-national>';
     ftset.uspc_nr_linestart = 22;
     ftset.uspc_nr_linestop = '</main-classification>';
+    
+    ftset.ipc_nr_findstr = '(<main-classification>)|(<further-classification>)';
+    ftset.ipc_nr_start_str = '<classification-ipc>';
+    ftset.ipc_nr_end_str = '</classification-ipc>';
+    ftset.ipc_nr_linestart = 13;
+    ftset.ipc_nr_linestop = '</main-classification>|(</further-classification>)';
     
     ftset.fdate_linestart = 7;
     ftset.fdate_linestop = 12;
