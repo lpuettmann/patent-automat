@@ -50,7 +50,7 @@ week_start = 1;
 week_end = set_weekend(ix_year); 
 
 % Add path to data and get a list with filenames for the year
-get_filenames(ix_year, week_start, week_end)
+filenames = get_filenames(ix_year, week_start, week_end);
 
 
 % Iterate through files of weekly patent grant text data

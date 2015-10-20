@@ -1,4 +1,4 @@
-function get_filenames(ix_year, week_start, week_end)
+function filenames = get_filenames(ix_year, week_start, week_end)
 
 % Build path to data
 build_data_path = set_data_path(ix_year);
