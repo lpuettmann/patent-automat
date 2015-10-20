@@ -4,12 +4,13 @@ function pat_ix = make_patent_index(ix_year)
 if (ix_year < 2002) && (ix_year > 1975)
     ftset.indic_filetype = 1;
     ftset.nr_trunc = 4;
-    ftset.patent_findstr = 'PATN';
+    ftset.patent_findstr = 'PATN'; % patent grant text start
     ftset.nr_lines4previouspatent = 1;
     
-    ftset.class_nr_findstr = 'OCL';
+    ftset.uspc_nr_findstr = 'OCL'; % United States Patent Classification (USPC)
+    ftse.ipc_nr_findstr = 'ICL'; % International Patent Classification (IPC)
     
-    ftset.fdate_findstr = 'APD';
+    ftset.fdate_findstr = 'APD'; % file date
     ftset.fdate_linestart = 6;
     ftset.fdate_linestop = 11;
     
@@ -19,7 +20,7 @@ elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.pnr_find_str = '<B110><DNUM><PDAT>';
     ftset.nr_lines4previouspatent = 2;
     
-    ftset.class_nr_findstr = '<B521><PDAT>';
+    ftset.uspc_nr_findstr = '<B521><PDAT>';
     ftset.classnr_linestart = 13;
     ftset.classnr_linestop = '</PDAT>';
     
@@ -32,7 +33,7 @@ elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.patent_findstr = '<!DOCTYPE us-patent-grant';
     ftset.pnr_find_str = '<us-patent-grant lang=';
     ftset.nr_lines4previouspatent = 1;
-    ftset.class_nr_findstr = '<classification-national>';
+    ftset.uspc_nr_findstr = '<classification-national>';
     ftset.classnr_linestart = 22;
     ftset.classnr_linestop = '</main-classification>';
     
@@ -48,18 +49,8 @@ week_start = 1;
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
 
-build_data_path = set_data_path(ix_year);
-addpath(build_data_path);
-
-
-% Get names of files
-% -------------------------------------------------------------------
-liststruct = dir(build_data_path);
-filenames = {liststruct.name};
-filenames = filenames(3:end)'; % truncate first elements . and ..
-
-filenames = ifmac_truncate_more(filenames);
-check_filenames_format(filenames, ix_year, week_start, week_end)
+% Add path to data and get a list with filenames for the year
+get_filenames(ix_year, week_start, week_end)
 
 
 % Iterate through files of weekly patent grant text data

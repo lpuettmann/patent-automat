@@ -17,7 +17,7 @@ for ix_patent=1:nr_patents
     switch ftset.indic_filetype
          case 1
             % Look up OCL (tech classification)
-            ix_find_OCL = strfind(patent_text_corpus, ftset.class_nr_findstr);
+            ix_find_OCL = strfind(patent_text_corpus,  ftset.uspc_nr_findstr);
             all_OCL_matches = find(~cellfun(@isempty, ix_find_OCL));
 
             % Only look at first OCL match
@@ -28,7 +28,7 @@ for ix_patent=1:nr_patents
 
         case {2, 3}
             % Search for technology classification number
-            indic_class_find = regexp(patent_text_corpus, ftset.class_nr_findstr);
+            indic_class_find = regexp(patent_text_corpus,  ftset.uspc_nr_findstr);
             indic_class_find = ~cellfun(@isempty, indic_class_find); % make logical array
             ix_class_find = find(indic_class_find);
 

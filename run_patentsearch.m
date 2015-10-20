@@ -16,38 +16,39 @@ years = year_start:year_end;
 
 
 %% Make patent index
-% for ix_year = years
-%     tic
-%  
-%     % Search for keywords in the patent grant texts
-%     pat_ix = make_patent_index(ix_year);
-%     
-%     % Print how long the year took
-%     print_finish_summary(toc, ix_year)
-%     
-%     % Save to .mat file
-%     save_patix2mat(pat_ix, ix_year)
-% end
-
-
-%% Search for keywords
 for ix_year = years
     tic
-    
-    % Define dictionary to search for
-    find_dictionary = define_dictionary();
-    
+ 
     % Search for keywords in the patent grant texts
-    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+    pat_ix = make_patent_index(ix_year);
     
     % Print how long the year took
     print_finish_summary(toc, ix_year)
     
-%     Save to .mat file
-    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+    % Save to .mat file
+    save_patix2mat(pat_ix, ix_year)
 end
 
 break
+
+%% Search for keywords
+% for ix_year = years
+%     tic
+%     
+%     % Define dictionary to search for
+%     find_dictionary = define_dictionary();
+%     
+%     % Search for keywords in the patent grant texts
+%     patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+% %     Save to .mat file
+%     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+% end
+
+
 
 % %% Clean matches
 % clean_matches(year_start, year_end)
@@ -114,7 +115,7 @@ fyr_end = 2014;
 
 
 %% Industry-level analysis
-load('pat2ind')
+% load('pat2ind')
 % 
 % max_nr_patlink2ind = max( pat2ind.nr_appear_allyear);
 % 

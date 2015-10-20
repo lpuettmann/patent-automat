@@ -46,22 +46,9 @@ week_start = 1;
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
 
-% Build path to data
-build_data_path = set_data_path(ix_year);
-addpath(build_data_path);
+% Add path to data and get a list with filenames for the year
+get_filenames(ix_year, week_start, week_end)
 
-
-% Get names of files
-% -------------------------------------------------------------------
-if ix_year < 2002
-    file_paths = [build_data_path, '/*.txt'];
-else
-    file_paths = [build_data_path, '/*.xml']; % not case insensitive (both xml and XML are found)
-end
-liststruct = dir(file_paths);
-filenames = {liststruct.name};
-
-check_filenames_format(filenames, ix_year, week_start, week_end)
 
 % Load patent_index for year
 % -------------------------------------------------------------------
