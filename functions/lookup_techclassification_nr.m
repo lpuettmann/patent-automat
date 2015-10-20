@@ -9,14 +9,15 @@ ipc_nr = repmat({''}, nr_patents, 1);
 for ix_patent=1:nr_patents
     
     % Get start and end of patent text
-    % ------------------------------------------------------------
+    % ====================================================================
     patent_text_corpus = get_patent_text_corpus(ix_find, ix_patent, ...
         nr_patents, ftset, search_corpus);
 
-    % lookup technology classification number
-    % ------------------------------------------------------------
+    % Lookup technology classification number
+    % ====================================================================
     switch ftset.indic_filetype
          case 1
+             
             % Look up USPC tech classification (sometimes called OCL)
             % ------------------------------------------------------------
             ix_find_USPC = strfind(patent_text_corpus, ftset.uspc_nr_findstr);
@@ -30,6 +31,7 @@ for ix_patent=1:nr_patents
 
             % Get rid of leading and trailing whitespace
             uspc_nr = strtrim(uspc_nr);
+            
             
             % Look up IPC tech classification
             % ------------------------------------------------------------
@@ -54,7 +56,9 @@ for ix_patent=1:nr_patents
             ipc_nr{ix_patent} = ipc_indiv;               
             
         case {2, 3}
-            % Search for technology classification number
+            
+            % Look up USPC tech classification (sometimes called OCL)
+            % ------------------------------------------------------------
             indic_class_find = regexp(patent_text_corpus, ftset.uspc_nr_findstr);
             indic_class_find = ~cellfun(@isempty, indic_class_find); % make logical array
             ix_class_find = find(indic_class_find);
@@ -74,8 +78,14 @@ for ix_patent=1:nr_patents
             
             % Classificiations differ in length, so have to find end
             % where the classification stops.
-            class_find_end = regexp(class_nr_line, ftset.classnr_linestop); 
-            class_number{ix_patent} = class_nr_line(...
-                ftset.classnr_linestart : class_find_end - 1);
+            class_find_end = regexp(class_nr_line, ftset.uspc_nr_linestop); 
+            class_number = strtrim( class_nr_line(...
+                ftset.uspc_nr_linestart : class_find_end - 1) );
+            uspc_nr{ix_patent} = class_number;
+                        
+            % Look up IPC tech classification
+            % ------------------------------------------------------------
+            
+            
     end
 end

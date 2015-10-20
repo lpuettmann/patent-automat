@@ -14,7 +14,7 @@ year_start = 1976;
 year_end = 2015;
 years = year_start:year_end;
 
-
+break
 %% Make patent index
 for ix_year = years
     tic
@@ -29,6 +29,7 @@ for ix_year = years
     save_patix2mat(pat_ix, ix_year)
 end
 
+break
 
 %% Search for keywords
 for ix_year = years
@@ -43,7 +44,7 @@ for ix_year = years
     % Print how long the year took
     print_finish_summary(toc, ix_year)
     
-%     Save to .mat file
+    % Save to .mat file
     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end
 

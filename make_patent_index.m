@@ -21,8 +21,12 @@ elseif (ix_year >=2002) && (ix_year < 2005)
     ftset.nr_lines4previouspatent = 2;
     
     ftset.uspc_nr_findstr = '<B521><PDAT>';
-    ftset.classnr_linestart = 13;
-    ftset.classnr_linestop = '</PDAT>';
+    ftset.uspc_nr_linestart = 13;
+    ftset.uspc_nr_linestop = '</PDAT>';
+    
+    ftset.ipc_nr_findstr = '<B511><PDAT>';
+    ftset.ipc_nr_linestart = nan;
+    ftset.ipc_nr_linestop = nan;
     
     ftset.fdate_findstr = '<B220><DATE><PDAT>';
     ftset.fdate_linestart = 19;
@@ -33,9 +37,10 @@ elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.patent_findstr = '<!DOCTYPE us-patent-grant';
     ftset.pnr_find_str = '<us-patent-grant lang=';
     ftset.nr_lines4previouspatent = 1;
+    
     ftset.uspc_nr_findstr = '<classification-national>';
-    ftset.classnr_linestart = 22;
-    ftset.classnr_linestop = '</main-classification>';
+    ftset.uspc_nr_linestart = 22;
+    ftset.uspc_nr_linestop = '</main-classification>';
     
     ftset.fdate_linestart = 7;
     ftset.fdate_linestop = 12;
