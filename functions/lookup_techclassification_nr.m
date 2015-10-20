@@ -20,14 +20,14 @@ for ix_patent=1:nr_patents
              
             % Look up USPC tech classification (sometimes called OCL)
             % ------------------------------------------------------------
-            ix_find_USPC = strfind(patent_text_corpus, ftset.uspc_nr_findstr);
-            all_USPC_matches = find(~cellfun(@isempty, ix_find_USPC));
+            ix_find_uspc = strfind(patent_text_corpus, ftset.uspc_nr_findstr);
+            all_uspc_matches = find(~cellfun(@isempty, ix_find_uspc));
 
             % Only look at first USPC match
-            row_USPC_class = patent_text_corpus{all_USPC_matches(1)}; 
+            row_uspc_class = patent_text_corpus{all_uspc_matches(1)}; 
 
             % Extract tech class number from string
-            uspc_nr{ix_patent} = row_USPC_class(6:numel(row_USPC_class));
+            uspc_nr{ix_patent} = row_uspc_class(6:numel(row_uspc_class));
 
             % Get rid of leading and trailing whitespace
             uspc_nr = strtrim(uspc_nr);
@@ -35,16 +35,16 @@ for ix_patent=1:nr_patents
             
             % Look up IPC tech classification
             % ------------------------------------------------------------
-            ix_find_IPC = strfind(patent_text_corpus, ftset.ipc_nr_findstr);
-            all_IPC_matches = find(~cellfun(@isempty, ix_find_IPC));
+            ix_find_ipc = strfind(patent_text_corpus, ftset.ipc_nr_findstr);
+            all_ipc_matches = find(~cellfun(@isempty, ix_find_ipc));
             
             % Get all IPC matches
-            ipc_indiv = repmat({''}, length(all_IPC_matches), 1);
+            ipc_indiv = repmat({''}, length(all_ipc_matches), 1);
             
-            for ix_ipc=1:length(all_IPC_matches)
-                row_IPC_class = patent_text_corpus{all_IPC_matches(ix_ipc)}; 
+            for ix_ipc=1:length(all_ipc_matches)
+                row_ipc_class = patent_text_corpus{all_ipc_matches(ix_ipc)}; 
                 % Extract tech class number from string
-                ipc_extract = row_IPC_class(6:numel(row_IPC_class));
+                ipc_extract = row_ipc_class(6:numel(row_ipc_class));
                 
                 % Get rid of leading and trailing whitespace
                 ipc_extract = strtrim( ipc_extract );
@@ -88,8 +88,33 @@ for ix_patent=1:nr_patents
                         
             % Look up IPC tech classification
             % ------------------------------------------------------------
-            indic_class_find = regexp(patent_text_corpus, ...
-                ftset.uspc_nr_findstr);
+            indic_ipc_find = regexp(patent_text_corpus, ...
+                ftset.ipc_nr_findstr);
             
+            % Make logical array
+            indic_ipc_find = ~cellfun(@isempty, indic_ipc_find); 
+            all_ipc_matches = find(indic_ipc_find);
+            
+            % Get all IPC matches
+            ipc_indiv = repmat({''}, length(all_ipc_matches), 1);
+            
+            for ix_ipc=1:length(all_ipc_matches)
+                row_ipc_class = patent_text_corpus{all_ipc_matches(ix_ipc)}; 
+                
+                % Classificiations differ in length, so have to find end
+                % where the classification stops.
+                ipc_find_end = regexp(row_ipc_class, ftset.ipc_nr_linestop);
+                
+                % Extract tech class number from string
+                ipc_extract = strtrim( row_ipc_class(...
+                    ftset.uspc_nr_linestart : ipc_find_end - 1) );
+                
+                % Get rid of leading and trailing whitespace
+                ipc_extract = strtrim( ipc_extract );
+
+                % Save in cell array
+                ipc_indiv{ix_ipc, 1} = ipc_extract;
+            end
+            ipc_nr{ix_patent} = ipc_indiv;           
     end
 end

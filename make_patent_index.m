@@ -27,7 +27,7 @@ elseif (ix_year >=2002) && (ix_year < 2005)
     % Use a regular expression to search for one or the other
     ftset.ipc_nr_findstr = '(<B511><PDAT>)|(<B512><PDAT>)';
     ftset.ipc_nr_linestart = nan;
-    ftset.ipc_nr_linestop = nan;
+    ftset.ipc_nr_linestop = '</PDAT>';
     
     ftset.fdate_findstr = '<B220><DATE><PDAT>';
     ftset.fdate_linestart = 19;
