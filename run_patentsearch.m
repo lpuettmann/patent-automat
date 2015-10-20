@@ -14,7 +14,7 @@ year_start = 1976;
 year_end = 2015;
 years = year_start:year_end;
 
-break
+years = [1987, 2003, 2009]
 %% Make patent index
 for ix_year = years
     tic
