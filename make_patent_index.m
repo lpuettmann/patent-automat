@@ -8,7 +8,7 @@ if (ix_year < 2002) && (ix_year > 1975)
     ftset.nr_lines4previouspatent = 1;
     
     ftset.uspc_nr_findstr = 'OCL'; % United States Patent Classification (USPC)
-    ftse.ipc_nr_findstr = 'ICL'; % International Patent Classification (IPC)
+    ftset.ipc_nr_findstr = 'ICL '; % International Patent Classification (IPC)
     
     ftset.fdate_findstr = 'APD'; % file date
     ftset.fdate_linestart = 6;
@@ -135,8 +135,8 @@ for ix_week = week_start:week_end
     end 
 
     % Look up patent technology classification numbers
-    trunc_tech_class = lookup_techclassification_nr(nr_patents, ix_find, ...
-        ftset, search_corpus);
+    [uspc_nr, ipc_nr] = lookup_techclassification_nr(nr_patents, ...
+        ix_find, ftset, search_corpus);
 
     % Look up filing dates
     fdate = lookup_fdate(search_corpus, ftset, ix_find, nr_patents);
@@ -150,8 +150,9 @@ for ix_week = week_start:week_end
     % Define patent index.
     pat_ix{ix_week, 1} = patent_number;
     pat_ix{ix_week, 2} = ix_find;
-    pat_ix{ix_week, 3} = trunc_tech_class;
+    pat_ix{ix_week, 3} = uspc_nr;
     pat_ix{ix_week, 4} = fdate;
+    pat_ix{ix_week, 5} = ipc_nr;
 
     % Close file again. It can cause errors if you open too many
     % (around 512) files at once.
