@@ -177,6 +177,8 @@ for t=1:length(years)
     
     ix_year = years(t);
     
+    fprintf('Year: %d\n', ix_year)
+     
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
 
@@ -244,6 +246,7 @@ for t=1:length(years)
 
         clear sic_automix nr_autompat_icp2sic automix_use automix_mfg any_patmatch
     end
+    disp('-------------------------------------------------------------')
 end
 
 
