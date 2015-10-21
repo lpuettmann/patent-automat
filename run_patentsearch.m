@@ -171,8 +171,12 @@ sic_silverman = unique(sic_silverman);
 
 
 % Get list of IPCs of automation patents for year
+years = [1990:-1:1976];
 
-parfor ix_year=1985:1995
+for t=1:length(years)
+    
+    ix_year = years(t);
+    
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
 
@@ -185,6 +189,12 @@ parfor ix_year=1985:1995
 
 
     ipc_list = patsearch_results.classnr_ipc;
+    
+    assert( length(ipc_list)==length( alg1 ) )
+    
+    % Only keep automation patents
+        
+    ipc_list = ipc_list( find( alg1 ));
     ipc_short = strtok(ipc_list);
 
 
@@ -211,13 +221,10 @@ parfor ix_year=1985:1995
                 any_patmatch(ix_patent,1) = max(indic_patmatch);
                 clear indic_patmatch
             end
-
-            % Only count automation patents
-            autompat_match = any_patmatch .* alg1;
-
-            % Calculate number of auotomation patents that match from 
+            
+            % Calculate number of auotomation patents that match from
             % particular IPC to SIC.
-            nr_autompat_icp2sic(ix_icp,1) = sum( autompat_match );
+            nr_autompat_icp2sic(ix_icp,1) = sum( any_patmatch );
 
             % Extract empirical frequencies for this IPC
             automix_use(ix_icp,1) = ipcsicfinalv5.mfgfrq( ix_pick( ix_icp ) ) ...
@@ -235,9 +242,10 @@ parfor ix_year=1985:1995
         fprintf(' Number automation patents matched to SIC (%s): %d, automix_use: %d.\n', ...
                 sic_pick, sum(nr_autompat_icp2sic), sum(automix_use))
 
-        clear sic_automix nr_autompat_icp2sic automix_use automix_mfg
+        clear sic_automix nr_autompat_icp2sic automix_use automix_mfg any_patmatch
     end
 end
+
 
 break
 
