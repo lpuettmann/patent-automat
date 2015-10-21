@@ -11,7 +11,7 @@ setup_path
 
 %% Choose years
 year_start = 1976;
-year_end = 2015;
+year_end = 2001;
 years = year_start:year_end;
 
 
@@ -79,45 +79,43 @@ years = year_start:year_end;
 
 % Insert
 % ----------------------------------------------------------------------
-for ix_year=1976:2001
-
-    load_file_name = horzcat('patent_index_', num2str(ix_year));
-    load(load_file_name)
-    
-    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
-    load(load_file_name)
-
-    ipc_nr = pat_ix(:, 5);
-    
-    allyear_ipc_nr = {};
-    for i=1:length(ipc_nr)
-            allyear_ipc_nr = [allyear_ipc_nr;
-                    ipc_nr{i,1}];
-    end
-    
-    assert( size(allyear_ipc_nr, 1) == size( ...
-        patent_keyword_appear.classnr_uspc, 1) )
-    
-    patent_keyword_appear.classnr_ipc = allyear_ipc_nr;
-
-    save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('matches', save_name);
-    save(matfile_path_save, 'patent_keyword_appear');    
-    fprintf('Saved: %s.\n', save_name)    
-end
-
-
-
-break
+% for ix_year=1976:2001
+% 
+%     load_file_name = horzcat('patent_index_', num2str(ix_year));
+%     load(load_file_name)
+%     
+%     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+%     load(load_file_name)
+% 
+%     ipc_nr = pat_ix(:, 5);
+%     
+%     allyear_ipc_nr = {};
+%     for i=1:length(ipc_nr)
+%             allyear_ipc_nr = [allyear_ipc_nr;
+%                     ipc_nr{i,1}];
+%     end
+%     
+%     assert( size(allyear_ipc_nr, 1) == size( ...
+%         patent_keyword_appear.classnr_uspc, 1) )
+%     
+%     patent_keyword_appear.classnr_ipc = allyear_ipc_nr;
+% 
+%     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
+%     matfile_path_save = fullfile('matches', save_name);
+%     save(matfile_path_save, 'patent_keyword_appear');    
+%     fprintf('Saved: %s.\n', save_name)    
+% end
 
 
 % %% Clean matches
 % clean_matches(year_start, year_end)
 
 
+
 %% Check matches for plausibility
 % check_cleanedmatches_plausability(year_start, year_end)
 
+break
 
 %% Transfer matches to CSV (for use in Stata)
 % transfer_cleaned_matches2csv(year_start, year_end)

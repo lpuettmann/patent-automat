@@ -3,14 +3,10 @@ function check_cleanedmatches_plausability(year_start, year_end)
 % Set path to the cleaned matches (which we want to check)
 build_data_path = [pwd, '/cleaned_matches'];
 
+file_paths = [build_data_path, '/*.mat']; 
 
-% Get names of files
-% -------------------------------------------------------------------
-liststruct = dir(build_data_path);
+liststruct = dir(file_paths);
 filenames = {liststruct.name};
-filenames = filenames(3:end)'; % truncate first elements . and ..
-filenames = ifmac_truncate_more(filenames);
-
 
 indic_gitignore = strcmp(filenames, '.gitignore');
 
@@ -62,7 +58,8 @@ for ix_year=year_start:year_end
 
         % Check that dimensions are right with respect to number of patents
         check_rightheight = [size( patsearch_results.patentnr, 1);
-                            size( patsearch_results.classnr, 1);
+                            size( patsearch_results.classnr_uspc, 1);
+                            size( patsearch_results.classnr_ipc, 1);
                             size( patsearch_results.week, 1);    
                             size( patsearch_results.title_matches, 1);    
                             size( patsearch_results.abstract_matches, 1);    

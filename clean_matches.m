@@ -81,7 +81,8 @@ for ix_year = year_start:year_end
     
     % Delete patents that start with letter
     patsearch_results.patentnr(save_row_delete) = [];
-    patsearch_results.classnr(save_row_delete) = [];
+    patsearch_results.classnr_uspc(save_row_delete) = [];
+    patsearch_results.classnr_ipc(save_row_delete) = [];
     patsearch_results.week(save_row_delete) = [];
     patsearch_results.title_matches(save_row_delete, :) = []; % matrix not vector
     patsearch_results.abstract_matches(save_row_delete, :) = []; % matrix not vector
@@ -140,23 +141,6 @@ for ix_year = year_start:year_end
     
     % Insert truncated patent numbers back into patent result table
     patsearch_results.patentnr = patent_number_cleaned;
-    
-    
-    % Clean technology classification (OCL) numbers
-    tech_class_nr = patsearch_results.classnr;
-    tech_class_nr = strtrim(tech_class_nr); % remove leading and trailing whitespace
-    tech_class_nr = strtok(tech_class_nr); % keep string until first whitespace
-
-    % Test if there is whitespaces tech classification numbers
-    test_contains_space = strfind(tech_class_nr, ' ');
-    show_ix_contains_space = find(~cellfun(@isempty, test_contains_space));
-    if not(isempty(show_ix_contains_space))
-        warning('There is a space in the patent tech classification numbers')
-        disp(tech_class_nr(show_ix_contains_space))
-    end
-    
-    % Insert prepared tech class numbers back
-    patsearch_results.classnr = tech_class_nr;
     
 
     % Save

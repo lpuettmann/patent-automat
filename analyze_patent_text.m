@@ -87,12 +87,15 @@ for ix_week = week_start:week_end
     % ----------------------------------------------------------------
     weekly_metadata = patent_number;
     
-    % Column for technology classification numbers
+    % Column for USPC technology classification numbers
     weekly_metadata(:, 2) = pat_ix{ix_week, 3};
 
     % Insert the current week for later reference
     weekly_metadata = [weekly_metadata, num2cell(repmat(ix_week, ...
         nr_patents, 1))];
+    
+    % IPC technology classification numbers
+    weekly_metadata = [weekly_metadata, pat_ix{ix_week, 5}];
 
     % Initialize matrix to count number of keyword appearances
     weekly_keyword_appear = zeros(nr_patents, length(find_dictionary));
@@ -295,6 +298,7 @@ end
 patent_keyword_appear.patentnr = patent_metadata(:,1);
 patent_keyword_appear.classnr_uspc = patent_metadata(:,2); % USPC tech classification number
 patent_keyword_appear.week = patent_metadata(:,3);
+patent_keyword_appear.classnr_ipc = patent_metadata(:,4); % IPC tech classification number
 patent_keyword_appear.title_matches = nr_keyword_appear(:, :, 1);
 patent_keyword_appear.abstract_matches = nr_keyword_appear(:, :, 2);
 patent_keyword_appear.body_matches = nr_keyword_appear(:, :, 3);
