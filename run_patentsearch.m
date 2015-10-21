@@ -54,24 +54,40 @@ years = year_start:year_end;
 % end
 
 
-%% Put the extracted ICP numbers from pat_ix into the 
-% patent_keyword_appear files.
+%% Deal with tech class numbers
 
 % Rename USPC
 % ----------------------------------------------------------------------
-for ix_year=1976:year_end
+% for ix_year=1976:2015
+% 
+%     % Load matches
+%     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+%     load(load_file_name)
+%     
+%     oldField = 'classnr';
+%     newField = 'classnr_uspc';
+%     [patent_keyword_appear.(newField)] = patent_keyword_appear.(oldField);
+%     patent_keyword_appear = rmfield(patent_keyword_appear, oldField);
+%        
+%     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
+%     matfile_path_save = fullfile('matches', save_name);
+%     save(matfile_path_save, 'patent_keyword_appear');    
+%     fprintf('Saved: %s.\n', save_name)
+% end
 
-    % Load matches
-    load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+
+
+% Insert ICP
+% ----------------------------------------------------------------------
+for ix_year=1976:2001
+
+    load_file_name = horzcat('patent_index_', num2str(ix_year));
     load(load_file_name)
     
-    patent_keyword_appear = patsearch_results;
-    clear patsearch_results
-    
-    patent_keyword_appear.classnr_uspc = patent_keyword_appear.classnr;
-    rmfield(patent_keyword_appear, 'classnr');
-    
-    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+    load(load_file_name)
+
+    break
 end
 
 
