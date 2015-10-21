@@ -60,7 +60,7 @@ week_start = 1;
 
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(ix_year); 
-week_end = 2
+
 % Add path to data and get a list with filenames for the year
 filenames = get_filenames(ix_year, week_start, week_end);
 

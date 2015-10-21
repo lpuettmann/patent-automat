@@ -293,7 +293,7 @@ for ix_week = week_start:week_end
 end
 
 patent_keyword_appear.patentnr = patent_metadata(:,1);
-patent_keyword_appear.classnr = patent_metadata(:,2);
+patent_keyword_appear.classnr_uspc = patent_metadata(:,2); % USPC tech classification number
 patent_keyword_appear.week = patent_metadata(:,3);
 patent_keyword_appear.title_matches = nr_keyword_appear(:, :, 1);
 patent_keyword_appear.abstract_matches = nr_keyword_appear(:, :, 2);

@@ -14,39 +14,68 @@ year_start = 1976;
 year_end = 2015;
 years = year_start:year_end;
 
-years = [1987, 2003, 2009]
-%% Make patent index
-for ix_year = years
-    tic
- 
-    % Search for keywords in the patent grant texts
-    pat_ix = make_patent_index(ix_year);
-    
-    % Print how long the year took
-    print_finish_summary(toc, ix_year)
-    
-    % Save to .mat file
-    save_patix2mat(pat_ix, ix_year)
-end
 
-break
+%% Make patent index
+% parfor ix_year = years
+%     tic
+%  
+%     % Search for keywords in the patent grant texts
+%     try
+%         pat_ix = make_patent_index(ix_year);
+%     catch
+%         warning('Problem in year: %d. Go to next year.', ix_year)
+%         continue
+%     end
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+%     % Save to .mat file
+%     save_patix2mat(pat_ix, ix_year)
+% end
+
+
 
 %% Search for keywords
-for ix_year = years
-    tic
+% for ix_year = years
+%     tic
+%     
+%     % Define dictionary to search for
+%     find_dictionary = define_dictionary();
+%     
+%     % Search for keywords in the patent grant texts
+%     patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+%     % Save to .mat file
+%     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+% end
+
+
+%% Put the extracted ICP numbers from pat_ix into the 
+% patent_keyword_appear files.
+
+% Rename USPC
+% ----------------------------------------------------------------------
+for ix_year=1977:year_end
+
+    % Load matches
+    load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+    load(load_file_name)
     
-    % Define dictionary to search for
-    find_dictionary = define_dictionary();
+    patsearch_results.classnr_uspc = patsearch_results.classnr;
+    rmfield(patsearch_results, 'classnr');
     
-    % Search for keywords in the patent grant texts
-    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+    fprintf('Renaming tech. class. USPC finished: %d.\n', ix_year)
     
-    % Print how long the year took
-    print_finish_summary(toc, ix_year)
-    
-    % Save to .mat file
+    patent_keyword_appear = patsearch_results;
     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end
+
+% Insert the IPC numbers as a field classnr_ipc in the struct
+% ----------------------------------------------------------------------
 
 break
 
