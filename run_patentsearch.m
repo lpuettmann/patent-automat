@@ -191,12 +191,6 @@ for t=1:length(years)
 
 
     ipc_list = patsearch_results.classnr_ipc;
-    
-    assert( length(ipc_list)==length( alg1 ) )
-    
-    % Only keep automation patents
-        
-    ipc_list = ipc_list( find( alg1 ));
     ipc_short = strtok(ipc_list);
 
 
@@ -224,9 +218,14 @@ for t=1:length(years)
                 clear indic_patmatch
             end
             
+            total_nr_matched(ix_icp,1) = sum( any_patmatch );
+            
+            % Only count automation patents
+            autompat_match = any_patmatch .* alg1;
+            
             % Calculate number of auotomation patents that match from
             % particular IPC to SIC.
-            nr_autompat_icp2sic(ix_icp,1) = sum( any_patmatch );
+            nr_autompat_icp2sic(ix_icp,1) = sum( autompat_match );
 
             % Extract empirical frequencies for this IPC
             automix_use(ix_icp,1) = ipcsicfinalv5.mfgfrq( ix_pick( ix_icp ) ) ...
@@ -235,16 +234,16 @@ for t=1:length(years)
                 * nr_autompat_icp2sic(ix_icp);
         end
 
-        sic_silverman_automix = [nr_autompat_icp2sic, automix_use, automix_mfg];
+        sic_silverman_automix = [nr_autompat_icp2sic, total_nr_matched automix_use, automix_mfg];
 
         save_name = horzcat('sic_silverman_automix/sic_silverman_automix_', num2str(ix_year), ...
             '_', sic_pick, '.mat');
         save(save_name, 'sic_silverman_automix');    
 
-        fprintf(' Number automation patents matched to SIC (%s): %d, automix_use: %d.\n', ...
-                sic_pick, sum(nr_autompat_icp2sic), sum(automix_use))
+        fprintf(' Number automation patents matched to SIC (%s): %d/%d, automix_use: %d.\n', ...
+                sic_pick, sum(nr_autompat_icp2sic), sum(total_nr_matched), sum(automix_use))
 
-        clear sic_automix nr_autompat_icp2sic automix_use automix_mfg any_patmatch
+        clear nr_autompat_icp2sic automix_use automix_mfg any_patmatch total_nr_matched sic_silverman_automix
     end
     disp('-------------------------------------------------------------')
 end
