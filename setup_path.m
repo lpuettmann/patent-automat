@@ -1,4 +1,4 @@
-function setup_path
+function setup_path()
 %SETUP Adds directories for Metrics to your MATLAB path
 %
 %   Author: Ben Hamner (ben@benhamner.com)

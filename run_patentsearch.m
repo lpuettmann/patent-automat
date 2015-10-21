@@ -6,7 +6,7 @@ clc
 fclose('all');
 
 % Set paths to all underlying directories
-setup_path
+setup_path()
 
 
 %% Choose years
@@ -115,7 +115,7 @@ years = year_start:year_end;
 %% Check matches for plausibility
 % check_cleanedmatches_plausability(year_start, year_end)
 
-break
+
 
 %% Transfer matches to CSV (for use in Stata)
 % transfer_cleaned_matches2csv(year_start, year_end)
@@ -126,7 +126,7 @@ break
 
 
 %% Make some visualizations 
-dim_subplot = [7, 5];
+% dim_subplot = [7, 5];
 
 % plot_matches_overtime(year_start, year_end, dim_subplot)
 % plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
@@ -148,9 +148,55 @@ dim_subplot = [7, 5];
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
-make_table_yearsstats(year_start, year_end)
+% make_table_yearsstats(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+
+
+%% Link to sector of use using Silverman concordance
+ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+    'ReadVariableNames', false);
+
+% Variables in Silverman concordance table:
+%   - ipc: IPC class and subclass      
+%   - sic: US SIC
+%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
+%   - usefrq: frequency of patents in IPC assigned to SIC of use
+ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
+
+sic_silverman = cell2mat( cellfun(@str2num, ipcsicfinalv5.sic, ...
+    'UniformOutput', false) );
+sic_silverman = unique(sic_silverman);
+
+
+
+% Get list of IPCs of patents for year
+ix_year = 1991;
+load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+load(load_file_name)
+
+ipc_list = patsearch_results.classnr_ipc;
+ipc_short = strtok(ipc_list);
+
+
+for ix_sic=1:length(sic_silverman)
+    sic_pick = num2str( sic_silverman(ix_sic) );    
+    ix_pick = find( strcmp(ipcsicfinalv5.sic, sic_pick) );
+    icp_concordance = ipcsicfinalv5.ipc(ix_pick);
+    
+    for ix_patent=1:length(ipc_list)
+        ipc_pick = ipc_short{ix_patent};
+        
+        find( strcmp(ipc_short, icp_concordance) )
+    end
+   
+    
+end
+
+
+
+break
+
 
 
 %% Prepare conversion table
