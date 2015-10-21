@@ -170,10 +170,18 @@ sic_silverman = unique(sic_silverman);
 
 
 
-% Get list of IPCs of patents for year
+% Get list of IPCs of automation patents for year
 ix_year = 1991;
 load_file_name = horzcat('patsearch_results_', num2str(ix_year));
 load(load_file_name)
+
+exclude_techclass = choose_exclude_techclass();
+
+alg1 = classif_alg1(patsearch_results.dictionary, ...
+    patsearch_results.title_matches, ...
+    patsearch_results.abstract_matches, patsearch_results.body_matches, ...
+    exclude_techclass);
+
 
 ipc_list = patsearch_results.classnr_ipc;
 ipc_short = strtok(ipc_list);
@@ -184,15 +192,50 @@ for ix_sic=1:length(sic_silverman)
     ix_pick = find( strcmp(ipcsicfinalv5.sic, sic_pick) );
     icp_concordance = ipcsicfinalv5.ipc(ix_pick);
     
-    for ix_patent=1:length(ipc_list)
-        ipc_pick = ipc_short{ix_patent};
-        
-        find( strcmp(ipc_short, icp_concordance) )
-    end
-   
+    fprintf('[%d/%d]', ix_sic, length(sic_silverman))
     
+    for ix_icp=1:length(icp_concordance)
+        pick_icp = icp_concordance{ix_icp};
+        
+        for ix_patent=1:length(ipc_short)
+            ipc_patent = ipc_short{ix_patent};
+            
+            if isempty(ipc_patent)
+                indic_patmatch = 0;
+            end
+            
+            for j=1:length(ipc_patent)
+                indic_patmatch(j,1) = strcmp( ipc_patent{j}, pick_icp );
+            end
+            any_patmatch(ix_patent,1) = max(indic_patmatch);
+            clear indic_patmatch
+        end
+        
+        % Only count automation patents
+        autompat_match = any_patmatch .* alg1;
+        
+        % Calculate number of auotomation patents that match from 
+        % particular IPC to SIC.
+        nr_autompat_icp2sic(ix_icp,1) = sum( autompat_match );
+        
+        % Extract empirical frequencies for this IPC
+        automix_use(ix_icp,1) = ipcsicfinalv5.mfgfrq( ix_pick( ix_icp ) ) ...
+            * nr_autompat_icp2sic(ix_icp);
+        automix_mfg(ix_icp,1) = ipcsicfinalv5.usefrq( ix_pick( ix_icp ) ) ...
+            * nr_autompat_icp2sic(ix_icp);
+    end
+    
+    sic_silverman_automix = [nr_autompat_icp2sic, automix_use, automix_mfg];
+    
+    save_name = horzcat('sic_silverman_automix/sic_silverman_automix_', num2str(ix_year), ...
+        '_', sic_pick, '.mat');
+    save(save_name, 'sic_silverman_automix');    
+    
+    fprintf(' Number automation patents matched to SIC (%s): %d, automix_use: %d.\n', ...
+            sic_pick, sum(nr_autompat_icp2sic), sum(automix_use))
+        
+    clear sic_automix nr_autompat_icp2sic automix_use automix_mfg
 end
-
 
 
 break
