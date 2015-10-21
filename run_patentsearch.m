@@ -59,23 +59,22 @@ years = year_start:year_end;
 
 % Rename USPC
 % ----------------------------------------------------------------------
-for ix_year=1977:year_end
+for ix_year=1976:year_end
 
     % Load matches
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
     
-    patsearch_results.classnr_uspc = patsearch_results.classnr;
-    rmfield(patsearch_results, 'classnr');
-    
-    fprintf('Renaming tech. class. USPC finished: %d.\n', ix_year)
-    
     patent_keyword_appear = patsearch_results;
+    clear patsearch_results
+    
+    patent_keyword_appear.classnr_uspc = patent_keyword_appear.classnr;
+    rmfield(patent_keyword_appear, 'classnr');
+    
     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end
 
-% Insert the IPC numbers as a field classnr_ipc in the struct
-% ----------------------------------------------------------------------
+
 
 break
 
