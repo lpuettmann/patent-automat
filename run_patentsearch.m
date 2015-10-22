@@ -253,8 +253,6 @@ years = year_start:year_end;
 
 
 %% Compile SIC automatix
-clc
-
 sic_automix_allyearsMat = [];
 
 for ix_year=year_start:year_end
