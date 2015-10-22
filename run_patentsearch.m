@@ -191,8 +191,10 @@ for t=1:length(years)
         exclude_techclass);
 
     ipc_list = patsearch_results.classnr_ipc;
-
+    ipc_flat = flatten_cellarray(ipc_list);    
+    ipc_short = shorten_cellarray(ipc_flat, 4);
     
+    make_frac_count
 
     for ix_sic=1:length(sic_silverman)
         

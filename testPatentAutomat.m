@@ -10,3 +10,4 @@ run(test_set_weekend);
 run(test_get_ix_cellarray_str);
 run(test_extract_patent_number);
 run(test_flatten_cellarray);
+run(test_shorten_cellarray);

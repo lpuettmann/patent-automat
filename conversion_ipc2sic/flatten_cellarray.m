@@ -9,9 +9,8 @@ assert( iscell( in_cellarray ), 'Must be cell array.' )
 assert( min( size( in_cellarray ) ) == 1, ...
     'Can only take one-dimensional cell arrays.')
 
-for i=1:length(in_cellarray)
-    assert( iscell(in_cellarray{i}), 'Can only take cell array of cells.')
-end
+assert( all( cellfun(@(x) iscell(x), in_cellarray) ), ...
+    'Can only take cell array of cells.')
 
 
 %% Flatten
@@ -28,5 +27,9 @@ assert( length(out_cellarray_flat) >= length(in_cellarray) )
 for i=1:length(in_cellarray)
     count_element_depth(i,1) = length(in_cellarray{i});
 end    
-    
+   
 assert( sum(count_element_depth) == length(out_cellarray_flat) )
+
+% While the output is a cell array, the individual elements should not be
+% cells themselves.
+assert( not( any( cellfun(@(x) iscell(x), out_cellarray_flat) ) ) )
