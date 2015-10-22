@@ -171,7 +171,7 @@ sic_silverman = unique(sic_silverman);
 
 
 % Get list of IPCs of automation patents for year
-years = [1990: -1: 1976];
+years = [1989: -1: 1976];
 
 for t=1:length(years)
     
@@ -244,7 +244,9 @@ for t=1:length(years)
 
     save_name = horzcat('sic_automix/sic_automix_yres_', ...
         num2str(ix_year), '.mat');
-    save(save_name, 'sic_automix_yres');  
+    save(save_name, 'sic_automix_yres'); 
+    
+    clear sic_automix_yres
 end
 
 
