@@ -217,43 +217,63 @@ for t=1:length(years)
     for ix_sic=1:length(sic_silverman)
         sic_pick = num2str( sic_silverman(ix_sic) );    
         ix_pick = find( strcmp(ipcsicfinalv5.sic, sic_pick) );
-        icp_concordance = ipcsicfinalv5.ipc(ix_pick);
+        ipc_concordance = ipcsicfinalv5.ipc(ix_pick);
 
         fprintf('[%d/%d]', ix_sic, length(sic_silverman))
+        
+        for ix_ipc=1:length(ipc_concordance)
+            pick_ipc = ipc_concordance{ix_ipc};
 
-        for ix_icp=1:length(icp_concordance)
-            pick_icp = icp_concordance{ix_icp};
-
-            ix_ipc_match = strcmp(ipc_flat, pick_icp);
-            total_nr_matched(ix_icp,1) = sum( ix_ipc_match );
+            % Find patents with the right IPCs
+            % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ix_ipc_match = strcmp(ipc_flat, pick_ipc);
+            
+            % Number of patent IPCs that fit
+            sic_automix.total_nr_matched(ix_ipc,1) = sum( ix_ipc_match );
+            
+            % Get fractional counts of those patents
             match_frac_counts = frac_counts(ix_ipc_match);
-            total_frac_counts(ix_icp,1) = sum( match_frac_counts );
+            
+            % Get total fractional count of patents with the right IPC
+            sic_automix.total_frac_counts(ix_ipc,1) = sum( ...
+                match_frac_counts );
 
             % Only count automation patents
             autompat_match = ix_ipc_match .* alg1_flatten;
-            autompat_nr_matched(ix_icp,1) = sum( autompat_match ); % number of automation patents match from IPC to SIC
+            
+            % Number of automation patents match from IPC to SIC
+            sic_automix.autompat_nr_matched(ix_ipc,1) = sum( autompat_match ); 
+            
+            % Get fractional count of patents with the right IPC
             autompat_matched_frac_counts = frac_counts( find( autompat_match ) );
-            autompat_frac_counts(ix_icp,1) = sum( autompat_matched_frac_counts );
+            
+            % Get total count of fractional automation patents
+            sic_automix.autompat_frac_counts(ix_ipc,1) = sum( ...
+                autompat_matched_frac_counts );
 
             % Extract empirical frequencies for this IPC
-            automix_mfg(ix_icp,1) = ipcsicfinalv5.mfgfrq( ix_pick( ix_icp ) ) ...
-                * autompat_frac_counts(ix_icp,1);
-            automix_use(ix_icp,1) = ipcsicfinalv5.usefrq( ix_pick( ix_icp ) ) ...
-                * autompat_frac_counts(ix_icp,1);
+            % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+            % Industries of manufacture
+            sic_automix.automix_mfg(ix_ipc,1) = ipcsicfinalv5.mfgfrq( ...
+                ix_pick( ix_ipc ) ) * sic_automix.autompat_frac_counts( ...
+                ix_ipc,1);
+            
+            % Sector of use
+            sic_automix.automix_use(ix_ipc,1) = ipcsicfinalv5.usefrq( ...
+                ix_pick( ix_ipc ) ) * sic_automix.autompat_frac_counts( ...
+                ix_ipc,1); 
         end
 
-        sic_silverman_automix = [total_nr_matched, total_frac_counts, ...
-            autompat_nr_matched, autompat_frac_counts, ...
-            automix_mfg, automix_use];
-
-        save_name = horzcat('sic_silverman_automix/sic_silverman_automix_', num2str(ix_year), ...
+        save_name = horzcat('sic_automix/sic_automix_', num2str(ix_year), ...
             '_', sic_pick, '.mat');
-        save(save_name, 'sic_silverman_automix');    
+        save(save_name, 'sic_automix');    
 
-        fprintf(' Number automation patents matched to SIC (%s): %d/%d, automix_use: %d.\n', ...
-                sic_pick, sum(nr_autompat_icp2sic), sum(total_nr_matched), sum(automix_use))
+        fprintf(' Number automation patents matched to SIC (%s): %d/%d.\n', ...
+                sic_pick, sum(sic_automix.autompat_nr_matched), ...
+                sum(sic_automix.total_nr_matched))
 
-        clear(sic_silverman_automix %% CONTINUE HERE
+        clear sic_automix
     end
     disp('-------------------------------------------------------------')
 end
