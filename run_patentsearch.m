@@ -171,7 +171,7 @@ sic_silverman = unique(sic_silverman);
 
 
 % Get list of IPCs of automation patents for year
-years = [1976:2001];
+years = [1990: -1: 1976];
 
 for t=1:length(years)
     
@@ -213,6 +213,8 @@ for t=1:length(years)
         sic_automix = match_sic2ipc(ipc_concordance, ipc_short, ...
             frac_counts, alg1_flatten, ix_pick, mfgfrq, usefrq);
                
+        
+        % Get summary for all IPCs mapping into SICs
         sic_automix_yres.sic(ix_sic, 1) = str2num( sic_pick );
         
         sic_automix_yres.nr_pat(ix_sic, 1) = ...
@@ -221,10 +223,10 @@ for t=1:length(years)
         sic_automix_yres.nr_fracpat(ix_sic, 1) = ...
             sum( sic_automix.total_frac_counts );
         
-        sic_automix_yres.autompat(ix_sic, 1) = ...
+        sic_automix_yres.nr_autompat(ix_sic, 1) = ...
             sum( sic_automix.autompat_nr_matched );
         
-        sic_automix_yres.fracautompat(ix_sic, 1) = ...
+        sic_automix_yres.nr_fracautompat(ix_sic, 1) = ...
             sum( sic_automix.autompat_frac_counts );  
         
         sic_automix_yres.automix_mfgt(ix_sic, 1) = ...
@@ -233,12 +235,16 @@ for t=1:length(years)
         sic_automix_yres.automix_use(ix_sic, 1) = ...
             sum( sic_automix.automix_use );  
 
-        fprintf('I')
+        fprintf('[%d] Finished SIC: %d/%d.\n', ix_year, ix_sic, ...
+            length(sic_silverman))
         clear sic_automix
     end
-    fprintf('\n')
     
-    disp('-------------------------------------------------------------')
+    sic_automix_yres = struct2table(sic_automix_yres);
+
+    save_name = horzcat('sic_automix/sic_automix_yres_', ...
+        num2str(ix_year), '.mat');
+    save(save_name, 'sic_automix_yres');  
 end
 
 
