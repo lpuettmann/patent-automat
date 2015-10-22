@@ -1,5 +1,5 @@
 function sic_automix = match_sic2ipc(ipc_concordance, ipc_short, ...
-    frac_counts, mfgfrq, usefrq)   
+    frac_counts, alg1_flatten, ix_pick, mfgfrq, usefrq)   
 
 
 %% Check inputs
@@ -9,6 +9,11 @@ assert( isnumeric( frac_counts ))
 assert( isnumeric( mfgfrq ))
 assert( isnumeric( usefrq ))
 
+assert( length(frac_counts) == length(ipc_short) )
+assert( length(ipc_concordance) == length(ix_pick) )
+assert( length(alg1_flatten) == length(frac_counts) )
+
+assert( length(mfgfrq) == length(usefrq) )
 
 
 %% Match
@@ -46,13 +51,14 @@ for ix_ipc=1:length(ipc_concordance)
     % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     % Industries of manufacture
-    sic_automix.automix_mfg(ix_ipc,1) = mfgfrq( ...
-        ix_pick( ix_ipc ) ) * sic_automix.autompat_frac_counts( ...
-        ix_ipc,1);
+    sic_automix.automix_mfg(ix_ipc,1) = mfgfrq( ix_pick( ix_ipc ) ) * ...
+        sic_automix.autompat_frac_counts( ix_ipc,1);
 
     % Sector of use
-    sic_automix.automix_use(ix_ipc,1) = usefrq( ...
-        ix_pick( ix_ipc ) ) * sic_automix.autompat_frac_counts( ...
-        ix_ipc,1); 
+    sic_automix.automix_use(ix_ipc,1) = usefrq( ix_pick( ix_ipc ) ) * ...
+        sic_automix.autompat_frac_counts( ix_ipc,1); 
 end
 
+
+%% Check output
+assert( isstruct(sic_automix) )
