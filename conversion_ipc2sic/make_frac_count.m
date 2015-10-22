@@ -1,10 +1,4 @@
-function [frac_counts, alg1_flatten] = get_flat_ipc_alg1(ipc_list, alg1);
-
-
-ipc_short = strtok(ipc_list);
-
-% Make a vector that holds the fractional counts  
-ipc_flat = vertcat( ipc_short{:} );
+function [frac_counts, alg1_flatten] = make_frac_count(ipc_list, alg1)
 
 ix_save = 1;
 for i=1:length(ipc_short)
