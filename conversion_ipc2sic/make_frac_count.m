@@ -1,6 +1,7 @@
 function [frac_counts, alg1_flatten] = make_frac_count(in_cellarray, alg1)
 
-%%
+
+%% Check input format
 assert( all( cellfun(@(x) iscell(x), in_cellarray) ), ...
     'Can only take cell array of cells.')
 
@@ -30,6 +31,6 @@ for i=1:length(in_cellarray)
     end
 end
 
-%% Check that format is right.
+%% Check output format.
 assert( length(frac_counts) == length(alg1_flatten)  )
 assert( isnumeric(alg1_flatten) )

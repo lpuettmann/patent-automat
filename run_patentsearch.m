@@ -192,14 +192,13 @@ for t=1:length(years)
 
     ipc_list = patsearch_results.classnr_ipc;
     
-    in_cellarray = ipc_list;
-    [frac_counts, alg1_flatten] = make_frac_count(in_cellarray, alg1)
-
+    [frac_counts, alg1_flatten] = make_frac_count(ipc_list, alg1);
     
     ipc_flat = flatten_cellarray(ipc_list);    
     
     assert( length(frac_counts) == length(ipc_flat) )
     
+    % Only keep first 4 characters of IPC number
     ipc_short = shorten_cellarray(ipc_flat, 4);
 
 
@@ -211,7 +210,11 @@ for t=1:length(years)
 
         fprintf('[%d/%d]', ix_sic, length(sic_silverman))
         
+        mfgfrq = ipcsicfinalv5.mfgfrq;
+        usefrq = ipcsicfinalv5.usefrq;
         sic_automix = match_sic2ipc() 
+        
+        
         
         save_name = horzcat('sic_automix/sic_automix_', num2str(ix_year), ...
             '_', sic_pick, '.mat');
