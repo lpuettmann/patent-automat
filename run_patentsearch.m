@@ -155,102 +155,130 @@ years = year_start:year_end;
 
 %% Link to sector of use using Silverman concordance
 
-ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-    'ReadVariableNames', false);
+% ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+%     'ReadVariableNames', false);
+% 
+% % Variables in Silverman concordance table:
+% %   - ipc: IPC class and subclass      
+% %   - sic: US SIC
+% %   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
+% %   - usefrq: frequency of patents in IPC assigned to SIC of use
+% ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
+% 
+% sic_silverman = cell2mat( cellfun(@str2num, ipcsicfinalv5.sic, ...
+%     'UniformOutput', false) );
+% sic_silverman = unique(sic_silverman);
+% 
+% 
+% % Get list of IPCs of automation patents for year
+% years = [1989: -1: 1976];
+% 
+% for t=1:length(years)
+%     
+%     ix_year = years(t);
+%     
+%     fprintf('Year: %d\n', ix_year)
+%      
+%     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+%     load(load_file_name)
+% 
+%     exclude_techclass = choose_exclude_techclass();
+% 
+%     % Classify patents as automation patents according to algorithm 1
+%     alg1 = classif_alg1(patsearch_results.dictionary, ...
+%         patsearch_results.title_matches, ...
+%         patsearch_results.abstract_matches, patsearch_results.body_matches, ...
+%         exclude_techclass);
+% 
+%     ipc_list = patsearch_results.classnr_ipc;
+%     
+%     [frac_counts, alg1_flatten] = make_frac_count(ipc_list, alg1);
+%     
+%     ipc_flat = flatten_cellarray(ipc_list);    
+%     
+%     assert( length(frac_counts) == length(ipc_flat) )
+%     
+%     % Only keep first 4 characters of IPC number
+%     ipc_short = shorten_cellarray(ipc_flat, 4);
+% 
+%     for ix_sic=1:length(sic_silverman)
+% 
+%         sic_pick = num2str( sic_silverman(ix_sic) );    
+%         ix_pick = find( strcmp(ipcsicfinalv5.sic, sic_pick) );
+%         ipc_concordance = ipcsicfinalv5.ipc(ix_pick);
+%         
+%         mfgfrq = ipcsicfinalv5.mfgfrq;
+%         usefrq = ipcsicfinalv5.usefrq;
+%         
+%         sic_automix = match_sic2ipc(ipc_concordance, ipc_short, ...
+%             frac_counts, alg1_flatten, ix_pick, mfgfrq, usefrq);
+%                
+%         
+%         % Get summary for all IPCs mapping into SICs
+%         sic_automix_yres.sic(ix_sic, 1) = str2num( sic_pick );
+%         
+%         sic_automix_yres.nr_pat(ix_sic, 1) = ...
+%             sum( sic_automix.total_nr_matched );
+%         
+%         sic_automix_yres.nr_fracpat(ix_sic, 1) = ...
+%             sum( sic_automix.total_frac_counts );
+%         
+%         sic_automix_yres.nr_autompat(ix_sic, 1) = ...
+%             sum( sic_automix.autompat_nr_matched );
+%         
+%         sic_automix_yres.nr_fracautompat(ix_sic, 1) = ...
+%             sum( sic_automix.autompat_frac_counts );  
+%         
+%         sic_automix_yres.automix_mfgt(ix_sic, 1) = ...
+%             sum( sic_automix.automix_mfg );  
+%         
+%         sic_automix_yres.automix_use(ix_sic, 1) = ...
+%             sum( sic_automix.automix_use );  
+% 
+%         fprintf('[%d] Finished SIC: %d/%d.\n', ix_year, ix_sic, ...
+%             length(sic_silverman))
+%         clear sic_automix
+%     end
+%     
+%     sic_automix_yres = struct2table(sic_automix_yres);
+% 
+%     save_name = horzcat('sic_automix/sic_automix_yres_', ...
+%         num2str(ix_year), '.mat');
+%     save(save_name, 'sic_automix_yres'); 
+%     
+%     clear sic_automix_yres
+% end
 
-% Variables in Silverman concordance table:
-%   - ipc: IPC class and subclass      
-%   - sic: US SIC
-%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
-%   - usefrq: frequency of patents in IPC assigned to SIC of use
-ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
-
-sic_silverman = cell2mat( cellfun(@str2num, ipcsicfinalv5.sic, ...
-    'UniformOutput', false) );
-sic_silverman = unique(sic_silverman);
 
 
-% Get list of IPCs of automation patents for year
-years = [1989: -1: 1976];
 
-for t=1:length(years)
+%% Compile SIC automatix
+clc
+
+sic_automix_allyearsMat = [];
+
+for ix_year=year_start:year_end
+    ix_save = ix_year - year_start + 1;
     
-    ix_year = years(t);
-    
-    fprintf('Year: %d\n', ix_year)
-     
-    load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+    load_file_name = horzcat('sic_automix_yres_', num2str(ix_year));
     load(load_file_name)
-
-    exclude_techclass = choose_exclude_techclass();
-
-    % Classify patents as automation patents according to algorithm 1
-    alg1 = classif_alg1(patsearch_results.dictionary, ...
-        patsearch_results.title_matches, ...
-        patsearch_results.abstract_matches, patsearch_results.body_matches, ...
-        exclude_techclass);
-
-    ipc_list = patsearch_results.classnr_ipc;
     
-    [frac_counts, alg1_flatten] = make_frac_count(ipc_list, alg1);
-    
-    ipc_flat = flatten_cellarray(ipc_list);    
-    
-    assert( length(frac_counts) == length(ipc_flat) )
-    
-    % Only keep first 4 characters of IPC number
-    ipc_short = shorten_cellarray(ipc_flat, 4);
+    sic_automix_yres.year = repmat(ix_year, size(sic_automix_yres.sic));
 
-    for ix_sic=1:length(sic_silverman)
-
-        sic_pick = num2str( sic_silverman(ix_sic) );    
-        ix_pick = find( strcmp(ipcsicfinalv5.sic, sic_pick) );
-        ipc_concordance = ipcsicfinalv5.ipc(ix_pick);
-        
-        mfgfrq = ipcsicfinalv5.mfgfrq;
-        usefrq = ipcsicfinalv5.usefrq;
-        
-        sic_automix = match_sic2ipc(ipc_concordance, ipc_short, ...
-            frac_counts, alg1_flatten, ix_pick, mfgfrq, usefrq);
-               
-        
-        % Get summary for all IPCs mapping into SICs
-        sic_automix_yres.sic(ix_sic, 1) = str2num( sic_pick );
-        
-        sic_automix_yres.nr_pat(ix_sic, 1) = ...
-            sum( sic_automix.total_nr_matched );
-        
-        sic_automix_yres.nr_fracpat(ix_sic, 1) = ...
-            sum( sic_automix.total_frac_counts );
-        
-        sic_automix_yres.nr_autompat(ix_sic, 1) = ...
-            sum( sic_automix.autompat_nr_matched );
-        
-        sic_automix_yres.nr_fracautompat(ix_sic, 1) = ...
-            sum( sic_automix.autompat_frac_counts );  
-        
-        sic_automix_yres.automix_mfgt(ix_sic, 1) = ...
-            sum( sic_automix.automix_mfg );  
-        
-        sic_automix_yres.automix_use(ix_sic, 1) = ...
-            sum( sic_automix.automix_use );  
-
-        fprintf('[%d] Finished SIC: %d/%d.\n', ix_year, ix_sic, ...
-            length(sic_silverman))
-        clear sic_automix
-    end
+    % Convert table to matrix
+    sic_automix_yres_tempMat = table2array( sic_automix_yres );
     
-    sic_automix_yres = struct2table(sic_automix_yres);
-
-    save_name = horzcat('sic_automix/sic_automix_yres_', ...
-        num2str(ix_year), '.mat');
-    save(save_name, 'sic_automix_yres'); 
-    
-    clear sic_automix_yres
+    sic_automix_allyearsMat = [sic_automix_allyearsMat;
+                            sic_automix_yres_tempMat];
 end
 
+varnames = sic_automix_yres.Properties.VariableNames;
+sic_automix_allyears = array2table(sic_automix_allyearsMat);
+sic_automix_allyears.Properties.VariableNames = varnames;
 
-
+savename = 'output/sic_automix_allyears.csv';
+writetable(sic_automix_allyears, savename)
+fprintf('Saved: %s.\n', savename)
 
 
 break
