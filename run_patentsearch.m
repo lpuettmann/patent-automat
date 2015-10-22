@@ -171,7 +171,7 @@ sic_silverman = unique(sic_silverman);
 
 
 % Get list of IPCs of automation patents for year
-years = [1990:-1:1976];
+years = [1990 : -1 : 1976];
 
 for t=1:length(years)
     
@@ -184,15 +184,35 @@ for t=1:length(years)
 
     exclude_techclass = choose_exclude_techclass();
 
+    % Classify patents as automation patents according to algorithm 1
     alg1 = classif_alg1(patsearch_results.dictionary, ...
         patsearch_results.title_matches, ...
         patsearch_results.abstract_matches, patsearch_results.body_matches, ...
         exclude_techclass);
 
-
     ipc_list = patsearch_results.classnr_ipc;
     ipc_short = strtok(ipc_list);
 
+    % Make a vector that holds the fractional counts  
+    ipc_flat = vertcat( ipc_short{:} );
+    
+    ix_save = 1;
+    for i=1:length(ipc_short)
+        % Count number of IPCs per patent
+        nr_ipc = length( ipc_short{i} );
+        
+        for j=1:nr_ipc
+            % Get fractional counts
+            frac_counts(ix_save,1) = 1 / nr_ipc ;
+            
+            % Save for every entry if it belongs to an automation patent
+            alg1_flatten(ix_save,1) = alg1(i);
+            ix_save = ix_save + 1;
+        end
+    end
+
+    assert( length(frac_counts) == length(ipc_flat) )
+    assert( length(frac_counts) == length(alg1_flatten)  )
 
     for ix_sic=1:length(sic_silverman)
         sic_pick = num2str( sic_silverman(ix_sic) );    
@@ -204,37 +224,27 @@ for t=1:length(years)
         for ix_icp=1:length(icp_concordance)
             pick_icp = icp_concordance{ix_icp};
 
-            for ix_patent=1:length(ipc_short)
-                ipc_patent = ipc_short{ix_patent};
+            ix_ipc_match = strcmp(ipc_flat, pick_icp);
+            total_nr_matched(ix_icp,1) = sum( ix_ipc_match );
+            match_frac_counts = frac_counts(ix_ipc_match);
+            total_frac_counts(ix_icp,1) = sum( match_frac_counts );
 
-                if isempty(ipc_patent)
-                    indic_patmatch = 0;
-                end
-
-                for j=1:length(ipc_patent)
-                    indic_patmatch(j,1) = strcmp( ipc_patent{j}, pick_icp );
-                end
-                any_patmatch(ix_patent,1) = max(indic_patmatch);
-                clear indic_patmatch
-            end
-            
-            total_nr_matched(ix_icp,1) = sum( any_patmatch );
-            
             % Only count automation patents
-            autompat_match = any_patmatch .* alg1;
-            
-            % Calculate number of auotomation patents that match from
-            % particular IPC to SIC.
-            nr_autompat_icp2sic(ix_icp,1) = sum( autompat_match );
+            autompat_match = ix_ipc_match .* alg1_flatten;
+            autompat_nr_matched(ix_icp,1) = sum( autompat_match ); % number of automation patents match from IPC to SIC
+            autompat_matched_frac_counts = frac_counts( find( autompat_match ) );
+            autompat_frac_counts(ix_icp,1) = sum( autompat_matched_frac_counts );
 
             % Extract empirical frequencies for this IPC
-            automix_use(ix_icp,1) = ipcsicfinalv5.mfgfrq( ix_pick( ix_icp ) ) ...
-                * nr_autompat_icp2sic(ix_icp);
-            automix_mfg(ix_icp,1) = ipcsicfinalv5.usefrq( ix_pick( ix_icp ) ) ...
-                * nr_autompat_icp2sic(ix_icp);
+            automix_mfg(ix_icp,1) = ipcsicfinalv5.mfgfrq( ix_pick( ix_icp ) ) ...
+                * autompat_frac_counts(ix_icp,1);
+            automix_use(ix_icp,1) = ipcsicfinalv5.usefrq( ix_pick( ix_icp ) ) ...
+                * autompat_frac_counts(ix_icp,1);
         end
 
-        sic_silverman_automix = [nr_autompat_icp2sic, total_nr_matched automix_use, automix_mfg];
+        sic_silverman_automix = [total_nr_matched, total_frac_counts, ...
+            autompat_nr_matched, autompat_frac_counts, ...
+            automix_mfg, automix_use];
 
         save_name = horzcat('sic_silverman_automix/sic_silverman_automix_', num2str(ix_year), ...
             '_', sic_pick, '.mat');
@@ -243,7 +253,7 @@ for t=1:length(years)
         fprintf(' Number automation patents matched to SIC (%s): %d/%d, automix_use: %d.\n', ...
                 sic_pick, sum(nr_autompat_icp2sic), sum(total_nr_matched), sum(automix_use))
 
-        clear nr_autompat_icp2sic automix_use automix_mfg any_patmatch total_nr_matched sic_silverman_automix
+        clear(sic_silverman_automix %% CONTINUE HERE
     end
     disp('-------------------------------------------------------------')
 end
