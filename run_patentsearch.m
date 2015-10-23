@@ -10,30 +10,30 @@ setup_path()
 
 
 %% Choose years
-year_start = 1976;
-year_end = 2001;
-years = year_start:year_end;
+year_start = 2005;
+year_end = 2015;
 
 
 %% Make patent index
-% parfor ix_year = years
-%     tic
-%  
-%     % Search for keywords in the patent grant texts
-%     try
-%         pat_ix = make_patent_index(ix_year);
-%     catch
-%         warning('Problem in year: %d. Go to next year.', ix_year)
-%         continue
-%     end
-%     
-%     % Print how long the year took
-%     print_finish_summary(toc, ix_year)
-%     
-%     % Save to .mat file
-%     save_patix2mat(pat_ix, ix_year)
-% end
+for ix_year = year_start:year_end
+    tic
+ 
+    % Search for keywords in the patent grant texts
+    try
+        pat_ix = make_patent_index(ix_year);
+    catch
+        warning('Problem in year: %d. Go to next year.', ix_year)
+        continue
+    end
+    
+    % Print how long the year took
+    print_finish_summary(toc, ix_year)
+    
+    % Save to .mat file
+    save_patix2mat(pat_ix, ix_year)
+end
 
+break
 
 
 %% Search for keywords
@@ -176,27 +176,17 @@ fprintf('Saved: %s.\n', savename)
 
 
 %% Analyse SIC automatix table
-sic_list = unique( sic_automix_allyears.sic );
+% ========================================================================
 
-plot_settings_global
-
-figure
-
-box off
-set(gca,'TickDir','out') 
-set(gcf, 'Color', 'w');
-
-for ix_sic=1:length(sic_list)
-    pick_sic = sic_list( ix_sic) ;
-
-    find_ix = (sic_automix_allyears.sic == pick_sic);
-    six_automix_series = sic_automix_allyears.automix_use(find_ix);
-
-    plot(year_start:year_end, six_automix_series)
-    hold on
-end
+% Make plot of SIC automatix over time, raw series
+% ------------------------------------------------------------------------
+plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
 
+% Make plot of SIC automatix over time, indexed, 
+% ------------------------------------------------------------------------
+plot_sic_automatix_logindexed(sic_automix_allyears, year_start, year_end, ...
+    year_start)
 
 
 

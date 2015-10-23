@@ -90,7 +90,7 @@ for ix_patent=1:nr_patents
             % ------------------------------------------------------------
             switch ftset.indic_filetype
                 case 2
-                     icp_classtxt = patent_text_corpus;
+                     ipc_classtxt = patent_text_corpus;
             
                 case 3
                     % Extract part of patent text that deals with the IPCs.
@@ -102,11 +102,11 @@ for ix_patent=1:nr_patents
                         ftset.ipc_nr_end_str);
                     classtxt_end = find( ~cellfun(@isempty, classtxt_end) ); 
                     
-                    icp_classtxt = patent_text_corpus(classtxt_start:...
+                    ipc_classtxt = patent_text_corpus(classtxt_start:...
                         classtxt_end,:);
             end
             
-            indic_ipc_find = regexp(icp_classtxt, ftset.ipc_nr_findstr);
+            indic_ipc_find = regexp(ipc_classtxt, ftset.ipc_nr_findstr);
             
             % Make logical array
             indic_ipc_find = ~cellfun(@isempty, indic_ipc_find); 
@@ -116,7 +116,7 @@ for ix_patent=1:nr_patents
             ipc_indiv = repmat({''}, length(all_ipc_matches), 1);
             
             for ix_ipc=1:length(all_ipc_matches)
-                row_ipc_class = icp_classtxt{all_ipc_matches(ix_ipc)}; 
+                row_ipc_class = ipc_classtxt{all_ipc_matches(ix_ipc)}; 
                 
                 % Classificiations differ in length, so have to find end
                 % where the classification stops.
