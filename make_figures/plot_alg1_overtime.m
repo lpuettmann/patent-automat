@@ -1,9 +1,7 @@
 function plot_alg1_overtime(year_start, year_end)
 
 %%
-% Set font
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
+plot_settings_global
 
 
 % Load summary data
