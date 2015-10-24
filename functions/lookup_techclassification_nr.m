@@ -116,29 +116,75 @@ for ix_patent=1:nr_patents
             ipc_indiv = repmat({''}, length(all_ipc_matches), 1);
             
             for ix_ipc=1:length(all_ipc_matches)
-                row_ipc_class = ipc_classtxt{all_ipc_matches(ix_ipc)}; 
                 
-                % Classificiations differ in length, so have to find end
-                % where the classification stops.
-                ipc_find_end = regexp(row_ipc_class, ftset.ipc_nr_linestop);
+                if ftset.indic_specialcase == 1 % if 2006 upwarwds
+                    
+                    if ix_ipc < length(all_ipc_matches)
+                        extract_classtxt = ipc_classtxt( ...
+                            all_ipc_matches(ix_ipc) : all_ipc_matches( ...
+                            ix_ipc + 1) );
+                    elseif ix_ipc == length(all_ipc_matches)
+                        extract_classtxt = ipc_classtxt( ...
+                            all_ipc_matches(ix_ipc) : all_ipc_matches( ...
+                            end) );
+                    else 
+                        error('Should not be reached.')
+                    end
+
+                    ipc_indiv = '';
+                    
+                    find_ix_section = regexp(extract_classtxt, '<section>')
+                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
+                        @isempty, find_ix_section) ) };
+                    extract_icp_part = extract_icp_part_line(10);
                 
-                % Extract tech class number from string
-                switch ftset.indic_filetype
-                    case 2
-                        ipc_extract = strtrim( row_ipc_class(...
-                            ftset.ipc_nr_linestart : ipc_find_end - 1) );
-                
-                    case 3
-                        if ix_ipc == 1
-                            line_start = 22;
-                        else
-                            line_start = 25;
-                        end
-                        
-                        ipc_extract = strtrim( row_ipc_class(...
-                            line_start : ipc_find_end - 1) );
+                    find_ix_section = regexp(extract_classtxt, '<class>')
+                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
+                        @isempty, find_ix_section) ) };
+                    extract_icp_part = extract_icp_part_line(8:9);
+                    
+                    find_ix_section = regexp(extract_classtxt, '<subclass>')
+                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
+                        @isempty, find_ix_section) ) };
+                    extract_icp_part = extract_icp_part_line(11);
+                    
+                    find_ix_section = regexp(extract_classtxt, '<main-group>')
+                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
+                        @isempty, find_ix_section) ) };
+                    extract_icp_part = extract_icp_part_line(13:14);
+                    
+                    find_ix_section = regexp(extract_classtxt, 'subgroup>')
+                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
+                        @isempty, find_ix_section) ) };
+                    extract_icp_part = extract_icp_part_line(11:12);
+                    
+                    ipc_indiv = [
+                else
+
+                    row_ipc_class = ipc_classtxt{all_ipc_matches(ix_ipc)}; 
+
+                    % Classificiations differ in length, so have to find end
+                    % where the classification stops.
+                    ipc_find_end = regexp(row_ipc_class, ftset.ipc_nr_linestop);
+
+                    % Extract tech class number from string
+                    switch ftset.indic_filetype
+                        case 2
+                            ipc_extract = strtrim( row_ipc_class(...
+                                ftset.ipc_nr_linestart : ipc_find_end - 1) );
+
+                        case 3
+                            if ix_ipc == 1
+                                line_start = 22;
+                            else
+                                line_start = 25;
+                            end
+
+                            ipc_extract = strtrim( row_ipc_class(...
+                                line_start : ipc_find_end - 1) );
+                    end
                 end
-                        
+                
                 % Get rid of leading and trailing whitespace
                 ipc_extract = strtrim( ipc_extract );
 

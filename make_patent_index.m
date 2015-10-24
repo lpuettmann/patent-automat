@@ -43,11 +43,18 @@ elseif (ix_year >=2005) && (ix_year < 2016)
     ftset.uspc_nr_linestart = 22;
     ftset.uspc_nr_linestop = '</main-classification>';
     
-    ftset.ipc_nr_findstr = '(<main-classification>)|(<further-classification>)';
-    ftset.ipc_nr_start_str = '<classification-ipc>';
-    ftset.ipc_nr_end_str = '</classification-ipc>';
-    ftset.ipc_nr_linestart = 13;
-    ftset.ipc_nr_linestop = '</main-classification>|(</further-classification>)';
+    if ix_year == 2005
+        ftset.ipc_nr_findstr = '(<main-classification>)|(<further-classification>)';
+        ftset.ipc_nr_start_str = '<classification-ipc>';
+        ftset.ipc_nr_end_str = '</classification-ipc>';
+        ftset.ipc_nr_linestart = 13;
+        ftset.ipc_nr_linestop = '</main-classification>|(</further-classification>)';
+    else
+        ftset.indic_specialcase = 1;        
+        ftset.ipc_nr_findstr = '<classification-ipcr>';
+        ftset.ipc_nr_start_str = '<classifications-ipcr>';
+        ftset.ipc_nr_end_str = '</classifications-ipcr>';
+    end
     
     ftset.fdate_linestart = 7;
     ftset.fdate_linestop = 12;
