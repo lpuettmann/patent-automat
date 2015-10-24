@@ -16,7 +16,6 @@ year_end = 2015;
 
 %% Make patent index
 for ix_year = year_start:year_end
-    ix_year = 2006
     tic
  
     % Search for keywords in the patent grant texts

@@ -125,40 +125,37 @@ for ix_patent=1:nr_patents
                             ix_ipc + 1) );
                     elseif ix_ipc == length(all_ipc_matches)
                         extract_classtxt = ipc_classtxt( ...
-                            all_ipc_matches(ix_ipc) : all_ipc_matches( ...
-                            end) );
+                            all_ipc_matches(ix_ipc) : end);
                     else 
                         error('Should not be reached.')
                     end
+                    
+                    subparticp_info = {'<section>'; ...
+                                        '<class>'; ...
+                                        '<subclass>'; ...
+                                        '<main-group>'; ...
+                                        '<subgroup>'};
+                    
+                    ipc_extract = '';
+                                    
+                    for i=1:size(subparticp_info, 1)
+                        
+                        ix_section = regexp(extract_classtxt, ...
+                             subparticp_info{i});
+                         
+                        eline = extract_classtxt{ find( ...
+                            ~cellfun( @isempty, ix_section) ) };
+                        
+                        linestop = [subparticp_info{i,1}(1), '/', ...
+                            subparticp_info{i,1}(2:end)];
+                        
+                        find_extract_end = regexp( eline, linestop );
 
-                    ipc_indiv = '';
-                    
-                    find_ix_section = regexp(extract_classtxt, '<section>')
-                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
-                        @isempty, find_ix_section) ) };
-                    extract_icp_part = extract_icp_part_line(10);
-                
-                    find_ix_section = regexp(extract_classtxt, '<class>')
-                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
-                        @isempty, find_ix_section) ) };
-                    extract_icp_part = extract_icp_part_line(8:9);
-                    
-                    find_ix_section = regexp(extract_classtxt, '<subclass>')
-                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
-                        @isempty, find_ix_section) ) };
-                    extract_icp_part = extract_icp_part_line(11);
-                    
-                    find_ix_section = regexp(extract_classtxt, '<main-group>')
-                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
-                        @isempty, find_ix_section) ) };
-                    extract_icp_part = extract_icp_part_line(13:14);
-                    
-                    find_ix_section = regexp(extract_classtxt, 'subgroup>')
-                    extract_icp_part_line = extract_classtxt{find( ~cellfun( ...
-                        @isempty, find_ix_section) ) };
-                    extract_icp_part = extract_icp_part_line(11:12);
-                    
-                    ipc_indiv = [
+                        ipc_part = eline( numel( subparticp_info{i} ) + 1 : ...
+                            find_extract_end - 1);
+
+                        ipc_extract = [ipc_extract, ipc_part];
+                    end
                 else
 
                     row_ipc_class = ipc_classtxt{all_ipc_matches(ix_ipc)}; 
