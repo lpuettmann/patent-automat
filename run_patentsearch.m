@@ -10,7 +10,7 @@ setup_path()
 
 
 %% Choose years
-year_start = 2005;
+year_start = 2006;
 year_end = 2015;
 
 
