@@ -13,9 +13,10 @@ setup_path()
 year_start = 2005;
 year_end = 2015;
 
-
+break
 %% Make patent index
 for ix_year = year_start:year_end
+    ix_year = 2006
     tic
  
     % Search for keywords in the patent grant texts
