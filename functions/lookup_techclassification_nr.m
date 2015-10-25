@@ -140,21 +140,28 @@ for ix_patent=1:nr_patents
                                     
                     for i=1:size(subparticp_info, 1)
                         
-                        ix_section = regexp(extract_classtxt, ...
-                             subparticp_info{i});
+                       find_section = regexp( extract_classtxt, ...
+                             subparticp_info{i} );
+                        
+                        ix_section = ~cellfun( @isempty, find_section );
                          
-                        eline = extract_classtxt{ find( ...
-                            ~cellfun( @isempty, ix_section) ) };
-                        
-                        linestop = [subparticp_info{i,1}(1), '/', ...
-                            subparticp_info{i,1}(2:end)];
-                        
-                        find_extract_end = regexp( eline, linestop );
+                        if not( any( ix_section ) )
+                            warning('Part of IPC missing in patent %d/%d.', ...
+                                ix_patent, nr_patents)                   
+                            continue
+                        else
+                            eline = extract_classtxt{ find( ix_section ) };
 
-                        ipc_part = eline( numel( subparticp_info{i} ) + 1 : ...
-                            find_extract_end - 1);
+                            linestop = [subparticp_info{i,1}(1), '/', ...
+                                subparticp_info{i,1}(2:end)];
 
-                        ipc_extract = [ipc_extract, ipc_part];
+                            find_extract_end = regexp( eline, linestop );
+
+                            ipc_part = eline( numel( subparticp_info{i} ) + 1 : ...
+                                find_extract_end - 1);
+
+                            ipc_extract = [ipc_extract, ipc_part];
+                        end
                     end
                 else
 

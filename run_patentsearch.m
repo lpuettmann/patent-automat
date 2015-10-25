@@ -10,30 +10,31 @@ setup_path()
 
 
 %% Choose years
-year_start = 2005;
+year_start = 2002;
 year_end = 2015;
 
+% years = 2015:-1:2006;
 
 %% Make patent index
-for ix_year = year_start:year_end
-    tic
- 
-    % Search for keywords in the patent grant texts
-    try
-        pat_ix = make_patent_index(ix_year);
-    catch
-        warning('Problem in year: %d. Go to next year.', ix_year)
-        continue
-    end
-    
-    % Print how long the year took
-    print_finish_summary(toc, ix_year)
-    
-    % Save to .mat file
-    save_patix2mat(pat_ix, ix_year)
-end
+% for ix_year = years
+%     tic
+%  
+%     % Search for keywords in the patent grant texts
+%     try
+%         pat_ix = make_patent_index(ix_year);
+%     catch
+%         warning('Problem in year: %d. Go to next year.', ix_year)
+%         continue
+%     end
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+%     % Save to .mat file
+%     save_patix2mat(pat_ix, ix_year)
+% end
 
-break
+
 
 
 %% Search for keywords
@@ -56,55 +57,34 @@ break
 
 %% Deal with tech class numbers
 
-% Rename USPC
-% ----------------------------------------------------------------------
-% for ix_year=1976:2015
-% 
-%     % Load matches
-%     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
-%     load(load_file_name)
-%     
-%     oldField = 'classnr';
-%     newField = 'classnr_uspc';
-%     [patent_keyword_appear.(newField)] = patent_keyword_appear.(oldField);
-%     patent_keyword_appear = rmfield(patent_keyword_appear, oldField);
-%        
-%     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-%     matfile_path_save = fullfile('matches', save_name);
-%     save(matfile_path_save, 'patent_keyword_appear');    
-%     fprintf('Saved: %s.\n', save_name)
-% end
-
-
-
 % Insert
 % ----------------------------------------------------------------------
-% for ix_year=1976:2001
-% 
-%     load_file_name = horzcat('patent_index_', num2str(ix_year));
-%     load(load_file_name)
-%     
-%     load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
-%     load(load_file_name)
-% 
-%     ipc_nr = pat_ix(:, 5);
-%     
-%     allyear_ipc_nr = {};
-%     for i=1:length(ipc_nr)
-%             allyear_ipc_nr = [allyear_ipc_nr;
-%                     ipc_nr{i,1}];
-%     end
-%     
-%     assert( size(allyear_ipc_nr, 1) == size( ...
-%         patent_keyword_appear.classnr_uspc, 1) )
-%     
-%     patent_keyword_appear.classnr_ipc = allyear_ipc_nr;
-% 
-%     save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-%     matfile_path_save = fullfile('matches', save_name);
-%     save(matfile_path_save, 'patent_keyword_appear');    
-%     fprintf('Saved: %s.\n', save_name)    
-% end
+for ix_year=2005:year_end
+
+    load_file_name = horzcat('patent_index_', num2str(ix_year));
+    load(load_file_name)
+    
+    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+    load(load_file_name)
+
+    ipc_nr = pat_ix(:, 5);
+    
+    allyear_ipc_nr = {};
+    for i=1:length(ipc_nr)
+            allyear_ipc_nr = [allyear_ipc_nr;
+                    ipc_nr{i,1}];
+    end
+    
+    assert( size(allyear_ipc_nr, 1) == size( ...
+        patent_keyword_appear.classnr_uspc, 1) )
+    
+    patent_keyword_appear.classnr_ipc = allyear_ipc_nr;
+
+    save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
+    matfile_path_save = fullfile('matches', save_name);
+    save(matfile_path_save, 'patent_keyword_appear');    
+    fprintf('Saved: %s.\n', save_name)    
+end
 
 
 % %% Clean matches
