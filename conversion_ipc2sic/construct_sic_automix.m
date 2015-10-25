@@ -76,9 +76,9 @@ for t=1:length(years)
     
     sic_automix_yres = struct2table(sic_automix_yres);
 
-    save_name = horzcat('sic_automix/sic_automix_yres_', ...
+    savename = horzcat('sic_automix/sic_automix_yres_', ...
         num2str(ix_year), '.mat');
-    save(save_name, 'sic_automix_yres'); 
+    save(savename, 'sic_automix_yres'); 
     fprintf('Saved: %s.\n', savename)
     
     clear sic_automix_yres

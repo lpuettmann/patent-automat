@@ -10,10 +10,9 @@ setup_path()
 
 
 %% Choose years
-year_start = 2002;
+year_start = 2003;
 year_end = 2015;
-
-% years = 2015:-1:2006;
+years = year_start:year_end;
 
 %% Make patent index
 % for ix_year = years
@@ -35,8 +34,6 @@ year_end = 2015;
 % end
 
 
-
-
 %% Search for keywords
 % for ix_year = years
 %     tic
@@ -53,9 +50,6 @@ year_end = 2015;
 %     % Save to .mat file
 %     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 % end
-
-
-%% Deal with tech class numbers
 
 
 % %% Clean matches
@@ -105,19 +99,19 @@ year_end = 2015;
 
 
 %% Link to sector of use using Silverman concordance
-% ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-%     'ReadVariableNames', false);
-% 
-% % Variables in Silverman concordance table:
-% %   - ipc: IPC class and subclass      
-% %   - sic: US SIC
-% %   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
-% %   - usefrq: frequency of patents in IPC assigned to SIC of use
-% ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
-% 
-% construct_sic_automix(years, ipcsicfinalv5)
+ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+    'ReadVariableNames', false);
 
+% Variables in Silverman concordance table:
+%   - ipc: IPC class and subclass      
+%   - sic: US SIC
+%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
+%   - usefrq: frequency of patents in IPC assigned to SIC of use
+ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
 
+construct_sic_automix(years, ipcsicfinalv5)
+
+break
 %% Compile SIC automatix
 sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 
