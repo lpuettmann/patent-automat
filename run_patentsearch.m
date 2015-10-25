@@ -57,35 +57,6 @@ year_end = 2015;
 
 %% Deal with tech class numbers
 
-% Insert
-% ----------------------------------------------------------------------
-for ix_year=2005:year_end
-
-    load_file_name = horzcat('patent_index_', num2str(ix_year));
-    load(load_file_name)
-    
-    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
-    load(load_file_name)
-
-    ipc_nr = pat_ix(:, 5);
-    
-    allyear_ipc_nr = {};
-    for i=1:length(ipc_nr)
-            allyear_ipc_nr = [allyear_ipc_nr;
-                    ipc_nr{i,1}];
-    end
-    
-    assert( size(allyear_ipc_nr, 1) == size( ...
-        patent_keyword_appear.classnr_uspc, 1) )
-    
-    patent_keyword_appear.classnr_ipc = allyear_ipc_nr;
-
-    save_name = horzcat('patent_keyword_appear_', num2str(ix_year), '.mat');
-    matfile_path_save = fullfile('matches', save_name);
-    save(matfile_path_save, 'patent_keyword_appear');    
-    fprintf('Saved: %s.\n', save_name)    
-end
-
 
 % %% Clean matches
 % clean_matches(year_start, year_end)
