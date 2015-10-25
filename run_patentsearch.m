@@ -10,7 +10,7 @@ setup_path()
 
 
 %% Choose years
-year_start = 2003;
+year_start = 1976;
 year_end = 2015;
 years = year_start:year_end;
 
@@ -111,13 +111,13 @@ ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
 
 construct_sic_automix(years, ipcsicfinalv5)
 
-break
+
 %% Compile SIC automatix
 sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
-
-savename = 'output/sic_automix_allyears.csv';
-writetable(sic_automix_allyears, savename)
-fprintf('Saved: %s.\n', savename)
+% 
+% savename = 'output/sic_automix_allyears.csv';
+% writetable(sic_automix_allyears, savename)
+% fprintf('Saved: %s.\n', savename)
 
 
 %% Analyse SIC automatix table

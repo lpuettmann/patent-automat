@@ -5,6 +5,7 @@ sic_silverman = cell2mat( cellfun(@str2num, ipcsicfinalv5.sic, ...
     'UniformOutput', false) );
 sic_silverman = unique(sic_silverman);
 
+exclude_techclass = choose_exclude_techclass();
 
 % Get list of IPCs of automation patents for year
 for t=1:length(years)
@@ -15,8 +16,6 @@ for t=1:length(years)
      
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
-
-    exclude_techclass = choose_exclude_techclass();
 
     % Classify patents as automation patents according to algorithm 1
     alg1 = classif_alg1(patsearch_results.dictionary, ...
