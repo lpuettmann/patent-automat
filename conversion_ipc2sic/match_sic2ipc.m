@@ -50,13 +50,22 @@ for ix_ipc=1:length(ipc_concordance)
     % Extract empirical frequencies for this IPC
     % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    % Industries of manufacture
-    sic_automix.automix_mfg(ix_ipc,1) = mfgfrq( ix_pick( ix_ipc ) ) * ...
-        sic_automix.autompat_frac_counts( ix_ipc,1);
+    % Industries of manufacture (all patents)
+    sic_automix.patents_mfg(ix_ipc,1) = mfgfrq( ix_pick( ix_ipc ) ) * ...
+        sic_automix.total_frac_counts( ix_ipc, 1 );
 
-    % Sector of use
+    % Sector of use (all patents)
+    sic_automix.patents_use(ix_ipc,1) = usefrq( ix_pick( ix_ipc ) ) * ...
+        sic_automix.total_frac_counts( ix_ipc, 1 );
+    
+    
+    % Industries of manufacture (automation patents)
+    sic_automix.automix_mfg(ix_ipc,1) = mfgfrq( ix_pick( ix_ipc ) ) * ...
+        sic_automix.autompat_frac_counts( ix_ipc, 1 );
+
+    % Sector of use (automation patents)
     sic_automix.automix_use(ix_ipc,1) = usefrq( ix_pick( ix_ipc ) ) * ...
-        sic_automix.autompat_frac_counts( ix_ipc,1); 
+        sic_automix.autompat_frac_counts( ix_ipc, 1 ); 
 end
 
 

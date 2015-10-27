@@ -99,25 +99,26 @@ years = year_start:year_end;
 
 
 %% Link to sector of use using Silverman concordance
-% ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-%     'ReadVariableNames', false);
-% 
-% % Variables in Silverman concordance table:
-% %   - ipc: IPC class and subclass      
-% %   - sic: US SIC
-% %   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
-% %   - usefrq: frequency of patents in IPC assigned to SIC of use
-% ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
-% 
-% construct_sic_automix(years, ipcsicfinalv5)
+ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+    'ReadVariableNames', false);
+
+% Variables in Silverman concordance table:
+%   - ipc: IPC class and subclass      
+%   - sic: US SIC
+%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
+%   - usefrq: frequency of patents in IPC assigned to SIC of use
+ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
+
+construct_sic_automix(years, ipcsicfinalv5)
 
 
 %% Compile SIC automatix
 sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
-% 
-% savename = 'output/sic_automix_allyears.csv';
-% writetable(sic_automix_allyears, savename)
-% fprintf('Saved: %s.\n', savename)
+
+savename = 'output/sic_automix_allyears.csv';
+writetable(sic_automix_allyears, savename)
+fprintf('Saved: %s.\n', savename)
+
 
 break
 
