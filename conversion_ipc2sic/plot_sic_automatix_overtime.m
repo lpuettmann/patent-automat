@@ -27,7 +27,7 @@ set(gcf, 'Color', 'w');
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 800 400])
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
@@ -38,5 +38,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/sic_automatix_overtime_', num2str(year_start), '-',  num2str(year_end),'.pdf');
+print_pdf_name = horzcat('output/sic_automatix_overtime_', ...
+    num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')

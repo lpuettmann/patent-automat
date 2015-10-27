@@ -12,7 +12,8 @@ setup_path()
 %% Choose years
 year_start = 1976;
 year_end = 2015;
-years = year_start:year_end;
+years = year_end : -1 : 2010;
+
 
 %% Make patent index
 % for ix_year = years
@@ -113,17 +114,126 @@ construct_sic_automix(years, ipcsicfinalv5)
 
 
 %% Compile SIC automatix
-sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
+% sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
+% 
+% savename = 'output/sic_automix_allyears.mat';
+% save(savename, 'sic_automix_allyears')
+% fprintf('Saved: %s.\n', savename)
+% 
+% savename = 'output/sic_automix_allyears.csv';
+% writetable(sic_automix_allyears, savename)
+% fprintf('Saved: %s.\n', savename)
 
-savename = 'output/sic_automix_allyears.csv';
-writetable(sic_automix_allyears, savename)
-fprintf('Saved: %s.\n', savename)
+
+%% Analyse SIC automatix table
+% ========================================================================
+load('output/sic_automix_allyears.mat')
+
+sic_automix_allyears.overcat = assign_sic_overcategories( ....
+    sic_automix_allyears.sic);
+
+sic_overcategories = define_sic_overcategories();
+
+for ix_year=year_start:year_end
+    t = ix_year - year_start + 1;    
+    
+    year_data = sic_automix_allyears( find( sic_automix_allyears.year ...
+        == ix_year ), :);
+    
+    for i=1:length(sic_overcategories.letter)
+        pick_sic_overcat = sic_overcategories.letter{i};
+
+        find_ix = find( strcmp( year_data.overcat, ...
+            pick_sic_overcat) );
+        aggr_automix(t, i) = nansum( year_data.automix_use(find_ix));
+        
+        aggr_automix_share(t, i) = nanmean( year_data.automix_use(find_ix) ./ ...
+            year_data.patents_use(find_ix));
+    end
+end
+
+
+%%
+close all
+
+plot_settings_global
+
+figureHandle = figure;
+ 
+set(gcf, 'Color', 'w');
+
+for i=1:length(sic_overcategories.letter)
+
+    subplot(4, 3, i) 
+    plot(year_start:year_end-1, aggr_automix_share(1:end-1, i), ...
+        'Color', color3_pick, 'LineWidth', 1.3)
+    
+    title(sic_overcategories.fullname{i})
+    xlim([year_start, year_end-1])
+    box off
+    set(gca,'TickDir','out')
+end
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 1400 900]) % in vector: left bottom width height
+
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print_pdf_name = horzcat('output/overcat_sic_automatix_share_overtime_', num2str(year_start), '-',  num2str(year_end),'.pdf');
+print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+
+
+%%
+plot_settings_global
+
+figureHandle = figure;
+ 
+set(gcf, 'Color', 'w');
+
+for i=1:length(sic_overcategories.letter)
+
+    subplot(4, 3, i) 
+    plot(year_start:year_end-1, aggr_automix(1:end-1, i), ...
+        'Color', color3_pick, 'LineWidth', 1.3)
+    
+    title(sic_overcategories.fullname{i})
+    xlim([year_start, year_end-1])
+    box off
+    set(gca,'TickDir','out')
+end
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 1400 900]) % in vector: left bottom width height
+
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print_pdf_name = horzcat('output/overcat_sic_automatix_overtime_', num2str(year_start), '-',  num2str(year_end),'.pdf');
+print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+
+
+
 
 
 break
 
-%% Analyse SIC automatix table
-% ========================================================================
 
 % Make plot of SIC automatix over time, raw series
 % ------------------------------------------------------------------------
@@ -137,7 +247,7 @@ plot_sic_automatix_logindexed(sic_automix_allyears, year_start, year_end, ...
 
 
 
-break
+
 
 
 
