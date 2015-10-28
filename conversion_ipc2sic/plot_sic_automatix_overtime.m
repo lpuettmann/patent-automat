@@ -11,15 +11,18 @@ for ix_sic=1:length(sic_list)
     pick_sic = sic_list( ix_sic) ;
 
     find_ix = (sic_automix_allyears.sic == pick_sic);
-    six_automix_series = sic_automix_allyears.automix_use(find_ix);
+    six_automix_series = sic_automix_allyears.automix_use(find_ix) ./ ...
+        sic_automix_allyears.patents_use(find_ix);
 
-    p  = patchline(year_start:year_end, six_automix_series, ...
-        'LineStyle', '-', 'EdgeColor', color3_pick, 'LineWidth', 1.3, ...
-            'EdgeAlpha', 0.2);  
+    patchline(year_start:year_end, six_automix_series, ...
+        'EdgeColor', 'black', 'LineWidth', 1.3, ...
+        'EdgeAlpha', 0.05);  
+
     hold on
 end
 
 xlim([year_start, year_end])
+ylim([0, 1])
 box off
 set(gca,'TickDir','out') 
 set(gcf, 'Color', 'w');

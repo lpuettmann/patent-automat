@@ -2,8 +2,7 @@ function plot_alg1_over_nrpatents_weekly(year_start, year_end)
 
 %%
 % Set font
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
+plot_settings_global
 
 
 % Load summary data
@@ -23,11 +22,7 @@ plot_series = raw_series ./ allyr_patstats.nr_patents_per_week;
 my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
-
-
-color1_pick = [0.3, 0.3, 0.3]; % dark gray
-my_gray = [0.806, 0.806, 0.806]; % light gray
-
+plot_settings_global
 
 figureHandle = figure;
 

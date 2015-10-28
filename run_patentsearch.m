@@ -12,7 +12,7 @@ setup_path()
 %% Choose years
 year_start = 1976;
 year_end = 2015;
-years = year_end : -1 : 2010;
+
 
 
 %% Make patent index
@@ -72,7 +72,7 @@ years = year_end : -1 : 2010;
 
 
 %% Make some visualizations 
-% dim_subplot = [7, 5];
+dim_subplot = [7, 5];
 
 % plot_matches_overtime(year_start, year_end, dim_subplot)
 % plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
@@ -86,11 +86,11 @@ years = year_end : -1 : 2010;
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)
 
-% plot_alg1_overtime(year_start, year_end)
+plot_alg1_overtime(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 %
-% plot_alg1_over_nrpatents_weekly(year_start, year_end)
+plot_alg1_over_nrpatents_weekly(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
@@ -98,22 +98,24 @@ years = year_end : -1 : 2010;
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
+break
+
 
 %% Link to sector of use using Silverman concordance
-ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-    'ReadVariableNames', false);
+% ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+%     'ReadVariableNames', false);
+% 
+% % Variables in Silverman concordance table:
+% %   - ipc: IPC class and subclass      
+% %   - sic: US SIC
+% %   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
+% %   - usefrq: frequency of patents in IPC assigned to SIC of use
+% ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
+% 
+% construct_sic_automix(years, ipcsicfinalv5)
 
-% Variables in Silverman concordance table:
-%   - ipc: IPC class and subclass      
-%   - sic: US SIC
-%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
-%   - usefrq: frequency of patents in IPC assigned to SIC of use
-ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
 
-construct_sic_automix(years, ipcsicfinalv5)
-
-
-%% Compile SIC automatix
+% %% Compile SIC automatix
 % sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 % 
 % savename = 'output/sic_automix_allyears.mat';
@@ -154,96 +156,19 @@ end
 
 
 %%
-close all
 
-plot_settings_global
+plot_overcat_sic_automatix_subplot(aggr_automix, ...
+    sic_overcategories, year_start, year_end)
 
-figureHandle = figure;
- 
-set(gcf, 'Color', 'w');
+plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+    sic_overcategories, year_start, year_end)
 
-for i=1:length(sic_overcategories.letter)
-
-    subplot(4, 3, i) 
-    plot(year_start:year_end-1, aggr_automix_share(1:end-1, i), ...
-        'Color', color3_pick, 'LineWidth', 1.3)
-    
-    title(sic_overcategories.fullname{i})
-    xlim([year_start, year_end-1])
-    box off
-    set(gca,'TickDir','out')
-end
-
-
-% Reposition the figure
-% -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 1400 900]) % in vector: left bottom width height
-
-set(figureHandle, 'Units', 'Inches');
-pos = get(figureHandle, 'Position');
-
-set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-    'Inches', 'PaperSize', [pos(3), pos(4)])
-
-
-% Export to pdf
-% -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/overcat_sic_automatix_share_overtime_', num2str(year_start), '-',  num2str(year_end),'.pdf');
-print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
-%%
-plot_settings_global
-
-figureHandle = figure;
- 
-set(gcf, 'Color', 'w');
-
-for i=1:length(sic_overcategories.letter)
-
-    subplot(4, 3, i) 
-    plot(year_start:year_end-1, aggr_automix(1:end-1, i), ...
-        'Color', color3_pick, 'LineWidth', 1.3)
-    
-    title(sic_overcategories.fullname{i})
-    xlim([year_start, year_end-1])
-    box off
-    set(gca,'TickDir','out')
-end
-
-
-% Reposition the figure
-% -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 1400 900]) % in vector: left bottom width height
-
-set(figureHandle, 'Units', 'Inches');
-pos = get(figureHandle, 'Position');
-
-set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-    'Inches', 'PaperSize', [pos(3), pos(4)])
-
-
-% Export to pdf
-% -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/overcat_sic_automatix_overtime_', num2str(year_start), '-',  num2str(year_end),'.pdf');
-print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
-
-
-
-break
-
+plot_overcat_sic_automatix_share(aggr_automix_share, ...
+    sic_overcategories, year_start, year_end)
 
 % Make plot of SIC automatix over time, raw series
-% ------------------------------------------------------------------------
 plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
-
-% Make plot of SIC automatix over time, indexed, 
-% ------------------------------------------------------------------------
-plot_sic_automatix_logindexed(sic_automix_allyears, year_start, year_end, ...
-    year_start)
 
 
 

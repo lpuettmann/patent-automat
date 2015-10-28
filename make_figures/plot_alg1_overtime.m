@@ -18,11 +18,6 @@ my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
     ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ...
     ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
 
-
-color1_pick = [0.3, 0.3, 0.3]; % dark gray
-my_gray = [0.806, 0.806, 0.806]; % light gray
-
-
 figureHandle = figure;
 
 set(gca,'FontSize', 22) % change default font size of axis labels
