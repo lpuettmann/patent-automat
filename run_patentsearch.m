@@ -86,11 +86,11 @@ year_end = 2015;
 % plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
 % plot_pat1m_overtime(year_start, year_end, pick_k)
 
-plot_alg1_overtime(year_start, year_end)
+% plot_alg1_overtime(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 %
-plot_alg1_over_nrpatents_weekly(year_start, year_end)
+% plot_alg1_over_nrpatents_weekly(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 % 
@@ -98,7 +98,6 @@ plot_alg1_over_nrpatents_weekly(year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
-break
 
 
 %% Link to sector of use using Silverman concordance
@@ -316,9 +315,9 @@ break
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-% manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 % manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
-manclassData = prepare_manclass('checked_by_lukas_2015-10-30.xlsx');
+% manclassData = prepare_manclass('checked_by_lukas_2015-10-30.xlsx');
 
 
 
@@ -339,16 +338,16 @@ manclassData = prepare_manclass('checked_by_lukas_2015-10-30.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
-automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
-    manclassData.indic_year, year_start, year_end)
-automclassData.indic_exclclassnr = check_classnr_uspc(automclassData.classnr_uspc);
+% automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
+%     manclassData.indic_year, year_start, year_end)
+% automclassData.indic_exclclassnr = check_classnr_uspc(automclassData.classnr_uspc);
 % save('output/automclassData.mat', 'automclassData'); % save to .mat
 
 
 
 %%
 % Classify patents based on computerized methods
-% load('automclassData')
+load('automclassData')
 
 
 computerClass = classify_autom_algorith(automclassData);
@@ -361,16 +360,15 @@ computerClass = classify_autom_algorith(automclassData);
 ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
     computerClass.compAutomat(:, ix_alg));
-break
-make_contingency_table(classifstat)
+% make_contingency_table(classifstat)
 
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
-make_table_evalstats(classifstat)
+% make_table_evalstats(classifstat)
 
-copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
-    'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
+% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_evalstats.tex', ...
+%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
 
@@ -383,7 +381,7 @@ plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\classifstat_yrly.pdf', ...
 %     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
-
+break
 % Compare some algorithms
 choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
     'Always "No"', 'Always "Yes"'};

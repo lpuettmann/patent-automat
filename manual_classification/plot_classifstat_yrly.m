@@ -2,8 +2,7 @@ function plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
 
 
 %% Set font
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
+plot_settings_global
 
 lwidth = 1.5;
 

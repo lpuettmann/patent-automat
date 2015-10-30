@@ -72,7 +72,8 @@ set(gcf, 'Color', 'w');
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
+% set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 1000 400]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
