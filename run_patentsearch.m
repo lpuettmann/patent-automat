@@ -72,7 +72,7 @@ year_end = 2015;
 
 
 %% Make some visualizations 
-dim_subplot = [7, 5];
+% dim_subplot = [7, 5];
 
 % plot_matches_overtime(year_start, year_end, dim_subplot)
 % plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
@@ -129,45 +129,45 @@ break
 
 %% Analyse SIC automatix table
 % ========================================================================
-load('output/sic_automix_allyears.mat')
-
-sic_automix_allyears.overcat = assign_sic_overcategories( ....
-    sic_automix_allyears.sic);
-
-sic_overcategories = define_sic_overcategories();
-
-for ix_year=year_start:year_end
-    t = ix_year - year_start + 1;    
-    
-    year_data = sic_automix_allyears( find( sic_automix_allyears.year ...
-        == ix_year ), :);
-    
-    for i=1:length(sic_overcategories.letter)
-        pick_sic_overcat = sic_overcategories.letter{i};
-
-        find_ix = find( strcmp( year_data.overcat, ...
-            pick_sic_overcat) );
-        aggr_automix(t, i) = nansum( year_data.automix_use(find_ix));
-        
-        aggr_automix_share(t, i) = nanmean( year_data.automix_use(find_ix) ./ ...
-            year_data.patents_use(find_ix));
-    end
-end
+% load('output/sic_automix_allyears.mat')
+% 
+% sic_automix_allyears.overcat = assign_sic_overcategories( ....
+%     sic_automix_allyears.sic);
+% 
+% sic_overcategories = define_sic_overcategories();
+% 
+% for ix_year=year_start:year_end
+%     t = ix_year - year_start + 1;    
+%     
+%     year_data = sic_automix_allyears( find( sic_automix_allyears.year ...
+%         == ix_year ), :);
+%     
+%     for i=1:length(sic_overcategories.letter)
+%         pick_sic_overcat = sic_overcategories.letter{i};
+% 
+%         find_ix = find( strcmp( year_data.overcat, ...
+%             pick_sic_overcat) );
+%         aggr_automix(t, i) = nansum( year_data.automix_use(find_ix));
+%         
+%         aggr_automix_share(t, i) = nanmean( year_data.automix_use(find_ix) ./ ...
+%             year_data.patents_use(find_ix));
+%     end
+% end
 
 
 %%
 
-plot_overcat_sic_automatix_subplot(aggr_automix, ...
-    sic_overcategories, year_start, year_end)
-
-plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end)
-
-plot_overcat_sic_automatix_share(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end)
-
-% Make plot of SIC automatix over time, raw series
-plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
+% plot_overcat_sic_automatix_subplot(aggr_automix, ...
+%     sic_overcategories, year_start, year_end)
+% 
+% plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+%     sic_overcategories, year_start, year_end)
+% 
+% plot_overcat_sic_automatix_share(aggr_automix_share, ...
+%     sic_overcategories, year_start, year_end)
+% 
+% % Make plot of SIC automatix over time, raw series
+% plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
 
 
@@ -177,8 +177,8 @@ plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
 
 %% Prepare conversion table
-fyr_start = 1976;
-fyr_end = 2014;
+% fyr_start = 1976;
+% fyr_end = 2014;
 
 % fname = 'Naics_co13.csv';
 % lnumber = 203074; % unfortunately hard-code line number
@@ -316,8 +316,11 @@ fyr_end = 2014;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+% manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 % manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
+manclassData = prepare_manclass('checked_by_lukas_2015-10-30.xlsx');
+
+
 
 % Use patents classified by Bessen and Hunt (2007) 
     % patent: patent number
@@ -336,16 +339,16 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
-% automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
-%     manclassData.indic_year, year_start, year_end)
-% automclassData.indic_exclclassnr = check_classnr(automclassData.classnr);
+automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
+    manclassData.indic_year, year_start, year_end)
+automclassData.indic_exclclassnr = check_classnr_uspc(automclassData.classnr_uspc);
 % save('output/automclassData.mat', 'automclassData'); % save to .mat
 
 
 
 %%
 % Classify patents based on computerized methods
-load('automclassData')
+% load('automclassData')
 
 
 computerClass = classify_autom_algorith(automclassData);
@@ -358,6 +361,7 @@ computerClass = classify_autom_algorith(automclassData);
 ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
 classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
     computerClass.compAutomat(:, ix_alg));
+break
 make_contingency_table(classifstat)
 
 % copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_contingency.tex', ...
