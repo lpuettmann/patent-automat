@@ -161,17 +161,22 @@ year_end = 2015;
 % 
 % plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end)
-% 
-% plot_overcat_sic_automatix_share(aggr_automix_share, ...
-%     sic_overcategories, year_start, year_end)
-% 
-% % Make plot of SIC automatix over time, raw series
+
+
+% for pick_hl=1:size(sic_overcategories, 1) + 1
+%     plot_overcat_sic_automatix_share(aggr_automix_share, ...
+%         sic_overcategories, year_start, year_end, pick_hl)
+% end
+
+
+
+% Make plot of SIC automatix over time, raw series
 % plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
 
 
 
-
+break
 
 
 
