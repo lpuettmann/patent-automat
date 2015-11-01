@@ -111,6 +111,9 @@ year_end = 2015;
 % %   - usefrq: frequency of patents in IPC assigned to SIC of use
 % ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
 % 
+% AA = unique( ipcsicfinalv5.ipc );
+
+
 % construct_sic_automix(years, ipcsicfinalv5)
 
 
@@ -173,10 +176,6 @@ year_end = 2015;
 % Make plot of SIC automatix over time, raw series
 % plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
-
-
-
-break
 
 
 

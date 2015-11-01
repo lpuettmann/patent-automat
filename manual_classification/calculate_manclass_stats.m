@@ -71,6 +71,14 @@ classifstat.auc = calculate_auc(correctClass, estimatClass);
 classifstat.matthewscorrcoeff = (tp * tn - fp * fn) / sqrt((tp + fp)*...
     (tp + fn)*(tn + fp)*(tn + fn));
 
+% Calculate Cohen's kappa
+p_man_yes = sum(correctClass) / classifstat.nr_codpt;
+p_comp_yes = sum(estimatClass) / classifstat.nr_codpt;
+p_rand_agree = p_man_yes * p_comp_yes + (1 - p_man_yes) * ...
+    (1 - p_comp_yes); % probability of random agreement
+classifstat.cohenskappa = 1 - ((1 - classifstat.accuracy) / ...
+    (1 - p_rand_agree));
+
 % Save in struct
 classifstat.true_positive = tp;
 classifstat.false_positive = fp;
