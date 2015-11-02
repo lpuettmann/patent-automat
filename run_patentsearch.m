@@ -133,28 +133,28 @@ year_end = 2015;
 % ========================================================================
 load('output/sic_automix_allyears.mat')
 
-% sic_automix_allyears.overcat = assign_sic_overcategories( ....
-%     sic_automix_allyears.sic);
-% 
-% sic_overcategories = define_sic_overcategories();
-% 
-% for ix_year=year_start:year_end
-%     t = ix_year - year_start + 1;    
-%     
-%     year_data = sic_automix_allyears( find( sic_automix_allyears.year ...
-%         == ix_year ), :);
-%     
-%     for i=1:length(sic_overcategories.letter)
-%         pick_sic_overcat = sic_overcategories.letter{i};
-% 
-%         find_ix = find( strcmp( year_data.overcat, ...
-%             pick_sic_overcat) );
-%         aggr_automix(t, i) = nansum( year_data.automix_use(find_ix));
-%         
-%         aggr_automix_share(t, i) = nanmean( year_data.automix_use(find_ix) ./ ...
-%             year_data.patents_use(find_ix));
-%     end
-% end
+sic_automix_allyears.overcat = assign_sic_overcategories( ....
+    sic_automix_allyears.sic);
+
+sic_overcategories = define_sic_overcategories();
+
+for ix_year=year_start:year_end
+    t = ix_year - year_start + 1;    
+    
+    year_data = sic_automix_allyears( find( sic_automix_allyears.year ...
+        == ix_year ), :);
+    
+    for i=1:length(sic_overcategories.letter)
+        pick_sic_overcat = sic_overcategories.letter{i};
+
+        find_ix = find( strcmp( year_data.overcat, ...
+            pick_sic_overcat) );
+        aggr_automix(t, i) = nansum( year_data.automix_use(find_ix));
+        
+        aggr_automix_share(t, i) = nanmean( year_data.automix_use(find_ix) ./ ...
+            year_data.patents_use(find_ix));
+    end
+end
 
 
 %%
@@ -210,10 +210,16 @@ end
 sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
     sic_automix_allyears.patents_use;
 
-%% Get index of manufacturing industries
+%% Get manufacturing industries
+ix_color_manufact = strcmp( sic_automix_allyears.overcat, 'D');
+
 
 %%
 close all
+
+pick_series1 = log( sic_automix_allyears.automix_use );
+pick_series2 = sic_automix_allyears.rti60;
+pick_series3 = sic_automix_allyears.rel_automix;
 
 figureHandle = figure;
 plot_settings_global()
@@ -221,37 +227,80 @@ set(gca,'FontSize', 18) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
-subplot(2, 1, 1)
-scatter(log( sic_automix_allyears.automix_use ), sic_automix_allyears.rti60, ...
-    'Marker', '.', 'MarkerEdgeColor', color1_pick)
+subplot(2, 2, 1)
+scatter(pick_series1, pick_series2, ...
+    'Marker', '.', 'MarkerEdgeColor', [0.6, 0.6, 0.6])
 
 hold on
 xpush = linspace(-7, 9, 100);
-mdl = fitlm(log( sic_automix_allyears.automix_use ), ...
-    sic_automix_allyears.rti60);
+mdl = fitlm(pick_series1, ...
+    pick_series2);
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 2.5, 'Color', mystrongred);
+    'LineWidth', 2.5, 'Color', [0.4, 0.4, 0.4]);
 
 ylabel('Share of routine labor 1960')
 xlabel('log( total automation index )')
 set(gca,'TickDir','out')
 ylim([0, 1])
 
-subplot(2, 1, 2)
-scatter(sic_automix_allyears.rel_automix, sic_automix_allyears.rti60, ...
-    'Marker', '.', 'MarkerEdgeColor', color1_pick)
-
+subplot(2, 2, 2)
+scatter(pick_series3( not( ix_color_manufact ) ), ...
+    pick_series2( not( ix_color_manufact ) ), ...
+    'Marker', '.', 'MarkerEdgeColor', color_list(8,:))
 hold on
 xpush = linspace(0, 1, 100);
-mdl = fitlm(sic_automix_allyears.rel_automix, sic_automix_allyears.rti60);
+mdl = fitlm(pick_series3(not( ix_color_manufact )), ...
+    pick_series2(not( ix_color_manufact )));
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 2.5, 'Color', mystrongred);
+    'LineWidth', 2.5, 'Color', color_list(9,:));
+hold on
+scatter(pick_series3(ix_color_manufact), ...
+    pick_series2(ix_color_manufact), ...
+    'Marker', '.', 'MarkerEdgeColor', color_list(5,:))
+hold on
+xpush = linspace(0, 1, 100);
+mdl = fitlm(pick_series3(ix_color_manufact), ...
+    pick_series2(ix_color_manufact));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 2.5, 'Color', color_list(4,:));
 
 ylabel('Share of routine labor 1960')
 xlabel('Relative automation index')
 set(gca,'TickDir','out')
 xlim([0, 1])
 ylim([0, 1])
+
+subplot(2, 2, 3)
+scatter(pick_series3( not( ix_color_manufact ) ), ...
+    pick_series2( not( ix_color_manufact ) ), ...
+    'Marker', '.', 'MarkerEdgeColor', color_list(8,:))
+hold on
+title('Not manufacturing')
+xpush = linspace(0, 1, 100);
+mdl = fitlm(pick_series3(not( ix_color_manufact )), ...
+    pick_series2(not( ix_color_manufact )));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 2.5, 'Color', color_list(9,:));
+
+ylabel('Share of routine labor 1960')
+xlabel('Relative automation index')
+set(gca,'TickDir','out')
+
+subplot(2, 2, 4)
+scatter(pick_series3(ix_color_manufact), ...
+    pick_series2(ix_color_manufact), ...
+    'Marker', '.', 'MarkerEdgeColor', color_list(5,:))
+title('Manufacturing')
+hold on
+xpush = linspace(0, 1, 100);
+mdl = fitlm(pick_series3(ix_color_manufact), ...
+    pick_series2(ix_color_manufact));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 2.5, 'Color', color_list(4,:));
+
+ylabel('Share of routine labor 1960')
+xlabel('Relative automation index')
+set(gca,'TickDir','out')
 
 
 % Reposition the figure
