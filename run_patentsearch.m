@@ -210,6 +210,8 @@ end
 sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
     sic_automix_allyears.patents_use;
 
+%% Get index of manufacturing industries
+
 %%
 close all
 
