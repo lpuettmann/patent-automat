@@ -23,5 +23,6 @@
 *.XML
 *.xls
 *.xlsx
+*.gif
 delete_me.m
 copy_selected_files.m

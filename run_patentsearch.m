@@ -205,20 +205,120 @@ for i=1:length(sic_list)
     end
 end
 
+
+%% Insert the relative automation index in the table
+sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
+    sic_automix_allyears.patents_use;
+
 %%
 close all
+
 figureHandle = figure;
+plot_settings_global()
+set(gca,'FontSize', 18) % change default font size of axis labels
+set(gcf, 'Color', 'w');
+box off
 
 subplot(2, 1, 1)
-scatter(sic_automix_allyears.automix_use, sic_automix_allyears.rti60)
-xlabel('Total automation index')
+scatter(log( sic_automix_allyears.automix_use ), sic_automix_allyears.rti60, ...
+    'Marker', '.', 'MarkerEdgeColor', color1_pick)
+
+hold on
+xpush = linspace(-7, 9, 100);
+mdl = fitlm(log( sic_automix_allyears.automix_use ), ...
+    sic_automix_allyears.rti60);
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 2.5, 'Color', mystrongred);
+
+ylabel('Share of routine labor 1960')
+xlabel('log( total automation index )')
+set(gca,'TickDir','out')
+ylim([0, 1])
 
 subplot(2, 1, 2)
-scatter(sic_automix_allyears.automix_use ./ ...
-    sic_automix_allyears.patents_use, sic_automix_allyears.rti60)
+scatter(sic_automix_allyears.rel_automix, sic_automix_allyears.rti60, ...
+    'Marker', '.', 'MarkerEdgeColor', color1_pick)
+
+hold on
+xpush = linspace(0, 1, 100);
+mdl = fitlm(sic_automix_allyears.rel_automix, sic_automix_allyears.rti60);
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 2.5, 'Color', mystrongred);
+
+ylabel('Share of routine labor 1960')
 xlabel('Relative automation index')
+set(gca,'TickDir','out')
 xlim([0, 1])
 ylim([0, 1])
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print_pdf_name = horzcat('output/rel_automix_vs_rti60_', ...
+    num2str(year_start), '-',  num2str(year_end), '.pdf');
+print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+
+
+
+
+%%
+
+
+% figureHandle = figure;
+% plot_settings_global()
+% set(gca,'FontSize', 18) % change default font size of axis labels
+% set(gcf, 'Color', 'w');
+% box off
+% 
+
+% 
+% for ix_year=year_start:year_end
+%     
+%     ix_extr = find(ix_year == sic_automix_allyears.year);
+%     scatter(rel_automix(ix_extr), sic_automix_allyears.rti60(ix_extr), ...
+%         'Marker', '.', 'MarkerEdgeColor', color1_pick)
+% 
+%     ylabel('Share of routine labor 1960')
+%     xlabel('Relative automation index')
+%     set(gca,'TickDir','out')
+%     xlim([0, 1])
+%     ylim([0, 1])
+%     
+%     title(num2str(ix_year))
+%     
+%     hold on
+%     pause(0.02)
+% end
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+% set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+% 
+% set(figureHandle, 'Units', 'Inches');
+% pos = get(figureHandle, 'Position');
+% 
+% set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+%     'Inches', 'PaperSize', [pos(3), pos(4)])
+% 
+% 
+% % Export to pdf
+% % -----------------------------------------------------------------------
+% print_pdf_name = horzcat('output/rel_automix_vs_rti60_', ...
+%     num2str(year_start), '-',  num2str(year_end), '.pdf');
+% print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+
 
 break
 
