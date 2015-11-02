@@ -319,10 +319,7 @@ year_end = 2015;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
-% manclassData = prepare_manclass('manclass_unseen_eval_alg1.xlsx');
-% manclassData = prepare_manclass('checked_by_lukas_2015-10-30.xlsx');
-
+manclassData = prepare_manclass('manclass_consolidated_v11.xlsx');
 
 
 % Use patents classified by Bessen and Hunt (2007) 
@@ -342,16 +339,16 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
-% automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
-%     manclassData.indic_year, year_start, year_end)
-% automclassData.indic_exclclassnr = check_classnr_uspc(automclassData.classnr_uspc);
-% save('output/automclassData.mat', 'automclassData'); % save to .mat
+automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
+    manclassData.indic_year, year_start, year_end)
+automclassData.indic_exclclassnr = check_classnr_uspc(automclassData.classnr_uspc);
+save('output/automclassData.mat', 'automclassData'); % save to .mat
 
 
 
 %%
 % Classify patents based on computerized methods
-load('automclassData')
+% load('automclassData')
 
 
 computerClass = classify_autom_algorith(automclassData);

@@ -27,11 +27,11 @@ coderDate = manclass_dataRaw(:, 9);
 
 %% Make some checks
 if length(unique(patentnr)) ~= length(patentnr)
-    warning('There are duplicate patents:')
     [duplN, duplBin] = histc(patentnr, ...
         unique(patentnr));
     duplMultiple = find(duplN > 1);
     duplIndex = manclass_dataRaw(find(ismember(duplBin, duplMultiple)), 1)
+    error('There are duplicate patents.')
 end
     
 if any(not((manAutomat == 1) | (manAutomat == 0)))
