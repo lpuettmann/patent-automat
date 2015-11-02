@@ -131,8 +131,8 @@ year_end = 2015;
 
 %% Analyse SIC automatix table
 % ========================================================================
-% load('output/sic_automix_allyears.mat')
-% 
+load('output/sic_automix_allyears.mat')
+
 % sic_automix_allyears.overcat = assign_sic_overcategories( ....
 %     sic_automix_allyears.sic);
 % 
@@ -164,8 +164,8 @@ year_end = 2015;
 % 
 % plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end)
-
-
+% 
+% 
 % for pick_hl=1:size(sic_overcategories, 1) + 1
 %     plot_overcat_sic_automatix_share(aggr_automix_share, ...
 %         sic_overcategories, year_start, year_end, pick_hl)
@@ -177,7 +177,50 @@ year_end = 2015;
 % plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
 
 
+%% Import Routine Task Index (RTI) by Autor, Levy and Murnane (2003)
+rti_data = readtable('idata_rti.xlsx');
+rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
 
+
+[sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
+
+sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
+
+for i=1:length(sic_list)
+    sic_pick = sic_list(i);    
+    ix_extr = find( sic_pick == rti_data.sic );    
+    assert( length(ix_extr) <= 1)
+    
+    sic_summary(i, 2) = sic_pick;
+    if isempty( ix_extr ) 
+        sic_summary(i, 2) = NaN;
+    else
+        sic_summary(i, 2) = rti_data.rti60(ix_extr);
+    end
+    
+    ix_insert = find( ix_map == i );
+    
+    for j=1:length(ix_insert)
+        sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
+    end
+end
+
+%%
+close all
+figureHandle = figure;
+
+subplot(2, 1, 1)
+scatter(sic_automix_allyears.automix_use, sic_automix_allyears.rti60)
+xlabel('Total automation index')
+
+subplot(2, 1, 2)
+scatter(sic_automix_allyears.automix_use ./ ...
+    sic_automix_allyears.patents_use, sic_automix_allyears.rti60)
+xlabel('Relative automation index')
+xlim([0, 1])
+ylim([0, 1])
+
+break
 
 %% Prepare conversion table
 % fyr_start = 1976;
