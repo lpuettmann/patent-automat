@@ -158,7 +158,7 @@ end
 
 
 %%
-
+% 
 % plot_overcat_sic_automatix_subplot(aggr_automix, ...
 %     sic_overcategories, year_start, year_end)
 % 
@@ -166,16 +166,22 @@ end
 %     sic_overcategories, year_start, year_end)
 % 
 % 
-% for pick_hl=1:size(sic_overcategories, 1) + 1
+for pick_hl=1:size(sic_overcategories, 1) + 1
 %     plot_overcat_sic_automatix_share(aggr_automix_share, ...
 %         sic_overcategories, year_start, year_end, pick_hl)
-% end
+    
+%     plot_overcat_sic_automatix(aggr_automix, ...
+%         sic_overcategories, year_start, year_end, pick_hl)
+    
+    plot_overcat_sic_lautomatix(aggr_automix, ...
+        sic_overcategories, year_start, year_end, pick_hl)    
+end
 
 
 
 % Make plot of SIC automatix over time, raw series
 % plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
-
+break
 
 %% Import Routine Task Index (RTI) by Autor, Levy and Murnane (2003)
 rti_data = readtable('idata_rti.xlsx');
