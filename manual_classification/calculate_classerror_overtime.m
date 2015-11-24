@@ -14,14 +14,16 @@ for ix_year=year_start:year_end
     
     nr_equal = length( find( manclass_Yes_yr == compClass_Yes_yr ) );
     nr_wrong = nr_class - nr_equal;
+       
+    classifstat = calculate_manclass_stats(manclass_Yes_yr, ...
+        compClass_Yes_yr);
     
-    accuracy = nr_equal / nr_class;
-
     % Save in struct
     classifstat_yrly.nr_class(ix_iter) = nr_class;
     classifstat_yrly.nr_equal(ix_iter) = nr_equal;
     classifstat_yrly.nr_wrong(ix_iter) = nr_wrong;
     classifstat_yrly.nr_manclass_Yes_yr(ix_iter) = sum( manclass_Yes_yr );
     classifstat_yrly.nr_compClass_Yes_yr(ix_iter) = sum( compClass_Yes_yr );
-    classifstat_yrly.accuracy(ix_iter) = accuracy;
+    classifstat_yrly.accuracy(ix_iter) = classifstat.accuracy;
+    classifstat_yrly.fmeasure(ix_iter) = classifstat.fmeasure;
 end
