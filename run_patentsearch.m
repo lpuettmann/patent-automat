@@ -193,49 +193,28 @@ sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
     sic_automix_allyears.patents_use;
 
 
-%% Get manufacturing industries
-% ix_color_manufact = strcmp( sic_automix_allyears.overcat, 'D');
-
-sic_list = unique( sic_automix_allyears.sic );
-
-for i=1:length(sic_list)
+%% Get summary statistics for all years
+for i=1:length(rti_data.sic)
     
-    ix_pick = ( sic_list(i) == sic_automix_allyears.sic );
-    
-    % This mean doesn't really do anything, as there is only one
-    % observation per SIC.
-    pick_rti60 = nanmean( sic_automix_allyears.rti60(ix_pick) ); 
+    ix_pick = ( rti_data.sic(i) == sic_automix_allyears.sic );
 
-    if isnan( pick_rti60 ) 
-        continue
-    else
-        sic_summary.rti60(i, 1) = pick_rti60;
-    end
-    
-    sic_summary.automix_use_log_sum(i, 1) = log( sum( ...
+    rti_data.automix_use_log_sum(i) = log( sum( ...
         sic_automix_allyears.automix_use(ix_pick) ) );   
     
-    sic_summary.rel_automix_mean(i, 1) = mean( ...
+    rti_data.rel_automix_mean(i, 1) = mean( ...
         sic_automix_allyears.rel_automix(ix_pick) );   
     
     % Save an indicator of whether this SIC is in manufacturing
     pick_overcat = sic_automix_allyears.overcat( ix_pick );
     
-    sic_summary.ix_manufact(i, 1) = +strcmp( pick_overcat{1}, 'D');
+    rti_data.ix_manufact(i, 1) = +strcmp( pick_overcat{1}, 'D');
 end
 
-if sum(sic_summary.ix_manufact) ~= 458
+if sum(rti_data.ix_manufact) ~= 454
     warning('Not correct number of manufacturing industries.')
 end
 
-if any( isnan( sic_summary.rti60 ) ) | any( isnan( ...
-        sic_summary.automix_use_log_sum ) ) | any( isnan( ...
-        sic_summary.rel_automix_mean ) ) | any( isnan( ...
-        sic_summary.ix_manufact ) )
-    warning('Contains NaN.')
-end
-
-plot_automix_vs_rti(year_start, year_end, sic_summary)
+plot_automix_vs_rti(year_start, year_end, rti_data)
 
 
 break

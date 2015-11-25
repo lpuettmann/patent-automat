@@ -1,69 +1,34 @@
-function plot_automix_vs_rti(year_start, year_end, sic_summary)
+function plot_automix_vs_rti(year_start, year_end, rti_data)
 
-pick_series1 = sic_summary.automix_use_log_sum;
-pick_series2 = sic_summary.rti60;
-pick_series3 = sic_summary.rel_automix_mean;
+%%
+rti60 = rti_data.rti60;
+rel_automix_mean = rti_data.rel_automix_mean;
 
-ix_color = find( sic_summary.ix_manufact );
+pos_manufact = find( rti_data.ix_manufact );
+pos_other_ind = find( not( rti_data.ix_manufact ) );
 
+
+
+
+%%
+figure1 = figure;
 
 plot_settings_global()
-
-figureHandle = figure;
-
-set(gca,'FontSize', 16) % change default font size of axis labels
+set(gca,'FontSize', 18) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
-subplot(2, 2, 1)
-scatter(pick_series1, pick_series2, ...
-    'Marker', '.', 'MarkerEdgeColor', [0.6, 0.6, 0.6])
+scatter(rti_data.automix_use_log_sum, rti60, ...
+    'Marker', '.', 'MarkerEdgeColor', my_gray)
 
 hold on
+xpush = [min(rti_data.automix_use_log_sum), max(rti_data.automix_use_log_sum)];
+mdl = fitlm(rti_data.automix_use_log_sum, rti60);
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color3_pick);
+
 ylabel('Share of routine labor 1960')
 xlabel('log( total automation index )')
-set(gca,'TickDir','out')
-ylim([0, 1])
-
-subplot(2, 2, 2)
-scatter(pick_series3( not( ix_color ) ), ...
-    pick_series2( not( ix_color ) ), ...
-    'Marker', '.', 'MarkerEdgeColor', color_list(8,:))
-hold on
-scatter(pick_series3(ix_color), pick_series2(ix_color), ...
-    'Marker', '.', 'MarkerEdgeColor', color_list(5,:))
-hold on
-xpush = linspace(0, 1, 100);
-mdl = fitlm(pick_series3(ix_color), ...
-    pick_series2(ix_color));
-plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 1.5, 'Color', color_list(4,:));
-
-ylabel('Share of routine labor 1960')
-xlabel('Relative automation index')
-set(gca,'TickDir','out')
-xlim([0, 1])
-ylim([0, 1])
-
-subplot(2, 2, 3)
-scatter(pick_series3( not( ix_color ) ), ...
-    pick_series2( not( ix_color ) ), ...
-    'Marker', '.', 'MarkerEdgeColor', color_list(8,:))
-title('Not manufacturing')
-
-ylabel('Share of routine labor 1960')
-xlabel('Relative automation index')
-set(gca,'TickDir','out')
-ylim([0, 1])
-
-subplot(2, 2, 4)
-scatter(pick_series3(ix_color), ...
-    pick_series2(ix_color), ...
-    'Marker', '.', 'MarkerEdgeColor', color_list(5,:))
-title('Manufacturing')
-
-ylabel('Share of routine labor 1960')
-xlabel('Relative automation index')
 set(gca,'TickDir','out')
 ylim([0, 1])
 
@@ -72,10 +37,54 @@ ylim([0, 1])
 % -----------------------------------------------------------------------
 set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
 
-set(figureHandle, 'Units', 'Inches');
-pos = get(figureHandle, 'Position');
+set(figure1, 'Units', 'Inches');
+pos = get(figure1, 'Position');
 
-set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+set(figure1, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print_pdf_name = horzcat('output/lautomix_vs_rti60_', ...
+    num2str(year_start), '-',  num2str(year_end), '.pdf');
+print(figure1, print_pdf_name, '-dpdf', '-r0')
+
+
+
+%%
+close all
+figure2 = figure;
+
+plot_settings_global()
+set(gca,'FontSize', 18) % change default font size of axis labels
+set(gcf, 'Color', 'w');
+box off
+
+scatter(rel_automix_mean, rti60, ...
+    'Marker', '.', 'MarkerEdgeColor', my_gray)
+
+hold on
+xpush = [min(rel_automix_mean), max(rel_automix_mean)];
+mdl = fitlm(rel_automix_mean, rti60);
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color3_pick);
+
+ylabel('Share of routine labor 1960')
+xlabel('Relative automation index')
+set(gca,'TickDir','out')
+xlim([0, 1])
+ylim([0, 1])
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+
+set(figure2, 'Units', 'Inches');
+pos = get(figure2, 'Position');
+
+set(figure2, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
     'Inches', 'PaperSize', [pos(3), pos(4)])
 
 
@@ -83,4 +92,93 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % -----------------------------------------------------------------------
 print_pdf_name = horzcat('output/rel_automix_vs_rti60_', ...
     num2str(year_start), '-',  num2str(year_end), '.pdf');
-print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+print(figure2, print_pdf_name, '-dpdf', '-r0')
+
+
+%%
+close all
+figure3 = figure;
+
+plot_settings_global()
+set(gca,'FontSize', 18) % change default font size of axis labels
+set(gcf, 'Color', 'w');
+box off
+
+scatter(rel_automix_mean( pos_other_ind ), ...
+    rti60( pos_other_ind ), ...
+    'Marker', '.', 'MarkerEdgeColor', my_gray)
+
+hold on
+xpush = [min(rel_automix_mean( pos_other_ind )), max(rel_automix_mean( pos_other_ind ))];
+mdl = fitlm(rel_automix_mean( pos_other_ind ), rti60( pos_other_ind ));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color3_pick);
+
+ylabel('Share of routine labor 1960')
+xlabel('Relative automation index')
+set(gca,'TickDir','out')
+ylim([0, 1])
+xlim([0, 1])
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+
+set(figure3, 'Units', 'Inches');
+pos = get(figure3, 'Position');
+
+set(figure3, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print_pdf_name = horzcat('output/rel_automix_vs_rti60_notManuf_', ...
+    num2str(year_start), '-',  num2str(year_end), '.pdf');
+print(figure3, print_pdf_name, '-dpdf', '-r0')
+
+
+
+%%
+close all
+figure4 = figure;
+
+plot_settings_global()
+set(gca,'FontSize', 18) % change default font size of axis labels
+set(gcf, 'Color', 'w');
+box off
+
+scatter(rel_automix_mean(pos_manufact), ...
+    rti60(pos_manufact), ...
+    'Marker', '.', 'MarkerEdgeColor', my_gray)
+
+hold on
+xpush = [min(rel_automix_mean(pos_manufact)), max(rel_automix_mean(pos_manufact))];
+mdl = fitlm(rel_automix_mean(pos_manufact), rti60(pos_manufact));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color3_pick);
+
+ylabel('Share of routine labor 1960')
+xlabel('Relative automation index')
+set(gca,'TickDir','out')
+ylim([0, 1])
+xlim([0, 1])
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+
+set(figure4, 'Units', 'Inches');
+pos = get(figure4, 'Position');
+
+set(figure4, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print_pdf_name = horzcat('output/rel_automix_vs_rti60_Manuf_', ...
+    num2str(year_start), '-',  num2str(year_end), '.pdf');
+print(figure4, print_pdf_name, '-dpdf', '-r0')
