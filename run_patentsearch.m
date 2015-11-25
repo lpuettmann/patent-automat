@@ -105,21 +105,14 @@ year_end = 2015;
 % %   - usefrq: frequency of patents in IPC assigned to SIC of use
 % ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
 % 
-% AA = unique( ipcsicfinalv5.ipc );
-
-
 % construct_sic_automix(years, ipcsicfinalv5)
 
 
-% %% Compile SIC automatix
+%% Compile SIC automatix
 % sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 % 
 % savename = 'output/sic_automix_allyears.mat';
 % save(savename, 'sic_automix_allyears')
-% fprintf('Saved: %s.\n', savename)
-% 
-% savename = 'output/sic_automix_allyears.csv';
-% writetable(sic_automix_allyears, savename)
 % fprintf('Saved: %s.\n', savename)
 
 
@@ -127,44 +120,25 @@ year_end = 2015;
 % ========================================================================
 load('output/sic_automix_allyears.mat')
 
-sic_automix_allyears.overcat = assign_sic_overcategories( ....
-    sic_automix_allyears.sic);
+% Get some summary series for over-categories of industries
+% [sic_overcategories, aggr_automix, aggr_automix_share] = ...
+%     get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears);
 
-sic_overcategories = define_sic_overcategories();
-
-for ix_year=year_start:year_end
-    t = ix_year - year_start + 1;    
-    
-    year_data = sic_automix_allyears( find( sic_automix_allyears.year ...
-        == ix_year ), :);
-    
-    for i=1:length(sic_overcategories.letter)
-        pick_sic_overcat = sic_overcategories.letter{i};
-
-        find_ix = find( strcmp( year_data.overcat, ...
-            pick_sic_overcat) );
-        aggr_automix(t, i) = nansum( year_data.automix_use(find_ix));
-        
-        aggr_automix_share(t, i) = nanmean( year_data.automix_use(find_ix) ./ ...
-            year_data.patents_use(find_ix));
-    end
-end
 
 
 %%
-close all
 
 % Sort the series for plotting
-[~, plot_ix] = sort( aggr_automix_share(end, :) );
-
-plot_overcat_sic_automatix_subplot(aggr_automix, ...
-    sic_overcategories, year_start, year_end, plot_ix)
-
-plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end, plot_ix)
-
-plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end, plot_ix)
+% [~, plot_ix] = sort( aggr_automix_share(end, :) );
+% 
+% plot_overcat_sic_automatix_subplot(aggr_automix, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
+% 
+% plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
+% 
+% plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
 
 
 % for pick_hl=1:size(sic_overcategories, 1) + 1
@@ -184,207 +158,87 @@ plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
 %     pause(0.05)
 % end
 
-break
-
-
-% Make plot of SIC automatix over time, raw series
-% plot_sic_automatix_overtime(sic_automix_allyears, year_start, year_end)
-
 
 %% Import Routine Task Index (RTI) by Autor, Levy and Murnane (2003)
-% rti_data = readtable('idata_rti.xlsx');
-% rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
-% 
-% 
-% [sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
-% 
-% sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
-% 
-% for i=1:length(sic_list)
-%     sic_pick = sic_list(i);    
-%     ix_extr = find( sic_pick == rti_data.sic );    
-%     assert( length(ix_extr) <= 1)
-%     
-%     sic_summary(i, 2) = sic_pick;
-%     if isempty( ix_extr ) 
-%         sic_summary(i, 2) = NaN;
-%     else
-%         sic_summary(i, 2) = rti_data.rti60(ix_extr);
-%     end
-%     
-%     ix_insert = find( ix_map == i );
-%     
-%     for j=1:length(ix_insert)
-%         sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
-%     end
-% end
-% 
-% 
-% %% Insert the relative automation index in the table
-% sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
-%     sic_automix_allyears.patents_use;
-% 
-% %% Get manufacturing industries
+rti_data = readtable('idata_rti.xlsx');
+rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
+
+
+[sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
+
+sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
+
+for i=1:length(sic_list)
+    sic_pick = sic_list(i);    
+    ix_extr = find( sic_pick == rti_data.sic );    
+    assert( length(ix_extr) <= 1)
+    
+    sic_summary(i, 2) = sic_pick;
+    if isempty( ix_extr ) 
+        sic_summary(i, 2) = NaN;
+    else
+        sic_summary(i, 2) = rti_data.rti60(ix_extr);
+    end
+    
+    ix_insert = find( ix_map == i );
+    
+    for j=1:length(ix_insert)
+        sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
+    end
+end
+
+
+%% Insert the relative automation index in the table
+sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
+    sic_automix_allyears.patents_use;
+
+
+%% Get manufacturing industries
 % ix_color_manufact = strcmp( sic_automix_allyears.overcat, 'D');
-% 
-% 
-% %%
-% close all
-% 
-% pick_series1 = log( sic_automix_allyears.automix_use );
-% pick_series2 = sic_automix_allyears.rti60;
-% pick_series3 = sic_automix_allyears.rel_automix;
-% 
-% figureHandle = figure;
-% plot_settings_global()
-% set(gca,'FontSize', 18) % change default font size of axis labels
-% set(gcf, 'Color', 'w');
-% box off
-% 
-% subplot(2, 2, 1)
-% scatter(pick_series1, pick_series2, ...
-%     'Marker', '.', 'MarkerEdgeColor', [0.6, 0.6, 0.6])
-% 
-% hold on
-% xpush = linspace(-7, 9, 100);
-% mdl = fitlm(pick_series1, ...
-%     pick_series2);
-% plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-%     'LineWidth', 2.5, 'Color', [0.4, 0.4, 0.4]);
-% 
-% ylabel('Share of routine labor 1960')
-% xlabel('log( total automation index )')
-% set(gca,'TickDir','out')
-% ylim([0, 1])
-% 
-% subplot(2, 2, 2)
-% scatter(pick_series3( not( ix_color_manufact ) ), ...
-%     pick_series2( not( ix_color_manufact ) ), ...
-%     'Marker', '.', 'MarkerEdgeColor', color_list(8,:))
-% hold on
-% xpush = linspace(0, 1, 100);
-% mdl = fitlm(pick_series3(not( ix_color_manufact )), ...
-%     pick_series2(not( ix_color_manufact )));
-% plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-%     'LineWidth', 2.5, 'Color', color_list(9,:));
-% hold on
-% scatter(pick_series3(ix_color_manufact), ...
-%     pick_series2(ix_color_manufact), ...
-%     'Marker', '.', 'MarkerEdgeColor', color_list(5,:))
-% hold on
-% xpush = linspace(0, 1, 100);
-% mdl = fitlm(pick_series3(ix_color_manufact), ...
-%     pick_series2(ix_color_manufact));
-% plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-%     'LineWidth', 2.5, 'Color', color_list(4,:));
-% 
-% ylabel('Share of routine labor 1960')
-% xlabel('Relative automation index')
-% set(gca,'TickDir','out')
-% xlim([0, 1])
-% ylim([0, 1])
-% 
-% subplot(2, 2, 3)
-% scatter(pick_series3( not( ix_color_manufact ) ), ...
-%     pick_series2( not( ix_color_manufact ) ), ...
-%     'Marker', '.', 'MarkerEdgeColor', color_list(8,:))
-% hold on
-% title('Not manufacturing')
-% xpush = linspace(0, 1, 100);
-% mdl = fitlm(pick_series3(not( ix_color_manufact )), ...
-%     pick_series2(not( ix_color_manufact )));
-% plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-%     'LineWidth', 2.5, 'Color', color_list(9,:));
-% 
-% ylabel('Share of routine labor 1960')
-% xlabel('Relative automation index')
-% set(gca,'TickDir','out')
-% 
-% subplot(2, 2, 4)
-% scatter(pick_series3(ix_color_manufact), ...
-%     pick_series2(ix_color_manufact), ...
-%     'Marker', '.', 'MarkerEdgeColor', color_list(5,:))
-% title('Manufacturing')
-% hold on
-% xpush = linspace(0, 1, 100);
-% mdl = fitlm(pick_series3(ix_color_manufact), ...
-%     pick_series2(ix_color_manufact));
-% plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-%     'LineWidth', 2.5, 'Color', color_list(4,:));
-% 
-% ylabel('Share of routine labor 1960')
-% xlabel('Relative automation index')
-% set(gca,'TickDir','out')
-% 
-% 
-% % Reposition the figure
-% % -----------------------------------------------------------------------
-% set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
-% 
-% set(figureHandle, 'Units', 'Inches');
-% pos = get(figureHandle, 'Position');
-% 
-% set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-%     'Inches', 'PaperSize', [pos(3), pos(4)])
-% 
-% 
-% % Export to pdf
-% % -----------------------------------------------------------------------
-% print_pdf_name = horzcat('output/rel_automix_vs_rti60_', ...
-%     num2str(year_start), '-',  num2str(year_end), '.pdf');
-% print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+
+sic_list = unique( sic_automix_allyears.sic );
+
+for i=1:length(sic_list)
+    
+    ix_pick = ( sic_list(i) == sic_automix_allyears.sic );
+    
+    % This mean doesn't really do anything, as there is only one
+    % observation per SIC.
+    pick_rti60 = nanmean( sic_automix_allyears.rti60(ix_pick) ); 
+
+    if isnan( pick_rti60 ) 
+        continue
+    else
+        sic_summary.rti60(i, 1) = pick_rti60;
+    end
+    
+    sic_summary.automix_use_log_sum(i, 1) = log( sum( ...
+        sic_automix_allyears.automix_use(ix_pick) ) );   
+    
+    sic_summary.rel_automix_mean(i, 1) = mean( ...
+        sic_automix_allyears.rel_automix(ix_pick) );   
+    
+    % Save an indicator of whether this SIC is in manufacturing
+    pick_overcat = sic_automix_allyears.overcat( ix_pick );
+    
+    sic_summary.ix_manufact(i, 1) = +strcmp( pick_overcat{1}, 'D');
+end
+
+if sum(sic_summary.ix_manufact) ~= 458
+    warning('Not correct number of manufacturing industries.')
+end
+
+if any( isnan( sic_summary.rti60 ) ) | any( isnan( ...
+        sic_summary.automix_use_log_sum ) ) | any( isnan( ...
+        sic_summary.rel_automix_mean ) ) | any( isnan( ...
+        sic_summary.ix_manufact ) )
+    warning('Contains NaN.')
+end
+
+plot_automix_vs_rti(year_start, year_end, sic_summary)
 
 
-
-
-%%
-
-
-% figureHandle = figure;
-% plot_settings_global()
-% set(gca,'FontSize', 18) % change default font size of axis labels
-% set(gcf, 'Color', 'w');
-% box off
-% 
-
-% 
-% for ix_year=year_start:year_end
-%     
-%     ix_extr = find(ix_year == sic_automix_allyears.year);
-%     scatter(rel_automix(ix_extr), sic_automix_allyears.rti60(ix_extr), ...
-%         'Marker', '.', 'MarkerEdgeColor', color1_pick)
-% 
-%     ylabel('Share of routine labor 1960')
-%     xlabel('Relative automation index')
-%     set(gca,'TickDir','out')
-%     xlim([0, 1])
-%     ylim([0, 1])
-%     
-%     title(num2str(ix_year))
-%     
-%     hold on
-%     pause(0.02)
-% end
-
-
-% Reposition the figure
-% -----------------------------------------------------------------------
-% set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
-% 
-% set(figureHandle, 'Units', 'Inches');
-% pos = get(figureHandle, 'Position');
-% 
-% set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-%     'Inches', 'PaperSize', [pos(3), pos(4)])
-% 
-% 
-% % Export to pdf
-% % -----------------------------------------------------------------------
-% print_pdf_name = horzcat('output/rel_automix_vs_rti60_', ...
-%     num2str(year_start), '-',  num2str(year_end), '.pdf');
-% print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
-
+break
 
 %% Prepare conversion table
 % fyr_start = 1976;
@@ -423,13 +277,9 @@ break
 
 % subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
 %     pat2ind.ind_corresp)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_alg1.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-% 
+
 % subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
 %     pat2ind.ind_corresp)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\subplot_industries_mean_alg1.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
 
 
 % idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
@@ -447,9 +297,7 @@ break
 % laborm_series = idata.capital;
 % make_bivariate_capital_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
 %     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_capital.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-% 
+
 % 
 % laborm_series = idata.labor_cost;
 % make_bivariate_labor_cost_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
@@ -462,10 +310,7 @@ break
 % laborm_series = idata.production;
 % make_bivariate_production_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
 %     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\bivariate_autompat_vs_production.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-% 
-% 
+
 % laborm_series = idata.output;
 % make_bivariate_output_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
 %     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
@@ -487,9 +332,6 @@ break
 
 
 % make_table_meancorr_laborm_patentm(manufacturing_ind_data)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_meancorr_laborm_patentm.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
-
 
 % ix_patentmetric = 3;
 % ix_labormvar = 5;
@@ -557,9 +399,9 @@ compClass_Yes = computerClass.compAutomat(:, ix_alg);
 classifstat_yrly = calculate_classerror_overtime(manclassData, ...
     compClass_Yes, year_start, year_end);
 
-% plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
-plot_accuracy_yrly(classifstat_yrly, year_start, year_end)
-plot_accuracy_and_fmeasure_yrly(classifstat_yrly, year_start, year_end)
+plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
+% plot_accuracy_yrly(classifstat_yrly, year_start, year_end)
+% plot_accuracy_and_fmeasure_yrly(classifstat_yrly, year_start, year_end)
 
 
 % Compare some algorithms

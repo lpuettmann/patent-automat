@@ -27,3 +27,7 @@ sic_automix_allyears = array2table(sic_automix_allyearsMat);
 
 % Attach variable names back
 sic_automix_allyears.Properties.VariableNames = varnames;
+
+% Look up the overcategories for every SIC
+sic_automix_allyears.overcat = assign_sic_overcategories( ....
+    sic_automix_allyears.sic);
