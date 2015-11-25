@@ -1,10 +1,10 @@
 
 % Set font
-% set(0, 'DefaultTextFontName', 'Palatino')
-% set(0, 'DefaultAxesFontName', 'Palatino')
+set(0, 'DefaultTextFontName', 'Palatino')
+set(0, 'DefaultAxesFontName', 'Palatino')
 
-set(0, 'DefaultTextFontName', 'Helvetica')
-set(0, 'DefaultAxesFontName', 'Helvetica')
+% set(0, 'DefaultTextFontName', 'Helvetica')
+% set(0, 'DefaultAxesFontName', 'Helvetica')
 
 % set(0, 'DefaultTextFontName', 'CMU Sans Serif')
 % set(0, 'DefaultAxesFontName', 'CMU Sans Serif')

@@ -87,16 +87,10 @@ year_end = 2015;
 % plot_pat1m_overtime(year_start, year_end, pick_k)
 
 % plot_alg1_overtime(year_start, year_end)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_weekly_1976-2015.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-%
+
 % plot_alg1_over_nrpatents_weekly(year_start, year_end)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\alg1_over_nrpatents_weekly_1976-2015.pdf', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\figures')
-% 
+
 % make_table_yearsstats(year_start, year_end)
-% copyfile('D:\Dropbox\0_Lukas\econ\projects\PatentSearch_Automation\patent-automat\output\table_yearsstats.tex', ...
-%     'D:\Dropbox\MannPuettmann\2_writing\paper-patent-automat\tables')
 
 
 
@@ -158,19 +152,25 @@ end
 
 
 %%
-% 
-% plot_overcat_sic_automatix_subplot(aggr_automix, ...
-%     sic_overcategories, year_start, year_end)
-% 
-% plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-%     sic_overcategories, year_start, year_end)
-
 close all
 
-for pick_hl=1:size(sic_overcategories, 1) + 1
+% Sort the series for plotting
+[~, plot_ix] = sort( aggr_automix_share(end, :) );
+
+plot_overcat_sic_automatix_subplot(aggr_automix, ...
+    sic_overcategories, year_start, year_end, plot_ix)
+
+plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+    sic_overcategories, year_start, year_end, plot_ix)
+
+plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+    sic_overcategories, year_start, year_end, plot_ix)
+
+
+% for pick_hl=1:size(sic_overcategories, 1) + 1
     
-    plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
-        aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
+%     plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
+%         aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
     
 %     plot_overcat_sic_automatix_share(aggr_automix_share, ...
 %         sic_overcategories, year_start, year_end, pick_hl)
@@ -181,8 +181,8 @@ for pick_hl=1:size(sic_overcategories, 1) + 1
 %     plot_overcat_sic_lautomatix(aggr_automix, ...
 %         sic_overcategories, year_start, year_end, pick_hl)    
     
-    pause(0.1)
-end
+%     pause(0.05)
+% end
 
 break
 

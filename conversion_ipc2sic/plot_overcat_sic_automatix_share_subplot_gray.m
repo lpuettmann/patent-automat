@@ -1,10 +1,8 @@
-function plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+function plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
     sic_overcategories, year_start, year_end, plot_ix)
 
 plot_settings_global
 
-color_pick = color1_pick;
-choose_linewidth = 1.5;
 
 figureHandle = figure;
 titlenames = [sic_overcategories.plot_fullnames; {''}];
@@ -18,15 +16,32 @@ for j=1:size(sic_overcategories, 1)
 
     pick_hl = plot_ix(j);
 
-    hp = plot(year_start:year_end-1, aggr_automix_share(1:end-1, pick_hl), ...
-        'Color', color_pick, 'LineWidth',choose_linewidth);
+    for i=1:length(sic_overcategories.letter)
 
-    box off
-    set(gca,'TickDir','out')
-    hold on
+        if i==pick_hl
+            color_pick = color1_pick;
+            choose_linewidth = 1.5;
+        else
+            color_pick = my_gray;
+            choose_linewidth = 0.6;
+        end
 
-    ylim([0, 0.65])
-    xlim([year_start, year_end-1])
+        hp = plot(year_start:year_end-1, aggr_automix_share(1:end-1, i), ...
+            'Color', color_pick, 'LineWidth',choose_linewidth);
+
+        if i==pick_hl
+            uistack(hp, 'top')
+        else
+            uistack(hp, 'bottom')
+        end
+
+        box off
+        set(gca,'TickDir','out')
+        hold on
+
+        ylim([0, 0.65])
+        xlim([year_start, year_end-1])
+    end
     
     title( titlenames(pick_hl) )
 end
@@ -46,6 +61,6 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/overcat_sic_automatix_share_subplot_', ...
+print_pdf_name = horzcat('output/overcat_sic_automatix_share_subplot_gray_', ...
     num2str(year_start), '-',  num2str(year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
