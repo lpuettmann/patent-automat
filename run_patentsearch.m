@@ -217,8 +217,6 @@ end
 plot_automix_vs_rti(year_start, year_end, rti_data)
 
 
-break
-
 %% Prepare conversion table
 % fyr_start = 1976;
 % fyr_end = 2014;

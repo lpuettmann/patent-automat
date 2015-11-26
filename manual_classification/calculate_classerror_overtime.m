@@ -3,7 +3,7 @@ function classifstat_yrly = calculate_classerror_overtime(manclassData, ...
 
 for ix_year=year_start:year_end
     ix_iter = ix_year + 1 - year_start;
-    
+
     ix_pos = find(manclassData.indic_year == ix_year);
     nr_class = length(ix_pos);
     

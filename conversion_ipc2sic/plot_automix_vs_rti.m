@@ -7,25 +7,26 @@ rel_automix_mean = rti_data.rel_automix_mean;
 pos_manufact = find( rti_data.ix_manufact );
 pos_other_ind = find( not( rti_data.ix_manufact ) );
 
-
+frame_size = [100 200 500 380];
+set_font_size = 18;
 
 
 %%
 figure1 = figure;
 
 plot_settings_global()
-set(gca,'FontSize', 18) % change default font size of axis labels
+set(gca,'FontSize', set_font_size) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
 scatter(rti_data.automix_use_log_sum, rti60, ...
-    'Marker', '.', 'MarkerEdgeColor', my_gray)
+    'Marker', '.', 'MarkerEdgeColor', color3_pick)
 
 hold on
 xpush = [min(rti_data.automix_use_log_sum), max(rti_data.automix_use_log_sum)];
 mdl = fitlm(rti_data.automix_use_log_sum, rti60);
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 1, 'Color', color3_pick);
+    'LineWidth', 1, 'Color', color1_pick);
 
 ylabel('Share of routine labor 1960')
 xlabel('log( total automation index )')
@@ -35,7 +36,7 @@ ylim([0, 1])
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(gcf, 'Position', frame_size) % in vector: left bottom width height
 
 set(figure1, 'Units', 'Inches');
 pos = get(figure1, 'Position');
@@ -57,18 +58,18 @@ close all
 figure2 = figure;
 
 plot_settings_global()
-set(gca,'FontSize', 18) % change default font size of axis labels
+set(gca,'FontSize', set_font_size) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
 scatter(rel_automix_mean, rti60, ...
-    'Marker', '.', 'MarkerEdgeColor', my_gray)
+    'Marker', '.', 'MarkerEdgeColor', color3_pick)
 
 hold on
 xpush = [min(rel_automix_mean), max(rel_automix_mean)];
 mdl = fitlm(rel_automix_mean, rti60);
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 1, 'Color', color3_pick);
+    'LineWidth', 1, 'Color', color1_pick);
 
 ylabel('Share of routine labor 1960')
 xlabel('Relative automation index')
@@ -79,7 +80,7 @@ ylim([0, 1])
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(gcf, 'Position', frame_size) % in vector: left bottom width height
 
 set(figure2, 'Units', 'Inches');
 pos = get(figure2, 'Position');
@@ -100,19 +101,19 @@ close all
 figure3 = figure;
 
 plot_settings_global()
-set(gca,'FontSize', 18) % change default font size of axis labels
+set(gca,'FontSize', set_font_size) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
 scatter(rel_automix_mean( pos_other_ind ), ...
     rti60( pos_other_ind ), ...
-    'Marker', '.', 'MarkerEdgeColor', my_gray)
+    'Marker', '.', 'MarkerEdgeColor', color3_pick)
 
 hold on
 xpush = [min(rel_automix_mean( pos_other_ind )), max(rel_automix_mean( pos_other_ind ))];
 mdl = fitlm(rel_automix_mean( pos_other_ind ), rti60( pos_other_ind ));
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 1, 'Color', color3_pick);
+    'LineWidth', 1, 'Color', color1_pick);
 
 ylabel('Share of routine labor 1960')
 xlabel('Relative automation index')
@@ -123,7 +124,7 @@ xlim([0, 1])
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(gcf, 'Position', frame_size) % in vector: left bottom width height
 
 set(figure3, 'Units', 'Inches');
 pos = get(figure3, 'Position');
@@ -145,19 +146,18 @@ close all
 figure4 = figure;
 
 plot_settings_global()
-set(gca,'FontSize', 18) % change default font size of axis labels
+set(gca,'FontSize', set_font_size) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
-scatter(rel_automix_mean(pos_manufact), ...
-    rti60(pos_manufact), ...
-    'Marker', '.', 'MarkerEdgeColor', my_gray)
+scatter(rel_automix_mean(pos_manufact), rti60(pos_manufact), ...
+    'Marker', '.', 'MarkerEdgeColor', color3_pick)
 
 hold on
 xpush = [min(rel_automix_mean(pos_manufact)), max(rel_automix_mean(pos_manufact))];
 mdl = fitlm(rel_automix_mean(pos_manufact), rti60(pos_manufact));
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 1, 'Color', color3_pick);
+    'LineWidth', 1, 'Color', color1_pick);
 
 ylabel('Share of routine labor 1960')
 xlabel('Relative automation index')
@@ -168,7 +168,7 @@ xlim([0, 1])
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(gcf, 'Position', frame_size) % in vector: left bottom width height
 
 set(figure4, 'Units', 'Inches');
 pos = get(figure4, 'Position');
