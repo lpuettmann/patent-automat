@@ -1,11 +1,9 @@
-function plot_automix_vs_rti(year_start, year_end, rti_data)
+function plot_automix_vs_rti(automix_use_log_sum, ...
+    rel_automix_mean, rti60, ix_manufact, save_str)
 
 %%
-rti60 = rti_data.rti60;
-rel_automix_mean = rti_data.rel_automix_mean;
-
-pos_manufact = find( rti_data.ix_manufact );
-pos_other_ind = find( not( rti_data.ix_manufact ) );
+pos_manufact = find( ix_manufact );
+pos_other_ind = find( not( ix_manufact ) );
 
 frame_size = [100 200 500 380];
 set_font_size = 18;
@@ -19,12 +17,12 @@ set(gca,'FontSize', set_font_size) % change default font size of axis labels
 set(gcf, 'Color', 'w');
 box off
 
-scatter(rti_data.automix_use_log_sum, rti60, ...
+scatter(automix_use_log_sum, rti60, ...
     'Marker', '.', 'MarkerEdgeColor', color3_pick)
 
 hold on
-xpush = [min(rti_data.automix_use_log_sum), max(rti_data.automix_use_log_sum)];
-mdl = fitlm(rti_data.automix_use_log_sum, rti60);
+xpush = [min(automix_use_log_sum), max(automix_use_log_sum)];
+mdl = fitlm(automix_use_log_sum, rti60);
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
     'LineWidth', 1, 'Color', color1_pick);
 
@@ -47,8 +45,7 @@ set(figure1, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/lautomix_vs_rti60_', ...
-    num2str(year_start), '-',  num2str(year_end), '.pdf');
+print_pdf_name = horzcat('output/lautomix_vs_rti60_', save_str, '.pdf');
 print(figure1, print_pdf_name, '-dpdf', '-r0')
 
 
@@ -91,8 +88,7 @@ set(figure2, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 % Export to pdf
 % -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/rel_automix_vs_rti60_', ...
-    num2str(year_start), '-',  num2str(year_end), '.pdf');
+print_pdf_name = horzcat('output/rel_automix_vs_rti60_', save_str, '.pdf');
 print(figure2, print_pdf_name, '-dpdf', '-r0')
 
 
@@ -136,7 +132,7 @@ set(figure3, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % Export to pdf
 % -----------------------------------------------------------------------
 print_pdf_name = horzcat('output/rel_automix_vs_rti60_notManuf_', ...
-    num2str(year_start), '-',  num2str(year_end), '.pdf');
+    save_str, '.pdf');
 print(figure3, print_pdf_name, '-dpdf', '-r0')
 
 
@@ -180,5 +176,5 @@ set(figure4, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % Export to pdf
 % -----------------------------------------------------------------------
 print_pdf_name = horzcat('output/rel_automix_vs_rti60_Manuf_', ...
-    num2str(year_start), '-',  num2str(year_end), '.pdf');
+    save_str, '.pdf');
 print(figure4, print_pdf_name, '-dpdf', '-r0')

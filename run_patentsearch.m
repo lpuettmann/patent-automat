@@ -196,13 +196,26 @@ sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
 %% Get summary statistics for all years
 for i=1:length(rti_data.sic)
     
-    ix_pick = ( rti_data.sic(i) == sic_automix_allyears.sic );
-
-    rti_data.automix_use_log_sum(i) = log( sum( ...
-        sic_automix_allyears.automix_use(ix_pick) ) );   
+    ix_pick = ( sic_automix_allyears.sic == rti_data.sic(i) );
     
-    rti_data.rel_automix_mean(i, 1) = mean( ...
-        sic_automix_allyears.rel_automix(ix_pick) );   
+    ix_year = ( sic_automix_allyears.year <= 1998 ); 
+    
+    ix_pre1998 = ( ix_pick & ix_year );
+    ix_post1998 = ( ix_pick & not(ix_year) );
+    
+    assert(isequal(ix_pre1998 + ix_post1998, ix_pick), 'Should be equal.')
+    
+    rti_data.automix_use_log_sum_pre1998(i) = log( sum( ...
+        sic_automix_allyears.automix_use(ix_pre1998) ) );   
+    
+    rti_data.automix_use_log_sum_post1998(i) = log( sum( ...
+        sic_automix_allyears.automix_use(ix_post1998) ) ); 
+    
+    rti_data.rel_automix_mean_pre1998(i, 1) = mean( ...
+        sic_automix_allyears.rel_automix(ix_pre1998) );   
+    
+    rti_data.rel_automix_mean_post1998(i, 1) = mean( ...
+        sic_automix_allyears.rel_automix(ix_post1998) );   
     
     % Save an indicator of whether this SIC is in manufacturing
     pick_overcat = sic_automix_allyears.overcat( ix_pick );
@@ -214,7 +227,15 @@ if sum(rti_data.ix_manufact) ~= 454
     warning('Not correct number of manufacturing industries.')
 end
 
-plot_automix_vs_rti(year_start, year_end, rti_data)
+
+plot_automix_vs_rti(rti_data.automix_use_log_sum_pre1998, ...
+    rti_data.rel_automix_mean_pre1998, rti_data.rti60, ...
+    rti_data.ix_manufact, 'pre1998')
+
+plot_automix_vs_rti(rti_data.automix_use_log_sum_post1998, ...
+    rti_data.rel_automix_mean_post1998, rti_data.rti60, ...
+    rti_data.ix_manufact, 'post1998')
+
 
 break
 
