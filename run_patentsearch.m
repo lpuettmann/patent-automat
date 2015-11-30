@@ -120,124 +120,164 @@ year_end = 2015;
 % ========================================================================
 load('output/sic_automix_allyears.mat')
 
-% Get some summary series for over-categories of industries
-% [sic_overcategories, aggr_automix, aggr_automix_share] = ...
-%     get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears);
 
+sic_overcategories = define_sic_overcategories();
+
+pick_sic_overcat = sic_overcategories.letter{1};
+
+ix_extr = + strcmp(sic_automix_allyears.overcat, pick_sic_overcat);
+
+overcat_alldata = sic_automix_allyears(find(ix_extr),:);
+
+sic_list = unique(overcat_alldata.sic);
+sic_list(sic_list == 0) = [];
 
 
 %%
+close all
 
-% Sort the series for plotting
-% [~, plot_ix] = sort( aggr_automix_share(end, :) );
-% 
-% plot_overcat_sic_automatix_subplot(aggr_automix, ...
-%     sic_overcategories, year_start, year_end, plot_ix)
-% 
-% plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
-%     sic_overcategories, year_start, year_end, plot_ix)
-% 
-% plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-%     sic_overcategories, year_start, year_end, plot_ix)
+plot_settings_global
 
+figureHandle = figure;
+titlenames = [sic_overcategories.plot_fullnames; {''}];
 
-% for pick_hl=1:size(sic_overcategories, 1) + 1
-    
-%     plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
-%         aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
-    
-%     plot_overcat_sic_automatix_share(aggr_automix_share, ...
-%         sic_overcategories, year_start, year_end, pick_hl)
-    
-%     plot_overcat_sic_automatix(aggr_automix, ...
-%         sic_overcategories, year_start, year_end, pick_hl)
-    
-%     plot_overcat_sic_lautomatix(aggr_automix, ...
-%         sic_overcategories, year_start, year_end, pick_hl)    
-    
-%     pause(0.05)
-% end
-
-
-%% Import Routine Task Index (RTI) by Autor, Levy and Murnane (2003)
-rti_data = readtable('idata_rti.xlsx');
-rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
-
-
-[sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
-
-sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
+set(gca,'FontSize', 12) % change default font size of axis labels
+set(gcf, 'Color', 'w');
 
 for i=1:length(sic_list)
-    sic_pick = sic_list(i);    
-    ix_extr = find( sic_pick == rti_data.sic );    
-    assert( length(ix_extr) <= 1)
     
-    sic_summary(i, 2) = sic_pick;
-    if isempty( ix_extr ) 
-        sic_summary(i, 2) = NaN;
-    else
-        sic_summary(i, 2) = rti_data.rti60(ix_extr);
-    end
-    
-    ix_insert = find( ix_map == i );
-    
-    for j=1:length(ix_insert)
-        sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
-    end
+    pick_sic = sic_list(i);
+    ix_sic = (overcat_alldata.sic == pick_sic);
+
+    sic_rel_automix = overcat_alldata.automix_use(ix_sic) ./ ...
+        overcat_alldata.patents_use(ix_sic);
+
+    hp = plot(year_start:year_end-1, sic_rel_automix(1:end-1), ...
+        'Color', my_gray, 'LineWidth', 0.6);
+    hold on
 end
-
-
-%% Insert the relative automation index in the table
-sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
-    sic_automix_allyears.patents_use;
-
-
-%% Get summary statistics for all years
-for i=1:length(rti_data.sic)
     
-    ix_pick = ( sic_automix_allyears.sic == rti_data.sic(i) );
-    
-    ix_year = ( sic_automix_allyears.year <= 1998 ); 
-    
-    ix_pre1998 = ( ix_pick & ix_year );
-    ix_post1998 = ( ix_pick & not(ix_year) );
-    
-    assert(isequal(ix_pre1998 + ix_post1998, ix_pick), 'Should be equal.')
-    
-    rti_data.automix_use_log_sum_pre1998(i) = log( sum( ...
-        sic_automix_allyears.automix_use(ix_pre1998) ) );   
-    
-    rti_data.automix_use_log_sum_post1998(i) = log( sum( ...
-        sic_automix_allyears.automix_use(ix_post1998) ) ); 
-    
-    rti_data.rel_automix_mean_pre1998(i, 1) = mean( ...
-        sic_automix_allyears.rel_automix(ix_pre1998) );   
-    
-    rti_data.rel_automix_mean_post1998(i, 1) = mean( ...
-        sic_automix_allyears.rel_automix(ix_post1998) );   
-    
-    % Save an indicator of whether this SIC is in manufacturing
-    pick_overcat = sic_automix_allyears.overcat( ix_pick );
-    
-    rti_data.ix_manufact(i, 1) = +strcmp( pick_overcat{1}, 'D');
-end
-
-if sum(rti_data.ix_manufact) ~= 454
-    warning('Not correct number of manufacturing industries.')
-end
-
-
-plot_automix_vs_rti(rti_data.automix_use_log_sum_pre1998, ...
-    rti_data.rel_automix_mean_pre1998, rti_data.rti60, ...
-    rti_data.ix_manufact, 'pre1998')
-
-plot_automix_vs_rti(rti_data.automix_use_log_sum_post1998, ...
-    rti_data.rel_automix_mean_post1998, rti_data.rti60, ...
-    rti_data.ix_manufact, 'post1998')
 
 
 break
+
+% Get some summary series for over-categories of industries
+[aggr_automix, aggr_automix_share] = ...
+    get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears, ...
+    sic_overcategories);
+
+
+% Sort the series for plotting
+[~, plot_ix] = sort( aggr_automix_share(end, :) );
+
+plot_overcat_sic_automatix_subplot(aggr_automix, ...
+    sic_overcategories, year_start, year_end, plot_ix)
+
+plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
+    sic_overcategories, year_start, year_end, plot_ix)
+
+plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+    sic_overcategories, year_start, year_end, plot_ix)
+
+
+
+for pick_hl=1:size(sic_overcategories, 1) + 1
+    
+    plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
+        aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
+    
+    plot_overcat_sic_automatix_share(aggr_automix_share, ...
+        sic_overcategories, year_start, year_end, pick_hl)
+    
+    plot_overcat_sic_automatix(aggr_automix, ...
+        sic_overcategories, year_start, year_end, pick_hl)
+    
+    plot_overcat_sic_lautomatix(aggr_automix, ...
+        sic_overcategories, year_start, year_end, pick_hl)    
+    
+    pause(0.05)
+end
+
+
+
+%% Import Routine Task Index (RTI) by Autor, Levy and Murnane (2003)
+% rti_data = readtable('idata_rti.xlsx');
+% rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
+% 
+% 
+% [sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
+% 
+% sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
+% 
+% for i=1:length(sic_list)
+%     sic_pick = sic_list(i);    
+%     ix_extr = find( sic_pick == rti_data.sic );    
+%     assert( length(ix_extr) <= 1)
+%     
+%     sic_summary(i, 2) = sic_pick;
+%     if isempty( ix_extr ) 
+%         sic_summary(i, 2) = NaN;
+%     else
+%         sic_summary(i, 2) = rti_data.rti60(ix_extr);
+%     end
+%     
+%     ix_insert = find( ix_map == i );
+%     
+%     for j=1:length(ix_insert)
+%         sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
+%     end
+% end
+% 
+% 
+% %% Insert the relative automation index in the table
+% sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
+%     sic_automix_allyears.patents_use;
+% 
+% 
+% %% Get summary statistics for all years
+% for i=1:length(rti_data.sic)
+%     
+%     ix_pick = ( sic_automix_allyears.sic == rti_data.sic(i) );
+%     
+%     ix_year = ( sic_automix_allyears.year <= 1998 ); 
+%     
+%     ix_pre1998 = ( ix_pick & ix_year );
+%     ix_post1998 = ( ix_pick & not(ix_year) );
+%     
+%     assert(isequal(ix_pre1998 + ix_post1998, ix_pick), 'Should be equal.')
+%     
+%     rti_data.automix_use_log_sum_pre1998(i) = log( sum( ...
+%         sic_automix_allyears.automix_use(ix_pre1998) ) );   
+%     
+%     rti_data.automix_use_log_sum_post1998(i) = log( sum( ...
+%         sic_automix_allyears.automix_use(ix_post1998) ) ); 
+%     
+%     rti_data.rel_automix_mean_pre1998(i, 1) = mean( ...
+%         sic_automix_allyears.rel_automix(ix_pre1998) );   
+%     
+%     rti_data.rel_automix_mean_post1998(i, 1) = mean( ...
+%         sic_automix_allyears.rel_automix(ix_post1998) );   
+%     
+%     % Save an indicator of whether this SIC is in manufacturing
+%     pick_overcat = sic_automix_allyears.overcat( ix_pick );
+%     
+%     rti_data.ix_manufact(i, 1) = +strcmp( pick_overcat{1}, 'D');
+% end
+% 
+% if sum(rti_data.ix_manufact) ~= 454
+%     warning('Not correct number of manufacturing industries.')
+% end
+% 
+% 
+% plot_automix_vs_rti(rti_data.automix_use_log_sum_pre1998, ...
+%     rti_data.rel_automix_mean_pre1998, rti_data.rti60, ...
+%     rti_data.ix_manufact, 'pre1998')
+% 
+% plot_automix_vs_rti(rti_data.automix_use_log_sum_post1998, ...
+%     rti_data.rel_automix_mean_post1998, rti_data.rti60, ...
+%     rti_data.ix_manufact, 'post1998')
+
+
 
 %% Prepare conversion table
 % fyr_start = 1976;

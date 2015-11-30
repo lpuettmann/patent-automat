@@ -1,7 +1,7 @@
-function [sic_overcategories, aggr_automix, aggr_automix_share] = ...
-    get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears)
+function [aggr_automix, aggr_automix_share] = ...
+    get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears, ...
+    sic_overcategories)
 
-sic_overcategories = define_sic_overcategories();
 
 for ix_year=year_start:year_end
     t = ix_year - year_start + 1;    

@@ -13,6 +13,13 @@ year_end = 2015;
 
 % Define some plot settings
 plottime = year_start:year_end;
+
+my_xaxis_ticks = [1976:2015];
+my_xaxis_labels = {1976; ''; ''; ''; 1980; ''; ''; ''; ''; 1985; ''; ...
+    ''; ''; ''; 1990; ''; ''; ''; ''; 1995; ''; ''; ''; ''; 2000; ''; ...
+    ''; ''; ''; 2005; ''; ''; ''; ''; 2010; ''; ''; ''; ''; 2015};
+
+
 my_gray = [0.806, 0.806, 0.806];
 my_dark_gray = [0.3, 0.3, 0.3];
 
@@ -48,11 +55,8 @@ hold on
 plot(plottime, classifstat_yrly.nr_compClass_Yes_yr, 'Color', color2_pick, ...
     'Linewidth', lwidth)
 box off
-% legend('Total', 'Manual "Yes"', ...
-%     'Computerized "Yes"', 'Location', 'North')
-% legend('boxoff')
 titleHandle = title('(a) Number of manually classified patents', 'FontWeight', 'bold');
-
+customize_xLabels(gca, my_xaxis_ticks, my_xaxis_labels)
 set(titleHandle, 'horizontalAlignment', 'left')
 set(titleHandle, 'units', 'normalized')
 h1 = get(titleHandle, 'position');
@@ -63,7 +67,6 @@ yLimits = get(gca,'YLim');
 xlim([year_start, year_end])
 ygrid_lines = [yLimits(1):5:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
-% ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
 handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 subplot(3,1,2)
@@ -73,13 +76,11 @@ hold on
 plot(plottime, classifstat_yrly.nr_compClass_Yes_yr ./ ...
     classifstat_yrly.nr_class, 'Color', color2_pick, 'Linewidth', lwidth)
 box off
-% legend('manual', ...
-%     'computerized', 'Location', 'North')
-% legend('boxoff')
 ylim([0, 1])
 titleHandle = title('(b) Share classified as automation patents', 'FontWeight', 'bold');
 
 xlim([year_start, year_end])
+customize_xLabels(gca, my_xaxis_ticks, my_xaxis_labels)
 set(titleHandle, 'horizontalAlignment', 'left')
 set(titleHandle, 'units', 'normalized')
 h1 = get(titleHandle, 'position');
@@ -90,7 +91,6 @@ set(gca, 'TickDir', 'out')
 yLimits = get(gca,'YLim');
 ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
-% ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
 handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 subplot(3,1,3)
@@ -100,11 +100,13 @@ hold on
 plot(plottime, classifstat_yrly.fmeasure, 'Color', color2_pick, ...
     'Linewidth', lwidth)
 titleHandle = title('(c) Evaluation statistics over time', 'FontWeight', 'bold');
-
+customize_xLabels(gca, my_xaxis_ticks, my_xaxis_labels)
 set(titleHandle, 'horizontalAlignment', 'left')
 set(titleHandle, 'units', 'normalized')
 h1 = get(titleHandle, 'position');
 set(titleHandle, 'position', [0 h1(2) h1(3)])
+
+
 
 box off
 ylim([0, 1])
@@ -113,13 +115,12 @@ xlim([year_start, year_end])
 yLimits = get(gca,'YLim');
 ygrid_lines = [yLimits(1):0.2:yLimits(end)];
 ygrid_lines(find(ygrid_lines==yLimits(1))) = []; % remove bottom grid line
-% ygrid_lines(find(ygrid_lines==yLimits(2))) = []; % remove grid line at the top
 handle_ygrid = gridxy([], ygrid_lines, 'Color', my_gray , 'linewidth', grid_linewidth);
 
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 1000 600]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 1000 740]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
@@ -192,5 +193,10 @@ annotation(figureHandle,'textarrow',[0.750955414012738 0.723566878980892],...
 % -----------------------------------------------------------------------
 print_pdf_name = 'output/classifstat_yrly.pdf';
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
+end
 
-
+function customize_xLabels(gca, my_xaxis_ticks, my_xaxis_labels)
+    set(gca, 'XTick', my_xaxis_ticks) % Set the x-axis tick labels
+    set(gca, 'xticklabel',{}) % turn x-axis labels off
+    set(gca, 'xticklabel', my_xaxis_labels); 
+end
