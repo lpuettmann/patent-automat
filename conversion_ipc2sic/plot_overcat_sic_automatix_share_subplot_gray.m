@@ -3,7 +3,6 @@ function plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
 
 plot_settings_global
 
-
 figureHandle = figure;
 titlenames = [sic_overcategories.plot_fullnames; {''}];
 
@@ -45,7 +44,6 @@ for j=1:size(sic_overcategories, 1)
     
     title( titlenames(pick_hl) )
 end
-
 
 
 % Reposition the figure

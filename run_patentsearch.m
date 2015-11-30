@@ -120,46 +120,7 @@ year_end = 2015;
 % ========================================================================
 load('output/sic_automix_allyears.mat')
 
-
 sic_overcategories = define_sic_overcategories();
-
-pick_sic_overcat = sic_overcategories.letter{1};
-
-ix_extr = + strcmp(sic_automix_allyears.overcat, pick_sic_overcat);
-
-overcat_alldata = sic_automix_allyears(find(ix_extr),:);
-
-sic_list = unique(overcat_alldata.sic);
-sic_list(sic_list == 0) = [];
-
-
-%%
-close all
-
-plot_settings_global
-
-figureHandle = figure;
-titlenames = [sic_overcategories.plot_fullnames; {''}];
-
-set(gca,'FontSize', 12) % change default font size of axis labels
-set(gcf, 'Color', 'w');
-
-for i=1:length(sic_list)
-    
-    pick_sic = sic_list(i);
-    ix_sic = (overcat_alldata.sic == pick_sic);
-
-    sic_rel_automix = overcat_alldata.automix_use(ix_sic) ./ ...
-        overcat_alldata.patents_use(ix_sic);
-
-    hp = plot(year_start:year_end-1, sic_rel_automix(1:end-1), ...
-        'Color', my_gray, 'LineWidth', 0.6);
-    hold on
-end
-    
-
-
-break
 
 % Get some summary series for over-categories of industries
 [aggr_automix, aggr_automix_share] = ...
@@ -170,16 +131,20 @@ break
 % Sort the series for plotting
 [~, plot_ix] = sort( aggr_automix_share(end, :) );
 
-plot_overcat_sic_automatix_subplot(aggr_automix, ...
-    sic_overcategories, year_start, year_end, plot_ix)
+% plot_overcat_sic_automatix_subplot(aggr_automix, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
+% 
+% plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
+% 
+% plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
 
-plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end, plot_ix)
+plot_overcat_sic_automatix_share_subplot_gray_allSubCat(...
+    year_start, year_end, sic_overcategories, sic_automix_allyears, ...
+    aggr_automix_share, plot_ix)
 
-plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end, plot_ix)
-
-
+break
 
 for pick_hl=1:size(sic_overcategories, 1) + 1
     
