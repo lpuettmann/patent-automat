@@ -129,10 +129,11 @@ sic_overcategories = define_sic_overcategories();
 
 
 % Sort the series for plotting
-[~, plot_ix] = sort( aggr_automix_share(end, :) );
+% [~, plot_ix] = sort( aggr_automix_share(end, :) );
+plot_ix = 1:10;
 
-% plot_overcat_sic_automatix_subplot(aggr_automix, ...
-%     sic_overcategories, year_start, year_end, plot_ix)
+plot_overcat_sic_automatix_subplot(aggr_automix, ...
+    sic_overcategories, year_start, year_end, plot_ix)
 % 
 % plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end, plot_ix)
@@ -143,6 +144,15 @@ sic_overcategories = define_sic_overcategories();
 plot_overcat_sic_automatix_share_subplot_gray_allSubCat(...
     year_start, year_end, sic_overcategories, sic_automix_allyears, ...
     aggr_automix_share, plot_ix)
+
+
+perc_abs_increase = (aggr_automix(end-1,:) ./ aggr_automix(1,:) - 1) * 100
+
+perc_rel_increase = (aggr_automix_share(end-1,:) ./ aggr_automix_share(1,:) ...
+    - 1) * 100
+
+
+
 
 break
 
