@@ -1,19 +1,17 @@
 function automclassData = compile_automclass4codedpats(patentnr, ...
     indic_year, year_start, year_end)
 
-% Sort data after years. This is important as we'll later loop through
+% Check that data is already sorted by years. This is important as we'll 
+% later loop through the years.
 [~, ix_sort] = sort(indic_year);
 if any( not( diff(ix_sort) == 1 ) )
     error('Patents should already be ordered by year.')
 end
 
-
-nr_years = length(year_start:year_end);
-
 all_matches = [];
 
 
-% Get the dictionary of words
+% Get some information on patemnts and the dictionary of keywords
 load('patsearch_results_1976.mat')
 
 automclassData.title_matches = nan( size(patentnr, 1), ...

@@ -57,10 +57,8 @@ year_end = 2015;
 % clean_matches(year_start, year_end)
 
 
-
 %% Check matches for plausibility
 % check_cleanedmatches_plausability(year_start, year_end)
-
 
 
 %% Transfer matches to CSV (for use in Stata)
@@ -406,7 +404,10 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 %% Extract texts of manually coded patents
+patentnr = manclassData.patentnr;
+indic_year = manclassData.indic_year;
 
+extract_pat_text(patentnr, indic_year, year_start, year_end)
 
 
 
