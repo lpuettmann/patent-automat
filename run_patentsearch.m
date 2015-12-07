@@ -407,8 +407,7 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 patentnr = manclassData.patentnr;
 indic_year = manclassData.indic_year;
 
-patextr = extract_pat_fileplace(patentnr, indic_year, year_start, ...
-    year_end);
+patextr = extract_pat_fileplace(patentnr, indic_year);
 
 
 

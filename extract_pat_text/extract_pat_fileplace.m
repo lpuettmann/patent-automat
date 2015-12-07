@@ -1,5 +1,4 @@
-function patextr = extract_pat_fileplace(patentnr, indic_year, ...
-    year_start, year_end)
+function patextr = extract_pat_fileplace(patentnr, indic_year)
 
 % Run some checks
 
