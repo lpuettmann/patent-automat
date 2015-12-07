@@ -118,22 +118,22 @@ year_end = 2015;
 
 %% Analyse SIC automatix table
 % ========================================================================
-load('output/sic_automix_allyears.mat')
+% load('output/sic_automix_allyears.mat')
 
-sic_overcategories = define_sic_overcategories();
+% sic_overcategories = define_sic_overcategories();
 
 % Get some summary series for over-categories of industries
-[aggr_automix, aggr_automix_share] = ...
-    get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears, ...
-    sic_overcategories);
+% [aggr_automix, aggr_automix_share] = ...
+%     get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears, ...
+%     sic_overcategories);
 
 
 % Sort the series for plotting
 % [~, plot_ix] = sort( aggr_automix_share(end, :) );
-plot_ix = 1:10;
-
-plot_overcat_sic_automatix_subplot(aggr_automix, ...
-    sic_overcategories, year_start, year_end, plot_ix)
+% plot_ix = 1:10;
+% 
+% plot_overcat_sic_automatix_subplot(aggr_automix, ...
+%     sic_overcategories, year_start, year_end, plot_ix)
 % 
 % plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end, plot_ix)
@@ -141,37 +141,27 @@ plot_overcat_sic_automatix_subplot(aggr_automix, ...
 % plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end, plot_ix)
 
-plot_overcat_sic_automatix_share_subplot_gray_allSubCat(...
-    year_start, year_end, sic_overcategories, sic_automix_allyears, ...
-    aggr_automix_share, plot_ix)
+% plot_overcat_sic_automatix_share_subplot_gray_allSubCat(...
+%     year_start, year_end, sic_overcategories, sic_automix_allyears, ...
+%     aggr_automix_share, plot_ix)
 
 
-perc_abs_increase = (aggr_automix(end-1,:) ./ aggr_automix(1,:) - 1) * 100
-
-perc_rel_increase = (aggr_automix_share(end-1,:) ./ aggr_automix_share(1,:) ...
-    - 1) * 100
-
-
-
-
-break
-
-for pick_hl=1:size(sic_overcategories, 1) + 1
-    
-    plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
-        aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
-    
-    plot_overcat_sic_automatix_share(aggr_automix_share, ...
-        sic_overcategories, year_start, year_end, pick_hl)
-    
-    plot_overcat_sic_automatix(aggr_automix, ...
-        sic_overcategories, year_start, year_end, pick_hl)
-    
-    plot_overcat_sic_lautomatix(aggr_automix, ...
-        sic_overcategories, year_start, year_end, pick_hl)    
-    
-    pause(0.05)
-end
+% for pick_hl=1:size(sic_overcategories, 1) + 1
+%     
+%     plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
+%         aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
+%     
+%     plot_overcat_sic_automatix_share(aggr_automix_share, ...
+%         sic_overcategories, year_start, year_end, pick_hl)
+%     
+%     plot_overcat_sic_automatix(aggr_automix, ...
+%         sic_overcategories, year_start, year_end, pick_hl)
+%     
+%     plot_overcat_sic_lautomatix(aggr_automix, ...
+%         sic_overcategories, year_start, year_end, pick_hl)    
+%     
+%     pause(0.05)
+% end
 
 
 
@@ -363,22 +353,6 @@ end
 manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
-% Use patents classified by Bessen and Hunt (2007) 
-    % patent: patent number
-    % sw: manual classification
-    % mowpat: classification by Mowery
-    % swpat2: algorithm used for classification
-% bh_manclass = readtable('bessen-hunt-classifications.csv')
-% 
-% 
-% overlap_manclass = intersect(manclassData.patentnr, bh_manclass.patent);
-% 
-% if not( isempty(overlap_manclass) )
-%     fprintf('Patent classified by us and BH: %d.\n', overlap_manclass)
-% end
-
-
-
 % Get keywords and technology numbers for manually classified patents
 % automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
 %     manclassData.indic_year, year_start, year_end)
@@ -389,19 +363,19 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 %%
 % Classify patents based on computerized methods
-load('automclassData')
+% load('automclassData')
 
 
-computerClass = classify_autom_algorith(automclassData);
+% computerClass = classify_autom_algorith(automclassData);
 
 
 %% Compare manual vs. computer classification of patents
 
 
 % Report contingency table for Algorithm1 only
-ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
-classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
-    computerClass.compAutomat(:, ix_alg));
+% ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
+% classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
+%     computerClass.compAutomat(:, ix_alg));
 % make_contingency_table(classifstat)
 
 % make_table_evalstats(classifstat)
@@ -409,25 +383,35 @@ classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
 
 
 
-compClass_Yes = computerClass.compAutomat(:, ix_alg);
-classifstat_yrly = calculate_classerror_overtime(manclassData, ...
-    compClass_Yes, year_start, year_end);
+% compClass_Yes = computerClass.compAutomat(:, ix_alg);
+% classifstat_yrly = calculate_classerror_overtime(manclassData, ...
+%     compClass_Yes, year_start, year_end);
 
-plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
+% plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
 % plot_accuracy_yrly(classifstat_yrly, year_start, year_end)
 % plot_accuracy_and_fmeasure_yrly(classifstat_yrly, year_start, year_end)
 
 
 % Compare some algorithms
-choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
-    'Always "No"', 'Always "Yes"'};
+% choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
+%     'Always "No"', 'Always "Yes"'};
 % choose_compalg_list = computerClass.algorithm_name; % pick all algorithms
-classalg_comparison = comp_evals_algs(choose_compalg_list, ...
-    computerClass, manclassData);
+% classalg_comparison = comp_evals_algs(choose_compalg_list, ...
+%     computerClass, manclassData);
 
-plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
+% plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
 
-max_line = 9; % choose number of algorithms to put on line for table in paper
-make_table_compare_classalg(classalg_comparison, max_line)
+% max_line = 9; % choose number of algorithms to put on line for table in paper
+% make_table_compare_classalg(classalg_comparison, max_line)
+
+
+%% Extract texts of manually coded patents
+
+
+
+
+
+
+
 
 

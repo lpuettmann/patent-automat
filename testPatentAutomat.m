@@ -13,4 +13,3 @@ run(test_flatten_cellarray);
 run(test_shorten_cellarray);
 run(test_make_frac_count);
 run(test_match_sic2ipc);
-run(test_extract_first2digits);
