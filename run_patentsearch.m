@@ -404,11 +404,20 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 %% Extract texts of manually coded patents
-patentnr = manclassData.patentnr;
-indic_year = manclassData.indic_year;
+% run(test_extract_pat_fileplace);
+% patfplace = extract_pat_fileplace(manclassData.patentnr, ...
+%     manclassData.indic_year);
+% 
+% patextr = manclassData;
+% 
+% patextr.nr_pat_in_file = patfplace.nr_pat_in_file;
+% patextr.week = patfplace.week;
+% patextr.line_start = patfplace.line_start;
+% patextr.line_end = patfplace.line_end;
+% 
+% save('output/patextr.mat', 'patextr'); % save to .mat
 
-patextr = extract_pat_fileplace(patentnr, indic_year);
-
+load('output/patextr.mat', 'patextr');
 
 
 
