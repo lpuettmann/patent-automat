@@ -6,7 +6,7 @@ if (ix_year < 2002) && (ix_year > 1975)
     ftset.nr_lines4previouspatent = 1;
     ftset.nr_trunc = 4;
     ftset.indic_titlefind = 'TTL ';
-    ftset.indic_abstractfind = '</PDAT>';
+    ftset.indic_abstractfind = 'ABST';
     ftset.indic_abstractend = {'BSUM', 'PARN', 'PAC '};
     ftset.indic_bodyfind = 'BSUM';
     

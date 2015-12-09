@@ -80,8 +80,9 @@ for ix_week = week_start:week_end
         patent_text_corpus = get_patent_text_corpus(ix_patentfind, ...
             ix_patent, nr_patents, ftset, search_corpus);
         
-
-    
+        % Extract title, abstract and text of the patent body
+        % ------------------------------------------------------------
+        patparts = extract_patent_parts(patent_text_corpus, ftset);
         
         for i=1:length(patparts)
             patpart_corpus = patparts{i};

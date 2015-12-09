@@ -112,7 +112,7 @@ else
             if isnan( ix_abstractend )
                 warning('ix_abstractend is Nan.')
             elseif isempty( ix_abstractend )
-                ('ix_abstractend is empty.')
+                warning('ix_abstractend is empty.')
             end
 
         case {2, 3}
