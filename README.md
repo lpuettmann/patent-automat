@@ -10,8 +10,9 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 
 Before running:
 ---------------------------
-1. **Obligatory:** Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
-2. **Optional:** Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly.
+1. In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data.
+2. Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
+3. Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly.
 
 
 To run:
