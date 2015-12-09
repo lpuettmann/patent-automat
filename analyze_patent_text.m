@@ -83,9 +83,10 @@ for ix_week = week_start:week_end
         % Extract title, abstract and text of the patent body
         % ------------------------------------------------------------
         patparts = extract_patent_parts(patent_text_corpus, ftset);
+        patparts_names = fieldnames( patparts );
         
-        for i=1:length(patparts)
-            patpart_corpus = patparts{i};
+        for i=1:length( patparts_names )
+            patpart_corpus = patparts.(patparts_names{i});
             
             for f=1:length(find_dictionary)
                 find_str = find_dictionary{f};

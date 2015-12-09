@@ -140,4 +140,12 @@ else
     body_str = patent_text_corpus(ix_bodystart + 1 : end);
 end
 
-patparts = {title_str, abstract_str, body_str};
+% Store text parts in struct
+patparts.title_str = title_str;
+patparts.abstract_str = abstract_str;
+patparts.body_str = body_str;
+
+
+
+
+

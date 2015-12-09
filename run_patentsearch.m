@@ -420,7 +420,7 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 load('output/patextr.mat', 'patextr');
 % check_correct_patextr(patextr)
 
-ix_patent = 560;
+ix_patent = 3;
 
 extr_patnr = patextr.patentnr(ix_patent);
 extr_patyear = patextr.indic_year(ix_patent);
