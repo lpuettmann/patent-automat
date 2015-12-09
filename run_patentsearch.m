@@ -419,6 +419,7 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 load('output/patextr.mat', 'patextr');
 
+check_correct_patextr(patextr)
 
 
 
