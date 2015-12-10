@@ -491,8 +491,26 @@ freq_unique_data = histc(ind, 1:numel(unique_data));
 
 [sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
 
-sumstats.autompat_title_utok_freq = sorted_freq_unique_data;
-sumstats.autompat_title_utok = unique_data(ix_sort);
-struct2table(sumstats)
+autompat_stats.title_utok_freq = sorted_freq_unique_data;
+autompat_stats.title_utok = unique_data(ix_sort);
+
+
+ix_select = find( (patextr.manAutomat == 0) );
+
+vis_strings = patextr.title_tokens( ix_select );
+vis_strings = vertcat( vis_strings{:} );
+
+[unique_data, ~, ind] = unique(vis_strings);
+freq_unique_data = histc(ind, 1:numel(unique_data));
+
+[sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
+
+otherpat_stats.title_utok_freq = sorted_freq_unique_data;
+otherpat_stats.title_utok = unique_data(ix_sort);
+
+struct2table(otherpat_stats)
+
+
+
 
 
