@@ -442,11 +442,6 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 load('output/patextr.mat', 'patextr');
 %%
-
-title_cell_array = patextr.title_str{1};
-
-title_cell_array = strsplit(title_cell_array);
-
 markup_remove_list = {','};
 
 fileID = fopen('english_stopwords.txt');
@@ -454,15 +449,50 @@ english_stop_words = textscan(fileID, '%s', 'Delimiter', '\n');
 fclose(fileID);
 english_stop_words = english_stop_words{1};
 
-title_cell_array = setdiff(title_cell_array, english_stop_words, 'stable');
 
-for i=1:length(title_cell_array)
-    inString = title_cell_array{i};
 
-    word_stem = porterStemmer(inString)
+for ix_patent = 1:length(patextr.patentnr);
+
+    title_cell_array = patextr.title_str{ix_patent};
+
+    % Cut leading and trailing whitespace
+    title_cell_array = strtrim(title_cell_array);
+    
+    % Convert string to lower case
+    title_cell_array = lower(title_cell_array);
+    
+    % Split string into separate tokens
+    title_cell_array = strsplit(title_cell_array);
+    
+    % also split at '/' and at ',' and '('
+
+    % Remove stop words
+    title_cell_array = setdiff(title_cell_array, english_stop_words, 'stable');
+
+    % Transform words into their word stems
+    for i=1:length(title_cell_array)
+        inString = title_cell_array{i};
+
+        word_stem = porterStemmer(inString);
+        title_tokens{i,1} = word_stem;
+    end
+    
+    patextr.title_tokens{ix_patent, 1} = title_tokens;
+    clear title_tokens
 end
 
+ix_select = find( (patextr.manAutomat == 1) );
 
+vis_strings = patextr.title_tokens( ix_select );
+vis_strings = vertcat( vis_strings{:} );
 
+[unique_data, ~, ind] = unique(vis_strings);
+freq_unique_data = histc(ind, 1:numel(unique_data));
+
+[sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
+
+sumstats.autompat_title_utok_freq = sorted_freq_unique_data;
+sumstats.autompat_title_utok = unique_data(ix_sort);
+struct2table(sumstats)
 
 
