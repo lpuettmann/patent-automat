@@ -417,55 +417,50 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 % 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 % check_correct_patextr(patextr)
 
-ix_patent = 3;
+% for ix_patent = 1:length(patextr.patentnr)
+%     extr_patnr = patextr.patentnr(ix_patent);
+%     extr_patyear = patextr.indic_year(ix_patent);
+%     extr_patweek = patextr.week(ix_patent);
+%     extr_patline_start = patextr.line_start(ix_patent);
+%     extr_patline_end = patextr.line_end(ix_patent);
+% 
+%     patparts = extract_specific_patpart(extr_patnr, extr_patyear, ...
+%         extr_patweek, extr_patline_start, extr_patline_end);
+% 
+%     patextr.title_str{ix_patent, 1} = patparts.title_str;
+%     patextr.abstract_str{ix_patent, 1} = patparts.abstract_str;
+%     patextr.body_str{ix_patent, 1} = patparts.body_str;
+%     
+%     fprintf('Finished patent: %d/%d.\n', ix_patent, ...
+%         length(patextr.patentnr))
+% end
 
-extr_patnr = patextr.patentnr(ix_patent);
-extr_patyear = patextr.indic_year(ix_patent);
-extr_patweek = patextr.week(ix_patent);
-extr_patline_start = patextr.line_start(ix_patent);
-extr_patline_end = patextr.line_end(ix_patent);
+% save('output/patextr.mat', 'patextr'); % save to .mat
 
-week_start = 1;
+load('output/patextr.mat', 'patextr');
+%%
 
-% Determine if there are 52 or 53 weeks in year
-week_end = set_weekend(extr_patyear); 
+title_cell_array = patextr.title_str{1};
 
-filenames = get_filenames(extr_patyear, week_start, week_end);
+title_cell_array = strsplit(title_cell_array);
 
-% Load the patent text
-choose_file_open = filenames{extr_patweek};
-unique_file_identifier = fopen(choose_file_open, 'r'); 
+markup_remove_list = {','};
 
-if unique_file_identifier == -1
-    warning('Matlab cannot open the file')
+fileID = fopen('english_stopwords.txt');
+english_stop_words = textscan(fileID, '%s', 'Delimiter', '\n');
+fclose(fileID);
+english_stop_words = english_stop_words{1};
+
+title_cell_array = setdiff(title_cell_array, english_stop_words, 'stable');
+
+for i=1:length(title_cell_array)
+    inString = title_cell_array{i};
+
+    word_stem = porterStemmer(inString)
 end
-
-open_file_aux = textscan(unique_file_identifier, '%s', ...
-    'delimiter', '\n');
-search_corpus = open_file_aux{1,1};
-
-% Customize file type settings (ftset)
-ftset = customize_ftset(extr_patyear);
-
-% Get start and end of patent text
-% ------------------------------------------------------------
-if isnan( extr_patline_end )
-    extr_patline_end = length(search_corpus);
-end
-
-patent_text_corpus = search_corpus(extr_patline_start:extr_patline_end, ...
-    :);
-
-patparts = extract_patent_parts(patent_text_corpus, ftset);
-
-% Close file again. It can cause errors if you open too many
-% (more than abound 512) files at once.
-fclose(unique_file_identifier);
-
-check_open_files
 
 
 

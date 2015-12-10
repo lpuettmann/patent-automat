@@ -144,8 +144,3 @@ end
 patparts.title_str = title_str;
 patparts.abstract_str = abstract_str;
 patparts.body_str = body_str;
-
-
-
-
-
