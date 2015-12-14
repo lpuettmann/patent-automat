@@ -348,7 +348,7 @@ year_end = 2015;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+% manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
@@ -442,72 +442,76 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 load('output/patextr.mat', 'patextr');
 %%
-markup_remove_list = {','};
+markup_remove_list = {',', '.', '"', ';', ':', ''''};
+
+% and delete all numbers? x0, y1
+% how deal with XML escape signs? &apo
 
 english_stop_words = define_english_stopwords();
 
+tic
 
-for ix_patent = 1:length(patextr.patentnr);
-
-    title_cell_array = patextr.title_str{ix_patent};
-
-    % Cut leading and trailing whitespace
-    title_cell_array = strtrim(title_cell_array);
+for ix_patent = 1:length(patextr.patentnr)
+     
+    % Extract tokens for title
+    inStr = patextr.title_str{ix_patent};
+    tokens = tokenize_string(inStr, english_stop_words);
+    patextr.title_tokens{ix_patent, 1} = tokens;
     
-    % Convert string to lower case
-    title_cell_array = lower(title_cell_array);
+    % Extract tokens for abstract
+    inStr = patextr.abstract_str{ix_patent};    
+    inStr = strjoin(inStr');    
+    tokens = tokenize_string(inStr, english_stop_words);
+    patextr.abstract_tokens{ix_patent, 1} = tokens;  
     
-    % Split string into separate tokens
-    title_cell_array = strsplit(title_cell_array);
+    % Extract tokens for text body
+    inStr = patextr.body_str{ix_patent};    
+    inStr = strjoin(inStr');    
+    tokens = tokenize_string(inStr, english_stop_words);
+    patextr.body_tokens{ix_patent, 1} = tokens; 
     
-    % also split at '/' and at ',' and '('
-
-    % Remove stop words
-    title_cell_array = setdiff(title_cell_array, english_stop_words, ...
-        'stable');
-
-    % Transform words into their word stems
-    for i=1:length(title_cell_array)
-        inString = title_cell_array{i};
-
-        word_stem = porterStemmer(inString);
-        title_tokens{i,1} = word_stem;
-    end
-    
-    patextr.title_tokens{ix_patent, 1} = title_tokens;
-    clear title_tokens
+    fprintf('Finished tokenizing patent %d/%d.\n', ix_patent, ...
+        length(patextr.patentnr))
 end
 
-ix_select = find( (patextr.manAutomat == 1) );
+toc
 
-vis_strings = patextr.title_tokens( ix_select );
-vis_strings = vertcat( vis_strings{:} );
+% Delete any token with a number in it? or with a strange sign #, <, > ?, 
+% =
+% Delete dates.
+% Delet single letter tokens.
+% 
 
-[unique_data, ~, ind] = unique(vis_strings);
-freq_unique_data = histc(ind, 1:numel(unique_data));
-
-[sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
-
-autompat_stats.title_utok_freq = sorted_freq_unique_data;
-autompat_stats.title_utok = unique_data(ix_sort);
-
-
-ix_select = find( (patextr.manAutomat == 0) );
-
-vis_strings = patextr.title_tokens( ix_select );
-vis_strings = vertcat( vis_strings{:} );
-
-[unique_data, ~, ind] = unique(vis_strings);
-freq_unique_data = histc(ind, 1:numel(unique_data));
-
-[sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
-
-otherpat_stats.title_utok_freq = sorted_freq_unique_data;
-otherpat_stats.title_utok = unique_data(ix_sort);
-
-struct2table(otherpat_stats)
-
-
-
-
-
+% ix_select = find( (patextr.manAutomat == 1) );
+% 
+% vis_strings = patextr.title_tokens( ix_select );
+% vis_strings = vertcat( vis_strings{:} );
+% 
+% [unique_data, ~, ind] = unique(vis_strings);
+% freq_unique_data = histc(ind, 1:numel(unique_data));
+% 
+% [sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
+% 
+% autompat_stats.title_utok_freq = sorted_freq_unique_data;
+% autompat_stats.title_utok = unique_data(ix_sort);
+% 
+% 
+% ix_select = find( (patextr.manAutomat == 0) );
+% 
+% vis_strings = patextr.title_tokens( ix_select );
+% vis_strings = vertcat( vis_strings{:} );
+% 
+% [unique_data, ~, ind] = unique(vis_strings);
+% freq_unique_data = histc(ind, 1:numel(unique_data));
+% 
+% [sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
+% 
+% otherpat_stats.title_utok_freq = sorted_freq_unique_data;
+% otherpat_stats.title_utok = unique_data(ix_sort);
+% 
+% struct2table(otherpat_stats)
+% 
+% 
+% 
+% 
+% 
