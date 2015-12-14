@@ -467,7 +467,8 @@ for ix_patent = 1:length(patextr.patentnr);
     % also split at '/' and at ',' and '('
 
     % Remove stop words
-    title_cell_array = setdiff(title_cell_array, english_stop_words, 'stable');
+    title_cell_array = setdiff(title_cell_array, english_stop_words, ...
+        'stable');
 
     % Transform words into their word stems
     for i=1:length(title_cell_array)
