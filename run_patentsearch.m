@@ -444,7 +444,7 @@ load('output/patextr.mat', 'patextr');
 %%
 markup_remove_list = {',', '.', '"', ';', ':', ''''};
 
-% and delete all numbers? x0, y1
+% and delete all numbers? x0, y1, vi, vii, viii
 % how deal with XML escape signs? &apo
 
 english_stop_words = define_english_stopwords();
@@ -475,6 +475,12 @@ for ix_patent = 1:length(patextr.patentnr)
 end
 
 toc
+
+extr_str = patextr.body_tokens{4, 1}{56, 1}
+isstrprop( extr_str, 'digit') 
+
+% Delete all tokens that contain numbers
+
 
 % Delete any token with a number in it? or with a strange sign #, <, > ?, 
 % =
