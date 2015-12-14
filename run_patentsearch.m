@@ -442,9 +442,9 @@ year_end = 2015;
 
 load('output/patextr.mat', 'patextr');
 %%
-markup_remove_list = {',', '.', '"', ';', ':', ''''};
 
-% and delete all numbers? x0, y1, vi, vii, viii
+% and delete all numbers? x0, y1, vi, vii, viii, U.S.
+% Furthermore, i.e., yaxi, xaxi, 
 % how deal with XML escape signs? &apo
 
 english_stop_words = define_english_stopwords();
@@ -476,12 +476,6 @@ end
 
 toc
 
-
-
-
-% Delete any token with a number in it? or with a strange sign #, <, > ?, 
-% =
-% Delete dates.
 % Delet single letter tokens.
 % 
 

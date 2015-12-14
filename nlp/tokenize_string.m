@@ -10,8 +10,11 @@ function tokens = tokenize_string(inStr, english_stop_words)
 %   OUT: 
 %       - tokens: cell array of tokens.
 %
-%   Requirements: This function calls the function porterStemmer.m which
-%   must be on the Matlab search path. 
+%   REQUIREMENTS: 
+%       - This function calls the function porterStemmer.m which
+%         must be on the Matlab search path. 
+%
+%
 %
 
 %% Run checks for correct inputs
@@ -36,6 +39,7 @@ end
 
 
 %% Tokenize
+
 % Cut leading and trailing whitespace
 inStr = strtrim(inStr);
 
@@ -43,23 +47,31 @@ inStr = strtrim(inStr);
 inStr = lower(inStr);
 
 % Split string into separate tokens
-inStr = strsplit(inStr);
-
-% also split at '/' and at ',' and '('
+delimiter = {' ', ',', '.', ')', '(', '"', ';', ':', '''', '#', '<', ...
+    '>', '!', '?', '=', '+', '\\', '/', '&'};
+inStr = strsplit(inStr, delimiter);
 
 % Remove stop words
-inStr = setdiff(inStr, english_stop_words, ...
-    'stable');
+inStr = setdiff(inStr, english_stop_words, 'stable');
 
 % Transform words into their word stems
 for i=1:length(inStr)
     inString = inStr{i};
-
     word_stem = porterStemmer(inString);
     tokens{i, 1} = word_stem;
 end
+
+% Delete empty tokens
+ixCellEmpty = cellfun(@isempty, tokens);
+tokens(ixCellEmpty) = [];
 
 % Delete all tokens that contain numbers
 indicCellwNum = isstrprop(tokens, 'digit');
 ixCellwNum = cellfun(@max, indicCellwNum);
 tokens(ixCellwNum) = [];
+
+% Delete tokens that are too short
+indicCellNumel = cellfun(@numel, tokens);
+ixToken2Short = (indicCellNumel <= 2);
+tokens( find(ixToken2Short) ) = [];
+
