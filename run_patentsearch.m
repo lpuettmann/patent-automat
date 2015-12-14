@@ -444,11 +444,7 @@ load('output/patextr.mat', 'patextr');
 %%
 markup_remove_list = {','};
 
-fileID = fopen('english_stopwords.txt');
-english_stop_words = textscan(fileID, '%s', 'Delimiter', '\n');
-fclose(fileID);
-english_stop_words = english_stop_words{1};
-
+english_stop_words = define_english_stopwords();
 
 
 for ix_patent = 1:length(patextr.patentnr);
