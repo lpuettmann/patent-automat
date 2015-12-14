@@ -476,10 +476,7 @@ end
 
 toc
 
-extr_str = patextr.body_tokens{4, 1}{56, 1}
-isstrprop( extr_str, 'digit') 
 
-% Delete all tokens that contain numbers
 
 
 % Delete any token with a number in it? or with a strange sign #, <, > ?, 

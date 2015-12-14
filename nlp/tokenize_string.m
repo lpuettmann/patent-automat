@@ -58,3 +58,8 @@ for i=1:length(inStr)
     word_stem = porterStemmer(inString);
     tokens{i, 1} = word_stem;
 end
+
+% Delete all tokens that contain numbers
+indicCellwNum = isstrprop(tokens, 'digit');
+ixCellwNum = cellfun(@max, indicCellwNum);
+tokens(ixCellwNum) = [];
