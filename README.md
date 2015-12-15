@@ -14,8 +14,9 @@ Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-te
 
 Put the unzipped data files into subfolders *[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
 
-So if you type `>>ls` in directory (folder) *1976* you should see:
+So in directory (folder) *1976* you should see:
 ```
+$ls
 pftaps19760106_wk01.txt pftaps19760113_wk19.txt pftaps19760120_wk37.txt
 pftaps19760106_wk02.txt pftaps19760113_wk20.txt pftaps19760120_wk38.txt
 pftaps19760106_wk03.txt pftaps19760113_wk21.txt pftaps19760120_wk39.txt
