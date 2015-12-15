@@ -476,8 +476,7 @@ end
 
 toc
 
-% Delet single letter tokens.
-% 
+
 
 % ix_select = find( (patextr.manAutomat == 1) );
 % 

@@ -1,5 +1,5 @@
 function tokens = tokenize_string(inStr, english_stop_words)
-% Converts a string to a cell array of strings (tokens.)
+% Converts a string to a cell array of shortened word stems (tokens.)
 %
 %   IN: 
 %       - [REQUIRED] inStr: string
@@ -11,10 +11,10 @@ function tokens = tokenize_string(inStr, english_stop_words)
 %       - tokens: cell array of tokens.
 %
 %   REQUIREMENTS: 
-%       - This function calls the function porterStemmer.m which
-%         must be on the Matlab search path. 
-%
-%
+%       - The function used here (most likely porterStemmer.m or 
+%       porterStemmer2.m) for stemming  the words to their word 
+%       stems is called here and, thus, needs to be on Matlab's search 
+%       path. 
 %
 
 %% Run checks for correct inputs
@@ -57,7 +57,7 @@ inStr = setdiff(inStr, english_stop_words, 'stable');
 % Transform words into their word stems
 for i=1:length(inStr)
     inString = inStr{i};
-    word_stem = porterStemmer(inString);
+    word_stem = porterStemmer2(inString);
     tokens{i, 1} = word_stem;
 end
 

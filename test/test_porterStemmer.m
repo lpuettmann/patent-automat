@@ -67,3 +67,14 @@ function testNormalCase6(testCase)
     
     verifyEqual(testCase, actSolution, expSolution)
 end
+
+function testKnownBug_ies(testCase)
+
+    inString = 'ies'; 
+    word_stem = porterStemmer(inString);
+    
+    actSolution = +strcmp(word_stem, 'ie');
+    expSolution = 1;
+    
+    verifyEqual(testCase, actSolution, expSolution)
+end
