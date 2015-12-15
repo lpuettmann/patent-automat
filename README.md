@@ -5,7 +5,14 @@ Analyze Patent Grant Texts
 
 Get data:
 ---------------------------
-Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and download the Patent Grant Full Texts for all years 1976-2015. For 2001, the data is provided as two filetypes. We choose the one used in the previous years (plain `.txt`). The unzipped files are 98 GB for 1976-2001 and 238 GB for 2002-2015. Put the unzipped data files into subfolders *[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
+Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and download the Patent Grant Full Texts for all years 1976-2015. 
+
+| Years  | Format | Size (unzipped) | 
+| ------------- | ------------- | ------------- |
+| 1976-2015  | `.txt` | 98 GB |
+| 2002-2015  | `.XML`, `.xml` | 238 GB |
+
+Put the unzipped data files into subfolders *[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
 
 
 Before running:
