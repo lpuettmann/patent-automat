@@ -17,10 +17,18 @@ Put the unzipped data files into subfolders *[year]*. Adjust the paths to this d
 So in directory (folder) *1976* you should see:
 ```
 $ls
-pftaps19760106_wk01.txt pftaps19760113_wk19.txt pftaps19760120_wk37.txt
-pftaps19760106_wk02.txt pftaps19760113_wk20.txt pftaps19760120_wk38.txt
-pftaps19760106_wk03.txt pftaps19760113_wk21.txt pftaps19760120_wk39.txt
-...		...		...
+pftaps19760106_wk01.txt
+pftaps19760106_wk02.txt
+pftaps19760106_wk03.txt
+...
+```
+and in directory *2014* you should see:
+```
+$ls
+ipg140107.xml
+ipg140114.xml
+ipg140121.xml
+..
 ```
 
 
