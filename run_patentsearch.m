@@ -441,79 +441,29 @@ year_end = 2015;
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
 % load('output/patextr.mat', 'patextr');
-% %%
-% 
+%%
+
 % patextr.title_tokens = [];
 % patextr.abstract_tokens = [];
 % patextr.body_tokens = [];
 % 
 % stop_words = define_stopwords();
-% 
-% for ix_patent = 1:length(patextr.patentnr)
-%      
-%     % Extract tokens for title
-%     inStr = patextr.title_str{ix_patent};
-%     tokens = tokenize_string(inStr, 'snowball', stop_words);
-%     patextr.title_tokens{ix_patent, 1} = tokens;
-%     
-%     % Extract tokens for abstract
-%     inStr = patextr.abstract_str{ix_patent};    
-%     inStr = strjoin(inStr');    
-%     tokens = tokenize_string(inStr, 'snowball', stop_words);
-%     patextr.abstract_tokens{ix_patent, 1} = tokens;  
-%     
-%     % Extract tokens for text body
-%     inStr = patextr.body_str{ix_patent};    
-%     inStr = strjoin(inStr');    
-%     tokens = tokenize_string(inStr, 'snowball', stop_words);
-%     patextr.body_tokens{ix_patent, 1} = tokens; 
-%     
-%     fprintf('Finished tokenizing patent %d/%d.\n', ix_patent, ...
-%         length(patextr.patentnr))
-% end
-% 
+% patextr = extract_tokens_patparts(patextr, stop_words, 'snowball');
+
 % save('output/patextr.mat', 'patextr'); % save to .mat
 load('output/patextr.mat', 'patextr');
 
 
-%% Run some checks on the extracted tokens
-
-
-%% Show some summary statistics about the extracted tokens
-plot_hist_nr_tok(patextr)
-
-
 %%
-% ix_select = find( (patextr.manAutomat == 1) );
-% 
-% vis_strings = patextr.title_tokens( ix_select );
-% vis_strings = vertcat( vis_strings{:} );
-% 
-% [unique_data, ~, ind] = unique(vis_strings);
-% freq_unique_data = histc(ind, 1:numel(unique_data));
-% 
-% [sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
-% 
-% autompat_stats.title_utok_freq = sorted_freq_unique_data;
-% autompat_stats.title_utok = unique_data(ix_sort);
-% 
-% 
-% ix_select = find( (patextr.manAutomat == 0) );
-% 
-% vis_strings = patextr.title_tokens( ix_select );
-% vis_strings = vertcat( vis_strings{:} );
-% 
-% [unique_data, ~, ind] = unique(vis_strings);
-% freq_unique_data = histc(ind, 1:numel(unique_data));
-% 
-% [sorted_freq_unique_data, ix_sort] = sort(freq_unique_data, 'descend');
-% 
-% otherpat_stats.title_utok_freq = sorted_freq_unique_data;
-% otherpat_stats.title_utok = unique_data(ix_sort);
-% 
-% struct2table(otherpat_stats)
-% 
-% 
-% 
-% 
-% 
+% tok_stats = collect_tok_stats(patextr);
+% plot_hist_nr_tok(tok_stats)
+
+
+
+
+
+
+
+
+
+
