@@ -440,12 +440,8 @@ year_end = 2015;
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 %%
-
-% and delete all numbers? x0, y1, vi, vii, viii, U.S.
-% Furthermore, i.e., yaxi, xaxi, 
-% how deal with XML escape signs? &apo
 
 english_stop_words = define_english_stopwords();
 
@@ -473,6 +469,9 @@ for ix_patent = 1:length(patextr.patentnr)
     fprintf('Finished tokenizing patent %d/%d.\n', ix_patent, ...
         length(patextr.patentnr))
 end
+
+save('output/patextr.mat', 'patextr'); % save to .mat
+load('output/patextr.mat', 'patextr');
 
 toc
 
