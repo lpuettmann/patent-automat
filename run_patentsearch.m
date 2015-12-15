@@ -480,12 +480,7 @@ load('output/patextr.mat', 'patextr');
 
 
 %% Show some summary statistics about the extracted tokens
-for i=1:length(patextr.title_tokens)
-    tok_stats.nr_titleTok(i, 1) = length(patextr.title_tokens{i});
-    tok_stats.nr_abstractTok(i, 1) = length(patextr.abstract_tokens{i});
-    tok_stats.nr_bodyTok(i, 1) = length(patextr.body_tokens{i});
-end
-
+plot_hist_nr_tok(patextr)
 
 
 %%
