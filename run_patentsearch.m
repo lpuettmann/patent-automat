@@ -441,39 +441,54 @@ year_end = 2015;
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
 % load('output/patextr.mat', 'patextr');
-%%
-
-english_stop_words = define_english_stopwords();
-
-for ix_patent = 1:length(patextr.patentnr)
-     
-    % Extract tokens for title
-    inStr = patextr.title_str{ix_patent};
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
-    patextr.title_tokens{ix_patent, 1} = tokens;
-    
-    % Extract tokens for abstract
-    inStr = patextr.abstract_str{ix_patent};    
-    inStr = strjoin(inStr');    
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
-    patextr.abstract_tokens{ix_patent, 1} = tokens;  
-    
-    % Extract tokens for text body
-    inStr = patextr.body_str{ix_patent};    
-    inStr = strjoin(inStr');    
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
-    patextr.body_tokens{ix_patent, 1} = tokens; 
-    
-    fprintf('Finished tokenizing patent %d/%d.\n', ix_patent, ...
-        length(patextr.patentnr))
-end
-
+% %%
+% 
+% patextr.title_tokens = [];
+% patextr.abstract_tokens = [];
+% patextr.body_tokens = [];
+% 
+% stop_words = define_stopwords();
+% 
+% for ix_patent = 1:length(patextr.patentnr)
+%      
+%     % Extract tokens for title
+%     inStr = patextr.title_str{ix_patent};
+%     tokens = tokenize_string(inStr, 'snowball', stop_words);
+%     patextr.title_tokens{ix_patent, 1} = tokens;
+%     
+%     % Extract tokens for abstract
+%     inStr = patextr.abstract_str{ix_patent};    
+%     inStr = strjoin(inStr');    
+%     tokens = tokenize_string(inStr, 'snowball', stop_words);
+%     patextr.abstract_tokens{ix_patent, 1} = tokens;  
+%     
+%     % Extract tokens for text body
+%     inStr = patextr.body_str{ix_patent};    
+%     inStr = strjoin(inStr');    
+%     tokens = tokenize_string(inStr, 'snowball', stop_words);
+%     patextr.body_tokens{ix_patent, 1} = tokens; 
+%     
+%     fprintf('Finished tokenizing patent %d/%d.\n', ix_patent, ...
+%         length(patextr.patentnr))
+% end
+% 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 load('output/patextr.mat', 'patextr');
 
 
+%% Run some checks on the extracted tokens
 
 
+%% Show some summary statistics about the extracted tokens
+for i=1:length(patextr.title_tokens)
+    tok_stats.nr_titleTok(i, 1) = length(patextr.title_tokens{i});
+    tok_stats.nr_abstractTok(i, 1) = length(patextr.abstract_tokens{i});
+    tok_stats.nr_bodyTok(i, 1) = length(patextr.body_tokens{i});
+end
+
+
+
+%%
 % ix_select = find( (patextr.manAutomat == 1) );
 % 
 % vis_strings = patextr.title_tokens( ix_select );

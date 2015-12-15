@@ -8,9 +8,20 @@ function stop_words = define_stopwords()
     cl = [english_stop_words;
           markup_garbage];
 
+    assert( length(english_stop_words) + length(markup_garbage) ...
+        == length(cl), 'Not the right length.')
+      
     % Delete any duplicates   
     [~, idx] = unique( cl );
-    stop_words = cl(idx, :)
+    stop_words = cl(idx, :);
+    
+    % Make some checks
+    for i=1:length(stop_words)
+        extr_str = stop_words{i};
+        check_allStr(i) = +ischar(extr_str);
+    end
+    assert( all( check_allStr ), ...
+        'Stop words must be a cell array of strings.')
 end
 
 
@@ -42,16 +53,9 @@ function markup_garbage = define_markup_garbage()
                      xml_markup_del_list];
 
     % Make some checks
-    for i=1:length(markup_garbage)
-        extr_str = markup_garbage{i};
-        check_allStr(i) = +ischar(extr_str);
-    end
-    assert( all( check_allStr ), ...
-        'Stop words must be a cell array of strings.')
-
     assert( length(other_junk_words) + length(txt_markup_del_list) + ...
         length(xml_markup_del_list) == length(markup_garbage), ...
-        'List markup_garbage does not have the right length.')
+        'Not the right length.')
 end
 
 function english_stop_words = define_english_stopwords()
