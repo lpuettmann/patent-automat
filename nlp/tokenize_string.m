@@ -63,7 +63,7 @@ inStr = strsplit(inStr, delimiter);
 % Remove stop words
 inStr = setdiff(inStr, english_stop_words, 'stable');
 
-% Transform words into their word stems
+%% Stem: transform words into their word stems
 for i=1:length(inStr)
     inString = inStr{i};
     
@@ -78,6 +78,7 @@ for i=1:length(inStr)
     tokens{i, 1} = word_stem;
 end
 
+%% Delete uninformative tokens
 % Delete empty tokens
 ixCellEmpty = cellfun(@isempty, tokens);
 tokens(ixCellEmpty) = [];
