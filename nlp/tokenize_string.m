@@ -1,8 +1,13 @@
-function tokens = tokenize_string(inStr, english_stop_words)
+function tokens = tokenize_string(inStr, indicStemmer, ...
+    english_stop_words)
 % Converts a string to a cell array of shortened word stems (tokens.)
 %
 %   IN: 
 %       - [REQUIRED] inStr: string
+%       - [REQUIRED] indicStemmer: string. 
+%                    Choose: 
+%                           - 'porter': Porter stemmer
+%                           - 'snowball': "Snowball" Porter 2 stemmer
 %       - [OPTIONAL] english_stop_words: cell array of strings to be 
 %           excluded. If no list is provided, it does not remove any stop
 %           words.
@@ -11,9 +16,7 @@ function tokens = tokenize_string(inStr, english_stop_words)
 %       - tokens: cell array of tokens.
 %
 %   REQUIREMENTS: 
-%       - The function used here (most likely porterStemmer.m or 
-%       porterStemmer2.m) for stemming  the words to their word 
-%       stems is called here and, thus, needs to be on Matlab's search 
+%       - porterStemmer.m  and porterStemmer2.m must be on Matlab's search 
 %       path. 
 %
 
@@ -22,7 +25,13 @@ assert( not( iscell(inStr) ), 'Input cannot be cell array.')
 assert( ischar(inStr), 'Input must be a string')
 assert( not( isempty( inStr ) ), 'Cannot be empty string.')
 
-if nargin == 2
+if nargin < 2
+    error('Too few inputs specified.')
+   
+elseif nargin == 2
+    assert(ischar(indicStemmer), 'Not specified choice of stemmer.');
+    
+elseif nargin == 3
     for i=1:length(english_stop_words)
         extr_str = english_stop_words{i};
         check_allStr(i) = +ischar(extr_str);
@@ -33,7 +42,7 @@ end
 
 
 %% If no list of stop words provided, default to no stop words
-if nargin < 2
+if nargin < 3
     english_stop_words = {};
 end
 
@@ -57,7 +66,15 @@ inStr = setdiff(inStr, english_stop_words, 'stable');
 % Transform words into their word stems
 for i=1:length(inStr)
     inString = inStr{i};
-    word_stem = porterStemmer2(inString);
+    
+    switch indicStemmer
+        case 'porter1'
+            word_stem = porterStemmer(inString);
+            
+        case 'snowball'
+            word_stem = porterStemmer2(inString);
+    end
+    
     tokens{i, 1} = word_stem;
 end
 
@@ -75,3 +92,9 @@ indicCellNumel = cellfun(@numel, tokens);
 ixToken2Short = (indicCellNumel <= 2);
 tokens( find(ixToken2Short) ) = [];
 
+% Delete all tokens that do not contain at least one alphabetic letter.
+% This also deletes empty cells.
+indicCellNoAlph = isstrprop(tokens, 'alpha');
+ixCellAlph = cellfun(@max, indicCellNoAlph);
+ixCellNoAlph = find(ixCellAlph == 0);
+tokens(ixCellNoAlph) = [];

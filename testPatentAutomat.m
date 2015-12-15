@@ -16,3 +16,4 @@ run(test_match_sic2ipc);
 run(test_porterStemmer);
 run(test_porterStemmer2);
 run(test_define_english_stopwords);
+run(test_tokenize_string);
