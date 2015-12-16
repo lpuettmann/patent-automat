@@ -5,8 +5,8 @@ end
 function test_normalSnowballCase1(testCase)
 
     inStr = 'automatically';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
     expected_out = 'automat';
     
@@ -20,8 +20,8 @@ end
 function test_normalSnowballCase2(testCase)
 
     inStr = 'robotically';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
     expected_out = 'robot';
     
@@ -34,8 +34,8 @@ end
 function test_normalSnowballCase3(testCase)
 
     inStr = 'grandeur';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
     expected_out = 'grandeur';
     
@@ -45,11 +45,11 @@ function test_normalSnowballCase3(testCase)
     verifyEqual(testCase, actSolution, expSolution)
 end
 
-function test_normalSnowballCase3(testCase)
+function test_normalSnowballCase4(testCase)
 
     inStr = 'switzerland';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
     expected_out = 'switzerland';
     
@@ -62,8 +62,8 @@ end
 function test_SnowballSplitStr1(testCase)
 
     inStr = 'Hi there, how are you today. All ok on the moon?';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
     expected_out = {'today', 'moon'};
     
@@ -80,8 +80,8 @@ end
 function test_SnowballSplitStr2(testCase)
 
     inStr = 'Hi there, how automatically/are you today. All ok on the moon?';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
     expected_out = {'automat', 'today', 'moon'};
     
@@ -98,10 +98,10 @@ end
 function test_SnowballSplitStr3(testCase)
 
     inStr = 'Hi there, how automatically/are --he---lo--- you today. All ok on the moon?';
-    english_stop_words = define_english_stopwords();
-    tokens = tokenize_string(inStr, 'snowball', english_stop_words);
+    stop_words = define_stopwords();
+    tokens = tokenize_string(inStr, 'snowball', stop_words);
     
-    expected_out = {'automat', '--he---lo---', 'today', 'moon'};
+    expected_out = {'automat', 'he---lo', 'today', 'moon'};
     
     for i=1:length(tokens)
         checkequal(i) = max( strcmp(expected_out, tokens{i}) ); 
@@ -115,7 +115,7 @@ end
 
 function test_DifferentStopwords(testCase)
 
-    inStr = 'This is and full of stopwords in yes great, moonlanding.';
+    inStr = 'This is and full of stop_words in yes great, moonlanding.';
     my_stop_words = {'moonlanding', 'the martian'};
     tokens = tokenize_string(inStr, 'snowball', my_stop_words);
     
@@ -133,7 +133,7 @@ end
 
 function test_EmptyStopWordsCheckError(testCase)
 
-    inStr = 'This is and full of stopwords in yes great, moonlanding.';
+    inStr = 'This is and full of stop_words in yes great, moonlanding.';
     my_stop_words = {};
     
     % This should throw an error, as my_stop_words is not a string.

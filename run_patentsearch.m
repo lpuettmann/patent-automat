@@ -455,8 +455,8 @@ load('output/patextr.mat', 'patextr');
 
 
 %%
-% tok_stats = collect_tok_stats(patextr);
-% plot_hist_nr_tok(tok_stats)
+tok_stats = collect_tok_stats(patextr);
+plot_hist_nr_tok(tok_stats)
 
 
 
