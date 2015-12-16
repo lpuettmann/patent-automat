@@ -119,13 +119,8 @@ function test_DifferentStopwords(testCase)
     my_stop_words = {'moonlanding', 'the martian'};
     tokens = tokenize_string(inStr, 'snowball', my_stop_words);
     
-    expected_out = {'this', 'and', 'full', 'stopword', 'yes', 'great'};
-    
-    for i=1:length(tokens)
-        checkequal(i) = max( strcmp(expected_out, tokens{i}) ); 
-    end
-
-    actSolution = +min(checkequal);
+    expected_out = {'this'; 'and'; 'full'; 'stop_word'; 'yes'; 'great'};
+    actSolution = +min(strcmp(tokens, expected_out));
     expSolution = 1; 
     
     verifyEqual(testCase, actSolution, expSolution)
