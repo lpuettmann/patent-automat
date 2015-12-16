@@ -475,14 +475,16 @@ load('output/patextr.mat', 'patextr');
 clear pick_token incidMat
 clc
 
-i = 101;
-pick_token = patextr.unique_titleT{i};
+docTokens = patextr.abstract_tokens;
+tokenList = patextr.unique_abstractT;
 
-incidMat = +strcmp(patextr.title_tokens, pick_token)'
+% docTokens = patextr.title_tokens;
+% tokenList = patextr.unique_titleT;
 
 
-
-
+tic
+incidMat = compile_incidence_matrix(tokenList, docTokens);
+toc
 
 
 
