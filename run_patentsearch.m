@@ -419,7 +419,7 @@ year_end = 2015;
 
 % load('output/patextr.mat', 'patextr');
 % check_correct_patextr(patextr)
-
+% 
 % for ix_patent = 1:length(patextr.patentnr)
 %     extr_patnr = patextr.patentnr(ix_patent);
 %     extr_patyear = patextr.indic_year(ix_patent);
@@ -440,18 +440,18 @@ year_end = 2015;
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
-% load('output/patextr.mat', 'patextr');
-%%
-
-% patextr.title_tokens = [];
-% patextr.abstract_tokens = [];
-% patextr.body_tokens = [];
-% 
-% stop_words = define_stopwords();
-% patextr = extract_tokens_patparts(patextr, stop_words, 'snowball');
-
-% save('output/patextr.mat', 'patextr'); % save to .mat
 load('output/patextr.mat', 'patextr');
+%
+
+patextr.title_tokens = [];
+patextr.abstract_tokens = [];
+patextr.body_tokens = [];
+
+stop_words = define_stopwords();
+patextr = extract_tokens_patparts(patextr, stop_words, 'snowball');
+
+save('output/patextr.mat', 'patextr'); % save to .mat
+% load('output/patextr.mat', 'patextr');
 
 
 %%

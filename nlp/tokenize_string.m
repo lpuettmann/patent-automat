@@ -58,7 +58,7 @@ inStr = lower(inStr);
 % Split string into separate tokens
 delimiter = {' ', ',', '.', ')', '(', '"', ';', ':', '''', '#', '<', ...
     '>', '!', '?', '=', '+', '\\', '/', '&', '*', '@', '[', ']', ...
-    '|', '{', '}'};
+    '|', '{', '}', '`', '$'};
 inStr = strsplit(inStr, delimiter);
 
 % Remove stop words
@@ -112,16 +112,3 @@ tokens( not(ixCellAlph) ) = [];
 % "automat"
 % --------------------------
 tokens = strtrim_punctuation(tokens);
-
-
-
-
-
-
-
-
-
-
-
-
-
