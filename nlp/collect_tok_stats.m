@@ -15,13 +15,7 @@ for i=1:3
         error('Don''t go here.')
     end
 
-    % Concatenate
-    all_tok = [];
-
-    for k=1:length(inNestedCellArray)
-        all_tok = [all_tok;
-                   inNestedCellArray{k}];
-    end
+    all_tok = extract_nested_cellarray(inNestedCellArray);
 
     unique_tok = unique( all_tok );
 

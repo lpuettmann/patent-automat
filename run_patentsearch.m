@@ -440,23 +440,45 @@ year_end = 2015;
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
-load('output/patextr.mat', 'patextr');
-%
-
-patextr.title_tokens = [];
-patextr.abstract_tokens = [];
-patextr.body_tokens = [];
-
-stop_words = define_stopwords();
-patextr = extract_tokens_patparts(patextr, stop_words, 'snowball');
-
-save('output/patextr.mat', 'patextr'); % save to .mat
+% load('output/patextr.mat', 'patextr');
+% %
+% 
+% patextr.title_tokens = [];
+% patextr.abstract_tokens = [];
+% patextr.body_tokens = [];
+% 
+% stop_words = define_stopwords();
+% patextr = extract_tokens_patparts(patextr, stop_words, 'snowball');
+% 
+% save('output/patextr.mat', 'patextr'); % save to .mat
 % load('output/patextr.mat', 'patextr');
 
 
-%%
-tok_stats = collect_tok_stats(patextr);
-plot_hist_nr_tok(tok_stats)
+%% Summary plots about tokens
+% tok_stats = collect_tok_stats(patextr);
+% plot_hist_nr_tok(tok_stats)
+
+
+%% Get unique tokens
+% patextr.unique_titleT = unique( extract_nested_cellarray( ...
+%     patextr.title_tokens) );
+% patextr.unique_abstractT = unique( extract_nested_cellarray( ...
+%     patextr.abstract_tokens) );
+% patextr.unique_bodyT = unique( extract_nested_cellarray(...
+%     patextr.body_tokens) );
+
+% save('output/patextr.mat', 'patextr'); % save to .mat
+load('output/patextr.mat', 'patextr');
+
+
+%% Compile huge incidence matrix showing which patent contains which term
+clear pick_token incidMat
+clc
+
+i = 101;
+pick_token = patextr.unique_titleT{i};
+
+incidMat = +strcmp(patextr.title_tokens, pick_token)'
 
 
 
