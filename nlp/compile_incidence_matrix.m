@@ -1,5 +1,5 @@
 function incidMat = compile_incidence_matrix(tokenList, docTokens)
-% Check with tokens appear in which documents and return a matrix.
+% Check which tokens appear in which documents and return a matrix.
 
 % TO DO:
 % Transform loops into vectors. Make a long list with all the tokens in the
@@ -10,11 +10,12 @@ function incidMat = compile_incidence_matrix(tokenList, docTokens)
 % unique tokens.
 
 %% Check function inputs
-assert(not( isempty( docTokens ) ))
-assert(not( isempty( tokenList ) ))
+% -------------------------------------------------------------------
+assert( not( isempty( docTokens ) ) )
+assert( not( isempty( tokenList ) ) )
 
 %% Compile incidence matrix
-
+% -------------------------------------------------------------------
 incidMat = zeros(length(docTokens), length(tokenList)); % initialize
 
 for k=1:length(tokenList)
@@ -25,21 +26,21 @@ for k=1:length(tokenList)
         
         occurences = zeros(length(single_docTokens), 1); % initialize
         
-        for j=1:length(single_docTokens)
-            occurences(j) = +strcmp(compareStr, docTokens{i}{j});
-        end
+        % The plus ("+") converts logical to double
+        occurences = +strcmp(compareStr, single_docTokens);
 
         incidMat(i, k) = sum( occurences );
         clear occurences
     end
     
-    if mod(k, 100) == 0
+    % Write a status message
+    if (mod(k, 100) == 0) || (k == length(tokenList))
         fprintf('Finished token %d/%d.\n', k, length(tokenList))
     end
 end
 
 %% Check outputs
-
+% -------------------------------------------------------------------
 % Check that all columns contain at least one nonzero value (otherwise,
 % these tokens should not be in the list of unique tokens anyway).
 assert( not( any( sum(incidMat) == 0 ) ), ...

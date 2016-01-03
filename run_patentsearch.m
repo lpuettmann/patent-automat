@@ -478,3 +478,7 @@ tokenList = patextr.unique_titleT;
 tic
 incidMat = compile_incidence_matrix(tokenList, docTokens);
 toc
+
+
+
+
