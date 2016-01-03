@@ -25,6 +25,8 @@ assert( not( iscell(inStr) ), 'Input cannot be cell array.')
 assert( ischar(inStr), 'Input must be a string')
 assert( not( isempty( inStr ) ), 'Cannot be empty string.')
 
+% error(nargchk(1,3,nargin));
+
 if nargin < 2
     error('Too few inputs specified.')
    

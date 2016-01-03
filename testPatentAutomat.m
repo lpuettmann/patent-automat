@@ -19,3 +19,4 @@ run(test_define_stopwords);
 run(test_tokenize_string);
 run(test_strtrim_punctuation);
 run(test_extract_nested_cellarray);
+run(test_compile_incidence_matrix);
