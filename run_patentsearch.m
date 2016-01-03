@@ -489,24 +489,37 @@ year_end = 2015;
 % toc
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 
 
 %% Get some summary statistics on most frequent terms in both groups of 
 % documents (automation and non-automation patents)
+% patextr.title_occurstats = get_occurstats(patextr.incidMat_title, ...
+%     patextr.unique_titleT, patextr.manAutomat);
 
-manAutomat = patextr.manAutomat;
+% patextr.abstract_occurstats = get_occurstats(patextr.incidMat_abstract, ...
+%     patextr.unique_abstractT, patextr.manAutomat);
+% 
+% patextr.body_occurstats = get_occurstats(patextr.incidMat_body, ...
+%     patextr.unique_bodyT, patextr.manAutomat);
 
-incidMat = patextr.incidMat_body;
-uniqueT = patextr.unique_bodyT;
+% save('output/patextr.mat', 'patextr'); % save to .mat
+load('output/patextr.mat', 'patextr');
 
-% incidMat = patextr.incidMat_abstract;
-% uniqueT = patextr.unique_abstractT;
 
-% incidMat = patextr.incidMat_title;
-% uniqueT = patextr.unique_titleT;
+%% Calculate mutual information statistic for every term
+% AA = patextr.incidMat_title
 
-occurstats = get_occurstats(incidMat, uniqueT, manAutomat);
+
+
+
+
+
+
+
+
+
+
 
 
 

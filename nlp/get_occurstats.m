@@ -1,5 +1,4 @@
 function occurstats = get_occurstats(incidMat, uniqueT, manAutomat)
-    
 
     aPat = find( manAutomat ); % index of automation patents
     nPat = find( not( manAutomat ) ); % index of non-automation patents
@@ -31,7 +30,7 @@ function [sortedT, sortedOccur] = countDocTok(incidMat, uniqueT)
     occurMat = +( incidMat > 0 );
 
     % Number of documents that contain a particular term at least once
-    tfreq = sum(occurMat)';
+    tfreq = sum(occurMat, 1)';
 
     [sortedOccur, ixSort] = sort(tfreq, 'descend');
 
