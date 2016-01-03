@@ -472,8 +472,8 @@ load('output/patextr.mat', 'patextr');
 
 
 %% Compile huge incidence matrix showing which patent contains which term
-docTokens = patextr.title_tokens;
-tokenList = patextr.unique_titleT;
+docTokens = patextr.body_tokens;
+tokenList = patextr.unique_bodyT;
 
 tic
 incidMat = compile_incidence_matrix(tokenList, docTokens);

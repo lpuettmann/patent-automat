@@ -1,14 +1,6 @@
 function incidMat = compile_incidence_matrix(tokenList, docTokens)
 % Check which tokens appear in which documents and return a matrix.
 
-% TO DO:
-% Transform loops into vectors. Make a long list with all the tokens in the
-% documents (use the de-nesting function I just wrote) and also keep a vector with what token belongs to which
-% document. And then just compare the long list of tokens with the one
-% string (still have to do that many times). This would get rid of two of
-% the loops, so we would only have to iterate once through the list of
-% unique tokens.
-
 %% Check function inputs
 % -------------------------------------------------------------------
 assert( not( isempty( docTokens ) ) )
@@ -47,4 +39,3 @@ assert( not( any( sum(incidMat) == 0 ) ), ...
     'Incidence matrix should not have empty columns.')
 assert( isnumeric(incidMat) )
 assert( not( isempty( incidMat ) ) )
-
