@@ -468,16 +468,45 @@ year_end = 2015;
 %     patextr.body_tokens) );
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
+% load('output/patextr.mat', 'patextr');
+
+
+%% Compile huge incidence matrices showing which patent contains which term
+
+% tic
+% patextr.incidMat_title = compile_incidence_matrix(patextr.unique_titleT, ...
+%     patextr.title_tokens);
+% toc
+% 
+% tic
+% patextr.incidMat_abstract = compile_incidence_matrix(patextr.unique_abstractT, ...
+%     patextr.abstract_tokens);
+% toc
+
+% tic
+% patextr.incidMat_body = compile_incidence_matrix(patextr.unique_bodyT, ...
+%     patextr.body_tokens);
+% toc
+
+% save('output/patextr.mat', 'patextr'); % save to .mat
 load('output/patextr.mat', 'patextr');
 
 
-%% Compile huge incidence matrix showing which patent contains which term
-docTokens = patextr.body_tokens;
-tokenList = patextr.unique_bodyT;
+%% Get some summary statistics on most frequent terms in both groups of 
+% documents (automation and non-automation patents)
 
-tic
-incidMat = compile_incidence_matrix(tokenList, docTokens);
-toc
+manAutomat = patextr.manAutomat;
+
+incidMat = patextr.incidMat_body;
+uniqueT = patextr.unique_bodyT;
+
+% incidMat = patextr.incidMat_abstract;
+% uniqueT = patextr.unique_abstractT;
+
+% incidMat = patextr.incidMat_title;
+% uniqueT = patextr.unique_titleT;
+
+occurstats = get_occurstats(incidMat, uniqueT, manAutomat);
 
 
 
