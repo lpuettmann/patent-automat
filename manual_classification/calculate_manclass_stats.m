@@ -28,11 +28,11 @@ if nargin < 3
     evalalpha = 0.5;
 end
 
-if (min(size(correctClass)) > 1) || (min(size(estimatClass)) > 1)
+if (min(size(correctClass)) > 1) | (min(size(estimatClass)) > 1)
     error('Should be vector.')
 end
 
-if (isnan(correctClass)) || (isnan(estimatClass))
+if (isnan(correctClass)) | (isnan(estimatClass))
     error('Missing values.')
 end
 
@@ -42,7 +42,7 @@ if any( not((correctClass == 0) | (correctClass == 1)) | ...
 end
 
 % Number of classified cases
-classifstat.nr_codpt = length(correctClass);
+N = length(correctClass);
 
 tp = sum( (correctClass==1) & (estimatClass == 1) );
 fp = sum( (correctClass==0) & (estimatClass == 1) );
@@ -50,7 +50,7 @@ tn = sum( (correctClass==0) & (estimatClass == 0) );
 fn =  sum( (correctClass==1) & (estimatClass == 0) );
 
 % Overall agreement rate
-classifstat.accuracy = (tp + tn) / classifstat.nr_codpt;
+classifstat.accuracy = (tp + tn) / N;
 
 classifstat.precision = tp / (tp + fp);
 classifstat.recall = tp / (tp + fn);
@@ -72,17 +72,32 @@ classifstat.matthewscorrcoeff = (tp * tn - fp * fn) / sqrt((tp + fp)*...
     (tp + fn)*(tn + fp)*(tn + fn));
 
 % Calculate Cohen's kappa
-p_man_yes = sum(correctClass) / classifstat.nr_codpt;
-p_comp_yes = sum(estimatClass) / classifstat.nr_codpt;
+p_man_yes = sum(correctClass) / N;
+p_comp_yes = sum(estimatClass) / N;
 p_rand_agree = p_man_yes * p_comp_yes + (1 - p_man_yes) * ...
     (1 - p_comp_yes); % probability of random agreement
 classifstat.cohenskappa = 1 - ((1 - classifstat.accuracy) / ...
     (1 - p_rand_agree));
 
 % Calculate mutual information
+N11 = tp;
+N10 = fp;
+N01 = fn;
+N00 = tn;
 
+N1dot = tp + fp;
+Ndot1 = tp + fn;
+N0dot = fn + tn;
+Ndot0 = fp + tn;
+
+classifstat.mutual_information = ...
+   (N11 * log2( (N*N11) / (N1dot*Ndot1) ) + ...
+    N01 * log2( (N*N01) / (N0dot*Ndot1) ) + ...
+    N10 * log2( (N*N10) / (N1dot*Ndot0) ) + ...
+    N00 * log2( (N*N00) / (N0dot*Ndot0) ) ) / N;
 
 % Save in struct
+classifstat.nr_codpt = N;
 classifstat.true_positive = tp;
 classifstat.false_positive = fp;
 classifstat.true_negative = tn;

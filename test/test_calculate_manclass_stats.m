@@ -49,3 +49,43 @@ function testCowensKappa(testCase)
     diffSolutions = (actSolution - expSolution) / actSolution;
     verifyLessThan(testCase, diffSolutions, 10^-3)
 end
+
+function testMutualInformation(testCase)
+    % Check the example from Manning, Raghavan and Schuetze (2008),
+    % p. 252-253.
+    N = 801948;
+    tp = 49;
+    fp = 27652;
+    fn = 141;
+    tn = 774106;
+    
+    % Make two vectors that reproduce exactly those true and false
+    % positives and negatives
+    correctClass = zeros(N, 1);
+    correctClass(1:tp) = 1; % tp
+    correctClass(tp + fp + 1 : tp + fp + fn) = 1; % fn
+   
+    estimatClass = zeros(N, 1);
+    estimatClass(1 : tp + fp) = 1; % tp + fp;
+    
+    % Carry out the test
+    classifstat = calculate_manclass_stats(correctClass, estimatClass);
+    actSolution = classifstat.mutual_information;
+    expSolution = 0.0001105;
+    diffSolutions = (actSolution - expSolution) / actSolution;
+    verifyLessThan(testCase, diffSolutions, 10^-3)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
