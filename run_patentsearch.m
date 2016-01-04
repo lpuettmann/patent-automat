@@ -508,10 +508,36 @@ load('output/patextr.mat', 'patextr');
 
 
 %% Calculate mutual information statistic for every term
-% AA = patextr.incidMat_title
+incidMat = patextr.incidMat_title;
+manAutomat = patextr.manAutomat;
+
+t = 93; % choose token
+
+singleTok_class = incidMat(:, t);
+
+classifstat = calculate_manclass_stats(manAutomat, singleTok_class)
 
 
 
+%%
+tp = 49;
+fp = 27652;
+fn = 141;
+tn = 774106;
+
+N11 = tp;
+N10 = fp;
+N01 = fn;
+N00 = tn;
+
+N1dot = tp + fp;
+Ndot1 = tp + fn;
+N0dot = fn + tn;
+Ndot0 = fp + fn;
+
+mutual_information = (N11 * log2( (N*N11) / (N1dot*Ndot1) ) + ...
+    N01 * log2( (N*N01) / (N0dot*Ndot0) ) + N10 * log2( (N*N10) / ...
+    (N1dot*Ndot0) ) + N00 * log2( (N*N00) / (N0dot*Ndot0) ) ) / N;
 
 
 

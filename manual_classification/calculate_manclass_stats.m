@@ -28,11 +28,11 @@ if nargin < 3
     evalalpha = 0.5;
 end
 
-if (min(size(correctClass)) > 1) | (min(size(estimatClass)) > 1)
+if (min(size(correctClass)) > 1) || (min(size(estimatClass)) > 1)
     error('Should be vector.')
 end
 
-if (isnan(correctClass)) | (isnan(estimatClass))
+if (isnan(correctClass)) || (isnan(estimatClass))
     error('Missing values.')
 end
 
@@ -78,6 +78,9 @@ p_rand_agree = p_man_yes * p_comp_yes + (1 - p_man_yes) * ...
     (1 - p_comp_yes); % probability of random agreement
 classifstat.cohenskappa = 1 - ((1 - classifstat.accuracy) / ...
     (1 - p_rand_agree));
+
+% Calculate mutual information
+
 
 % Save in struct
 classifstat.true_positive = tp;
