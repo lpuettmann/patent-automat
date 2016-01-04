@@ -508,42 +508,38 @@ load('output/patextr.mat', 'patextr');
 
 
 %% Calculate mutual information statistic for every term
-incidMat = patextr.incidMat_title;
+
+feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
+    patextr.incidMat_body];
+
+feat_occurMat = +( feat_incidMat > 0 );
+
 manAutomat = patextr.manAutomat;
 
-t = 93; % choose token
+mutInf = zeros(size(feat_occurMat, 2), 1);
 
-singleTok_class = incidMat(:, t);
+tic
+for t = 1:size(feat_occurMat, 2)
+    singleTok_class = feat_occurMat(:, t);
+    classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
+    mutInf(t) = classifstat.mutual_information;
+end
+toc
 
-classifstat = calculate_manclass_stats(manAutomat, singleTok_class)
+mutInf_noNaN = mutInf;
+mutInf_noNaN(isnan(mutInf_noNaN)) = -Inf;
 
+[sort_mutInf, ix_sort] = sort(mutInf_noNaN, 'descend');
 
+% patextr.unique_titleT(ix_sort(1:30))
+% patextr.unique_abstractT(ix_sort(1:30))
+% patextr.unique_bodyT(ix_sort(1:30))
 
-%%
-tp = 49;
-fp = 27652;
-fn = 141;
-tn = 774106;
+featTok = [cellfun(@(c) [c ' [title]'], patextr.unique_titleT, 'uni', false);
+           cellfun(@(c) [c ' [abstract]'], patextr.unique_abstractT, 'uni', false);
+           cellfun(@(c) [c ' [body]'], patextr.unique_bodyT, 'uni', false)];
 
-N = tp + fp + fn + tn;
-
-N11 = tp;
-N10 = fp;
-N01 = fn;
-N00 = tn;
-
-N1dot = tp + fp;
-Ndot1 = tp + fn;
-N0dot = fn + tn;
-Ndot0 = fp + tn;
-
-mutual_information = (N11 * log2( (N*N11) / (N1dot*Ndot1) ) + ...
-    N01 * log2( (N*N01) / (N0dot*Ndot1) ) + ...
-    N10 * log2( (N*N10) / (N1dot*Ndot0) ) + ...
-    N00 * log2( (N*N00) / (N0dot*Ndot0) ) ) / N
-
-
-
+featTok( ix_sort(1:30) )
 
 
 
