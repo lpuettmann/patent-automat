@@ -525,6 +525,8 @@ fp = 27652;
 fn = 141;
 tn = 774106;
 
+N = tp + fp + fn + tn;
+
 N11 = tp;
 N10 = fp;
 N01 = fn;
@@ -533,13 +535,12 @@ N00 = tn;
 N1dot = tp + fp;
 Ndot1 = tp + fn;
 N0dot = fn + tn;
-Ndot0 = fp + fn;
+Ndot0 = fp + tn;
 
 mutual_information = (N11 * log2( (N*N11) / (N1dot*Ndot1) ) + ...
-    N01 * log2( (N*N01) / (N0dot*Ndot0) ) + N10 * log2( (N*N10) / ...
-    (N1dot*Ndot0) ) + N00 * log2( (N*N00) / (N0dot*Ndot0) ) ) / N;
-
-
+    N01 * log2( (N*N01) / (N0dot*Ndot1) ) + ...
+    N10 * log2( (N*N10) / (N1dot*Ndot0) ) + ...
+    N00 * log2( (N*N00) / (N0dot*Ndot0) ) ) / N
 
 
 
