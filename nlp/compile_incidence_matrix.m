@@ -8,7 +8,7 @@ assert( not( isempty( tokenList ) ) )
 
 %% Compile incidence matrix
 % -------------------------------------------------------------------
-incidMat = zeros(length(docTokens), length(tokenList)); % initialize
+incidMat = sparse( zeros(length(docTokens), length(tokenList)) ); % initialize
 
 for k=1:length(tokenList)
     compareStr = tokenList{k};
@@ -38,4 +38,4 @@ end
 assert( not( any( sum(incidMat) == 0 ) ), ...
     'Incidence matrix should not have empty columns.')
 assert( isnumeric(incidMat) )
-assert( not( isempty( incidMat ) ) )
+assert( nnz(incidMat) > 0 )

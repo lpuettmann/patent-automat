@@ -468,25 +468,26 @@ year_end = 2015;
 %     patextr.body_tokens) );
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
-% load('output/patextr.mat', 'patextr');
+load('output/patextr.mat', 'patextr');
 
 
 %% Compile huge incidence matrices showing which patent contains which term
+tic
+patextr.incidMat_title = compile_incidence_matrix(patextr.unique_titleT, ...
+    patextr.title_tokens);
+toc
 
-% tic
-% patextr.incidMat_title = compile_incidence_matrix(patextr.unique_titleT, ...
-%     patextr.title_tokens);
-% toc
-% 
-% tic
-% patextr.incidMat_abstract = compile_incidence_matrix(patextr.unique_abstractT, ...
-%     patextr.abstract_tokens);
-% toc
+tic
+patextr.incidMat_abstract = compile_incidence_matrix(patextr.unique_abstractT, ...
+    patextr.abstract_tokens);
+toc
 
-% tic
-% patextr.incidMat_body = compile_incidence_matrix(patextr.unique_bodyT, ...
-%     patextr.body_tokens);
-% toc
+tic
+patextr.incidMat_body = compile_incidence_matrix(patextr.unique_bodyT, ...
+    patextr.body_tokens);
+toc
+
+break
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 % load('output/patextr.mat', 'patextr');
@@ -504,42 +505,42 @@ year_end = 2015;
 %     patextr.unique_bodyT, patextr.manAutomat);
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 
 
 %% Calculate mutual information statistic for every term
 
-feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
-    patextr.incidMat_body];
-
-feat_occurMat = +( feat_incidMat > 0 );
-
-manAutomat = patextr.manAutomat;
-
-mutInf = zeros(size(feat_occurMat, 2), 1);
-
-tic
-for t = 1:size(feat_occurMat, 2)
-    singleTok_class = feat_occurMat(:, t);
-    classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
-    mutInf(t) = classifstat.mutual_information;
-end
-toc
-
-mutInf_noNaN = mutInf;
-mutInf_noNaN(isnan(mutInf_noNaN)) = -Inf;
-
-[sort_mutInf, ix_sort] = sort(mutInf_noNaN, 'descend');
-
-% patextr.unique_titleT(ix_sort(1:30))
-% patextr.unique_abstractT(ix_sort(1:30))
-% patextr.unique_bodyT(ix_sort(1:30))
-
-featTok = [cellfun(@(c) [c ' [title]'], patextr.unique_titleT, 'uni', false);
-           cellfun(@(c) [c ' [abstract]'], patextr.unique_abstractT, 'uni', false);
-           cellfun(@(c) [c ' [body]'], patextr.unique_bodyT, 'uni', false)];
-
-featTok( ix_sort(1:30) )
+% feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
+%     patextr.incidMat_body];
+% 
+% feat_occurMat = +( feat_incidMat > 0 );
+% 
+% manAutomat = patextr.manAutomat;
+% 
+% mutInf = zeros(size(feat_occurMat, 2), 1);
+% 
+% tic
+% for t = 1:size(feat_occurMat, 2)
+%     singleTok_class = feat_occurMat(:, t);
+%     classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
+%     mutInf(t) = classifstat.mutual_information;
+% end
+% toc
+% 
+% mutInf_noNaN = mutInf;
+% mutInf_noNaN(isnan(mutInf_noNaN)) = -Inf;
+% 
+% [sort_mutInf, ix_sort] = sort(mutInf_noNaN, 'descend');
+% 
+% % patextr.unique_titleT(ix_sort(1:30))
+% % patextr.unique_abstractT(ix_sort(1:30))
+% % patextr.unique_bodyT(ix_sort(1:30))
+% 
+% featTok = [cellfun(@(c) [c ' [title]'], patextr.unique_titleT, 'uni', false);
+%            cellfun(@(c) [c ' [abstract]'], patextr.unique_abstractT, 'uni', false);
+%            cellfun(@(c) [c ' [body]'], patextr.unique_bodyT, 'uni', false)];
+% 
+% featTok( ix_sort(1:30) )
 
 
 
