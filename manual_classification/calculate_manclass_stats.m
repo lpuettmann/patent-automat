@@ -11,9 +11,9 @@ function classifstat = calculate_manclass_stats(correctClass, ...
 %
 %
 % OPTIONAL IN:
-%       evalalphaa: number in [0, 1] indicating the weights for the F-measure,
-%              The default is set to 0.5 which gives equal weight to
-%              precision and recall.
+%       evalalpha: number in [0, 1] indicating the weights for the 
+%                  F-measure. The default is set to 0.5 which gives equal 
+%                  weight to precision and recall.
 %
 %
 % Out:
@@ -21,7 +21,7 @@ function classifstat = calculate_manclass_stats(correctClass, ...
 %
 %   For  definitions of evaluation measures (accuracy, precision, recall,
 %   fmeasure ...), see:
-%   Manning, Raghavan, Schütze "Introduction to Information Retrieval",
+%   Manning, Raghavan, Schuetze "Introduction to Information Retrieval",
 %   first edition (2008), section "8. Evaluation in information retrieval"
 
 if nargin < 3
@@ -47,7 +47,7 @@ N = length(correctClass);
 tp = sum( (correctClass==1) & (estimatClass == 1) );
 fp = sum( (correctClass==0) & (estimatClass == 1) );
 tn = sum( (correctClass==0) & (estimatClass == 0) );
-fn =  sum( (correctClass==1) & (estimatClass == 0) );
+fn = sum( (correctClass==1) & (estimatClass == 0) );
 
 % Overall agreement rate
 classifstat.accuracy = (tp + tn) / N;

@@ -14,7 +14,7 @@ year_start = 1976;
 year_end = 2015;
 
 
-
+break
 %% Make patent index
 % for ix_year = years
 %     tic
@@ -468,26 +468,24 @@ year_end = 2015;
 %     patextr.body_tokens) );
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 
 
 %% Compile huge incidence matrices showing which patent contains which term
-tic
-patextr.incidMat_title = compile_incidence_matrix(patextr.unique_titleT, ...
-    patextr.title_tokens);
-toc
-
-tic
-patextr.incidMat_abstract = compile_incidence_matrix(patextr.unique_abstractT, ...
-    patextr.abstract_tokens);
-toc
-
-tic
-patextr.incidMat_body = compile_incidence_matrix(patextr.unique_bodyT, ...
-    patextr.body_tokens);
-toc
-
-break
+% tic
+% patextr.incidMat_title = compile_incidence_matrix(patextr.unique_titleT, ...
+%     patextr.title_tokens);
+% toc
+% 
+% tic
+% patextr.incidMat_abstract = compile_incidence_matrix(patextr.unique_abstractT, ...
+%     patextr.abstract_tokens);
+% toc
+% 
+% tic
+% patextr.incidMat_body = compile_incidence_matrix(patextr.unique_bodyT, ...
+%     patextr.body_tokens);
+% toc
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
 % load('output/patextr.mat', 'patextr');
@@ -497,7 +495,7 @@ break
 % documents (automation and non-automation patents)
 % patextr.title_occurstats = get_occurstats(patextr.incidMat_title, ...
 %     patextr.unique_titleT, patextr.manAutomat);
-
+% 
 % patextr.abstract_occurstats = get_occurstats(patextr.incidMat_abstract, ...
 %     patextr.unique_abstractT, patextr.manAutomat);
 % 
@@ -505,42 +503,80 @@ break
 %     patextr.unique_bodyT, patextr.manAutomat);
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
-% load('output/patextr.mat', 'patextr');
+load('output/patextr.mat', 'patextr');
 
 
 %% Calculate mutual information statistic for every term
 
-% feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
-%     patextr.incidMat_body];
-% 
-% feat_occurMat = +( feat_incidMat > 0 );
-% 
-% manAutomat = patextr.manAutomat;
-% 
-% mutInf = zeros(size(feat_occurMat, 2), 1);
-% 
-% tic
-% for t = 1:size(feat_occurMat, 2)
-%     singleTok_class = feat_occurMat(:, t);
-%     classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
-%     mutInf(t) = classifstat.mutual_information;
-% end
-% toc
-% 
-% mutInf_noNaN = mutInf;
-% mutInf_noNaN(isnan(mutInf_noNaN)) = -Inf;
-% 
-% [sort_mutInf, ix_sort] = sort(mutInf_noNaN, 'descend');
-% 
-% % patextr.unique_titleT(ix_sort(1:30))
-% % patextr.unique_abstractT(ix_sort(1:30))
-% % patextr.unique_bodyT(ix_sort(1:30))
-% 
+feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
+    patextr.incidMat_body];
+
+feat_occurMat = +( feat_incidMat > 0 );
+
+manAutomat = patextr.manAutomat;
+
+mutInf = zeros(size(feat_occurMat, 2), 1);
+
+tic
+for t = 1:size(feat_occurMat, 2)
+    singleTok_class = feat_occurMat(:, t);
+    classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
+    mutInf(t) = classifstat.mutual_information;
+end
+toc
+
+mutInf_noNaN = mutInf;
+mutInf_noNaN(isnan(mutInf_noNaN)) = -Inf;
+
 % featTok = [cellfun(@(c) [c ' [title]'], patextr.unique_titleT, 'uni', false);
 %            cellfun(@(c) [c ' [abstract]'], patextr.unique_abstractT, 'uni', false);
 %            cellfun(@(c) [c ' [body]'], patextr.unique_bodyT, 'uni', false)];
-% 
+       
+featTok = [cellfun(@(c) c, patextr.unique_titleT, 'uni', false);
+           cellfun(@(c) c, patextr.unique_abstractT, 'uni', false);
+           cellfun(@(c) c, patextr.unique_bodyT, 'uni', false)];
+
+% All patent parts together
+% [~, ix_sort] = sort(mutInf_noNaN, 'descend');
 % featTok( ix_sort(1:30) )
+
+% % Title
+% j = 1:length(patextr.unique_titleT);
+% [~, ix_sort] = sort(mutInf_noNaN(j), 'descend');
+% aux_featTok = featTok(j);
+% aux_featTok( ix_sort(1:30) )
+% 
+% % Abstract
+% j = length(patextr.unique_titleT) + 1 : ...
+%     length(patextr.unique_titleT) + length(patextr.unique_abstractT);
+% [~, ix_sort] = sort(mutInf_noNaN(j), 'descend');
+% aux_featTok = featTok(j);
+% aux_featTok( ix_sort(1:30) )
+% 
+% Patent body
+j = length(patextr.unique_titleT) + length(patextr.unique_abstractT) + 1 : ...
+    length(patextr.unique_titleT) + length(patextr.unique_abstractT) + ...
+    length(patextr.unique_bodyT);
+[sort_mutInf, ix_sort] = sort(mutInf_noNaN(j), 'descend');
+aux_featTok = featTok(j);
+
+nr_meaningfulTok = 500;
+meaningfulTok = aux_featTok( ix_sort(1:nr_meaningfulTok) );
+
+clear expanded_meaningfulTok;
+k = 1;
+for i=1:nr_meaningfulTok
+    for j=1:(nr_meaningfulTok - i + 1)
+        expanded_meaningfulTok{k,1} = meaningfulTok{i};
+        k = k + 1;
+    end
+end
+expanded_meaningfulTok = strjoin(expanded_meaningfulTok');
+
+fileID = fopen('teststring.txt', 'w');
+fprintf(fileID, expanded_meaningfulTok);
+fclose(fileID);
+
 
 
 
