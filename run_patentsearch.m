@@ -348,7 +348,7 @@ year_end = 2015;
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+% manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
@@ -405,8 +405,8 @@ manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 %% Extract texts of manually coded patents
 % run(test_extract_pat_fileplace);
-patfplace = extract_pat_fileplace(manclassData.patentnr, ...
-    manclassData.indic_year);
+% patfplace = extract_pat_fileplace(manclassData.patentnr, ...
+%     manclassData.indic_year);
 % 
 % patextr = manclassData;
 % 
@@ -508,10 +508,23 @@ load('output/patextr.mat', 'patextr');
 
 %% Don't use chemical or pharmaceutical patents in manual sample
 
+% Keep first 3 numbers or until first space
+classnr_tok = strtok( patextr.uspc_nr );
 
+classnr_3dig = repmat({''}, length(classnr_tok), 1);
+for i=1:length(classnr_uspc)
+    extrstr = classnr_tok{i};
+    
+    if numel(extrstr) >=3
+        classnr_3dig{i, 1} = extrstr(1:3);
+    else
+        classnr_3dig{i, 1} = extrstr;
+    end
+end
 
-
-
+% !!! To do: insert "classnr_3dig" in "check_classnr_uspc" and make sure
+% it works (no cell array error)
+patextr.indic_exclclassnr = check_classnr_uspc()
 
 
 
