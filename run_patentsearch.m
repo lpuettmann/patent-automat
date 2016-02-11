@@ -9,12 +9,12 @@ fclose('all');
 setup_path()
 
 
-%% Choose years
+%% Choose years 
 year_start = 1976;
 year_end = 2015;
 
 
-break
+
 %% Make patent index
 % for ix_year = years
 %     tic
@@ -348,7 +348,7 @@ break
 %% Compare classification with manually coded patents
 
 % Load and prepare the manually classified patents
-% manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
 
 
 % Get keywords and technology numbers for manually classified patents
@@ -405,8 +405,8 @@ break
 
 %% Extract texts of manually coded patents
 % run(test_extract_pat_fileplace);
-% patfplace = extract_pat_fileplace(manclassData.patentnr, ...
-%     manclassData.indic_year);
+patfplace = extract_pat_fileplace(manclassData.patentnr, ...
+    manclassData.indic_year);
 % 
 % patextr = manclassData;
 % 
@@ -506,6 +506,17 @@ break
 load('output/patextr.mat', 'patextr');
 
 
+%% Don't use chemical or pharmaceutical patents in manual sample
+
+
+
+
+
+
+
+
+
+break
 %% Calculate mutual information statistic for every term
 
 feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
@@ -526,7 +537,7 @@ end
 toc
 
 mutInf_noNaN = mutInf;
-mutInf_noNaN(isnan(mutInf_noNaN)) = -Inf;
+mutInf_noNaN( isnan(mutInf_noNaN) ) = -Inf;
 
 % featTok = [cellfun(@(c) [c ' [title]'], patextr.unique_titleT, 'uni', false);
 %            cellfun(@(c) [c ' [abstract]'], patextr.unique_abstractT, 'uni', false);
@@ -562,20 +573,6 @@ aux_featTok = featTok(j);
 
 nr_meaningfulTok = 500;
 meaningfulTok = aux_featTok( ix_sort(1:nr_meaningfulTok) );
-
-clear expanded_meaningfulTok;
-k = 1;
-for i=1:nr_meaningfulTok
-    for j=1:(nr_meaningfulTok - i + 1)
-        expanded_meaningfulTok{k,1} = meaningfulTok{i};
-        k = k + 1;
-    end
-end
-expanded_meaningfulTok = strjoin(expanded_meaningfulTok');
-
-fileID = fopen('teststring.txt', 'w');
-fprintf(fileID, expanded_meaningfulTok);
-fclose(fileID);
 
 
 

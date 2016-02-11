@@ -28,11 +28,20 @@ for j=1:length(patentnr)
         nr_pat_in_file = find( ~cellfun('isempty', ix_match) );
 
         assert( length(nr_pat_in_file) <= 1, ...
-            'The patent should only be found once in the patent index [patent number: %d, week: %d].', patentnr(j), i)
+            'The patent should only be found once in the patent index [patent number: %d, week: %d].', ...
+            patentnr(j), i)
         
         if not( isempty( nr_pat_in_file ) ) 
             patfplace.nr_pat_in_file(j, 1) = nr_pat_in_file;
             patfplace.week(j, 1) = i;
+            
+            % Save information on technology classification numbers (USPC
+            % and IPC)
+            patfplace.uspc_nr(j, 1) = pat_ix{i, 3}(nr_pat_in_file);
+            patfplace.ipc_nr(j, 1) = pat_ix{i, 5}(nr_pat_in_file);
+            
+            % Save on which line of weekly text file this patent starts and
+            % ends
             patfplace.line_start(j, 1) = pat_ix{i, 2}(nr_pat_in_file);
 
             if nr_pat_in_file < size(pat_ix{i, 2}, 1)
