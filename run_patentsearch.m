@@ -506,25 +506,10 @@ year_end = 2015;
 load('output/patextr.mat', 'patextr');
 
 
-%% Don't use chemical or pharmaceutical patents in manual sample
+%% Get indicator of which manual patents to exlude based on their 
+% technological classification
+patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr)
 
-% Keep first 3 numbers or until first space
-classnr_tok = strtok( patextr.uspc_nr );
-
-classnr_3dig = repmat({''}, length(classnr_tok), 1);
-for i=1:length(classnr_uspc)
-    extrstr = classnr_tok{i};
-    
-    if numel(extrstr) >=3
-        classnr_3dig{i, 1} = extrstr(1:3);
-    else
-        classnr_3dig{i, 1} = extrstr;
-    end
-end
-
-% !!! To do: insert "classnr_3dig" in "check_classnr_uspc" and make sure
-% it works (no cell array error)
-patextr.indic_exclclassnr = check_classnr_uspc()
 
 
 

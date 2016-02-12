@@ -21,3 +21,4 @@ run(test_strtrim_punctuation);
 run(test_extract_nested_cellarray);
 run(test_compile_incidence_matrix);
 run(test_get_occurstats);
+run(test_get_indic_exclclassnr);
