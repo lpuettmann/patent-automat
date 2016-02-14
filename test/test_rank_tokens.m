@@ -10,11 +10,11 @@ function testNormalBigNotEmpty(testCase)
     manAutomat = randi([0, 1], N, 1);
     featTok = repmat({'a'}, T, 1);
                  
-    [meaningfulTok, ~] = rank_tokens(feat_incidMat, ...
+    tokRanking = rank_tokens(feat_incidMat, ...
         manAutomat, featTok);
 
     % Check that this large sample returns some positive values
-    actSolution = +isempty(meaningfulTok); 
+    actSolution = +isempty(tokRanking.meaningfulTok); 
     expSolution = 0; 
 
     verifyEqual(testCase, actSolution, expSolution)
@@ -28,8 +28,9 @@ function testKnownAnalyticSol(testCase)
     manAutomat = [zeros(40, 1); ones(60, 1)];
     featTok = 'testtoken';
                  
-    [~,  actSolution] = rank_tokens(feat_incidMat, ...
+    tokRanking = rank_tokens(feat_incidMat, ...
         manAutomat, featTok);
+    actSolution = tokRanking.mutInf_sorted;
 
     classifstat = calculate_manclass_stats(manAutomat, feat_incidMat);
     expSolution = classifstat.mutual_information;
@@ -45,12 +46,12 @@ function testKnownRanking(testCase)
     feat_incidMat(1, 2) = 0;
     
     manAutomat = [zeros(40, 1); ones(60, 1)];
-    featTok = {'token1', 'token2'};
+    featTok = {'token1'; 'token2'};
                  
-    [meaningfulTok,  ~] = rank_tokens(feat_incidMat, ...
+    tokRanking = rank_tokens(feat_incidMat, ...
         manAutomat, featTok);
    
-    actSolution = +strcmp(meaningfulTok{1}, 'token2');
+    actSolution = +strcmp(tokRanking.meaningfulTok{1}, 'token2');
     expSolution = 1;
     
     verifyEqual(testCase, actSolution, expSolution)

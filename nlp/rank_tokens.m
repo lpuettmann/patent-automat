@@ -1,4 +1,4 @@
-function [meaningfulTok, mutInf_sorted] = rank_tokens(feat_incidMat, ...
+function tokRanking = rank_tokens(feat_incidMat, ...
     manAutomat, featTok)
 % Rank the tokens in the document according to different criteria. This is
 % usual for feature selection, so which of these to treat as variables in
@@ -55,5 +55,8 @@ mutInf_notNaN = mutInf( not( indic_isnan ) );
 featTok_notNaN = featTok( not( indic_isnan ) );
 
 % Sort the tokens according to the mutual information criterion
-[mutInf_sorted, ix_sort] = sort(mutInf_notNaN, 'descend');
-meaningfulTok = featTok_notNaN( ix_sort );
+[tokRanking.mutInf_sorted, ix_sort] = sort(mutInf_notNaN, 'descend');
+tokRanking.meaningfulTok = featTok_notNaN( ix_sort );
+
+% Save struct as a table
+tokRanking = struct2table(tokRanking);

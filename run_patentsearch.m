@@ -478,8 +478,8 @@ year_end = 2015;
 % toc
 % 
 % tic
-% patextr.incidMat_abstract = compile_incidence_matrix(patextr.unique_abstractT, ...
-%     patextr.abstract_tokens);
+% patextr.incidMat_abstract = compile_incidence_matrix(...
+%     patextr.unique_abstractT, patextr.abstract_tokens);
 % toc
 % 
 % tic
@@ -509,30 +509,42 @@ year_end = 2015;
 %patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr);
 
 %save('output/patextr.mat', 'patextr'); % save to .mat
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 
 
 %% Calculate mutual information statistic for every term
+% i = not(patextr.indic_exclclassnr); % which patents to include
+% 
+% patextr.tokRanking_title = rank_tokens(...
+%     patextr.incidMat_title(i, :), patextr.manAutomat(i), ...
+%     patextr.unique_titleT);
+% 
+% patextr.tokRanking_abstract = rank_tokens(patextr.incidMat_abstract(i, :), ...
+%     patextr.manAutomat(i), patextr.unique_abstractT);
+% 
+% patextr.tokRanking_body = rank_tokens(patextr.incidMat_body(i, :), ...
+%     patextr.manAutomat(i), patextr.unique_bodyT);
+% 
+% save('output/patextr.mat', 'patextr'); % save to .mat
+load('output/patextr.mat', 'patextr');
 
-% Patent titles
-[meaningfulTok, mutInf_sorted] = rank_tokens(patextr.incidMat_title, ...
-    patextr.manAutomat, patextr.unique_titleT);
+%% Make the union of the top ranked tokens in all parts and check overlap
+nr_feat_title = 50;
+nr_feat_abstract = 200;
+nr_feat_body = 500;
 
-% Patent abstracts
-[meaningfulTok, mutInf_sorted] = rank_tokens(patextr.incidMat_abstract, ...
-    patextr.manAutomat, patextr.unique_abstractT);
+all_rankedTok = [patextr.tokRanking_title.meaningfulTok(1:nr_feat_title); 
+     patextr.tokRanking_abstract.meaningfulTok(1:nr_feat_abstract);
+     patextr.tokRanking_body.meaningfulTok(1:nr_feat_body)];
 
-% Patent body
-[meaningfulTok, mutInf_sorted] = rank_tokens(patextr.incidMat_body, ...
-    patextr.manAutomat, patextr.unique_bodyT);
+selectedTok = unique( all_rankedTok )
+length(selectedTok)
 
-% Make the union of the 500 most top ranked tokens in all parts and see how
-% big the overlap is
+original_findTok = tokenize_string( strjoin( define_dictionary() ), ...
+    'snowball', define_stopwords() )
 
-
-
-
-
+search_dict = unique([selectedTok; original_findTok]);
+length(BB)
 
 
 
@@ -540,4 +552,4 @@ load('output/patextr.mat', 'patextr');
 
 
 
-       
+
