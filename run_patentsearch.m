@@ -503,74 +503,31 @@ year_end = 2015;
 %     patextr.unique_bodyT, patextr.manAutomat);
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
+
+
+%% Determine which patents from sample to exclude based on tech. class
+%patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr);
+
+%save('output/patextr.mat', 'patextr'); % save to .mat
 load('output/patextr.mat', 'patextr');
 
 
-%% Get indicator of which manual patents to exlude based on their 
-% technological classification
-patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr)
-
-
-
-
-
-break
 %% Calculate mutual information statistic for every term
 
-feat_incidMat = [patextr.incidMat_title, patextr.incidMat_abstract, ...
-    patextr.incidMat_body];
+% Patent titles
+[meaningfulTok, mutInf_sorted] = rank_tokens(patextr.incidMat_title, ...
+    patextr.manAutomat, patextr.unique_titleT);
 
-feat_occurMat = +( feat_incidMat > 0 );
+% Patent abstracts
+[meaningfulTok, mutInf_sorted] = rank_tokens(patextr.incidMat_abstract, ...
+    patextr.manAutomat, patextr.unique_abstractT);
 
-manAutomat = patextr.manAutomat;
-
-mutInf = zeros(size(feat_occurMat, 2), 1);
-
-tic
-for t = 1:size(feat_occurMat, 2)
-    singleTok_class = feat_occurMat(:, t);
-    classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
-    mutInf(t) = classifstat.mutual_information;
-end
-toc
-
-mutInf_noNaN = mutInf;
-mutInf_noNaN( isnan(mutInf_noNaN) ) = -Inf;
-
-% featTok = [cellfun(@(c) [c ' [title]'], patextr.unique_titleT, 'uni', false);
-%            cellfun(@(c) [c ' [abstract]'], patextr.unique_abstractT, 'uni', false);
-%            cellfun(@(c) [c ' [body]'], patextr.unique_bodyT, 'uni', false)];
-       
-featTok = [cellfun(@(c) c, patextr.unique_titleT, 'uni', false);
-           cellfun(@(c) c, patextr.unique_abstractT, 'uni', false);
-           cellfun(@(c) c, patextr.unique_bodyT, 'uni', false)];
-
-% All patent parts together
-% [~, ix_sort] = sort(mutInf_noNaN, 'descend');
-% featTok( ix_sort(1:30) )
-
-% % Title
-% j = 1:length(patextr.unique_titleT);
-% [~, ix_sort] = sort(mutInf_noNaN(j), 'descend');
-% aux_featTok = featTok(j);
-% aux_featTok( ix_sort(1:30) )
-% 
-% % Abstract
-% j = length(patextr.unique_titleT) + 1 : ...
-%     length(patextr.unique_titleT) + length(patextr.unique_abstractT);
-% [~, ix_sort] = sort(mutInf_noNaN(j), 'descend');
-% aux_featTok = featTok(j);
-% aux_featTok( ix_sort(1:30) )
-% 
 % Patent body
-j = length(patextr.unique_titleT) + length(patextr.unique_abstractT) + 1 : ...
-    length(patextr.unique_titleT) + length(patextr.unique_abstractT) + ...
-    length(patextr.unique_bodyT);
-[sort_mutInf, ix_sort] = sort(mutInf_noNaN(j), 'descend');
-aux_featTok = featTok(j);
+[meaningfulTok, mutInf_sorted] = rank_tokens(patextr.incidMat_body, ...
+    patextr.manAutomat, patextr.unique_bodyT);
 
-nr_meaningfulTok = 500;
-meaningfulTok = aux_featTok( ix_sort(1:nr_meaningfulTok) );
+% Make the union of the 500 most top ranked tokens in all parts and see how
+% big the overlap is
 
 
 
@@ -579,3 +536,8 @@ meaningfulTok = aux_featTok( ix_sort(1:nr_meaningfulTok) );
 
 
 
+
+
+
+
+       
