@@ -5,14 +5,14 @@ Analyze Patent Grant Texts
 
 Get data:
 ---------------------------
-Go to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and download the Patent Grant Full Texts for all years 1976-2015. 
+The Matlab function `download_patent_files.m` goes to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and downloads the Patent Grant Full Texts for all years 1976-2015. 
 
 | Years  | Format | Size (unzipped) | 
 | ------------- | ------------- | ------------- |
 | 1976-2015  | `.txt` | 98 GB |
 | 2002-2015  | `.XML`, `.xml` | 238 GB |
 
-Put the unzipped data files into subfolders *[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
+It puts the unzipped data files into subfolders *[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
 
 So in directory (folder) *1976* you should see:
 ```
