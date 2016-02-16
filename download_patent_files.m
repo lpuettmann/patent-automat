@@ -3,7 +3,9 @@ function download_patent_files(year_start, year_end)
  
 
 %% Get HTML from website
+
 disp('Get names of files to download.')
+
 google_patents_URL = 'https://www.google.com/googlebooks/uspto-patents-grants-text.html';
 [webStr, status] = urlread(google_patents_URL);
 
@@ -17,13 +19,23 @@ url_base = 'http://storage.googleapis.com/patents/grant_full_text/';
 patternStart = strfind(webStr, url_base);
 
 searchStrEnd = '.zip';
-patterEnd = strfind(webStr, searchStrEnd);
+patternEnd = strfind(webStr, searchStrEnd);
 
 for i=1:length(patternStart)
     startStr = patternStart(i);
-    endStr = min( patterEnd(patterEnd > startStr) ) + 3;
+    endStr = min( patternEnd(patternEnd > startStr) ) + 3;
     download_url{i, 1} = webStr(startStr:endStr);
 end
+
+len1 = length(download_url);
+
+find_delPattern = regexp(download_url, '2001/pg');
+notEmpt_Cells = cellfun(@isempty, find_delPattern, 'Uniformoutput', false);
+indic_del = find([notEmpt_Cells{:}] == 0)';
+download_url( indic_del ) = [];
+
+assert( len1 - 52 == length(download_url), ...
+    'Not sure if deleted the right download links,')
 
 
 %% Run some checks to make sure that the links look plausible
@@ -45,7 +57,8 @@ year_indices = cellfun(@(x) x(numel(url_base) + 1 : numel(url_base) + 4), ...
 year_indices = cellfun(@str2num, year_indices, 'UniformOutput', false);
 year_indices = cell2mat(year_indices);
 
-assert( all( (year_indices >= year_start) & (year_indices <= year_end) ) )
+assert( all( (year_indices >= 1976) & (year_indices <= 2015) ), ...
+    'Files should be between %d and %d.', year_start, year_end)
 
 
 %% Access URLs and download files

@@ -10,13 +10,13 @@ setup_path()
 
 
 %% Choose years 
-year_start = 1976;
+year_start = 2001;
 year_end = 2015;
 
 
 %% Download the files from Google Patents (careful, these are 300 GB)
-% download_patent_files(year_start, year_end)
-% break
+download_patent_files(year_start, year_end)
+break
 
 %% Make patent index
 % for ix_year = years
