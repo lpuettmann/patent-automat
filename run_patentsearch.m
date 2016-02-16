@@ -10,16 +10,16 @@ setup_path()
 
 
 %% Choose years 
-year_start = 2001;
+year_start = 1976;
 year_end = 2015;
 
 
-%% Download the files from Google Patents (careful, these are 300 GB)
-download_patent_files(year_start, year_end)
-break
+% %% Download the files from Google Patents (careful, these are 300 GB)
+% download_patent_files(year_start, year_end)
+
 
 %% Make patent index
-% for ix_year = years
+% for ix_year=year_start:year_end
 %     tic
 %  
 %     % Search for keywords in the patent grant texts
@@ -39,14 +39,14 @@ break
 
 
 %% Search for keywords
-for ix_year = years
+for ix_year=year_start:year_end
     tic
     
     % Define dictionary to search for
-    find_dictionary = define_dictionary();
+    load('specs/find_dictionary.mat', 'find_dictionary');
     
     % Search for keywords in the patent grant texts
-    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+    patent_keyword_appear = analyze_patent_text(ix_year, search_dict);
     
     % Print how long the year took
     print_finish_summary(toc, ix_year)
@@ -55,6 +55,7 @@ for ix_year = years
     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
 end
 
+break
 
 % %% Clean matches
 % clean_matches(year_start, year_end)
@@ -541,13 +542,13 @@ all_rankedTok = [patextr.tokRanking_title.meaningfulTok(1:nr_feat_title);
      patextr.tokRanking_body.meaningfulTok(1:nr_feat_body)];
 
 selectedTok = unique( all_rankedTok )
-length(selectedTok)
 
 original_findTok = tokenize_string( strjoin( define_dictionary() ), ...
-    'snowball', define_stopwords() )
+    'snowball', define_stopwords() );
 
-search_dict = unique([selectedTok; original_findTok]);
-length(BB)
+find_dictionary = unique([selectedTok; original_findTok]);
+
+save('specs/find_dictionary.mat', 'find_dictionary')
 
 
 

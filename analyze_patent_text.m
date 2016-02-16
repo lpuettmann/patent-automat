@@ -9,7 +9,9 @@ ftset = customize_ftset(ix_year);
    
 % Initalize
 patent_metadata = []; 
-nr_keyword_appear = [];  
+hits_title = [];
+hits_abstract = [];
+hits_body = [];
 save_line_keywordNAM = [];  
 
 tic
@@ -36,6 +38,8 @@ fprintf('Search through patent grant texts for year %d:\n', ix_year)
 
 for ix_week = week_start:week_end
 
+    tic
+    
     % Get the index position of patent and the WKU number
     % ----------------------------------------------------------------
     patent_number = pat_ix{ix_week, 1};
@@ -71,7 +75,12 @@ for ix_week = week_start:week_end
     weekly_metadata = [weekly_metadata, pat_ix{ix_week, 5}];
 
     % Initialize matrix to count number of keyword appearances
-    weekly_keyword_appear = zeros(nr_patents, length(find_dictionary));
+    weekly_keyword_appear.title_str = sparse( zeros(nr_patents, ...
+        length(find_dictionary)) );
+    weekly_keyword_appear.abstract_str = sparse( zeros(nr_patents, ...
+        length(find_dictionary)) );
+    weekly_keyword_appear.body_str = sparse( zeros(nr_patents, ...
+        length(find_dictionary)) );
 
     for ix_patent=1:nr_patents
 
@@ -110,7 +119,8 @@ for ix_week = week_start:week_end
 
                 % Stack weekly information underneath
                 % ---------------------------------------------------------
-                weekly_keyword_appear(ix_patent, f, i) = nr_keyword_find;
+                weekly_keyword_appear.(patparts_names{i})(ix_patent, f) = ...
+                    nr_keyword_find;
             end
         end
     end
@@ -118,24 +128,29 @@ for ix_week = week_start:week_end
     % Save information for all weeks
     % ----------------------------------------------------------------  
     patent_metadata = [patent_metadata;
-                      weekly_metadata];   
+                      weekly_metadata];
 
-    nr_keyword_appear = [nr_keyword_appear;
-                        weekly_keyword_appear];
+    hits_title = [hits_title;
+                  weekly_keyword_appear.title_str];
+    hits_abstract = [hits_abstract;
+                    weekly_keyword_appear.abstract_str];
+    hits_body = [hits_body;
+                weekly_keyword_appear.body_str];
 
     % Close file again. It can cause errors if you open too many
     % (more than abound 512) files at once.
     fclose(unique_file_identifier);
 
-    check_open_files
+    check_open_files()
 
-    fprintf('[%d] Week finished: %d/%d.\n', ix_year, ix_week, week_end)
+    fprintf('[%d] Week finished: %d/%d (%d minutes).\n', ...
+        ix_year, ix_week, week_end, round(toc/60))
 end
 
 patent_keyword_appear.patentnr = patent_metadata(:,1);
 patent_keyword_appear.classnr_uspc = patent_metadata(:,2); % USPC tech classification number
 patent_keyword_appear.week = patent_metadata(:,3);
 patent_keyword_appear.classnr_ipc = patent_metadata(:,4); % IPC tech classification number
-patent_keyword_appear.title_matches = nr_keyword_appear(:, :, 1);
-patent_keyword_appear.abstract_matches = nr_keyword_appear(:, :, 2);
-patent_keyword_appear.body_matches = nr_keyword_appear(:, :, 3);
+patent_keyword_appear.title_matches = hits_title;
+patent_keyword_appear.abstract_matches = hits_abstract;
+patent_keyword_appear.body_matches = hits_body;
