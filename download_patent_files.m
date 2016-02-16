@@ -75,7 +75,8 @@ for ix_year=year_start:year_end
         'Format looks wrong in year %d.', ix_year)
 
     tic
-    fprintf('Downloading files %d (%d files): ', ix_year, length(url_yearly))
+    fprintf('Downloading files %d (%d files): ', ix_year, ...
+        length(url_yearly))
     for i=1:length(url_yearly)
         url = url_yearly{i};
 

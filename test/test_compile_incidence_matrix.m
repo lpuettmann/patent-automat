@@ -9,6 +9,9 @@ function testNormalCase1(testCase)
 
     incidMat = compile_incidence_matrix(tokenList, docTokens);
     
+    % Convert sparse to full matrix
+    incidMat = full(incidMat);
+    
     actSolution = + all(incidMat(3, :) == [1, 1, 1, 0, 1]); 
     expSolution = 1; 
     
@@ -19,8 +22,11 @@ function testNormalCase2(testCase)
     
     tokenList = {'a'; 'b'};
     docTokens = {{'a'; 'b'}; {'ZZZZZZZZ123'}};
-
+  
     incidMat = compile_incidence_matrix(tokenList, docTokens);
+
+    % Convert sparse to full matrix
+    incidMat = full(incidMat);
     
     actSolution = + all( all(incidMat == [1, 1; 0, 0]) ); 
     expSolution = 1; 
