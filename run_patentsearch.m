@@ -15,13 +15,13 @@ year_end = 2015;
 
 
 %% Get patent texts
-parent_dname = 'patent_data'; % parent directory name (path to data)
+% parent_dname = 'patent_data'; % parent directory name (path to data)
 
 % Download the files from Google Patents (careful, these are 300 GB)
-download_patent_files(year_start, year_end, parent_dname)
+% download_patent_files(year_start, year_end, parent_dname)
 
 % Unzip all files and delete zipped files
-unzip_patent_files(year_start, year_end, parent_dname)
+% unzip_patent_files(year_start, year_end, parent_dname)
 
 break
 
