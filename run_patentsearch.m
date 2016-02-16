@@ -15,9 +15,8 @@ year_end = 2015;
 
 
 %% Download the files from Google Patents (careful, these are 300 GB)
-download_patent_files(year_start, year_end)
-
-break
+% download_patent_files(year_start, year_end)
+% break
 
 %% Make patent index
 % for ix_year = years
@@ -40,21 +39,21 @@ break
 
 
 %% Search for keywords
-% for ix_year = years
-%     tic
-%     
-%     % Define dictionary to search for
-%     find_dictionary = define_dictionary();
-%     
-%     % Search for keywords in the patent grant texts
-%     patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
-%     
-%     % Print how long the year took
-%     print_finish_summary(toc, ix_year)
-%     
-%     % Save to .mat file
-%     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
-% end
+for ix_year = years
+    tic
+    
+    % Define dictionary to search for
+    find_dictionary = define_dictionary();
+    
+    % Search for keywords in the patent grant texts
+    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+    
+    % Print how long the year took
+    print_finish_summary(toc, ix_year)
+    
+    % Save to .mat file
+    save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
+end
 
 
 % %% Clean matches
