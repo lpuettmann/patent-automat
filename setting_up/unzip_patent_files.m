@@ -12,6 +12,8 @@ for ix_year=year_start:year_end
         unzip(zfile, [parent_dname, '/', num2str(ix_year)]);
         delete(zfile)
     end
+    
+    fprintf('Unzipped and deleted files for year: %d.\n', ix_year)
 end
 
 disp('_____________________________________________')
