@@ -1,4 +1,4 @@
-function download_patent_files(year_start, year_end)
+function download_patent_files(year_start, year_end, parent_dname)
 % Save patent files from Google patent into PatentData/[year].
  
 
@@ -62,8 +62,6 @@ assert( all( (year_indices >= 1976) & (year_indices <= 2015) ), ...
 
 
 %% Access URLs and download files
-parent_dname = 'patent_data';
-
 [status, ~, ~] = mkdir(parent_dname);
 assert( status ~= 0 )
 
