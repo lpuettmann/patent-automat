@@ -8,10 +8,9 @@ fclose('all');
 % Set paths to all underlying directories
 setup_path()
 
-
 %% Choose years 
 year_start = 1976;
-year_end = 2015;
+year_end = 1977;
 
 
 %% Get patent texts
@@ -23,7 +22,6 @@ year_end = 2015;
 % Unzip all files and delete zipped files
 % unzip_patent_files(year_start, year_end, parent_dname)
 
-break
 
 %% Make patent index
 % for ix_year=year_start:year_end
@@ -46,21 +44,24 @@ break
 
 
 %% Search for keywords
-% for ix_year=year_start:year_end
-%     tic
-%     
-%     % Define dictionary to search for
-%     load('specs/find_dictionary.mat', 'find_dictionary');
-%     
-%     % Search for keywords in the patent grant texts
-%     patent_keyword_appear = analyze_patent_text(ix_year, search_dict);
-%     
-%     % Print how long the year took
-%     print_finish_summary(toc, ix_year)
-%     
-%     % Save to .mat file
+
+for ix_year=year_start:year_end
+    tic
+    
+    % Define dictionary to search for
+%     find_dictionary = load_full_dict();
+    
+    find_dictionary = {'automat', 'robot'};
+    
+    % Search for keywords in the patent grant texts
+    patent_keyword_appear = analyze_patent_text(ix_year, find_dictionary);
+    
+    % Print how long the year took
+    print_finish_summary(toc, ix_year)
+    
+    % Save to .mat file
 %     save_patent_keyword_appear2mat(patent_keyword_appear, ix_year)
-% end
+end
 
 
 % %% Clean matches
@@ -536,25 +537,103 @@ break
 %     patextr.manAutomat(i), patextr.unique_bodyT);
 % 
 % save('output/patextr.mat', 'patextr'); % save to .mat
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 
 %% Make the union of the top ranked tokens in all parts and check overlap
-nr_feat_title = 50;
-nr_feat_abstract = 200;
-nr_feat_body = 500;
+% nr_feat_title = 50;
+% nr_feat_abstract = 200;
+% nr_feat_body = 500;
+% 
+% all_rankedTok = [patextr.tokRanking_title.meaningfulTok(1:nr_feat_title); 
+%      patextr.tokRanking_abstract.meaningfulTok(1:nr_feat_abstract);
+%      patextr.tokRanking_body.meaningfulTok(1:nr_feat_body)];
+% 
+% selectedTok = unique( all_rankedTok )
+% 
+% original_findTok = tokenize_string( strjoin( define_dictionary() ), ...
+%     'snowball', define_stopwords() );
+% 
+% find_dictionary = unique([selectedTok; original_findTok]);
+% 
+% save('specs/find_dictionary.mat', 'find_dictionary')
 
-all_rankedTok = [patextr.tokRanking_title.meaningfulTok(1:nr_feat_title); 
-     patextr.tokRanking_abstract.meaningfulTok(1:nr_feat_abstract);
-     patextr.tokRanking_body.meaningfulTok(1:nr_feat_body)];
 
-selectedTok = unique( all_rankedTok )
+%% Analyze new matches with big dictionary
+% check_plausible_clean_matches(1976, 1976)
+% 
+% 
+% %% Check plausibility
+% disp('Check plausibility of cleaned matches ...')
+% 
+% load('check_plausible_patsearch_results_1976.mat')
+% search_new = patsearch_results;
+% 
+% load('patsearch_results_1976.mat')
+% 
+% 
+% old = patsearch_results.patentnr;
+% new = search_new.patentnr;
+% 
+% assert( length(old) == length(new) )
+% assert( all( strcmp(old, new) ) )
+% disp('Patent numbers fine.')
+% 
+% old = patsearch_results.length_pattext;
+% new = search_new.length_pattext;
+% 
+% assert( length(old) == length(new) )
+% assert( all( old == new ) )
+% disp('Length of patent texts fine.')
+% 
+% 
+% %%
+% clc
+% 
+% overlap_dict = intersect(search_new.dictionary, ...
+%     patsearch_results.dictionary);
+% 
+% for i=1:length(overlap_dict)
+%     pickTok = overlap_dict{i};
+%     ix_old = find( strcmp(patsearch_results.dictionary, pickTok) );
+%     
+%     if length(ix_old) > 1
+%         ix_old = ix_old(1);
+%         fprintf('\tMore than one occurence of token %s.\n', pickTok)
+%     end
+%     
+%     ix_new = find( strcmp(search_new.dictionary, pickTok) );
+% 
+%     old_hits = patsearch_results.title_matches(:, ix_old);
+%     new_hits = full(search_new.title_matches(:, ix_new));
+%     
+%     try
+%         assert( sum(old_hits) == sum(new_hits) ), ...
+%             assert( all( old_hits == new_hits ) )
+%         
+%         fprintf('Finished checking hits for token: %s.\n', pickTok)
+%     catch
+%         fprintf('Error in token: %s.\n', pickTok) 
+%         break
+%     end
+% end
 
-original_findTok = tokenize_string( strjoin( define_dictionary() ), ...
-    'snowball', define_stopwords() );
 
-find_dictionary = unique([selectedTok; original_findTok]);
 
-save('specs/find_dictionary.mat', 'find_dictionary')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

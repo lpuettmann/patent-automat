@@ -36,7 +36,10 @@ load(build_load_filename)
 % -------------------------------------------------------------------
 fprintf('Search through patent grant texts for year %d:\n', ix_year)
 
-for ix_week = week_start:week_end
+delete(gcp)
+pool = parpool;
+
+parfor ix_week = week_start:week_end
 
     tic
     
@@ -75,11 +78,11 @@ for ix_week = week_start:week_end
     weekly_metadata = [weekly_metadata, pat_ix{ix_week, 5}];
 
     % Initialize matrix to count number of keyword appearances
-    weekly_keyword_appear.title_str = sparse( zeros(nr_patents, ...
+    matches_title = sparse( zeros(nr_patents, ...
         length(find_dictionary)) );
-    weekly_keyword_appear.abstract_str = sparse( zeros(nr_patents, ...
+    matches_abstract = sparse( zeros(nr_patents, ...
         length(find_dictionary)) );
-    weekly_keyword_appear.body_str = sparse( zeros(nr_patents, ...
+    matches_body = sparse( zeros(nr_patents, ...
         length(find_dictionary)) );
 
     for ix_patent=1:nr_patents
@@ -119,23 +122,31 @@ for ix_week = week_start:week_end
 
                 % Stack weekly information underneath
                 % ---------------------------------------------------------
-                weekly_keyword_appear.(patparts_names{i})(ix_patent, f) = ...
-                    nr_keyword_find;
+                if i == 1
+                    matches_title(ix_patent, f) = nr_keyword_find;
+                elseif i == 2
+                    matches_abstract(ix_patent, f) = nr_keyword_find;
+                elseif i == 3
+                    matches_body(ix_patent, f) = nr_keyword_find;
+                else
+                    error('Should not be reached.')
+                end
             end
         end
     end
 
     % Save information for all weeks
-    % ----------------------------------------------------------------  
-    patent_metadata = [patent_metadata;
-                      weekly_metadata];
-
-    hits_title = [hits_title;
-                  weekly_keyword_appear.title_str];
-    hits_abstract = [hits_abstract;
-                    weekly_keyword_appear.abstract_str];
-    hits_body = [hits_body;
-                weekly_keyword_appear.body_str];
+    % ----------------------------------------------------------------
+    wkly_matches = struct(); % need this to define struct in parfor loop
+    wkly_matches.weekly_metadata = weekly_metadata;
+    wkly_matches.matches_title = matches_title;
+    wkly_matches.matches_abstract = matches_abstract;
+    wkly_matches.matches_body = matches_body;
+    
+    fname = ['temp_wkly_matches/wkly_matches_', num2str(ix_week), ...
+        '.mat'];
+    % Need additional function to save things in parfor loop
+    parsave(fname, wkly_matches); 
 
     % Close file again. It can cause errors if you open too many
     % (more than abound 512) files at once.
@@ -143,10 +154,41 @@ for ix_week = week_start:week_end
 
     check_open_files()
 
-    fprintf('[%d] Week finished: %d/%d (%d minutes).\n', ...
-        ix_year, ix_week, week_end, round(toc/60))
+    fprintf('[%d] Week finished: %d/%d (%d minutes).\n', ix_year, ...
+        ix_week, week_end, round(toc/60))
 end
 
+
+% Collect the data for all weeks in a year
+for ix_week = week_start:week_end
+    
+    % Load the files with the matches
+    fname = ['temp_wkly_matches/wkly_matches_', num2str(ix_week), ...
+        '.mat'];
+    load(fname)
+    
+    % Concatenate the weekly files
+    patent_metadata = [patent_metadata;
+                      wkly_matches.weekly_metadata];
+
+    hits_title = [hits_title;
+                  wkly_matches.matches_title];
+    hits_abstract = [hits_abstract;
+                    wkly_matches.matches_abstract];
+    hits_body = [hits_body;
+                wkly_matches.matches_body];
+end
+
+
+% Delete temporary files
+temp_files = dir('temp_wkly_matches/*.mat');
+for i=1:length(temp_files)
+    tfile = ['temp_wkly_matches/', temp_files(i).name];
+    delete(tfile);
+end
+
+
+% Rearrange all the data in a struct
 patent_keyword_appear.patentnr = patent_metadata(:,1);
 patent_keyword_appear.classnr_uspc = patent_metadata(:,2); % USPC tech classification number
 patent_keyword_appear.week = patent_metadata(:,3);
@@ -154,3 +196,4 @@ patent_keyword_appear.classnr_ipc = patent_metadata(:,4); % IPC tech classificat
 patent_keyword_appear.title_matches = hits_title;
 patent_keyword_appear.abstract_matches = hits_abstract;
 patent_keyword_appear.body_matches = hits_body;
+
