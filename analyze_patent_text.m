@@ -196,4 +196,3 @@ patent_keyword_appear.classnr_ipc = patent_metadata(:,4); % IPC tech classificat
 patent_keyword_appear.title_matches = hits_title;
 patent_keyword_appear.abstract_matches = hits_abstract;
 patent_keyword_appear.body_matches = hits_body;
-
