@@ -72,19 +72,23 @@ years = [1976: 2000, 2002:2009, 2013:2015];
 
 
 %% Compare matches with previous searches
-disp('Compare new keyword searches with old ...')
-disp(' ')
+% disp('Compare new keyword searches with old ...')
+% disp(' ')
+% 
+% for ix_year=years
+%     
+%     compare_matches(ix_year)
+%     
+%     fprintf('Finished comparing matches for year: %d.\n', ix_year)
+%     disp('_________________________________________________')
+% end
 
-for ix_year=years
-    
-    compare_matches(ix_year)
-    
-    fprintf('<strong>Year finished: %d.</strong>\n', ix_year)
-    disp('_________________________________________________')
-end
 
 %% Check matches for plausibility
 % check_cleanedmatches_plausability(year_start, year_end)
+
+
+%% Compile dataset of classified patents
 
 
 %% Transfer matches to CSV (for use in Stata)
@@ -571,66 +575,6 @@ end
 % find_dictionary = unique([selectedTok; original_findTok]);
 % 
 % save('specs/find_dictionary.mat', 'find_dictionary')
-
-
-%% Analyze new matches with big dictionary
-% check_plausible_clean_matches(1976, 1976)
-% 
-% 
-% %% Check plausibility
-% disp('Check plausibility of cleaned matches ...')
-% 
-% load('check_plausible_patsearch_results_1976.mat')
-% search_new = patsearch_results;
-% 
-% load('patsearch_results_1976.mat')
-% 
-% 
-% old = patsearch_results.patentnr;
-% new = search_new.patentnr;
-% 
-% assert( length(old) == length(new) )
-% assert( all( strcmp(old, new) ) )
-% disp('Patent numbers fine.')
-% 
-% old = patsearch_results.length_pattext;
-% new = search_new.length_pattext;
-% 
-% assert( length(old) == length(new) )
-% assert( all( old == new ) )
-% disp('Length of patent texts fine.')
-% 
-% 
-% %%
-% clc
-% 
-% overlap_dict = intersect(search_new.dictionary, ...
-%     patsearch_results.dictionary);
-% 
-% for i=1:length(overlap_dict)
-%     pickTok = overlap_dict{i};
-%     ix_old = find( strcmp(patsearch_results.dictionary, pickTok) );
-%     
-%     if length(ix_old) > 1
-%         ix_old = ix_old(1);
-%         fprintf('\tMore than one occurence of token %s.\n', pickTok)
-%     end
-%     
-%     ix_new = find( strcmp(search_new.dictionary, pickTok) );
-% 
-%     old_hits = patsearch_results.title_matches(:, ix_old);
-%     new_hits = full(search_new.title_matches(:, ix_new));
-%     
-%     try
-%         assert( sum(old_hits) == sum(new_hits) ), ...
-%             assert( all( old_hits == new_hits ) )
-%         
-%         fprintf('Finished checking hits for token: %s.\n', pickTok)
-%     catch
-%         fprintf('Error in token: %s.\n', pickTok) 
-%         break
-%     end
-% end
 
 
 
