@@ -9,8 +9,7 @@ fclose('all');
 setup_path()
 
 %% Choose years 
-year_start = 1976;
-year_end = 1990;
+years = [1976: 2000, 2002:2009, 2013:2015];
 
 
 %% Get patent texts
@@ -61,8 +60,16 @@ year_end = 1990;
 % end
 
 
-% %% Clean matches
-% clean_matches(year_start, year_end)
+%% Clean matches
+for ix_year=years
+    ix_year = 1976
+    patsearch_results = clean_matches(ix_year)
+
+    % Save
+    save_name = horzcat('cleaned_matches/patsearch_results_', ...
+        num2str(ix_year), '.mat');
+    save(save_name, 'patsearch_results');
+end
 
 
 %% Compare matches with previous searches
