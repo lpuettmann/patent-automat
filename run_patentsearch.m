@@ -90,6 +90,43 @@ years = [1976: 2000, 2002:2009, 2013:2015];
 
 %% Compile dataset of classified patents
 
+% Initialize empty variables
+patents.patentnr = [];
+patents.classnr_uspc = [];
+patents.classnr_ipc = [];
+patents.week = [];
+patents.length_pattext = [];
+patents.year = [];
+
+for ix_year=years
+    load(['patsearch_results_', num2str(ix_year), '.mat']);
+      
+    % Save some information on patents
+    patents.patentnr = [patents.patentnr; patsearch_results.patentnr];
+    
+    patents.classnr_uspc = [patents.classnr_uspc; ...
+        patsearch_results.classnr_uspc];
+    
+    patents.classnr_ipc = [patents.classnr_ipc; ...
+        patsearch_results.classnr_ipc];
+    
+    patents.week = [patents.week; patsearch_results.week];
+    
+    patents.length_pattext = [patents.length_pattext; ...
+        patsearch_results.length_pattext];
+    
+    patents.year = [patents.year; repmat(ix_year, ...
+        length(patsearch_results.patentnr), 1)];
+    
+    % Classify patents
+    alg1 = classif_alg1(patsearch_results.dictionary, ...
+        patsearch_results.title_matches, ...
+        patsearch_results.abstract_matches, ...
+        patsearch_results.body_matches);
+    
+    fprintf('Finished compiling data: %d.\n', ix_year)
+end
+
 
 %% Transfer matches to CSV (for use in Stata)
 % transfer_cleaned_matches2csv(year_start, year_end)

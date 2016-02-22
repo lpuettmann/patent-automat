@@ -6,13 +6,13 @@ function class_pat = classif_alg1(searchdict, title_matches, ...
     % "adaptive" OR "self-generat" OR (in title + abstract) "detect" 
     % OR "program" OR "computer"
     
-    anwhere_words = {'automat', 'robot', 'movable arm', 'autonomous', ...
-        'adaptive', 'self-generat'};  
+    anwhere_words = {'automat', 'robot', 'movable', 'autonom', ...
+        'adapt', 'self-generat'};  
     total_matches = title_matches + abstract_matches + body_matches;    
     mat_classif_1 = multiple_class(searchdict, total_matches, ...
         anwhere_words);
 
-    titleabstract_words = {'detect', 'program', 'computer'};
+    titleabstract_words = {'detect', 'program', 'comput'};
     title_abstract_matches = title_matches + abstract_matches;
     mat_classif_2 = multiple_class(searchdict, title_abstract_matches, ...
         titleabstract_words);
