@@ -61,20 +61,27 @@ years = [1976: 2000, 2002:2009, 2013:2015];
 
 
 %% Clean matches
-for ix_year=years
-    ix_year = 1976
-    patsearch_results = clean_matches(ix_year)
-
-    % Save
-    save_name = horzcat('cleaned_matches/patsearch_results_', ...
-        num2str(ix_year), '.mat');
-    save(save_name, 'patsearch_results');
-end
+% for ix_year=years
+%
+%     patsearch_results = clean_matches(ix_year);
+%     
+%     save_name = horzcat('cleaned_matches/patsearch_results_', ...
+%         num2str(ix_year), '.mat');
+%     save(save_name, 'patsearch_results');
+% end
 
 
 %% Compare matches with previous searches
-% compare_matches(year_start, year_end)
+disp('Compare new keyword searches with old ...')
+disp(' ')
 
+for ix_year=years
+    
+    compare_matches(ix_year)
+    
+    fprintf('<strong>Year finished: %d.</strong>\n', ix_year)
+    disp('_________________________________________________')
+end
 
 %% Check matches for plausibility
 % check_cleanedmatches_plausability(year_start, year_end)
