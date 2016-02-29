@@ -9,7 +9,8 @@ fclose('all');
 setup_path()
 
 %% Choose years 
-years = [1976: 2000, 2002:2009, 2013:2015];
+year_start = 1976;
+year_end = 2015;
 
 
 %% Get patent texts
@@ -62,13 +63,14 @@ years = [1976: 2000, 2002:2009, 2013:2015];
 
 %% Clean matches
 % for ix_year=years
-%
+% 
 %     patsearch_results = clean_matches(ix_year);
 %     
 %     save_name = horzcat('cleaned_matches/patsearch_results_', ...
 %         num2str(ix_year), '.mat');
 %     save(save_name, 'patsearch_results');
 % end
+
 
 
 %% Compare matches with previous searches
@@ -88,6 +90,7 @@ years = [1976: 2000, 2002:2009, 2013:2015];
 % check_cleanedmatches_plausability(year_start, year_end)
 
 
+
 %% Compile dataset of classified patents
 
 % Initialize empty variables
@@ -97,12 +100,18 @@ patents.classnr_ipc = [];
 patents.week = [];
 patents.length_pattext = [];
 patents.year = [];
+patents.alg1 = [];
 
-for ix_year=years
+for ix_year=year_start:year_end
+    ix_iter = ix_year - year_start + 1;
+    
     load(['patsearch_results_', num2str(ix_year), '.mat']);
       
     % Save some information on patents
-    patents.patentnr = [patents.patentnr; patsearch_results.patentnr];
+   num_patentnr = cellfun(@str2num, patsearch_results.patentnr, ...
+       'UniformOutput', false); % convert string to numerical
+    num_patentnr = vertcat(num_patentnr{:}); % unnest
+    patents.patentnr = [patents.patentnr; num_patentnr];
     
     patents.classnr_uspc = [patents.classnr_uspc; ...
         patsearch_results.classnr_uspc];
@@ -117,15 +126,28 @@ for ix_year=years
     
     patents.year = [patents.year; repmat(ix_year, ...
         length(patsearch_results.patentnr), 1)];
-    
+        
     % Classify patents
     alg1 = classif_alg1(patsearch_results.dictionary, ...
         patsearch_results.title_matches, ...
         patsearch_results.abstract_matches, ...
-        patsearch_results.body_matches);
+        patsearch_results.body_matches);clc
     
-    fprintf('Finished compiling data: %d.\n', ix_year)
+    
+    patents.alg1 = [patents.alg1; alg1];        
+    share_alg1(ix_iter) = sum(alg1) ./ length(alg1);
+    size_patentDataFile = whos('patents');    
+    fprintf('Finished compiling data for %d (%3.2f GB).\n', ix_year, ...
+        size_patentDataFile.bytes / 10^9)
 end
+
+plot(share_alg1)
+% Need an additional swith '-v7.3' to save very large files.
+% save('output/patents.mat', 'patents', '-v7.3')
+
+
+
+break
 
 
 %% Transfer matches to CSV (for use in Stata)
