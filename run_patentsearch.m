@@ -95,33 +95,92 @@ year_end = 2015;
 
 anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
     'self-generat'};
-titleabstract_words = {'detect', 'program', 'comput'};
 
-% Initialize empty variables
-patents.alg1 = [];
+for i=1:length(anwhere_words)
+    pick_word = {anwhere_words{i}};
+    titleabstract_words = {};
 
-for ix_year=year_start:year_end
-    ix_iter = ix_year - year_start + 1;
+    % Initialize empty variables
+    patents.alg1 = [];
+
+    for ix_year=year_start:year_end
+        ix_iter = ix_year - year_start + 1;
+
+        load(['patsearch_results_', num2str(ix_year), '.mat']);
+
+        % Classify patents
+        alg1 = classif_alg(patsearch_results.dictionary, ...
+            patsearch_results.title_matches, ...
+            patsearch_results.abstract_matches, ...
+            patsearch_results.body_matches, pick_word, ...
+            titleabstract_words);
+
+        patents.alg1 = [patents.alg1; alg1];        
+        share_alg1(ix_iter) = sum(alg1) ./ length(alg1);
+        size_patentDataFile = whos('patents');    
+        fprintf('Finished compiling data for %d (%3.2f percent).\n', ...
+            ix_year, share_alg1(ix_iter))
+    end
+
+    %%
+    figHandle = figure;
+    years = year_start:year_end;
+    handlePlot = plot(years, share_alg1, '-o', 'MarkerEdgeColor','k',...
+                    'MarkerFaceColor', 'k',...
+                    'MarkerSize', 3);
+    title(['Patents containing "', pick_word,'"'])
+    xlabel('Years 1976-2015')
+    ylabel('Share of patents classified as automation patents')
+    ylim([0, 0.55])
+    grid on
+
+    saveas(handlePlot, ['output/anywhere_matches_', num2str(i)], 'png');
     
-    load(['patsearch_results_', num2str(ix_year), '.mat']);
-        
-    % Classify patents
-    alg1 = classif_alg(patsearch_results.dictionary, ...
-        patsearch_results.title_matches, ...
-        patsearch_results.abstract_matches, ...
-        patsearch_results.body_matches, anwhere_words, ...
-        titleabstract_words);
-    
-    patents.alg1 = [patents.alg1; alg1];        
-    share_alg1(ix_iter) = sum(alg1) ./ length(alg1);
-    size_patentDataFile = whos('patents');    
-    fprintf('Finished compiling data for %d (%3.2f GB).\n', ix_year, ...
-        size_patentDataFile.bytes / 10^9)
+    disp(' ')
 end
 
-plot(share_alg1)
-% Need an additional swith '-v7.3' to save very large files.
-% save('output/patents.mat', 'patents', '-v7.3')
+titleabstract_words = {'detect', 'program', 'comput'};
+
+for i=1:length(titleabstract_words)
+    anwhere_words = {};
+    pick_word = {titleabstract_words{i}};
+
+    % Initialize empty variables
+    patents.alg1 = [];
+
+    for ix_year=year_start:year_end
+        ix_iter = ix_year - year_start + 1;
+
+        load(['patsearch_results_', num2str(ix_year), '.mat']);
+
+        % Classify patents
+        alg1 = classif_alg(patsearch_results.dictionary, ...
+            patsearch_results.title_matches, ...
+            patsearch_results.abstract_matches, ...
+            patsearch_results.body_matches, anwhere_words, ...
+            pick_word);
+
+        patents.alg1 = [patents.alg1; alg1];        
+        share_alg1(ix_iter) = sum(alg1) ./ length(alg1);
+        size_patentDataFile = whos('patents');    
+        fprintf('Finished compiling data for %d (%3.2f percent)].\n', ...
+            ix_year, share_alg1(ix_iter))
+    end
+
+    %%
+    figHandle = figure;
+    years = year_start:year_end;
+    handlePlot = plot(years, share_alg1, '-o', 'MarkerEdgeColor','k',...
+                    'MarkerFaceColor', 'k',...
+                    'MarkerSize', 3);
+    title(['Patents containing "', pick_word,'"'])
+    xlabel('Years 1976-2015')
+    ylabel('Share of patents classified as automation patents')
+    ylim([0, 0.55])
+    grid on
+
+    saveas(handlePlot, ['output/titleabstract_matches_', num2str(i)], 'png');
+end
 
 
 

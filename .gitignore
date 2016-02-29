@@ -24,6 +24,7 @@
 *.xls
 *.xlsx
 *.gif
+*.png
 delete_me.m
 copy_selected_files.m
 teststring.txt

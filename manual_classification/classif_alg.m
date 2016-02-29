@@ -19,6 +19,9 @@ end
 
 
 function mat_classif = multiple_class(searchdict, matches, choose_dict)
+
+    mat_classif = zeros(size(matches, 1), 1);
+
     for i=1:length(choose_dict)
         pick_word = choose_dict{i};
         ix_pos = find( strcmp(searchdict, pick_word) );    
