@@ -23,4 +23,4 @@ run(test_compile_incidence_matrix);
 run(test_get_occurstats);
 run(test_get_indic_exclclassnr);
 run(test_rank_tokens);
-run(test_classif_alg1);
+run(test_classif_alg);

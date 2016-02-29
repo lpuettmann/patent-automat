@@ -93,46 +93,24 @@ year_end = 2015;
 
 %% Compile dataset of classified patents
 
+anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+    'self-generat'};
+titleabstract_words = {'detect', 'program', 'comput'};
+
 % Initialize empty variables
-patents.patentnr = [];
-patents.classnr_uspc = [];
-patents.classnr_ipc = [];
-patents.week = [];
-patents.length_pattext = [];
-patents.year = [];
 patents.alg1 = [];
 
 for ix_year=year_start:year_end
     ix_iter = ix_year - year_start + 1;
     
     load(['patsearch_results_', num2str(ix_year), '.mat']);
-      
-    % Save some information on patents
-   num_patentnr = cellfun(@str2num, patsearch_results.patentnr, ...
-       'UniformOutput', false); % convert string to numerical
-    num_patentnr = vertcat(num_patentnr{:}); % unnest
-    patents.patentnr = [patents.patentnr; num_patentnr];
-    
-    patents.classnr_uspc = [patents.classnr_uspc; ...
-        patsearch_results.classnr_uspc];
-    
-    patents.classnr_ipc = [patents.classnr_ipc; ...
-        patsearch_results.classnr_ipc];
-    
-    patents.week = [patents.week; patsearch_results.week];
-    
-    patents.length_pattext = [patents.length_pattext; ...
-        patsearch_results.length_pattext];
-    
-    patents.year = [patents.year; repmat(ix_year, ...
-        length(patsearch_results.patentnr), 1)];
         
     % Classify patents
-    alg1 = classif_alg1(patsearch_results.dictionary, ...
+    alg1 = classif_alg(patsearch_results.dictionary, ...
         patsearch_results.title_matches, ...
         patsearch_results.abstract_matches, ...
-        patsearch_results.body_matches);clc
-    
+        patsearch_results.body_matches, anwhere_words, ...
+        titleabstract_words);
     
     patents.alg1 = [patents.alg1; alg1];        
     share_alg1(ix_iter) = sum(alg1) ./ length(alg1);

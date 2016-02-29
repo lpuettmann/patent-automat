@@ -1,8 +1,11 @@
-function tests = test_classif_alg1
+function tests = test_classif_alg
     tests = functiontests(localfunctions);
 end
 
 function testNormalZero(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'automat', 'robot', 'movabl', 'autonom', ...
         'adapt', 'self-generat', 'detect', 'program', 'comput'};
@@ -10,8 +13,9 @@ function testNormalZero(testCase)
     abstract_matches = zeros(20, 9);
     body_matches = zeros(20, 9);
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = +any( class_pat ); 
     expSolution = 0; 
@@ -20,6 +24,9 @@ function testNormalZero(testCase)
 end
 
 function testNormalNoneClass(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'automat', 'robot', 'movabl', 'autonom', ...
         'adapt', 'self-generat', 'detect', 'program', 'comput'};
@@ -29,8 +36,9 @@ function testNormalNoneClass(testCase)
     body_matches(2, 8) = 1;
     body_matches(7, 9) = 1;
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = +any( class_pat ); 
     expSolution = 0; 
@@ -39,6 +47,9 @@ function testNormalNoneClass(testCase)
 end
 
 function testNormal1Classif(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'automat', 'robot', 'movabl', 'autonom', ...
         'adapt', 'self-generat', 'detect', 'program', 'comput'};
@@ -47,8 +58,9 @@ function testNormal1Classif(testCase)
     body_matches = zeros(20, 9);
     body_matches(1, 1) = 1;
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = + ( (sum(class_pat) == 1) && (class_pat(1, 1) == 1) ); 
     expSolution = 1; 
@@ -57,6 +69,9 @@ function testNormal1Classif(testCase)
 end
 
 function testNormal2Classif(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'automat', 'robot', 'movabl', 'autonom', ...
         'adapt', 'self-generat', 'detect', 'program', 'comput'};
@@ -67,8 +82,9 @@ function testNormal2Classif(testCase)
     body_matches(2, 1) = 1;
     body_matches(1, 2) = 150;
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = + ( (sum(class_pat) == 2) && (class_pat(2, 1) == 1) ); 
     expSolution = 1; 
@@ -77,6 +93,9 @@ function testNormal2Classif(testCase)
 end
 
 function testNegativeMatches(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'automat', 'robot', 'movabl', 'autonom', ...
         'adapt', 'self-generat', 'detect', 'program', 'comput'};
@@ -85,8 +104,9 @@ function testNegativeMatches(testCase)
     body_matches = zeros(20, 9);
     body_matches(5, 3) = -16;
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = + ( (sum(class_pat) == 0) && (class_pat(5, 1) == 0) ); 
     expSolution = 1; 
@@ -95,6 +115,9 @@ function testNegativeMatches(testCase)
 end
 
 function testMoreUnusedTokens(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'putthisin_here', 'automat', 'robot', 'movabl', ...
         'autonom', 'adapt', 'self-generat', 'detect', 'program', ...
@@ -104,8 +127,9 @@ function testMoreUnusedTokens(testCase)
     body_matches = zeros(20, 10);
     body_matches(5, 3) = -16;
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = + ( (sum(class_pat) == 0) && (class_pat(5, 1) == 0) ); 
     expSolution = 1; 
@@ -114,6 +138,9 @@ function testMoreUnusedTokens(testCase)
 end
 
 function testMoreTokwithPosMatch(testCase)
+    anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
+        'self-generat'};
+    titleabstract_words = {'detect', 'program', 'comput'};
 
     searchdict = {'putthisin_here', 'automat', 'robot', 'movabl', ...
         'autonom', 'adapt', 'self-generat', 'detect', 'program', ...
@@ -123,8 +150,9 @@ function testMoreTokwithPosMatch(testCase)
     body_matches = zeros(20, 10);
     body_matches(2, 1) = 3;
     
-    class_pat = classif_alg1(searchdict, title_matches, ...
-        abstract_matches, body_matches);
+    class_pat = classif_alg(searchdict, title_matches, ...
+        abstract_matches, body_matches, anwhere_words, ...
+        titleabstract_words);
 
     actSolution = +( sum(class_pat) == 0); 
     expSolution = 1; 
