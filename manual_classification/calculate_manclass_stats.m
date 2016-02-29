@@ -96,6 +96,15 @@ classifstat.mutual_information = ...
     N10 * log2( (N*N10) / (N1dot*Ndot0) ) + ...
     N00 * log2( (N*N00) / (N0dot*Ndot0) ) ) / N;
 
+% Calculate conditional probabilities of being in either class (automation
+% or non-automation patent) for all tokens that we searched for.
+% This is the Bernoulli Naive Bayes model.
+% Use Laplace (+1) smoothing. The 2 in the denominator comes from there
+% being two cases to differentiate.
+classifstat.cond_prob_yes = (tp + 1) / (fn + tp + 2);
+classifstat.cond_prob_no = (fp + 1) / (tn + fp + 2);
+
+
 % Save in struct
 classifstat.nr_codpt = N;
 classifstat.true_positive = tp;

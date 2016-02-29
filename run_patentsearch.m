@@ -91,96 +91,73 @@ year_end = 2015;
 
 
 
-%% Compile dataset of classified patents
+%%
+load('output/patextr.mat', 'patextr');
 
-anwhere_words = {'automat', 'robot', 'movabl', 'autonom', 'adapt', ...
-    'self-generat'};
+% Calculate conditional probabilities of being in either class (automation
+% or non-automation patent) for all tokens that we searched for.
+% Use Laplace (+1) smoothing. See Mannig, Schuetze, Raghavan (2013),
+% chapter 13.
 
-for i=1:length(anwhere_words)
-    pick_word = {anwhere_words{i}};
-    titleabstract_words = {};
+i = not(patextr.indic_exclclassnr); % which patents to include
 
-    % Initialize empty variables
-    patents.alg1 = [];
+feat_incidMat = patextr.incidMat_title(i, :);
+manAutomat = patextr.manAutomat(i);
+featTok = patextr.unique_titleT;
 
-    for ix_year=year_start:year_end
-        ix_iter = ix_year - year_start + 1;
+feat_occurMat = +( feat_incidMat > 0 );
 
-        load(['patsearch_results_', num2str(ix_year), '.mat']);
+load('specs/find_dictionary.mat', 'find_dictionary');
 
-        % Classify patents
-        alg1 = classif_alg(patsearch_results.dictionary, ...
-            patsearch_results.title_matches, ...
-            patsearch_results.abstract_matches, ...
-            patsearch_results.body_matches, pick_word, ...
-            titleabstract_words);
+cond_prob_automat = zeros(length(find_dictionary), 1);
 
-        patents.alg1 = [patents.alg1; alg1];        
-        share_alg1(ix_iter) = sum(alg1) ./ length(alg1);
-        size_patentDataFile = whos('patents');    
-        fprintf('Finished compiling data for %d (%3.2f percent).\n', ...
-            ix_year, share_alg1(ix_iter))
-    end
+prior_automat = sum(manAutomat) / length(manAutomat);
+prior_notautomat = 1 - prior_automat;
 
-    %%
-    figHandle = figure;
-    years = year_start:year_end;
-    handlePlot = plot(years, share_alg1, '-o', 'MarkerEdgeColor','k',...
-                    'MarkerFaceColor', 'k',...
-                    'MarkerSize', 3);
-    title(['Patents containing "', pick_word,'"'])
-    xlabel('Years 1976-2015')
-    ylabel('Share of patents classified as automation patents')
-    ylim([0, 0.55])
-    grid on
-
-    saveas(handlePlot, ['output/anywhere_matches_', num2str(i)], 'png');
+for t=1:length(find_dictionary)
+    pickTok = find_dictionary{t};
     
-    disp(' ')
-end
-
-titleabstract_words = {'detect', 'program', 'comput'};
-
-for i=1:length(titleabstract_words)
-    anwhere_words = {};
-    pick_word = {titleabstract_words{i}};
-
-    % Initialize empty variables
-    patents.alg1 = [];
-
-    for ix_year=year_start:year_end
-        ix_iter = ix_year - year_start + 1;
-
-        load(['patsearch_results_', num2str(ix_year), '.mat']);
-
-        % Classify patents
-        alg1 = classif_alg(patsearch_results.dictionary, ...
-            patsearch_results.title_matches, ...
-            patsearch_results.abstract_matches, ...
-            patsearch_results.body_matches, anwhere_words, ...
-            pick_word);
-
-        patents.alg1 = [patents.alg1; alg1];        
-        share_alg1(ix_iter) = sum(alg1) ./ length(alg1);
-        size_patentDataFile = whos('patents');    
-        fprintf('Finished compiling data for %d (%3.2f percent)].\n', ...
-            ix_year, share_alg1(ix_iter))
+    j = find( strcmp(featTok, pickTok) );
+    
+    if isempty( j )
+        singleTok_class = zeros(length(manAutomat), 1);
+    else  
+        singleTok_class = feat_occurMat(:, j);
+        singleTok_class = full( singleTok_class );
     end
-
-    %%
-    figHandle = figure;
-    years = year_start:year_end;
-    handlePlot = plot(years, share_alg1, '-o', 'MarkerEdgeColor','k',...
-                    'MarkerFaceColor', 'k',...
-                    'MarkerSize', 3);
-    title(['Patents containing "', pick_word,'"'])
-    xlabel('Years 1976-2015')
-    ylabel('Share of patents classified as automation patents')
-    ylim([0, 0.55])
-    grid on
-
-    saveas(handlePlot, ['output/titleabstract_matches_', num2str(i)], 'png');
+        
+    classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
+    cond_prob_yes(t) = classifstat.cond_prob_yes;
+    cond_prob_no(t) = classifstat.cond_prob_no;
+    
+    disp(t)
 end
+
+%%
+figHandle = figure;
+
+plot(cond_prob_yes)
+hold on
+plot(cond_prob_no, 'Color', 'red')
+
+legend('Conditional probability of patent with token being automation patent', ...
+    'Conditional probability of patent with token NOT being automation patent')
+xlim([0, length(cond_prob_yes)])
+
+break
+
+% Initialize empty variables
+patents.nb = [];
+
+for ix_year=year_start:year_end
+    ix_iter = ix_year - year_start + 1;
+
+    load(['patsearch_results_', num2str(ix_year), '.mat']);
+
+    patents.nb = [patents.nb; nb];
+end
+
+
 
 
 
