@@ -76,16 +76,44 @@ function testMutualInformation(testCase)
     verifyLessThan(testCase, diffSolutions, 10^-3)
 end
 
+function testBernoulliNaiveBayesCondProb_Yes1(testCase)
+    % See Manning, Raghavan and Schuetze (2008), p.261 and p.264
+    correctClass = [1; 1; 1; 0];
+    estimatClass = [1; 1; 1; 1]; % occurence: "Chinese"
+    classifstat = calculate_manclass_stats(correctClass, estimatClass);
+    actSolution = classifstat.cond_prob_yes;
+    expSolution = 4/5;
+    verifyEqual(testCase, actSolution, expSolution)
+end
 
+function testBernoulliNaiveBayesCondProb_Yes2(testCase)
+    % See Manning, Raghavan and Schuetze (2008), p.261 and p.264
+    correctClass = [1; 1; 1; 0];
+    estimatClass = [0; 0; 0; 1]; % occurence: "Tokyo"
+    classifstat = calculate_manclass_stats(correctClass, estimatClass);
+    actSolution = classifstat.cond_prob_yes;
+    expSolution = 1/5;
+    verifyEqual(testCase, actSolution, expSolution)
+end
 
+function testBernoulliNaiveBayesCondProb_No1(testCase)
+    % See Manning, Raghavan and Schuetze (2008), p.261 and p.264
+    correctClass = [1; 1; 1; 0];
+    estimatClass = [1; 1; 1; 1]; % occurence: "Chinese"
+    classifstat = calculate_manclass_stats(correctClass, estimatClass);
+    actSolution = classifstat.cond_prob_no; % not class China
+    expSolution = 2/3;
+    verifyEqual(testCase, actSolution, expSolution)
+end
 
-
-
-
-
-
-
-
-
+function testBernoulliNaiveBayesCondProb_No2(testCase)
+    % See Manning, Raghavan and Schuetze (2008), p.261 and p.264
+    correctClass = [1; 1; 1; 0];
+    estimatClass = [0; 0; 0; 1]; % occurence: "Tokyo"
+    classifstat = calculate_manclass_stats(correctClass, estimatClass);
+    actSolution = classifstat.cond_prob_no; % not class China
+    expSolution = 2/3;
+    verifyEqual(testCase, actSolution, expSolution)
+end
 
 

@@ -129,8 +129,6 @@ for t=1:length(find_dictionary)
     classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
     cond_prob_yes(t) = classifstat.cond_prob_yes;
     cond_prob_no(t) = classifstat.cond_prob_no;
-    
-    disp(t)
 end
 
 %%
