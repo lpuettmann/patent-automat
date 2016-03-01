@@ -11,11 +11,13 @@ function post = calc_post_nb(prior, cond_prob, indic_appear)
 
 assert( length(cond_prob) == length( indic_appear ) )
 
-cp_inDoc = cond_prob( logical( indic_appear ) );
+cp_inDoc = cond_prob( indic_appear );
 
 % The Bernoulli model for the Naive Bayes classifier penalizes for tokens
 % that do NOT appear in the document.
 penalty = 1 - cond_prob( not( indic_appear ) );
+
+assert( (length(cp_inDoc) + length(penalty)) == length(indic_appear) )
 
 % Calculate posterior probability for the document to belong to this class
 post = log( prior ) + sum( log( cp_inDoc ) ) + sum( log( penalty ) );

@@ -102,55 +102,66 @@ clear patextr
 
 load('find_dictionary')
 
-ix_year = 2014;
-load(['patsearch_results_', num2str(ix_year), '.mat']);
+for ix_year=year_start:year_end;
+    load(['patsearch_results_', num2str(ix_year), '.mat']);
 
+%     P = length(patsearch_results.patentnr);
+    P = 1002;
 
-%%
-P = length(patsearch_results.patentnr);
+    nb_post.post_yes = NaN(P, 1);
+    nb_post.post_no = NaN(P, 1);
+    share_probs_higherYes = NaN(P, 1);
 
-post_yes = NaN(P, 1);
-post_no = NaN(P, 1);
-share_probs_higherYes = NaN(P, 1);
+    for p=1:P
+        patMatches = [patsearch_results.title_matches(p, :), ...
+            patsearch_results.abstract_matches(p, :), ...
+            patsearch_results.body_matches(p, :)];
+        patOccur = +(patMatches > 0)'; % logical to double
+        indic_appear = logical( full( patOccur ) );
 
-for p=1:P
-    patMatches = [patsearch_results.title_matches(p, :), ...
-        patsearch_results.abstract_matches(p, :), ...
-        patsearch_results.body_matches(p, :)];
-    patOccur = +(patMatches > 0)'; % logical to double
-    indic_appear = find( patOccur ); % find tokens that appear in patent
-    
-    % Calculate updated posterior probabilty of the patent belonging to
-    % either class
-    post_yes(p) = calc_post_nb(prior_yes, cond_prob_yes, indic_appear);
-    post_no(p) = calc_post_nb(prior_no, cond_prob_no, indic_appear);
+        % Calculate updated posterior probabilty of the patent belonging to
+        % either class
+        nb_post.post_yes(p) = calc_post_nb(prior_yes, cond_prob_yes, indic_appear);
+        nb_post.post_no(p) = calc_post_nb(prior_no, cond_prob_no, indic_appear);
 
-    share_probs_higherYes(p) = sum(cond_prob_yes(indic_appear) > ...
-        cond_prob_no(indic_appear)) / length(cond_prob_yes(indic_appear));
-      
-    if mod(p, 1000) == 0
-        temp = +(post_yes(p - 999 : p) > post_no(p - 999 : p));
-        share_temp = sum(temp) / length(temp);
-        fprintf('Patent %d/%d finished: %3.2f percent automation patents.\n', ...
-            p, P, share_temp)
+        share_probs_higherYes(p) = sum(cond_prob_yes(indic_appear) > ...
+            cond_prob_no(indic_appear)) / length(cond_prob_yes(indic_appear));
+
+        if mod(p, 1000) == 0
+            temp = +(nb_post.post_yes(p - 999 : p) > nb_post.post_no(p - 999 : p));
+            share_temp = sum(temp) / length(temp);
+            fprintf('Patent %d/%d finished: %3.2f percent automation patents.\n', ...
+                p, P, share_temp)
+        end
     end
+    
+    save_name = horzcat('nb_posteriors/nb_post_', num2str(ix_year), ...
+        '.mat');
+    save(save_name, 'nb_post');    
+    disp('_____________________________________________________')
+    fprintf('Finished calculating posterior prob''s for year: %d.\n', ix_year)
+    disp(' ')
+
+    clear nb_post
 end
 
-disp('_____________________________________________________')
-fprintf('Finished calculating posterior prob''s for year: %d.\n', ix_year)
-disp(' ')
+%% Check plausibility of Naive Bayes posterior probabilities
 
-assert( not( any( isnan(post_yes) ) ) )
-assert( not( any( isnan(post_no) ) ) )
+for ix_year=year_start:year_end;
+    
+    load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
+    load(load_name)
+    
+    assert( all( nb_post.post_yes < 0 ) )
+    assert( all( nb_post.post_no < 0 ) )
+    
+    assert( not( any( isnan(nb_post.post_yes) ) ) )
+    assert( not( any( isnan(nb_post.post_no) ) ) )
+    
+    assert( length( nb_post.post_yes ) == length( nb_post.post_no ) )
+end
 
-%%
-autompat = +(post_yes > post_no);
-share_autompat = sum(autompat) / length(autompat);
 
-plot(post_yes)
-hold on
-plot(post_no, 'Color', 'red')
-legend('yes', 'no')
 
 break
 

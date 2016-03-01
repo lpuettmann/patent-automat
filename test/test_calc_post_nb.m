@@ -12,12 +12,12 @@ function testKnownExample_China(testCase)
                  2/5; % Beijing
                  2/5; % Macao
                  2/5]; % Shanghai
-    indic_appear = [1;
-                    1;
-                    1;
-                    0;
-                    0;
-                    0];
+    indic_appear = logical([1;
+                            1;
+                            1;
+                            0;
+                            0;
+                            0]);
     post = calc_post_nb(prior, cond_prob, indic_appear);
     actSolution = exp(post);
     expSolution = 3/4 * 4/5 * 1/5 * 1/5 * (1-2/5) * (1-2/5) * (1-2/5);
@@ -35,12 +35,12 @@ function testKnownExample_NotClass(testCase)
                  1/3; % Beijing
                  1/3; % Macao
                  1/3]; % Shanghai
-    indic_appear = [1;
-                    1;
-                    1;
-                    0;
-                    0;
-                    0];
+    indic_appear = logical([1;
+                            1;
+                            1;
+                            0;
+                            0;
+                            0]);
     post = calc_post_nb(prior, cond_prob, indic_appear);
     actSolution = exp(post);
     expSolution = 1/4 * 2/3 * 2/3 * 2/3 * (1-1/3) * (1-1/3) * (1-1/3);
