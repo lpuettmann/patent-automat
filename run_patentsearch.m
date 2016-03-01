@@ -89,73 +89,51 @@ year_end = 2015;
 %% Check matches for plausibility
 % check_cleanedmatches_plausability(year_start, year_end)
 
+%%
+
+load('patextr')
+cond_prob_yes = [patextr.title_cond_prob_yes; patextr.abstract_cond_prob_yes; ...
+    patextr.body_cond_prob_yes];
+cond_prob_no = [patextr.title_cond_prob_no; patextr.abstract_cond_prob_no; ...
+    patextr.body_cond_prob_no];
+prior = patextr.prior_automat;
+clear patextr
+
+
+load('find_dictionary')
+
+ix_year = 1976;
+load(['patsearch_results_', num2str(ix_year), '.mat']);
 
 
 %%
-load('output/patextr.mat', 'patextr');
+P = length(patsearch_results.patentnr);
 
-% Calculate conditional probabilities of being in either class (automation
-% or non-automation patent) for all tokens that we searched for.
-% Use Laplace (+1) smoothing. See Mannig, Schuetze, Raghavan (2013),
-% chapter 13.
+post_yes = NaN(P, 1);
+post_no = NaN(P, 1);
 
-i = not(patextr.indic_exclclassnr); % which patents to include
+for p=1:P
+    patMatches = [patsearch_results.title_matches(p, :), ...
+        patsearch_results.abstract_matches(p, :), ...
+        patsearch_results.body_matches(p, :)];
+    patMatches = full( patMatches ); % sparse to full matrix
+    patOccur = +(patMatches > 0)'; % logical to double
 
-feat_incidMat = patextr.incidMat_title(i, :);
-manAutomat = patextr.manAutomat(i);
-featTok = patextr.unique_titleT;
-
-feat_occurMat = +( feat_incidMat > 0 );
-
-load('specs/find_dictionary.mat', 'find_dictionary');
-
-cond_prob_automat = zeros(length(find_dictionary), 1);
-
-prior_automat = sum(manAutomat) / length(manAutomat);
-prior_notautomat = 1 - prior_automat;
-
-for t=1:length(find_dictionary)
-    pickTok = find_dictionary{t};
+    i = find( patOccur ); % find tokens that appear in patent
     
-    j = find( strcmp(featTok, pickTok) );
+    % Calculate updated posterior probabilty of the patent belonging to
+    % either class
+    post_yes(p) = log( prior ) + sum( log( cond_prob_yes(i) ) );
+    post_no(p) = log( prior ) + sum( log( cond_prob_no(i) ) );
+
+    share_probs_higherYes(p) = sum(cond_prob_yes(i) > cond_prob_no(i)) / ...
+        length(cond_prob_yes(i));
     
-    if isempty( j )
-        singleTok_class = zeros(length(manAutomat), 1);
-    else  
-        singleTok_class = feat_occurMat(:, j);
-        singleTok_class = full( singleTok_class );
+    if mod(p, 1000) == 0
+        fprintf('Patent %d/%d finished.\n', p, P)
     end
-        
-    classifstat = calculate_manclass_stats(manAutomat, singleTok_class);
-    cond_prob_yes(t) = classifstat.cond_prob_yes;
-    cond_prob_no(t) = classifstat.cond_prob_no;
 end
-
-%%
-figHandle = figure;
-
-plot(cond_prob_yes)
-hold on
-plot(cond_prob_no, 'Color', 'red')
-
-legend('Conditional probability of patent with token being automation patent', ...
-    'Conditional probability of patent with token NOT being automation patent')
-xlim([0, length(cond_prob_yes)])
-
-break
-
-% Initialize empty variables
-patents.nb = [];
-
-for ix_year=year_start:year_end
-    ix_iter = ix_year - year_start + 1;
-
-    load(['patsearch_results_', num2str(ix_year), '.mat']);
-
-    patents.nb = [patents.nb; nb];
-end
-
-
+    
 
 
 
@@ -647,5 +625,24 @@ break
 % 
 % save('specs/find_dictionary.mat', 'find_dictionary')
 
-
-
+%%
+% i = not(patextr.indic_exclclassnr); % which patents to include
+% load('specs/find_dictionary.mat', 'find_dictionary');
+% 
+% [patextr.title_cond_prob_yes, patextr.title_cond_prob_no] = ...
+%     calc_cond_probs_toks(patextr.incidMat_title(i, :), ...
+%     find_dictionary, patextr.manAutomat(i), patextr.unique_titleT);
+% 
+% [patextr.abstract_cond_prob_yes, patextr.abstract_cond_prob_no] = ...
+%     calc_cond_probs_toks(patextr.incidMat_abstract(i, :), ...
+%     find_dictionary, patextr.manAutomat(i), patextr.unique_abstractT);
+% 
+% [patextr.body_cond_prob_yes, patextr.body_cond_prob_no] = ...
+%     calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
+%     find_dictionary, patextr.manAutomat(i), patextr.unique_bodyT);
+% 
+% patextr.prior_automat = sum(patextr.manAutomat(i)) / ...
+%     length(patextr.manAutomat(i));
+% patextr.prior_notautomat = 1 - patextr.prior_automat;
+% 
+% save('output/patextr.mat', 'patextr'); % save to .mat
