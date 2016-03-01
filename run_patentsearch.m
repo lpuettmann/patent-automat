@@ -96,13 +96,13 @@ cond_prob_yes = [patextr.title_cond_prob_yes; patextr.abstract_cond_prob_yes; ..
     patextr.body_cond_prob_yes];
 cond_prob_no = [patextr.title_cond_prob_no; patextr.abstract_cond_prob_no; ...
     patextr.body_cond_prob_no];
-prior = patextr.prior_automat;
+prior_yes = patextr.prior_automat;
+prior_no = patextr.prior_notautomat;
 clear patextr
-
 
 load('find_dictionary')
 
-ix_year = 1976;
+ix_year = 2014;
 load(['patsearch_results_', num2str(ix_year), '.mat']);
 
 
@@ -111,31 +111,46 @@ P = length(patsearch_results.patentnr);
 
 post_yes = NaN(P, 1);
 post_no = NaN(P, 1);
+share_probs_higherYes = NaN(P, 1);
 
 for p=1:P
     patMatches = [patsearch_results.title_matches(p, :), ...
         patsearch_results.abstract_matches(p, :), ...
         patsearch_results.body_matches(p, :)];
-    patMatches = full( patMatches ); % sparse to full matrix
     patOccur = +(patMatches > 0)'; % logical to double
-
-    i = find( patOccur ); % find tokens that appear in patent
+    indic_appear = find( patOccur ); % find tokens that appear in patent
     
     % Calculate updated posterior probabilty of the patent belonging to
     % either class
-    post_yes(p) = log( prior ) + sum( log( cond_prob_yes(i) ) );
-    post_no(p) = log( prior ) + sum( log( cond_prob_no(i) ) );
+    post_yes(p) = calc_post_nb(prior_yes, cond_prob_yes, indic_appear);
+    post_no(p) = calc_post_nb(prior_no, cond_prob_no, indic_appear);
 
-    share_probs_higherYes(p) = sum(cond_prob_yes(i) > cond_prob_no(i)) / ...
-        length(cond_prob_yes(i));
-    
+    share_probs_higherYes(p) = sum(cond_prob_yes(indic_appear) > ...
+        cond_prob_no(indic_appear)) / length(cond_prob_yes(indic_appear));
+      
     if mod(p, 1000) == 0
-        fprintf('Patent %d/%d finished.\n', p, P)
+        temp = +(post_yes(p - 999 : p) > post_no(p - 999 : p));
+        share_temp = sum(temp) / length(temp);
+        fprintf('Patent %d/%d finished: %3.2f percent automation patents.\n', ...
+            p, P, share_temp)
     end
 end
-    
 
+disp('_____________________________________________________')
+fprintf('Finished calculating posterior prob''s for year: %d.\n', ix_year)
+disp(' ')
 
+assert( not( any( isnan(post_yes) ) ) )
+assert( not( any( isnan(post_no) ) ) )
+
+%%
+autompat = +(post_yes > post_no);
+share_autompat = sum(autompat) / length(autompat);
+
+plot(post_yes)
+hold on
+plot(post_no, 'Color', 'red')
+legend('yes', 'no')
 
 break
 

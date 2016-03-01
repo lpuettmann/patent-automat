@@ -24,3 +24,4 @@ run(test_get_occurstats);
 run(test_get_indic_exclclassnr);
 run(test_rank_tokens);
 run(test_classif_alg);
+run(test_calc_post_nb);
