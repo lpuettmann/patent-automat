@@ -144,28 +144,8 @@ year_end = 2015;
 %     clear nb_post
 % end
 
-%% Check plausibility of Naive Bayes posterior probabilities
+check_plausible_nb_post(year_start, year_end)
 
-for ix_year=year_start:year_end;
-    
-    load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
-    load(load_name)
-    
-    assert( all( nb_post.post_yes < 0 ) )
-    assert( all( nb_post.post_no < 0 ) )
-    
-    assert( not( any( isnan(nb_post.post_yes) ) ) )
-    assert( not( any( isnan(nb_post.post_no) ) ) )
-    
-    assert( length( nb_post.post_yes ) == length( nb_post.post_no ) )
-    
-    % Check if same number of posteriors as patents
-    load(['patsearch_results_', num2str(ix_year), '.mat']);
-    P = length(patsearch_results.patentnr);
-    assert( P == length(nb_post.post_yes) )
-    
-    fprintf('NB posteriors look fine so far: %d.\n', ix_year)
-end
 
 
 
@@ -582,17 +562,17 @@ end
 %% Compile huge incidence matrices showing which patent contains which term
 % tic
 % patextr.incidMat_title = compile_incidence_matrix(patextr.unique_titleT, ...
-%     patextr.title_tokens);
+%     patextr.title_tokens, 'verbose');
 % toc
 % 
 % tic
 % patextr.incidMat_abstract = compile_incidence_matrix(...
-%     patextr.unique_abstractT, patextr.abstract_tokens);
+%     patextr.unique_abstractT, patextr.abstract_tokens, 'verbose');
 % toc
 % 
 % tic
 % patextr.incidMat_body = compile_incidence_matrix(patextr.unique_bodyT, ...
-%     patextr.body_tokens);
+%     patextr.body_tokens, 'verbose');
 % toc
 
 % save('output/patextr.mat', 'patextr'); % save to .mat
