@@ -147,35 +147,43 @@ year_end = 2015;
 
 
 %% Classify patents based on the posterior probabilities
-for ix_year=year_start:year_end;
-    ix_iter = ix_year - year_start + 1;
-    
-    load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
-    load(load_name)
-
-    is_nbAutomat = +( nb_post.post_yes > nb_post.post_no );
-       
-    fname = ['patsearch_results_', num2str(ix_year), '.mat'];
-    load(fname);
-    patsearch_results.is_nbAutomat = is_nbAutomat;
-    save(['cleaned_matches/', fname]);
-    
-    fprintf('Year: %d.\n', ix_year)
-end
-
-nb_stats.year(ix_iter, 1) = ix_year;
-nb_stats.nrAutomat(ix_iter, 1) = sum( is_nbAutomat );
-nb_stats.nrPat(ix_iter, 1) = length( is_nbAutomat );
-nb_stats.shareAutomat(ix_iter, 1) = sum( is_nbAutomat ) / ...
-    length( is_nbAutomat );
-
-% nb_stats = struct2table( nb_stats );
+% for ix_year=year_start:year_end;
+%     ix_iter = ix_year - year_start + 1;
+%     
+%     load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
+%     load(load_name)
 % 
-% summarize_nb_class(year_start, year_end)
-
+%     is_nbAutomat = +( nb_post.post_yes > nb_post.post_no );
+%        
+%     fname = ['patsearch_results_', num2str(ix_year), '.mat'];
+%     load(fname);
+%     patsearch_results.is_nbAutomat = is_nbAutomat;
+%     save(['cleaned_matches/', fname], patsearch_results);
+%     fprintf('Year: %d.\n', ix_year)
+% end
 
 %%
-% plot_nb_autompat_yearly(year_start, year_end, nb_stats.shareAutomat)
+% nb_stats = compile_class_stats(year_start, year_end);
+% save('output/nb_stats.mat', 'nb_stats');
+
+
+
+load('output/nb_stats')
+
+ix_new_year = diff(nb_stats.weekstats.year);
+ix_new_year(1) = 1; % first year
+ix_new_year = find(ix_new_year);
+
+plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
+    ix_new_year)
+
+plot_series = nb_stats.weekstats.shareAutomat;
+plot_nb_share(year_start, year_end, plot_series, ix_new_year)
+
+
+
+% plot_nb_autompat_yearly(year_start, year_end, ...
+%     nb_stats.yearstats.shareAutomat)
 
 
 
