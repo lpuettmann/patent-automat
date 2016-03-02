@@ -123,9 +123,6 @@ year_end = 2015;
 %         nb_post.post_yes(p) = calc_post_nb(prior_yes, cond_prob_yes, indic_appear);
 %         nb_post.post_no(p) = calc_post_nb(prior_no, cond_prob_no, indic_appear);
 % 
-%         share_probs_higherYes(p) = sum(cond_prob_yes(indic_appear) > ...
-%             cond_prob_no(indic_appear)) / length(cond_prob_yes(indic_appear));
-% 
 %         if mod(p, 1000) == 0
 %             temp = +(nb_post.post_yes(p - 999 : p) > nb_post.post_no(p - 999 : p));
 %             share_temp = sum(temp) / length(temp);
@@ -144,17 +141,42 @@ year_end = 2015;
 %     clear nb_post
 % end
 
-check_plausible_nb_post(year_start, year_end)
+
+%% Check Naive Bayes for plausibility
+% check_plausible_nb_post(year_start, year_end)
 
 
+%% Classify patents based on the posterior probabilities
+for ix_year=year_start:year_end;
+    ix_iter = ix_year - year_start + 1;
+    
+    load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
+    load(load_name)
+
+    is_nbAutomat = +( nb_post.post_yes > nb_post.post_no );
+       
+    fname = ['patsearch_results_', num2str(ix_year), '.mat'];
+    load(fname);
+    patsearch_results.is_nbAutomat = is_nbAutomat;
+    save(['cleaned_matches/', fname]);
+    
+    fprintf('Year: %d.\n', ix_year)
+end
+
+nb_stats.year(ix_iter, 1) = ix_year;
+nb_stats.nrAutomat(ix_iter, 1) = sum( is_nbAutomat );
+nb_stats.nrPat(ix_iter, 1) = length( is_nbAutomat );
+nb_stats.shareAutomat(ix_iter, 1) = sum( is_nbAutomat ) / ...
+    length( is_nbAutomat );
+
+% nb_stats = struct2table( nb_stats );
+% 
+% summarize_nb_class(year_start, year_end)
 
 
-%% Transfer matches to CSV (for use in Stata)
-% transfer_cleaned_matches2csv(year_start, year_end)
+%%
+% plot_nb_autompat_yearly(year_start, year_end, nb_stats.shareAutomat)
 
-
-%% Summarize matches for visualizations
-% summarize_matches4viz(year_start, year_end)
 
 
 %% Make some visualizations 
