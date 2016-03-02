@@ -1,4 +1,8 @@
 function testPatentAutomat()
+% Test functions if they work as expected. Both the normal function, say
+% "examplefun.m", and the test function, say "test_examplefun.m" and 
+% possible dependencies must be on Matlab's search path. This makes use of
+% Matlab's xunit testing framework.
 
 run(test_count_occurences);
 run(test_count_elements_cell);
