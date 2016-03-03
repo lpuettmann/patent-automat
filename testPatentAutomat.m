@@ -29,3 +29,4 @@ run(test_get_indic_exclclassnr);
 run(test_rank_tokens);
 run(test_classif_alg);
 run(test_calc_post_nb);
+run(test_check_classnr_uspc);

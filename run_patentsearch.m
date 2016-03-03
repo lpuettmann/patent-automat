@@ -163,22 +163,36 @@ year_end = 2015;
 % end
 
 %%
-% nb_stats = compile_class_stats(year_start, year_end);
+for ix_year=year_start:year_end;
+    fname = ['patsearch_results_', num2str(ix_year)];
+    load(fname);
+    % Extract and clean the USPC technology numbers
+    classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc);
+    % Check which of these to exclude
+    patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
+%     save(['cleaned_matches/', fname, '.mat'], 'patsearch_results')
+    fprintf('Year finished: %d.\n', ix_year)
+end
+
+
+
+break
+nb_stats = compile_class_stats(year_start, year_end);
 % save('output/nb_stats.mat', 'nb_stats');
 
 
-
-load('output/nb_stats')
-
-ix_new_year = diff(nb_stats.weekstats.year);
-ix_new_year(1) = 1; % first year
-ix_new_year = find(ix_new_year);
-
-plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
-    ix_new_year)
-
-plot_series = nb_stats.weekstats.shareAutomat;
-plot_nb_share(year_start, year_end, plot_series, ix_new_year)
+% 
+% load('output/nb_stats')
+% 
+% ix_new_year = diff(nb_stats.weekstats.year);
+% ix_new_year(1) = 1; % first year
+% ix_new_year = find(ix_new_year);
+% 
+% plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
+%     ix_new_year)
+% 
+% plot_series = nb_stats.weekstats.shareAutomat;
+% plot_nb_share(year_start, year_end, plot_series, ix_new_year)
 
 
 
@@ -404,51 +418,6 @@ plot_nb_share(year_start, year_end, plot_series, ix_new_year)
 
 % idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
 % check_idata(idata)
-
-
-% laborm_series = idata.employment;
-% make_bivariate_employment_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.labor_productivity;
-% make_bivariate_labor_productivity_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.capital;
-% make_bivariate_capital_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% 
-% laborm_series = idata.labor_cost;
-% make_bivariate_labor_cost_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.capital_cost;
-% make_bivariate_capital_cost_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.production;
-% make_bivariate_production_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.output;
-% make_bivariate_output_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.output_deflator;
-% make_bivariate_output_deflator_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-% laborm_series = idata.output_deflator;
-% make_bivariate_output_deflator_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-
-% laborm_series = idata.capital_productivity;
-% make_bivariate_capital_productivity_plot(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-%     laborm_series, pat2ind.ind_corresp(:, 2), pat2ind.ind_corresp(:, 3))
-
-
 
 
 % make_table_meancorr_laborm_patentm(manufacturing_ind_data)
