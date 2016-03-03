@@ -163,42 +163,47 @@ year_end = 2015;
 % end
 
 %%
-for ix_year=year_start:year_end;
-    fname = ['patsearch_results_', num2str(ix_year)];
-    load(fname);
-    % Extract and clean the USPC technology numbers
-    classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc);
-    % Check which of these to exclude
-    patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
+% for ix_year=year_start:year_end;
+%     
+%     fname = ['patsearch_results_', num2str(ix_year)];
+%     load(fname);
+%     
+%     % Extract and clean the USPC technology numbers
+%     classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc);
+%     % Check which of these to exclude
+%     patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
+%     
 %     save(['cleaned_matches/', fname, '.mat'], 'patsearch_results')
-    fprintf('Year finished: %d.\n', ix_year)
-end
+%     
+%     fprintf('%d: %3.1f percent excluded.\n', ix_year, ...
+%         sum(patsearch_results.indic_exclclassnr) ./ ...
+%         length(patsearch_results.patentnr)*100)
+% end
 
 
+
+nb_stats = compile_class_stats(year_start, year_end);
+save('output/nb_stats.mat', 'nb_stats');
+
+
+load('output/nb_stats')
+
+ix_new_year = diff(nb_stats.weekstats.year);
+ix_new_year(1) = 1; % first year
+ix_new_year = find(ix_new_year);
+
+plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
+    ix_new_year)
+
+plot_series = nb_stats.weekstats.shareAutomat;
+plot_nb_share(year_start, year_end, plot_series, ix_new_year)
+
+
+
+plot_nb_autompat_yearly(year_start, year_end, ...
+    nb_stats.yearstats.shareAutomat)
 
 break
-nb_stats = compile_class_stats(year_start, year_end);
-% save('output/nb_stats.mat', 'nb_stats');
-
-
-% 
-% load('output/nb_stats')
-% 
-% ix_new_year = diff(nb_stats.weekstats.year);
-% ix_new_year(1) = 1; % first year
-% ix_new_year = find(ix_new_year);
-% 
-% plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
-%     ix_new_year)
-% 
-% plot_series = nb_stats.weekstats.shareAutomat;
-% plot_nb_share(year_start, year_end, plot_series, ix_new_year)
-
-
-
-% plot_nb_autompat_yearly(year_start, year_end, ...
-%     nb_stats.yearstats.shareAutomat)
-
 
 
 %% Make some visualizations 

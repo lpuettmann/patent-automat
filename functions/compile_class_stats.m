@@ -13,13 +13,27 @@ for ix_year=year_start:year_end
     ix_iter = ix_year - year_start + 1;
     
     load(['patsearch_results_', num2str(ix_year)]);
+    
+    % Exclude some patents
+    countAutomat = patsearch_results.is_nbAutomat( not( ...
+        patsearch_results.indic_exclclassnr ) );
+        
+    assert( length(countAutomat) + sum( ...
+        patsearch_results.indic_exclclassnr ) == length( ...
+        patsearch_results.patentnr ) )
    
+    indicWeek = patsearch_results.week( not( ...
+        patsearch_results.indic_exclclassnr ) );
+    
+    assert( length(indicWeek) == length( countAutomat ) )
+    
     % Annual summary
     yearstats.year(ix_iter, 1) = ix_year;
-    yearstats.nrAutomat(ix_iter, 1) = sum( patsearch_results.is_nbAutomat );
-    yearstats.nrPat(ix_iter, 1) = length( patsearch_results.is_nbAutomat );
-    yearstats.shareAutomat(ix_iter, 1) = sum( patsearch_results.is_nbAutomat ) / ...
-        length( patsearch_results.is_nbAutomat );
+    yearstats.nrAutomat(ix_iter, 1) = sum( countAutomat );
+    yearstats.nrPat(ix_iter, 1) = length( countAutomat );
+    yearstats.nrAllPats(ix_iter, 1) = length( patsearch_results.patentnr );
+    yearstats.shareAutomat(ix_iter, 1) = sum( countAutomat ) / ...
+        length( countAutomat );
         
     % Weekly summary
     week_end = set_weekend(ix_year); 
@@ -30,9 +44,9 @@ for ix_year=year_start:year_end
     week = zeros(week_end, 1);
     
     for ix_week=week_start:week_end
-        w = ( cell2mat( patsearch_results.week ) == ix_week);
+        w = ( cell2mat( indicWeek ) == ix_week);
         nrPat(ix_week) = sum( w );
-        nrAutomat(ix_week) = sum( patsearch_results.is_nbAutomat( w ) );
+        nrAutomat(ix_week) = sum( countAutomat( w ) );
         shareAutomat(ix_week) = nrAutomat(ix_week) / nrPat(ix_week);
         
         assert( shareAutomat(ix_week) <= 1 )
@@ -47,7 +61,8 @@ for ix_year=year_start:year_end
     weekstats.nrPat = [weekstats.nrPat; nrPat];
     weekstats.shareAutomat = [weekstats.shareAutomat; shareAutomat];
     
-    fprintf('Year: %d.\n', ix_year)
+    fprintf('Compile Naive Bayes classificiation stats for year: %d.\n', ...
+        ix_year)
 end
 
 nb_stats.weekstats = struct2table( weekstats );

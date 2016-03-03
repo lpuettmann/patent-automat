@@ -13,27 +13,32 @@ intermData(iTrunc) = strTrunced; % insert them back
 
 % Check if there is still any letter in that string
 containAlpha = cellfun(@(x) any(x), isstrprop(intermData, 'alpha'));
-iAlpha = find( containAlpha );
+containPunct = cellfun(@(x) any(x), isstrprop(intermData, 'punct'));
+allCheck = containAlpha + containPunct;
+iCheck = find( allCheck );
 
-% Delete the trailing alphabetic part for those patents that still contain
-% some
-for j=1:length( iAlpha )
-    pickAlpha = intermData{ iAlpha(j) };
-    delAlpha = isstrprop(pickAlpha, 'alpha');
-    firstAlpha = find( delAlpha );
-    newEntry = pickAlpha(1 : firstAlpha - 1);
+% Delete the trailing alphabetic part or punctuation marks
+for j=1:length( iCheck )
+    pickCheck = intermData{ iCheck(j) };
+    delCheck = isstrprop(pickCheck, 'alpha');    
+    firstAlpha = find( delCheck );
+    newEntry = pickCheck(1 : firstAlpha - 1);
+    
+    if isempty( newEntry )
+        newEntry = '000';
+    end
     
     % Put number stripped of characters back
-    intermData{ iAlpha(j) } = newEntry;
+    intermData{ iCheck(j) } = newEntry;
     
-    fprintf('[%d:] (%d) Replace ''%s'' with ''%s''.\n', ix_year, ...
-        iAlpha(j), pickAlpha, newEntry)
+    fprintf('(%d/%d) Replace ''%s'' with ''%s''.\n',iCheck(j), ...
+        length( inData ), pickCheck, newEntry)
 end   
 
 % Convert strings to numbers
 intermData = cellfun(@str2num, intermData, 'UniformOutput', false);
 
-assert( not( isempty( intermData ) ) )
+assert( not( any( cellfun(@isempty, intermData) ) ) )
 
 % Convert cell array to matrix
 outData = cell2mat(intermData);
