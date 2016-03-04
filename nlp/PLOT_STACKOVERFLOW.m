@@ -5,14 +5,18 @@ plot_settings_global
 set(0, 'DefaultTextFontName', 'Helvetica')
 set(0, 'DefaultAxesFontName', 'Helvetica')
 
+color4_pick = [228,26,28] ./ 255;
+color5_pick = [55,126,184] ./ 255;
+
 figureHandle = figure;
 
-T = length(patextr.title_cond_prob_no); % number of tokens
+% T = length(patextr.title_cond_prob_no); % number of tokens
+T = 500;
 
-subplot(3, 2, 1)
-plot(patextr.title_cond_prob_yes, 'Color', color4_pick)
+subplot(1, 2, 1)
+plot(patextr.body_cond_prob_yes(1:T), 'Color', color4_pick)
 hold on
-plot(patextr.title_cond_prob_no, 'Color', color5_pick)
+plot(patextr.body_cond_prob_no(1:T), 'Color', color5_pick)
 box off
 xlim([0, T])
 ylim([0, 1])
@@ -20,53 +24,13 @@ ylabel('Cond. prob.')
 xlabel('Tokens')
 set(gca, 'TickDir', 'out')
 
-subplot(3, 2, 2)
-scatter(patextr.title_cond_prob_yes, patextr.title_cond_prob_no, ...
+subplot(1, 2, 2)
+scatter(patextr.body_cond_prob_yes(1:T), patextr.body_cond_prob_no(1:T), ...
     'MarkerEdgeColor', color3_pick)
 xlim([0, 1])
 ylim([0, 1])
-xlabel('Automation patent', 'Color', color4_pick)
-ylabel('Not autom. pat.', 'Color', color5_pick)
-set(gca, 'TickDir', 'out')
-
-subplot(3, 2, 3)
-plot(patextr.abstract_cond_prob_yes, 'Color', color4_pick)
-hold on
-plot(patextr.abstract_cond_prob_no, 'Color', color5_pick)
-box off
-xlim([0, T])
-ylim([0, 1])
-ylabel('Cond. prob.')
-xlabel('Tokens')
-set(gca, 'TickDir', 'out')
-
-subplot(3, 2, 4)
-scatter(patextr.abstract_cond_prob_yes, patextr.abstract_cond_prob_no, ...
-    'MarkerEdgeColor', color3_pick)
-xlim([0, 1])
-ylim([0, 1])
-xlabel('Automation patent', 'Color', color4_pick)
-ylabel('Not autom. pat.', 'Color', color5_pick)
-set(gca, 'TickDir', 'out')
-
-subplot(3, 2, 5)
-plot(patextr.body_cond_prob_yes, 'Color', color4_pick)
-hold on
-plot(patextr.body_cond_prob_no, 'Color', color5_pick)
-box off
-xlim([0, T])
-ylim([0, 1])
-ylabel('Cond. prob.')
-xlabel('Tokens')
-set(gca, 'TickDir', 'out')
-
-subplot(3, 2, 6)
-scatter(patextr.body_cond_prob_yes, patextr.body_cond_prob_no, ...
-    'MarkerEdgeColor', color3_pick)
-xlim([0, 1])
-ylim([0, 1])
-xlabel('Automation patent', 'Color', color4_pick)
-ylabel('Not autom. pat.', 'Color', color5_pick)
+xlabel('Class 1', 'Color', color4_pick)
+ylabel('Class 2', 'Color', color5_pick)
 set(gca, 'TickDir', 'out')
 
 annotation(figureHandle,'textbox',...
@@ -87,7 +51,7 @@ annotation(figureHandle,'textbox',...
 
 % Reposition the figure
 % -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 800 600]) % in vector: left bottom width height
+set(gcf, 'Position', [100 200 800 400]) % in vector: left bottom width height
 
 set(figureHandle, 'Units', 'Inches');
 pos = get(figureHandle, 'Position');
