@@ -181,29 +181,28 @@ year_end = 2015;
 % end
 
 
-
-nb_stats = compile_class_stats(year_start, year_end);
-save('output/nb_stats.mat', 'nb_stats');
-
-
-load('output/nb_stats')
-
-ix_new_year = diff(nb_stats.weekstats.year);
-ix_new_year(1) = 1; % first year
-ix_new_year = find(ix_new_year);
-
-plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
-    ix_new_year)
-
-plot_series = nb_stats.weekstats.shareAutomat;
-plot_nb_share(year_start, year_end, plot_series, ix_new_year)
-
-
-
-plot_nb_autompat_yearly(year_start, year_end, ...
-    nb_stats.yearstats.shareAutomat)
-
-break
+%%
+% nb_stats = compile_class_stats(year_start, year_end);
+% save('output/nb_stats.mat', 'nb_stats');
+% 
+%
+%%
+% load('output/nb_stats')
+% 
+% ix_new_year = diff(nb_stats.weekstats.year);
+% ix_new_year(1) = 1; % first year
+% ix_new_year = find(ix_new_year);
+% 
+% plot_nb_overtime(year_start, year_end, nb_stats.weekstats.nrAutomat, ...
+%     ix_new_year)
+% 
+% plot_series = nb_stats.weekstats.shareAutomat;
+% plot_nb_share(year_start, year_end, plot_series, ix_new_year)
+% 
+% 
+% 
+% plot_nb_autompat_yearly(year_start, year_end, ...
+%     nb_stats.yearstats.shareAutomat)
 
 
 %% Make some visualizations 
@@ -657,5 +656,21 @@ break
 % patextr.prior_automat = sum(patextr.manAutomat(i)) / ...
 %     length(patextr.manAutomat(i));
 % patextr.prior_notautomat = 1 - patextr.prior_automat;
-% 
+
 % save('output/patextr.mat', 'patextr'); % save to .mat
+
+%%
+load('output/patextr.mat', 'patextr');
+
+%%
+close all
+% plot_cprob_tokclass(patextr)
+
+corr(patextr.title_cond_prob_no, patextr.title_cond_prob_yes)
+corr(patextr.abstract_cond_prob_no, patextr.abstract_cond_prob_yes)
+corr(patextr.body_cond_prob_no, patextr.body_cond_prob_yes)
+
+PLOT_STACKOVERFLOW(patextr)
+
+
+

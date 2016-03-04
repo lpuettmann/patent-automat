@@ -1,4 +1,5 @@
 
+
 % Set font
 set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
@@ -14,6 +15,9 @@ myRandomColor = [49, 130, 189] ./ 255;
 color1_pick = [0.3, 0.3, 0.3];
 color2_pick = [0.8, 0.8, 0.8];
 color3_pick = [0.5, 0.5, 0.5];
+color4_pick = [27, 158, 119] ./ 255; % colorbrewer2.org
+color5_pick = [217, 95, 2] ./ 255; % colorbrewer2.org
+color6_pick = [117, 112, 179] ./ 255; % colorbrewer2.org
 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
