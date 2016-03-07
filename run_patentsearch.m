@@ -642,20 +642,22 @@ load('output/patextr.mat', 'patextr');
 i = not(patextr.indic_exclclassnr); % which patents to include
 load('specs/find_dictionary.mat', 'find_dictionary');
 
-% tstats = calc_cond_probs_toks(patextr.incidMat_title(i, :), ...
+% tokstats = calc_cond_probs_toks(patextr.incidMat_title(i, :), ...
 %     find_dictionary, patextr.manAutomat(i), patextr.unique_titleT);
-% patextr.title_cond_prob_yes = tstats.cond_prob_yes;
-% patextr.title_cond_prob_no = tstats.cond_prob_no;
+% patextr.title_cond_prob_yes = tokstats.cond_prob_yes;
+% patextr.title_cond_prob_no = tokstats.cond_prob_no;
 % 
-% tstats = calc_cond_probs_toks(patextr.incidMat_abstract(i, :), ...
+% tokstats = calc_cond_probs_toks(patextr.incidMat_abstract(i, :), ...
 %     find_dictionary, patextr.manAutomat(i), patextr.unique_abstractT);
-% patextr.abstract_cond_prob_yes = tstats.cond_prob_yes;
-% patextr.abstract_cond_prob_no = tstats.cond_prob_no;
+% patextr.abstract_cond_prob_yes = tokstats.cond_prob_yes;
+% patextr.abstract_cond_prob_no = tokstats.cond_prob_no;
 
-tstats = calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
+tokstats = calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
     find_dictionary, patextr.manAutomat(i), patextr.unique_bodyT);
-% patextr.body_cond_prob_yes = tstats.cond_prob_yes;
-% patextr.body_cond_prob_no = tstats.cond_prob_no;
+plotmatrix_tokstats([tokstats.cond_prob_yes, tokstats.cond_prob_no, ...
+    tokstats.mutual_information, tokstats.nr_appear]);
+% patextr.body_cond_prob_yes = tokstats.cond_prob_yes;
+% patextr.body_cond_prob_no = tokstats.cond_prob_no;
 
 
 % patextr.prior_automat = sum(patextr.manAutomat(i)) / ...
@@ -670,117 +672,7 @@ tstats = calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
 % Plot conditional probabilities for tokens
 % plot_cprob_tokclass(patextr)
 
-load('specs/find_dictionary.mat', 'find_dictionary');
-[overview_table.cond_prob_yes, ix_sort] = sort(tstats.cond_prob_yes, ...
-    'descend');
-overview_table.cond_prob_no = tstats.cond_prob_no( ix_sort );
-overview_table.dict = find_dictionary( ix_sort );
-overview_table.mutual_information = tstats.mutual_information( ix_sort );
 
-%%
-overview_table.nr_appear = tstats.nr_appear(ix_sort);
-overview_table = struct2table(overview_table);
-
-corr(overview_table.cond_prob_no, overview_table.cond_prob_yes)
-
-X = [overview_table.cond_prob_yes, overview_table.cond_prob_no, ...
-    overview_table.mutual_information, overview_table.nr_appear];
-
-
-%%
-
-plot_settings_global;
-
-figureHandle = figure;
-
-subplot(4, 3, 1)
-scatter(X(:, 2), X(:, 1), 'MarkerEdgeColor', color1_pick)
-ylim([0, 1])
-ylabel('Cond. prob. "Yes"')
-xlabel('Cond. prob. "No"')
-set(gca,'xaxisLocation','top')
-annotation(figureHandle,'textbox',...
-    [0.273206303724928 0.780048076923077 0.1 0.0348557692307694],...
-    'String',{'Corr: 0.88'},...
-    'FitBoxToText','off',...
-    'EdgeColor','none');
-
-subplot(4, 3, 2)
-scatter(X(:, 3), X(:, 1), 'MarkerEdgeColor', color1_pick)
-ylim([0, 1])
-xlabel('Mutual information')
-set(gca,'xaxisLocation','top')
-set(gca,'ytick',[])
-annotation(figureHandle,'textbox',...
-    [0.53 0.78448275862069 0.1 0.0482758620689654],...
-    'String',{'Corr: 0.19'},...
-    'FitBoxToText','off',...
-    'EdgeColor','none');
-
-subplot(4, 3, 3)
-scatter(X(:, 4), X(:, 1), 'MarkerEdgeColor', color1_pick)
-ylim([0, 1])
-xlabel('#doc with token')
-set(gca,'xaxisLocation','top')
-set(gca,'ytick',[])
-annotation(figureHandle,'textbox',...
-    [0.818897637795276 0.786206896551724 0.0679133858267717 0.0413793103448276],...
-    'String',{'Corr: 0.95'},...
-    'FitBoxToText','off',...
-    'EdgeColor','none');
-
-
-% subplot(4, 3, 4) is empty
-
-subplot(4, 3, 5)
-scatter(X(:, 3), X(:, 2), 'MarkerEdgeColor', color1_pick)
-ylabel('Cond. prob. "No"')
-set(gca,'xtick',[])
-annotation(figureHandle,'textbox',...
-    [0.53348031496063 0.636206896551724 0.0777401574803151 0.0448275862068965],...
-    'String',{'Corr: -0.086'},...
-    'FitBoxToText','off',...
-    'EdgeColor','none');
-
-subplot(4, 3, 6)
-scatter(X(:, 4), X(:, 2), 'MarkerEdgeColor', color1_pick)
-set(gca,'ytick',[])
-set(gca,'xtick',[])
-annotation(figureHandle,'textbox',...
-    [0.74 0.644827586206896 0.0856141732283465 0.0431034482758618],...
-    'String',{'Corr: 0.99'},...
-    'FitBoxToText','off',...
-    'EdgeColor','none');
-
-
-% subplot(4, 3, 7) is empty
-
-% subplot(4, 3, 8) is empty
-
-subplot(4, 3, 9)
-scatter(X(:, 4), X(:, 3), 'MarkerEdgeColor', color1_pick)
-ylabel('Mutual information')
-set(gca,'xtick',[])
-annotation(figureHandle,'textbox',...
-    [0.812023622047244 0.413793103448276 0.0738031496062994 0.0448275862068964],...
-    'String',{'Corr: 0.0056'},...
-    'FitBoxToText','off',...
-    'EdgeColor','none');
-
-
-
-% Reposition the figure
-% -----------------------------------------------------------------------
-set(gcf, 'Position', [100 200 1200 900]) % in vector: left bottom width height
-
-set(figureHandle, 'Units', 'Inches');
-pos = get(figureHandle, 'Position');
-
-set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-    'Inches', 'PaperSize', [pos(3), pos(4)])
-
-% Export to pdf
-print(figureHandle, 'output/plotmatrix_tstats.pdf', '-dpdf', '-r0')
 
 
 
