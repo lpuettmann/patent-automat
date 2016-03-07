@@ -638,21 +638,26 @@ year_end = 2015;
 % save('specs/find_dictionary.mat', 'find_dictionary')
 
 %%
-% i = not(patextr.indic_exclclassnr); % which patents to include
-% load('specs/find_dictionary.mat', 'find_dictionary');
-% 
-% [patextr.title_cond_prob_yes, patextr.title_cond_prob_no] = ...
-%     calc_cond_probs_toks(patextr.incidMat_title(i, :), ...
+load('output/patextr.mat', 'patextr');
+i = not(patextr.indic_exclclassnr); % which patents to include
+load('specs/find_dictionary.mat', 'find_dictionary');
+
+% tstats = calc_cond_probs_toks(patextr.incidMat_title(i, :), ...
 %     find_dictionary, patextr.manAutomat(i), patextr.unique_titleT);
+% patextr.title_cond_prob_yes = tstats.cond_prob_yes;
+% patextr.title_cond_prob_no = tstats.cond_prob_no;
 % 
-% [patextr.abstract_cond_prob_yes, patextr.abstract_cond_prob_no] = ...
-%     calc_cond_probs_toks(patextr.incidMat_abstract(i, :), ...
+% tstats = calc_cond_probs_toks(patextr.incidMat_abstract(i, :), ...
 %     find_dictionary, patextr.manAutomat(i), patextr.unique_abstractT);
-% 
-% [patextr.body_cond_prob_yes, patextr.body_cond_prob_no] = ...
-%     calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
-%     find_dictionary, patextr.manAutomat(i), patextr.unique_bodyT);
-% 
+% patextr.abstract_cond_prob_yes = tstats.cond_prob_yes;
+% patextr.abstract_cond_prob_no = tstats.cond_prob_no;
+
+tstats = calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
+    find_dictionary, patextr.manAutomat(i), patextr.unique_bodyT);
+% patextr.body_cond_prob_yes = tstats.cond_prob_yes;
+% patextr.body_cond_prob_no = tstats.cond_prob_no;
+
+
 % patextr.prior_automat = sum(patextr.manAutomat(i)) / ...
 %     length(patextr.manAutomat(i));
 % patextr.prior_notautomat = 1 - patextr.prior_automat;
@@ -660,17 +665,42 @@ year_end = 2015;
 % save('output/patextr.mat', 'patextr'); % save to .mat
 
 %%
-load('output/patextr.mat', 'patextr');
+% load('output/patextr.mat', 'patextr');
 
-%%
-close all
+% Plot conditional probabilities for tokens
 % plot_cprob_tokclass(patextr)
 
-corr(patextr.title_cond_prob_no, patextr.title_cond_prob_yes)
-corr(patextr.abstract_cond_prob_no, patextr.abstract_cond_prob_yes)
-corr(patextr.body_cond_prob_no, patextr.body_cond_prob_yes)
+load('specs/find_dictionary.mat', 'find_dictionary');
+[overview_table.cond_prob_yes, ix_sort] = sort(tstats.cond_prob_yes, ...
+    'descend');
+overview_table.cond_prob_no = tstats.cond_prob_no( ix_sort );
+overview_table.dict = find_dictionary( ix_sort );
+overview_table.mutual_information = tstats.mutual_information( ix_sort );
 
-PLOT_STACKOVERFLOW(patextr)
+%%
+overview_table.nr_appear = tstats.nr_appear(ix_sort);
+overview_table = struct2table(overview_table);
+
+corr(overview_table.cond_prob_no, overview_table.cond_prob_yes)
+
+X = [overview_table.cond_prob_yes, overview_table.cond_prob_no, ...
+    overview_table.mutual_information, overview_table.nr_appear];
+
+plotmatrix(X, X)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
