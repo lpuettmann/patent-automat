@@ -678,7 +678,7 @@ load('output/patextr.mat', 'patextr');
 i = not(patextr.indic_exclclassnr); % which patents to include
 load('specs/find_dictionary.mat', 'find_dictionary');
 
-% Calculate updated posterior probabilty of the patent belonging to
+%% Calculate updated posterior probabilty of the patent belonging to
 % either class
 prior_yes = patextr.prior_automat;
 prior_no = patextr.prior_notautomat;
@@ -699,38 +699,41 @@ for t=1:length(find_dictionary)
         selected_feat_incidMat = [selected_feat_incidMat, append_this];
         
     else
-        warning('At token %d.', t)
         selected_feat_incidMat = [selected_feat_incidMat, ...
             zeros(size(selected_feat_incidMat, 1), 1)];
     end
 end
 
-occur = +(selected_feat_incidMat > 0);
+occur = (selected_feat_incidMat > 0);
 
 for i=1:size(occur, 1)
     indic_appear = occur(i, :)';
     
     assert( length(indic_appear) == length(cond_prob_yes) )
     
-    post_yes(i) = calc_post_nb(prior_yes, cond_prob_yes, ...
+    post_yes(i, 1) = calc_post_nb(prior_yes, cond_prob_yes, ...
+        indic_appear);
+    
+    post_no(i, 1) = calc_post_nb(prior_no, cond_prob_no, ...
         indic_appear);
 end
 
+%%
+figureHandle = figure;
 
+subplot(1, 2, 1)
+plot(post_yes, 'Color', [152,78,163] ./ 255)
+hold on
+plot(post_no, 'Color', [255,127,0] ./ 255)
 
+subplot(1, 2, 2)
+scatter(post_yes, post_no, 'MarkerEdgeColor', [0.3, 0.3, 0.3])
+corr(post_yes, post_no)
 
+nb_class = (post_yes > post_no);
 
-
-
-
-
-
-
-
-
-
-
-
+calculate_manclass_stats(patextr.manAutomat(not(patextr.indic_exclclassnr)), ...
+    nb_class)
 
 
 
