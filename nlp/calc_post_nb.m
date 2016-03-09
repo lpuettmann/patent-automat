@@ -1,6 +1,7 @@
 function post = calc_post_nb(prior, cond_prob, indic_appear)
 % Calculate the log posterior from the prior and the conditional
-% probabilities. See Manning, Raghavan, Schuetze (2008) chapter 13.
+% probabilities for the Bernoulli Naive Bayes. 
+% See Manning, Raghavan, Schuetze (2008), chapter 13.
 % 
 % IN:
 %       - prior: a probability between 0 and 1.

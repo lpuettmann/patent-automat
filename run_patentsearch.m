@@ -638,9 +638,9 @@ year_end = 2015;
 % save('specs/find_dictionary.mat', 'find_dictionary')
 
 %%
-load('output/patextr.mat', 'patextr');
-i = not(patextr.indic_exclclassnr); % which patents to include
-load('specs/find_dictionary.mat', 'find_dictionary');
+% load('output/patextr.mat', 'patextr');
+% i = not(patextr.indic_exclclassnr); % which patents to include
+% load('specs/find_dictionary.mat', 'find_dictionary');
 
 % tokstats = calc_cond_probs_toks(patextr.incidMat_title(i, :), ...
 %     find_dictionary, patextr.manAutomat(i), patextr.unique_titleT);
@@ -652,14 +652,14 @@ load('specs/find_dictionary.mat', 'find_dictionary');
 % patextr.abstract_cond_prob_yes = tokstats.cond_prob_yes;
 % patextr.abstract_cond_prob_no = tokstats.cond_prob_no;
 
-tokstats = calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
-    find_dictionary, patextr.manAutomat(i), patextr.unique_bodyT);
-plotmatrix_tokstats([tokstats.cond_prob_yes, tokstats.cond_prob_no, ...
-    tokstats.mutual_information, tokstats.nr_appear]);
+% tokstats = calc_cond_probs_toks(patextr.incidMat_body(i, :), ...
+%     find_dictionary, patextr.manAutomat(i), patextr.unique_bodyT);
+% plotmatrix_tokstats([tokstats.cond_prob_yes, tokstats.cond_prob_no, ...
+%     tokstats.mutual_information, tokstats.nr_appear]);
 % patextr.body_cond_prob_yes = tokstats.cond_prob_yes;
 % patextr.body_cond_prob_no = tokstats.cond_prob_no;
-
-
+% 
+% 
 % patextr.prior_automat = sum(patextr.manAutomat(i)) / ...
 %     length(patextr.manAutomat(i));
 % patextr.prior_notautomat = 1 - patextr.prior_automat;
@@ -671,6 +671,60 @@ plotmatrix_tokstats([tokstats.cond_prob_yes, tokstats.cond_prob_no, ...
 
 % Plot conditional probabilities for tokens
 % plot_cprob_tokclass(patextr)
+
+
+%% Calculate some classification statistics
+load('output/patextr.mat', 'patextr');
+i = not(patextr.indic_exclclassnr); % which patents to include
+load('specs/find_dictionary.mat', 'find_dictionary');
+
+% Calculate updated posterior probabilty of the patent belonging to
+% either class
+prior_yes = patextr.prior_automat;
+prior_no = patextr.prior_notautomat;
+cond_prob_yes = patextr.body_cond_prob_yes;
+cond_prob_no = patextr.body_cond_prob_no;
+featTok = patextr.unique_bodyT;
+feat_incidMat = patextr.incidMat_body(i, :);
+
+selected_feat_incidMat = [];
+
+for t=1:length(find_dictionary)
+    pickTok = find_dictionary{t};
+    
+    j = find( strcmp(featTok, pickTok) );
+    
+    if not( isempty( j ) )
+        append_this = full( feat_incidMat(:, j) );
+        selected_feat_incidMat = [selected_feat_incidMat, append_this];
+        
+    else
+        warning('At token %d.', t)
+        selected_feat_incidMat = [selected_feat_incidMat, ...
+            zeros(size(selected_feat_incidMat, 1), 1)];
+    end
+end
+
+occur = +(selected_feat_incidMat > 0);
+
+for i=1:size(occur, 1)
+    indic_appear = occur(i, :)';
+    
+    assert( length(indic_appear) == length(cond_prob_yes) )
+    
+    post_yes(i) = calc_post_nb(prior_yes, cond_prob_yes, ...
+        indic_appear);
+end
+
+
+
+
+
+
+
+
+
+
 
 
 
