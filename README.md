@@ -2,9 +2,6 @@ Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
 
-* auto-gen TOC:
-{:toc}
-
 Get data:
 ---------------------------
 The Matlab function `download_patent_files.m` goes to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and downloads the Patent Grant Full Texts for all years 1976-2015. 
