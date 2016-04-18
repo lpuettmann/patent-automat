@@ -33,9 +33,11 @@ ipg140121.xml
 
 Before running:
 ---------------------------
-- In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data. Be aware that you still have to do this even if you automatically downloaded the files using the `download_patent_files.m` function.
-- Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
-- Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
+In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data. Be aware that you still have to do this even if you automatically downloaded the files using the `download_patent_files.m` function.
+
+Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
+
+Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
 
 To run:
 ---------------------------
