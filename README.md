@@ -12,9 +12,9 @@ The Matlab function `download_patent_files.m` goes to [Google Patents](http://ww
 | 1976-2015  | `.txt` | 98 GB |
 | 2002-2015  | `.XML`, `.xml` | 238 GB |
 
-It puts the unzipped data files into subfolders *[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
+It puts the unzipped data files into subfolders */[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
 
-So in directory (folder) *1976* you should see:
+So in directory */1976* you should see:
 ```
 $ls
 pftaps19760106_wk01.txt
@@ -22,7 +22,7 @@ pftaps19760106_wk02.txt
 pftaps19760106_wk03.txt
 ...
 ```
-and in directory *2014* you should see:
+and in directory */2014* you should see:
 ```
 $ls
 ipg140107.xml
@@ -33,15 +33,13 @@ ipg140121.xml
 
 Before running:
 ---------------------------
-In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data. Be aware that you still have to do this even if you automatically downloaded the files using the `download_patent_files.m` function.
+In directory */specs* in in `set_data_path.m` specify the absolute paths to the patent text data. Be aware that you still have to do this even if you automatically downloaded the files using the `download_patent_files.m` function.
 
-Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
-
-Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
+Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path. Only then run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
 
 To run:
 ---------------------------
-Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then runs the rest of the analysis.
+Run `run_patentsearch.m`. You can find all the figures and tables that go into the paper in the directory */output*.
 
 Necessary software:
 ---------------------------
