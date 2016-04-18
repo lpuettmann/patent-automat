@@ -33,14 +33,9 @@ ipg140121.xml
 
 Before running:
 ---------------------------
-
 1. In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data.
 2. Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
 3. Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
-
-1. James Madison
-2. James Monroe
-3. John Quincy Adams
 
 To run:
 ---------------------------
