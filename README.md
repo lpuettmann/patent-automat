@@ -8,7 +8,7 @@ This repository holds the codes for our paper. Please let us know if you find an
 
 > Mann, Katja and Lukas Püttmann (2016). "A New Indicator of Automation Based on Patent Text Search". University of Bonn.
 
-Get data:
+<a name="team-members"></a>Get data:
 ---------------------------
 The Matlab function `download_patent_files.m` goes to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and downloads the Patent Grant Full Texts for all years 1976-2015. 
 
