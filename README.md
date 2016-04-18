@@ -12,7 +12,7 @@ The Matlab function `download_patent_files.m` goes to [Google Patents](http://ww
 | 1976-2015  | `.txt` | 98 GB |
 | 2002-2015  | `.XML`, `.xml` | 238 GB |
 
-It puts the unzipped data files into subfolders */[year]*. Adjust the paths to this data in the function `set_data_path.m` in folder *functions*.
+It puts the unzipped data files into subdirectories */[year]*. Adjust the paths to this data in the function `set_data_path.m` in directory */specs*.
 
 So in directory */1976* you should see:
 ```
