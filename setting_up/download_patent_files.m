@@ -1,12 +1,20 @@
 function download_patent_files(year_start, year_end, parent_dname)
-% Save patent files from Google patent into PatentData/[year].
- 
+% Save patent grant text files from Google patents.
+%
+%   IN:
+%       - year_start: first year for which to download the files. Earliest
+%       option here is 1976.
+%       - year_end: last year for which to download the files. Latest
+%       option here is 2015, as they stopped the service then.
+%       - parent_dname: provide a name for the directory.
+%
 
 %% Get HTML from website
 
 disp('Get names of files to download.')
 
-google_patents_URL = 'https://www.google.com/googlebooks/uspto-patents-grants-text.html';
+google_patents_URL = ...
+    'https://www.google.com/googlebooks/uspto-patents-grants-text.html';
 [webStr, status] = urlread(google_patents_URL);
 
 if status == 0
