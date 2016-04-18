@@ -2,6 +2,10 @@ Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
 
+Overview:
+---------------------------
+This repository holds the codes for the paper ``A New Indicator of Automation Based on Patent Text Search". You are free to use them (see [license](https://github.com/lpuettmann/patent-automat/blob/master/LICENSE.md)). Please let us know if you find any bugs by filing an issue or sending us an email.
+
 Get data:
 ---------------------------
 The Matlab function `download_patent_files.m` goes to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and downloads the Patent Grant Full Texts for all years 1976-2015. 
