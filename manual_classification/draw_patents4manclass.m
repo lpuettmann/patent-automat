@@ -1,15 +1,9 @@
-close all
-clear all
-clc
-
+function draw_patents4manclass(vnum, year_start, year_end)
 
 tic
 
-
 %% Define parameters
 % ========================================================================
-year_start = 1976;
-year_end = 2015;
 nr_years = length(year_start:year_end);
 week_start = 1;
 
@@ -77,5 +71,3 @@ xlswrite(save_name, output_matrix);
 fprintf('Saved: %s.\n', save_name)
 
 toc
-
-

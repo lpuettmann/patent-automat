@@ -33,14 +33,14 @@ ipg140121.xml
 
 Before running:
 ---------------------------
-1. In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data.
-2. Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
-3. Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
+- In directory *specs* in in `set_data_path.m` specify the absolute paths to the patent text data. Be aware that you still have to do this even if you automatically downloaded the files using the `download_patent_files.m` function.
+- Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
+- Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
 
 To run:
 ---------------------------
-Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then executes the steps explained below.
+Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then runs the rest of the analysis.
 
 Necessary software:
 ---------------------------
-We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used (apart from `hpfilter` from the Econometrics Toolbox for some non-essential plots). The tests rely on Matlab's xUnit Framework which are included in Matlab from version R2013a (March 2013) onwards or else can be downloaded [here](http://de.mathworks.com/matlabcentral/fileexchange/22846-matlab-xunit-test-framework).
+We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used. The tests rely on Matlab's xUnit Framework which are included in Matlab from version R2013a (March 2013) onwards or else can be downloaded [here](http://de.mathworks.com/matlabcentral/fileexchange/22846-matlab-xunit-test-framework).

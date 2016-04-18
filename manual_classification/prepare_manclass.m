@@ -1,16 +1,12 @@
 function manclassData = prepare_manclass(filename)
 
-
-% Load excel file
+%% Load excel file
 [manclass_dataRaw, ~, ~] = xlsread(filename);
-
-
 
 %% Sort patents by year
 indic_year_unsorted = manclass_dataRaw(:, 2);
 [~, ix_sort] = sort( indic_year_unsorted );
 manclass_dataRaw = manclass_dataRaw(ix_sort, :);
-
 
 %% Extract data
 patentnr = manclass_dataRaw(:, 1);
@@ -55,7 +51,6 @@ end
 if any( diff(indic_year) < 0 )
     warning('Years should be increasing.')
 end
-
 
 %% Save data in a structure
 manclassData.patentnr = patentnr;
