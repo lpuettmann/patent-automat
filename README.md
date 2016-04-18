@@ -2,6 +2,8 @@ Analyze Patent Grant Texts
 ===========================================================
 **Katja Mann, Lukas Püttmann (2015)**
 
+* auto-gen TOC:
+{:toc}
 
 Get data:
 ---------------------------
