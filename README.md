@@ -38,6 +38,10 @@ Before running:
 2. Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path.
 3. Run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
 
+1. James Madison
+2. James Monroe
+3. John Quincy Adams
+
 To run:
 ---------------------------
 Run `run_patentsearch.m`. It runs `set_up.m` (step 1) above and then executes the steps explained below.
