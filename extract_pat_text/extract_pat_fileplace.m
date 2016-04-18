@@ -1,10 +1,12 @@
 function patfplace = extract_pat_fileplace(patentnr, indic_year)
 
-% Run some checks
+%% Run some checks
+% -------------------------------------------------------------
 
 % Check that data is already sorted by years. This is important as we'll 
-% later loop through the years.10
+% later loop through the years.
 [~, ix_sort] = sort(indic_year);
+
 if any( not( diff(ix_sort) == 1 ) )
     error('Patents should already be ordered by year.')
 end
@@ -14,12 +16,12 @@ assert( isnumeric(indic_year) )
 assert( length(patentnr) == length(indic_year) )
 
 
-% Find out which file the patent text belong to the patent number is in
+%% Find out which file the patent text belong to the patent number is in
+% -------------------------------------------------------------
 
 for j=1:length(patentnr)
 
     % Load patent index for year
-    % -------------------------------------------------------------
     load_file_name = horzcat('patent_index_', num2str(indic_year(j)));
     load(load_file_name)
 
