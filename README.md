@@ -1,6 +1,6 @@
 Analyze Patent Grant Texts
 ===========================================================
-**Katja Mann, Lukas Püttmann (2015)**
+**Katja Mann, Lukas Püttmann (2015)**, University of Bonn
 
 1. [Overview](https://github.com/lpuettmann/patent-automat#overview)
 2. [Get data](https://github.com/lpuettmann/patent-automat#get-data)
@@ -54,4 +54,4 @@ Run `run_patentsearch.m`. You can find all the figures and tables that go into t
 
 Necessary software:
 ---------------------------
-We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used. The tests rely on Matlab's xUnit Framework which are included in Matlab from version R2013a (March 2013) onwards or else can be downloaded [here](http://de.mathworks.com/matlabcentral/fileexchange/22846-matlab-xunit-test-framework).
+We wrote and tested this in Matlab R2013b on Windows, OS X and Linux machines. No toolboxes are used. The tests rely on Matlab's xUnit Framework which are included in Matlab from version R2013a (March 2013) onwards or else you downloaded them [here](http://de.mathworks.com/matlabcentral/fileexchange/22846-matlab-xunit-test-framework).
