@@ -2,46 +2,46 @@ function tests = test_get_indic_exclclassnr
     tests = functiontests(localfunctions);
 end
 
-function testNormal1(testCase)
-    uspc_nr = {'123'};
+function test_normalKnown2Excl(testCase)
+    exclude_techclass = choose_exclude_techclass();
+    uspc_nr = { num2str( exclude_techclass(1) ) }; % this should be exluded
     actSolution = get_indic_exclclassnr(uspc_nr);
-    
-    % We need to check if the proposed USPC technology number is actually
-    % in the list of excluded numbers. We don't specify this exluded list
-    % here or pass it in, but instead it is called from inside the
-    % function. Therefore we need to make the following function call.
-    uspc_nr_numeric = str2num(uspc_nr{1});
-    expSolution = check_classnr_uspc( uspc_nr_numeric );
+    expSolution = 1; 
     
     verifyEqual(testCase, actSolution, expSolution)
 end
 
-function testNormal2(testCase)
-    uspc_nr = {'00'};
+function test_normalKnownNotExcl(testCase)
+    % This doesn't look like a USPC number and should NOT be exluded
+    uspc_nr = {'0.000346'}; 
     actSolution = get_indic_exclclassnr(uspc_nr);
-    
-    uspc_nr_numeric = str2num(uspc_nr{1});
-    expSolution = check_classnr_uspc( uspc_nr_numeric );
+    expSolution = 0; 
     
     verifyEqual(testCase, actSolution, expSolution)
 end
 
-function testNormal3(testCase)
-    uspc_nr = {'531'};
+function test_NegativeStrangeNum(testCase)
+    uspc_nr = { num2str( -sqrt(31984) ) }; 
     actSolution = get_indic_exclclassnr(uspc_nr);
-    
-    uspc_nr_numeric = str2num(uspc_nr{1});
-    expSolution = check_classnr_uspc( uspc_nr_numeric );
+    expSolution = 0; 
     
     verifyEqual(testCase, actSolution, expSolution)
 end
 
-function testNormal4(testCase)
-    uspc_nr = {'693'};
-    actSolution = get_indic_exclclassnr(uspc_nr);
+function test_DoubleCellError(testCase)
     
-    uspc_nr_numeric = str2num(uspc_nr{1});
-    expSolution = check_classnr_uspc( uspc_nr_numeric );
+    % The numbers look right and they are in a cell array, but they should
+    % be strings, not doubles.
+    uspc_nr = {123; 512; 742}; 
+    
+    try
+        indic_exclclassnr = get_indic_exclclassnr(uspc_nr);
+        actSolution = 0; % this is wrong
+    catch
+        actSolution = 1; % yes, this is right.
+    end
+    
+    expSolution = 1; 
     
     verifyEqual(testCase, actSolution, expSolution)
 end

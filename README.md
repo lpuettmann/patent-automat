@@ -1,6 +1,6 @@
 Analyze Patent Grant Texts
 ===========================================================
-**Katja Mann, Lukas Püttmann (2015)**, University of Bonn
+**Katja Mann, Lukas Püttmann
 
 1. [Overview](https://github.com/lpuettmann/patent-automat#overview)
 2. [Get data](https://github.com/lpuettmann/patent-automat#get-data)

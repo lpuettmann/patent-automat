@@ -12,7 +12,6 @@ function indic_exclclassnr = get_indic_exclclassnr(uspc_nr)
 %
 
 % Check for correct inputs
-assert( not( isstr( uspc_nr ) ) ) % not a string
 assert( iscell( uspc_nr ) )
 
 % Get string until first space
@@ -31,10 +30,6 @@ for i=1:length(classnr_tok)
 end
 
 classnr_3dig = cell2mat( classnr_3dig );
-
-if length( classnr_3dig ) < length( uspc_nr )
-    warning('Maybe some tech. numbers are missing.')
-end
 
 % Get tech numbers to exclude
 exclude_techclass = choose_exclude_techclass();
