@@ -32,19 +32,29 @@ for ix_year=year_start:year_end
     
     % Load matches
     % -------------------------------------------------------------
-    load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+%     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+      
+    load_file_name = horzcat('patent_index_', num2str(ix_year));
     load(load_file_name)
     
-    nr_patents_yr = size(patsearch_results.patentnr, 1);
+    % Get list of patent numbers in year
+    patentnr = vertcat( pat_ix{:, 1} );
     
-    rand_pat_year = randsample(nr_patents_yr, nr_draw);
+    % Delete "named" patents (starting with letter)
+    save_row_delete = delete_named_pat(patentnr);
+    patentnr(save_row_delete) = [];
+    
+    % Delete first (and last [for some]) letter of patent numbers
+    patentnr = strip_patentnr(patentnr, ix_year);
         
-    patent_number = patsearch_results.patentnr(rand_pat_year);
-    patent_number = cellfun(@str2num, patent_number); 
+    rand_pat_year = randsample(length(patentnr), nr_draw);
+        
+    draw_patentnr = patentnr(rand_pat_year);
+    draw_patentnr = cellfun(@str2num, draw_patentnr); 
     
     % Stack yearly draws underneath
     rand_pat = [rand_pat; 
-                patent_number, repmat(ix_year, size(rand_pat_year))];
+                draw_patentnr, repmat(ix_year, size(rand_pat_year))];
     
     fprintf('Year %d completed.\n', ix_year)
 end

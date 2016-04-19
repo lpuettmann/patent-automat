@@ -41,27 +41,7 @@ if size(length_pattext) ~= size(patent_keyword_appear.patentnr, 1)
 end
 
 % Find numbers starting with a letter
-% Number of patents per ix_year
-nr_patents_yr = size(patent_keyword_appear.patentnr, 1);
-
-ix_save = 1; % initalize saving index
-
-for ix_patent = 1:nr_patents_yr
-    extract_row = patent_keyword_appear.patentnr{ix_patent};
-
-    if strcmp(extract_row(1), 'D') ... % design patents
-            || strcmp(extract_row(1), 'P') ... % PP: plant patents
-            || strcmp(extract_row(1), 'R') ... % reissue patents
-            || strcmp(extract_row(1), 'T') ... % defensive publications
-            || strcmp(extract_row(1), 'H') ... % SIR (statutory invention registration)
-            || strcmp(extract_row(1), 'X') % early X-patents
-       save_row_delete(ix_save) = ix_patent;
-       ix_save = ix_save + 1;
-    end   
-end
-
-save_row_delete = save_row_delete';
-
+save_row_delete = delete_named_pat(patent_keyword_appear.patentnr);
 
 % Define new data structure to hold the results "patsearch_results"
 patsearch_results = patent_keyword_appear;
@@ -78,8 +58,8 @@ patsearch_results.abstract_matches(save_row_delete, :) = []; % matrix not vector
 patsearch_results.body_matches(save_row_delete, :) = []; % matrix not vector
 patsearch_results.length_pattext(save_row_delete) = [];
 
-if nr_patents_yr - length(save_row_delete) ~= size(...
-        patsearch_results.patentnr, 1)
+if size(patent_keyword_appear.patentnr, 1) - length(save_row_delete) ...
+        ~= size(patsearch_results.patentnr, 1)
     warning('Should be equal.')
 end
 
@@ -106,20 +86,4 @@ elseif size(patsearch_results.patentnr, 1) ~= size(...
 end
 
 % Delete first (and last [for some]) letter of patent numbers
-patent_number_cleaned =  repmat({''}, size(patsearch_results.patentnr, ...
-    1), 1);
-for ix_patent = 1:size(patsearch_results.patentnr, 1)
-
-    extract_row = patsearch_results.patentnr{ix_patent};
-
-    if ix_year >= 2002 % after (not incl.) 2001: delete first letter only
-        trunc_row = extract_row(2:end);
-    else % before 2001: delete first and last letter
-        trunc_row = extract_row(2:end-1);
-    end
-
-    patent_number_cleaned{ix_patent} = trunc_row;
-end
-
-% Insert truncated patent numbers back into patent result table
-patsearch_results.patentnr = patent_number_cleaned;
+patsearch_results.patentnr = strip_patentnr(patsearch_results.patentnr);

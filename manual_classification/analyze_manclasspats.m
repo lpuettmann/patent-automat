@@ -6,14 +6,6 @@ function [find_dictionary, patextr] = analyze_manclasspats(fname, ...
 %% Load and prepare the manually classified patents
 patextr = prepare_manclass(fname);
 
-% Get technology numbers for manually classified patents
-patextr.uspc_nr = extract_classnr(patextr.patentnr, ...
-    patextr.indic_year, year_start, year_end);
-
-% Determine which patents from analysis to exclude based on tech. class
-patextr.indic_exclclassnr = get_indic_exclclassnr( ...
-    patextr.uspc_nr);
-
 
 %% Extract full texts of manually coded patents
 run(test_extract_pat_fileplace);
@@ -25,6 +17,14 @@ patextr.nr_pat_in_file = patfplace.nr_pat_in_file;
 patextr.week = patfplace.week;
 patextr.line_start = patfplace.line_start;
 patextr.line_end = patfplace.line_end;
+
+% Get technology numbers for manually classified patents
+patextr.uspc_nr = extract_classnr(patextr.patentnr, ...
+    patextr.indic_year, year_start, year_end);
+
+% Determine which patents from analysis to exclude based on tech. class
+patextr.indic_exclclassnr = get_indic_exclclassnr( ...
+    patextr.uspc_nr);
 
 % Check that things look plausible
 check_correct_patextr(patextr)
