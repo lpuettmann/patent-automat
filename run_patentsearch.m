@@ -98,67 +98,22 @@ year_end = 2015;
 %% Use the manual classifications
 
 % Load and prepare the manually classified patents
-manclassData = prepare_manclass('manclass_consolidated_v10.xlsx');
+patextr = prepare_manclass('manclass_consolidated_v10.xlsx');
+
+% Get technology numbers for manually classified patents
+patextr.uspc_nr = extract_classnr(patextr.patentnr, ...
+    patextr.indic_year, year_start, year_end);
+
+% Determine which patents from analysis to exclude based on tech. class
+patextr.indic_exclclassnr = get_indic_exclclassnr( ...
+    patextr.uspc_nr);
 
 
-% Get keywords and technology numbers for manually classified patents
-% automclassData = compile_automclass4codedpats(manclassData.patentnr, ...
-%     manclassData.indic_year, year_start, year_end)
-% automclassData.indic_exclclassnr = check_classnr_uspc(automclassData.classnr_uspc);
-% save('output/automclassData.mat', 'automclassData'); % save to .mat
-
-
-
-%%
-% Classify patents based on computerized methods
-% load('automclassData')
-
-
-% computerClass = classify_autom_algorith(automclassData);
-
-
-%% Compare manual vs. computer classification of patents
-
-
-% Report contingency table for Algorithm1 only
-% ix_alg = find( strcmp(computerClass.algorithm_name, 'Algorithm1') );
-% classifstat = calculate_manclass_stats(manclassData.manAutomat, ...
-%     computerClass.compAutomat(:, ix_alg));
-% make_contingency_table(classifstat)
-
-% make_table_evalstats(classifstat)
-
-
-
-
-% compClass_Yes = computerClass.compAutomat(:, ix_alg);
-% classifstat_yrly = calculate_classerror_overtime(manclassData, ...
-%     compClass_Yes, year_start, year_end);
-
-% plot_classifstat_yrly(classifstat_yrly, year_start, year_end)
-% plot_accuracy_yrly(classifstat_yrly, year_start, year_end)
-% plot_accuracy_and_fmeasure_yrly(classifstat_yrly, year_start, year_end)
-
-
-% Compare some algorithms
-% choose_compalg_list = {'Algorithm1', 'automat', 'Bessen-Hunt', ...
-%     'Always "No"', 'Always "Yes"'};
-% choose_compalg_list = computerClass.algorithm_name; % pick all algorithms
-% classalg_comparison = comp_evals_algs(choose_compalg_list, ...
-%     computerClass, manclassData);
-
-% plot_bar_fmeasure(classalg_comparison.fmeasure, classalg_comparison.algorithm_name)
-
-% max_line = 9; % choose number of algorithms to put on line for table in paper
-% make_table_compare_classalg(classalg_comparison, max_line)
-
-
-%% Extract texts of manually coded patents
+%% Extract full texts of manually coded patents
 run(test_extract_pat_fileplace);
-patfplace = extract_pat_fileplace(manclassData.patentnr, ...
-    manclassData.indic_year);
 
-patextr = manclassData;
+patfplace = extract_pat_fileplace(patextr.patentnr, ...
+    patextr.indic_year);
 
 patextr.nr_pat_in_file = patfplace.nr_pat_in_file;
 patextr.week = patfplace.week;
@@ -238,12 +193,8 @@ patextr.body_occurstats = get_occurstats(patextr.incidMat_body, ...
     patextr.unique_bodyT, patextr.manAutomat);
 
 
-%% Determine which patents from sample to exclude based on tech. class
-patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr);
-
-
 %% Calculate mutual information statistic for every term
-i = not(patextr.indic_exclclassnr); % which patents to include
+i = not( patextr.indic_exclclassnr ); % which patents to include
 
 patextr.tokRanking_title = rank_tokens(...
     patextr.incidMat_title(i, :), patextr.manAutomat(i), ...

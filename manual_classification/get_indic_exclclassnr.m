@@ -11,6 +11,8 @@ function indic_exclclassnr = get_indic_exclclassnr(uspc_nr)
 %       be exluded from further analysis. 1: exclude, 0: don't exclude
 %
 
+% Check for correct inputs
+assert( not( isstr( uspc_nr ) ) ) % not a string
 assert( iscell( uspc_nr ) )
 
 % Get string until first space
@@ -28,8 +30,23 @@ for i=1:length(classnr_tok)
     end
 end
 
-classnr_3dig = cell2mat(classnr_3dig);
+classnr_3dig = cell2mat( classnr_3dig );
 
-% Check the exctracted USPC classification numbers against the list of USPC
-% numbers that we want to exclude.
-indic_exclclassnr = check_classnr_uspc(classnr_3dig);
+if length( classnr_3dig ) < length( uspc_nr )
+    warning('Maybe some tech. numbers are missing.')
+end
+
+% Get tech numbers to exclude
+exclude_techclass = choose_exclude_techclass();
+
+assert( not( isstr( exclude_techclass ) ) ) % not a string
+assert( not( iscell( exclude_techclass ) ) ) % not a cell array
+
+% Check if tech numbers of manually classified patents is one of those
+% chosen to be excluded
+indic_exclclassnr = nan( size(classnr_3dig) );
+
+for i=1:size(classnr_3dig,1)   
+    pick_classnr = classnr_3dig(i);    
+    indic_exclclassnr(i) = any( exclude_techclass == pick_classnr );
+end
