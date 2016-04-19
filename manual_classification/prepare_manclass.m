@@ -19,8 +19,6 @@ indic_NotSure = manclass_dataRaw(:, 6);
 coderID = manclass_dataRaw(:, 8);
 coderDate = manclass_dataRaw(:, 9);
 
-%% Get list with technology numbers to be excluded from analysis
-
 %% Make some checks
 if length(unique(patentnr)) ~= length(patentnr)
     [duplN, duplBin] = histc(patentnr, ...
