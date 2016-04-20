@@ -103,35 +103,33 @@ year_end = 2015;
 
 %% Check for all patents which ones to exclude from analysis based on 
 % their technology class
-for ix_year=year_start:year_end;
-    
-    fname = ['patsearch_results_', num2str(ix_year)];
-    load(fname);
-    
-    % Extract and clean the USPC technology numbers
-    classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc, ...
-        'verbose');
-
-    % Check which of these to exclude
-    patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
-
+% for ix_year=year_start:year_end;
+%     
+%     fname = ['patsearch_results_', num2str(ix_year)];
+%     load(fname);
+%     
+%     % Extract and clean the USPC technology numbers
+%     classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc, ...
+%         'verbose');
+% 
+%     % Check which of these to exclude
+%     patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
+% 
 %     save(['cleaned_matches/', fname, '.mat'], 'patsearch_results')
-    
-    fprintf('%d: %3.1f percent excluded.\n', ix_year, ...
-        sum(patsearch_results.indic_exclclassnr) ./ ...
-        length(patsearch_results.patentnr)*100)
-end
+%     
+%     fprintf('%d: %3.1f percent excluded.\n', ix_year, ...
+%         sum(patsearch_results.indic_exclclassnr) ./ ...
+%         length(patsearch_results.patentnr)*100)
+% end
 
-
-break
 
 %%
 % nb_stats = compile_class_stats(year_start, year_end);
 % save('output/nb_stats.mat', 'nb_stats');
-% 
-%
-%%
-% load('output/nb_stats')
+
+
+%% Make some aggregate plots of our classifie patents
+load('output/nb_stats')
 % 
 % ix_new_year = diff(nb_stats.weekstats.year);
 % ix_new_year(1) = 1; % first year
@@ -143,32 +141,21 @@ break
 % plot_series = nb_stats.weekstats.shareAutomat;
 % plot_nb_share(year_start, year_end, plot_series, ix_new_year)
 % 
-% 
-% 
 % plot_nb_autompat_yearly(year_start, year_end, ...
 %     nb_stats.yearstats.shareAutomat)
 
 
 %% Make some visualizations 
-% dim_subplot = [7, 5];
 
-% plot_matches_overtime(year_start, year_end, dim_subplot)
-% plot_matches_over_nrpatents_weekly(year_start, year_end, dim_subplot)
-% plot_mean_len_pattxt(year_start, year_end)
-% plot_pat1m_over_nrlines(year_start, year_end)
-% plot_nr_pat1m(year_start, year_end)
-% plot_error_nr_patents % compares number of yearly patents 1976-2014
+% Make plot that compares number of yearly patents 1976-2014
+% plot_error_nr_patents(nb_stats.yearstats.nrAllPats, year_start)
 
-% Plot the classified automation patents
-% pick_k = 1; % 1: "automat"
-% plot_pat1m_over_nrpatents_weekly(year_start, year_end, pick_k)
-% plot_pat1m_overtime(year_start, year_end, pick_k)
 
-% plot_alg1_overtime(year_start, year_end)
+nrAutomat = nb_stats.yearstats.nrAutomat;
+nrAllPats = nb_stats.yearstats.nrAllPats;
+shareAutomat = nb_stats.yearstats.shareAutomat;
 
-% plot_alg1_over_nrpatents_weekly(year_start, year_end)
-
-% make_table_yearsstats(year_start, year_end)
+make_table_yearsstats(nrAutomat, nrAllPats, shareAutomat, year_start, year_end)
 
 
 

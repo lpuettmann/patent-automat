@@ -1,43 +1,15 @@
-function plot_error_nr_patents
+function plot_error_nr_patents(nrClassPats, year_start)
 
-
-% Define parameters
+% Attention: Stop the comparison in 2014, as we don't have data for all
+% patents in 2015. So we cannot compare the aggregate number for that year.
 compare_year_start = 1976;
 compare_year_end = 2014;
 
-
-% Load summary data
-build_load_filename = 'allyr_patstats_1976-2015.mat';
-
-if exist(build_load_filename, 'file') == 2 % check if file exists
-    load(build_load_filename)
-else
-    warning('%s does not exist. This function only works with data from 1976-2015.', ...
-        build_load_filename)
-    return
-end
-
-ix_start = 1;
-ix_iter = 1;
-for ix_year=1976:2015
-    week_end = set_weekend(ix_year);
-    ix_end = ix_start - 1 + week_end; 
-    nr_pat(ix_iter, 1) = sum( allyr_patstats.nr_patents_per_week( ...
-        ix_start : ix_end) );
-    ix_start = ix_end + 1;
-    ix_iter = ix_iter + 1;
-end
-
-nr_pat_until2014 = nr_pat(1:end - 1);
-
-
-%% Set font
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
-
-
 %% Calculate error in number of patents
 % From: http://www.uspto.gov/web/offices/ac/ido/oeip/taf/us_stat.htm
+% This the total number of "utility" patents granted in a year by the
+% USPTO. In the table at the url, this is called "Utility Patent Grants,
+% All Origin Total".
 official_nr_patents = [...  
         1976       70226;
         1977       65269;
@@ -77,15 +49,13 @@ official_nr_patents = [...
         2011      224505;
         2012      253155;
         2013      277835;
-        2014      300678];
+        2014      300677];
 
+nrClassPats_trunc = nrClassPats(compare_year_start - year_start + 1 : ...
+    compare_year_end - year_start + 1);
+error_nr_patents = (nrClassPats_trunc - official_nr_patents(:, 2));
 
-error_nr_patents = (nr_pat_until2014 - official_nr_patents(:, 2));
-
-
-
-%% Plot
-
+%%
 
 % Some settings for the plots
 plot_time = compare_year_start:compare_year_end;
@@ -107,8 +77,8 @@ bar(plot_time, pick_plot_series, 0.7, 'FaceColor', color1_pick, ...
 %plot(plot_time, pick_plot_series, 'Color', color1_pick, 'LineWidth', 0.5, ...
 %    'Marker', 'o', 'MarkerSize', 7, 'MarkerFaceColor', color1_pick)
 %set(gca,'FontSize',12) % change default font size of axis labels
-title('Error in number of identified patents (negative: identified too few patents)', 'FontSize', 14, ...
-    'FontWeight', 'bold')
+title('Error in number of identified patents (negative: identified too few patents)', ...
+    'FontSize', 14, 'FontWeight', 'bold')
 box off
 set(gca,'FontSize',12) % change default font size of axis labels
 
@@ -127,6 +97,7 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 
 
 %% Export to pdf
-print_pdf_name = horzcat('output/error_nr_patents_', num2str(compare_year_start), '-',  num2str(compare_year_end),'.pdf');
+print_pdf_name = horzcat('output/error_nr_patents_', ...
+    num2str(compare_year_start), '-',  num2str(compare_year_end),'.pdf');
 print(figureHandle, print_pdf_name, '-dpdf', '-r0')
 
