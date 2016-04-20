@@ -1,5 +1,8 @@
 function outData = format_classnr_uspc(inData)
 
+% Check for correct inputs
+assert( iscell( inData ) )
+
 % Break strings apart at first whitespace
 intermData = cellfun(@strtok, inData, 'UniformOutput', false);
 

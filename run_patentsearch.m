@@ -112,16 +112,13 @@ for ix_year=year_start:year_end;
     classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc);
 
     % Check which of these to exclude
-%     patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
-    
-    indic_exclclassnr = get_indic_exclclassnr(...
-        patsearch_results.classnr_uspc)
-    
+    patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
+
 %     save(['cleaned_matches/', fname, '.mat'], 'patsearch_results')
     
-%     fprintf('%d: %3.1f percent excluded.\n', ix_year, ...
-%         sum(patsearch_results.indic_exclclassnr) ./ ...
-%         length(patsearch_results.patentnr)*100)
+    fprintf('%d: %3.1f percent excluded.\n', ix_year, ...
+        sum(patsearch_results.indic_exclclassnr) ./ ...
+        length(patsearch_results.patentnr)*100)
 end
 
 
