@@ -44,9 +44,8 @@ year_end = 2015;
 
 
 %% Draw patents to classify manually
-vnum = 15; % give this a version number to refer back to it later
+% vnum = 15; % give this a version number to refer back to it later
 % draw_patents4manclass(vnum, year_start, year_end)
-draw_patents4manclass(vnum, 1976, 1978)
 
 
 %% Use the manual classifications
@@ -57,11 +56,38 @@ nr_feat_body = 500;
 indicStemmer = 'snowball'; % Options: 'porter' or 'snowball'
 stop_words = define_stopwords();             
 
-[find_dictionary, patextr] = analyze_manclasspats(fname, indicStemmer, ...
-    stop_words);
 
-save('specs/find_dictionary.mat', 'find_dictionary')
-save('output/patextr.mat', 'patextr');
+year_start = 1976;
+year_end = 1978;
+
+patextr = prepare_manclass(fname);
+
+patfplace = extract_pat_fileplace(patextr.patentnr, patextr.indic_year);
+
+patextr.nr_pat_in_file = patfplace.nr_pat_in_file;
+patextr.week = patfplace.week;
+patextr.line_start = patfplace.line_start;
+patextr.line_end = patfplace.line_end;
+
+uspc_nr_NEW = patfplace.uspc_nr;
+
+% Get technology numbers for manually classified patents
+uspc_nr = extract_classnr(patextr.patentnr, ...
+    patextr.indic_year, year_start, year_end);
+
+
+
+
+
+break
+
+
+%%
+% [find_dictionary, patextr] = analyze_manclasspats(fname, indicStemmer, ...
+%     stop_words);
+% 
+% save('specs/find_dictionary.mat', 'find_dictionary')
+% save('output/patextr.mat', 'patextr');
 
 
 

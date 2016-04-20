@@ -10,8 +10,7 @@ patextr = prepare_manclass(fname);
 %% Extract full texts of manually coded patents
 run(test_extract_pat_fileplace);
 
-patfplace = extract_pat_fileplace(patextr.patentnr, ...
-    patextr.indic_year);
+patfplace = extract_pat_fileplace(patextr.patentnr, patextr.indic_year);
 
 patextr.nr_pat_in_file = patfplace.nr_pat_in_file;
 patextr.week = patfplace.week;
@@ -23,8 +22,7 @@ patextr.uspc_nr = extract_classnr(patextr.patentnr, ...
     patextr.indic_year, year_start, year_end);
 
 % Determine which patents from analysis to exclude based on tech. class
-patextr.indic_exclclassnr = get_indic_exclclassnr( ...
-    patextr.uspc_nr);
+patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr);
 
 % Check that things look plausible
 check_correct_patextr(patextr)
