@@ -10,16 +10,15 @@ patextr = prepare_manclass(fname);
 %% Extract full texts of manually coded patents
 run(test_extract_pat_fileplace);
 
+patextr = prepare_manclass(fname);
+
 patfplace = extract_pat_fileplace(patextr.patentnr, patextr.indic_year);
 
 patextr.nr_pat_in_file = patfplace.nr_pat_in_file;
 patextr.week = patfplace.week;
 patextr.line_start = patfplace.line_start;
 patextr.line_end = patfplace.line_end;
-
-% Get technology numbers for manually classified patents
-patextr.uspc_nr = extract_classnr(patextr.patentnr, ...
-    patextr.indic_year, year_start, year_end);
+patextr.uspc_nr = patfplace.uspc_nr % USPC technology numbers
 
 % Determine which patents from analysis to exclude based on tech. class
 patextr.indic_exclclassnr = get_indic_exclclassnr(patextr.uspc_nr);

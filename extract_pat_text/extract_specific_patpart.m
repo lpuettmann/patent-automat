@@ -30,8 +30,7 @@ if isnan( extr_patline_end )
     extr_patline_end = length(search_corpus);
 end
 
-patent_text_corpus = search_corpus(extr_patline_start:extr_patline_end, ...
-    :);
+patent_text_corpus = search_corpus(extr_patline_start:extr_patline_end, :);
 
 patparts = extract_patent_parts(patent_text_corpus, ftset);
 
