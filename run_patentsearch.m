@@ -128,8 +128,8 @@ year_end = 2015;
 % save('output/nb_stats.mat', 'nb_stats');
 
 
-%% Make some aggregate plots of our classifie patents
-load('output/nb_stats')
+%% Summmarize classified patents with plots and tables
+% load('output/nb_stats')
 % 
 % ix_new_year = diff(nb_stats.weekstats.year);
 % ix_new_year(1) = 1; % first year
@@ -144,9 +144,6 @@ load('output/nb_stats')
 % plot_nb_autompat_yearly(year_start, year_end, ...
 %     nb_stats.yearstats.shareAutomat)
 
-
-%% Make some visualizations 
-
 % Make plot that compares number of yearly patents 1976-2014
 % plot_error_nr_patents(nb_stats.yearstats.nrAllPats, year_start)
 
@@ -156,30 +153,30 @@ load('output/nb_stats')
 %     year_start, year_end)
 
 
-%% Link to sector of use using Silverman concordance
-% ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-%     'ReadVariableNames', false);
-% 
-% % Variables in Silverman concordance table:
-% %   - ipc: IPC class and subclass      
-% %   - sic: US SIC
-% %   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
-% %   - usefrq: frequency of patents in IPC assigned to SIC of use
-% ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', 'usefrq'};
-% 
-% construct_sic_automix(years, ipcsicfinalv5)
+%% Link patents to sector of use using Silverman concordance
+ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+    'ReadVariableNames', false);
+
+% Variables in Silverman concordance table:
+%   - ipc: IPC class and subclass      
+%   - sic: US SIC
+%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
+%   - usefrq: frequency of patents in IPC assigned to SIC of use
+ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', ...
+    'usefrq'};
+
+construct_sic_automix(year_start, year_end, ipcsicfinalv5)
 
 
 %% Compile SIC automatix
-% sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
-% 
+sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
+
 % savename = 'output/sic_automix_allyears.mat';
 % save(savename, 'sic_automix_allyears')
 % fprintf('Saved: %s.\n', savename)
 
 
 %% Analyse SIC automatix table
-% ========================================================================
 % load('output/sic_automix_allyears.mat')
 
 % sic_overcategories = define_sic_overcategories();

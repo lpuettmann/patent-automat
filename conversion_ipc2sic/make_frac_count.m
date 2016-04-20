@@ -1,13 +1,13 @@
-function [frac_counts, alg1_flatten] = make_frac_count(in_cellarray, alg1)
+function [frac_counts, automPat_flatten] = make_frac_count(in_cellarray, automPat)
 
 
 %% Check input format
 assert( all( cellfun(@(x) iscell(x), in_cellarray) ), ...
     'Can only take cell array of cells.')
 
-assert( isnumeric(alg1) )
+assert( isnumeric(automPat) )
 
-assert( length(alg1) == length(in_cellarray) )
+assert( length(automPat) == length(in_cellarray) )
 
 
 %% Get fractional counts for all IPCs for all patents and the 
@@ -26,11 +26,11 @@ for i=1:length(in_cellarray)
         frac_counts(ix_save,1) = 1 / nr_ipc;
 
         % Save for every entry if it belongs to an automation patent
-        alg1_flatten(ix_save,1) = alg1(i);
+        automPat_flatten(ix_save,1) = automPat(i);
         ix_save = ix_save + 1;
     end
 end
 
 %% Check output format.
-assert( length(frac_counts) == length(alg1_flatten)  )
-assert( isnumeric(alg1_flatten) )
+assert( length(frac_counts) == length(automPat_flatten)  )
+assert( isnumeric(automPat_flatten) )

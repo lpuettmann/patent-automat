@@ -1,5 +1,5 @@
 function sic_automix = match_sic2ipc(ipc_concordance, ipc_short, ...
-    frac_counts, alg1_flatten, ix_pick, mfgfrq, usefrq)   
+    frac_counts, automPat_flatten, ix_pick, mfgfrq, usefrq)   
 
 
 %% Check inputs
@@ -11,7 +11,7 @@ assert( isnumeric( usefrq ))
 
 assert( length(frac_counts) == length(ipc_short) )
 assert( length(ipc_concordance) == length(ix_pick) )
-assert( length(alg1_flatten) == length(frac_counts) )
+assert( length(automPat_flatten) == length(frac_counts) )
 
 assert( length(mfgfrq) == length(usefrq) )
 
@@ -35,7 +35,7 @@ for ix_ipc=1:length(ipc_concordance)
         match_frac_counts );
 
     % Only count automation patents
-    autompat_match = ix_ipc_match .* alg1_flatten;
+    autompat_match = ix_ipc_match .* automPat_flatten;
 
     % Number of automation patents match from IPC to SIC
     sic_automix.autompat_nr_matched(ix_ipc,1) = sum( autompat_match ); 

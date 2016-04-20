@@ -1,4 +1,4 @@
-function construct_sic_automix(years, ipcsicfinalv5)
+function construct_sic_automix(year_start, year_end, ipcsicfinalv5)
 
 
 sic_silverman = cell2mat( cellfun(@str2num, ipcsicfinalv5.sic, ...
@@ -8,24 +8,25 @@ sic_silverman = unique(sic_silverman);
 exclude_techclass = choose_exclude_techclass();
 
 % Get list of IPCs of automation patents for year
-for t=1:length(years)
+disp('Link patents to sectors of use:')
+for t=1:length(year_start:year_end)
     
-    ix_year = years(t);
+    ix_year = year_start + t - 1;
     
     fprintf('Year: %d\n', ix_year)
      
     load_file_name = horzcat('patsearch_results_', num2str(ix_year));
     load(load_file_name)
 
-    % Classify patents as automation patents according to algorithm 1
-    alg1 = classif_alg1(patsearch_results.dictionary, ...
-        patsearch_results.title_matches, ...
-        patsearch_results.abstract_matches, patsearch_results.body_matches, ...
-        exclude_techclass);
+    % Indicators for patents showing if they are classified as automation
+    % patents.
+    automPat = patsearch_results.is_nbAutomat;
 
+    % List with IPC technology classification numbers
     ipc_list = patsearch_results.classnr_ipc;
     
-    [frac_counts, alg1_flatten] = make_frac_count(ipc_list, alg1);
+    in_cellarray = ipc_list;
+    [frac_counts, automPat_flatten] = make_frac_count(ipc_list, automPat);
     
     ipc_flat = flatten_cellarray(ipc_list);    
     
@@ -44,7 +45,7 @@ for t=1:length(years)
         usefrq = ipcsicfinalv5.usefrq;
         
         sic_automix = match_sic2ipc(ipc_concordance, ipc_short, ...
-            frac_counts, alg1_flatten, ix_pick, mfgfrq, usefrq);
+            frac_counts, automPat_flatten, ix_pick, mfgfrq, usefrq);
                
         
         % Get summary for all IPCs mapping into SICs
@@ -74,8 +75,13 @@ for t=1:length(years)
         sic_automix_yres.automix_use(ix_sic, 1) = ...
             sum( sic_automix.automix_use );  
 
-        fprintf('[%d] Finished SIC: %d/%d.\n', ix_year, ix_sic, ...
-            length(sic_silverman))
+        % Print a progress message for every 100th industry and the last
+        % one.
+        if (mod(ix_sic, 50) == 0) | (ix_sic == length(sic_silverman))
+            fprintf('[%d] Finished SIC: %d/%d.\n', ix_year, ix_sic, ...
+                length(sic_silverman))
+        end
+        
         clear sic_automix
     end
     
@@ -83,8 +89,9 @@ for t=1:length(years)
 
     savename = horzcat('sic_automix/sic_automix_yres_', ...
         num2str(ix_year), '.mat');
-    save(savename, 'sic_automix_yres'); 
-    fprintf('Saved: %s.\n', savename)
+%     save(savename, 'sic_automix_yres'); 
+%     fprintf('Saved: %s.\n', savename)
+    fprintf('Finished (not saved): %s.\n', savename)
     
     clear sic_automix_yres
 end

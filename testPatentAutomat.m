@@ -26,7 +26,6 @@ run(test_compile_incidence_matrix);
 run(test_get_occurstats);
 run(test_get_indic_exclclassnr);
 run(test_rank_tokens);
-run(test_classif_alg);
 run(test_calc_post_nb);
 run(test_format_classnr_uspc);
 run(test_check_classnr_uspc);
