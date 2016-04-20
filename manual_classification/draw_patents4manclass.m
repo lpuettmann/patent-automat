@@ -49,7 +49,7 @@ for ix_year=year_start:year_end
         
     rand_pat_year = randsample(length(patentnr), nr_draw);
         
-    draw_patentnr = patentnr(rand_pat_year);
+    draw_patentnr = patentnr( rand_pat_year );
     draw_patentnr = cellfun(@str2num, draw_patentnr); 
     
     % Stack yearly draws underneath
@@ -64,10 +64,7 @@ end
 %% Export to excel files
 % ========================================================================
 % Rearrange elements randomly
-rand_pat = rand_pat(randperm(length(rand_pat)), :);
-
-% Assign a version number
-vnum = 14;
+rand_pat = rand_pat(randperm( length(rand_pat) ), :);
 
 % Create an Excel document which gives the patent number of the drawn
 % patent

@@ -44,8 +44,9 @@ year_end = 2015;
 
 
 %% Draw patents to classify manually
-% vnum = 15; % give this a version number to refer back to it later
-draw_patents4manclass(vnum, year_start, year_end)
+vnum = 15; % give this a version number to refer back to it later
+% draw_patents4manclass(vnum, year_start, year_end)
+draw_patents4manclass(vnum, 1976, 1978)
 
 
 %% Use the manual classifications
