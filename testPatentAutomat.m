@@ -17,7 +17,6 @@ run(test_flatten_cellarray);
 run(test_shorten_cellarray);
 run(test_make_frac_count);
 run(test_match_sic2ipc);
-% run(test_porterStemmer); % there's a known and unresolved bug here
 run(test_porterStemmer2);
 run(test_define_stopwords);
 run(test_tokenize_string);
@@ -29,3 +28,8 @@ run(test_get_indic_exclclassnr);
 run(test_rank_tokens);
 run(test_classif_alg);
 run(test_calc_post_nb);
+run(test_format_classnr_uspc);
+run(test_check_classnr_uspc);
+
+% There's a known and unresolved bug here (fails on input ('ies')
+% run(test_porterStemmer); 

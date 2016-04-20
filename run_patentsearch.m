@@ -109,7 +109,8 @@ for ix_year=year_start:year_end;
     load(fname);
     
     % Extract and clean the USPC technology numbers
-    classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc);
+    classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc, ...
+        'verbose');
 
     % Check which of these to exclude
     patsearch_results.indic_exclclassnr = check_classnr_uspc(classnr_uspc);
@@ -121,6 +122,8 @@ for ix_year=year_start:year_end;
         length(patsearch_results.patentnr)*100)
 end
 
+
+break
 
 %%
 % nb_stats = compile_class_stats(year_start, year_end);
