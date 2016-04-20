@@ -3,13 +3,9 @@ Analyze Patent Grant Texts
 **Katja Mann, Lukas Püttmann**
 
 - [Overview](https://github.com/lpuettmann/patent-automat#overview)
-
 - [Get data](https://github.com/lpuettmann/patent-automat#get-data)
-
 - [Before running](https://github.com/lpuettmann/patent-automat#before-running)
-
 - [To run](https://github.com/lpuettmann/patent-automat#to-run)
-
 - [Necessary software](https://github.com/lpuettmann/patent-automat#necessary-software)
 
 
