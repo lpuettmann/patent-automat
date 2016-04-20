@@ -150,13 +150,10 @@ load('output/nb_stats')
 % Make plot that compares number of yearly patents 1976-2014
 % plot_error_nr_patents(nb_stats.yearstats.nrAllPats, year_start)
 
-
-nrAutomat = nb_stats.yearstats.nrAutomat;
-nrAllPats = nb_stats.yearstats.nrAllPats;
-shareAutomat = nb_stats.yearstats.shareAutomat;
-
-make_table_yearsstats(nrAutomat, nrAllPats, shareAutomat, year_start, year_end)
-
+% Make table of yearly summary statistics
+% make_table_yearsstats(nb_stats.yearstats.nrAutomat, ...
+%     nb_stats.yearstats.nrAllPats, nb_stats.yearstats.shareAutomat, ...
+%     year_start, year_end)
 
 
 %% Link to sector of use using Silverman concordance
