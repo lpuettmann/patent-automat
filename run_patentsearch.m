@@ -154,22 +154,22 @@ year_end = 2015;
 
 
 %% Link patents to sector of use using Silverman concordance
-ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-    'ReadVariableNames', false);
+% ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
+%     'ReadVariableNames', false);
 
 % Variables in Silverman concordance table:
 %   - ipc: IPC class and subclass      
 %   - sic: US SIC
 %   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
 %   - usefrq: frequency of patents in IPC assigned to SIC of use
-ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', ...
-    'usefrq'};
+% ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', ...
+%     'usefrq'};
 
-construct_sic_automix(year_start, year_end, ipcsicfinalv5)
+% construct_sic_automix(year_start, year_end, ipcsicfinalv5)
 
 
 %% Compile SIC automatix
-sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
+% sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 
 % savename = 'output/sic_automix_allyears.mat';
 % save(savename, 'sic_automix_allyears')
@@ -177,88 +177,93 @@ sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 
 
 %% Analyse SIC automatix table
-% load('output/sic_automix_allyears.mat')
+load('output/sic_automix_allyears.mat')
 
-% sic_overcategories = define_sic_overcategories();
+sic_overcategories = define_sic_overcategories();
 
 % Get some summary series for over-categories of industries
 % [aggr_automix, aggr_automix_share] = ...
-%     get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears, ...
-%     sic_overcategories);
-
+%     get_sic_ocat_automix_data(year_start, year_end, ...
+%     sic_automix_allyears, sic_overcategories);
 
 % Sort the series for plotting
 % [~, plot_ix] = sort( aggr_automix_share(end, :) );
 % plot_ix = 1:10;
 % 
-% plot_overcat_sic_automatix_subplot(aggr_automix, ...
-%     sic_overcategories, year_start, year_end, plot_ix)
-% 
+% plot_overcat_sic_automatix_subplot(aggr_automix, sic_overcategories, ...
+%     year_start, year_end, plot_ix)
+
 % plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end, plot_ix)
 % 
 % plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
 %     sic_overcategories, year_start, year_end, plot_ix)
-
+% 
 % plot_overcat_sic_automatix_share_subplot_gray_allSubCat(...
 %     year_start, year_end, sic_overcategories, sic_automix_allyears, ...
 %     aggr_automix_share, plot_ix)
 
 
 % for pick_hl=1:size(sic_overcategories, 1) + 1
-%     
+    
 %     plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
 %         aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
-%     
+    
 %     plot_overcat_sic_automatix_share(aggr_automix_share, ...
 %         sic_overcategories, year_start, year_end, pick_hl)
-%     
+    
 %     plot_overcat_sic_automatix(aggr_automix, ...
 %         sic_overcategories, year_start, year_end, pick_hl)
 %     
 %     plot_overcat_sic_lautomatix(aggr_automix, ...
 %         sic_overcategories, year_start, year_end, pick_hl)    
-%     
-%     pause(0.05)
+    
+%     pause(1.5)
 % end
 
 
 
 %% Import Routine Task Index (RTI) by Autor, Levy and Murnane (2003)
-% rti_data = readtable('idata_rti.xlsx');
-% rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
-% 
-% 
-% [sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
-% 
-% sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
-% 
-% for i=1:length(sic_list)
-%     sic_pick = sic_list(i);    
-%     ix_extr = find( sic_pick == rti_data.sic );    
-%     assert( length(ix_extr) <= 1)
-%     
-%     sic_summary(i, 2) = sic_pick;
-%     if isempty( ix_extr ) 
-%         sic_summary(i, 2) = NaN;
-%     else
-%         sic_summary(i, 2) = rti_data.rti60(ix_extr);
-%     end
-%     
-%     ix_insert = find( ix_map == i );
-%     
-%     for j=1:length(ix_insert)
-%         sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
-%     end
-% end
-% 
-% 
-% %% Insert the relative automation index in the table
-% sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
-%     sic_automix_allyears.patents_use;
-% 
-% 
-% %% Get summary statistics for all years
+rti_data = readtable('idata_rti.xlsx');
+rti_data.rti60 = rti_data.rti60 / 100; % from percentage to share
+
+[sic_list, ~, ix_map] = unique( sic_automix_allyears.sic );
+
+sic_automix_allyears.rti60 = nan( size( sic_automix_allyears.sic ) );
+
+for i=1:length(sic_list)
+    sic_pick = sic_list(i);    
+    ix_extr = find( sic_pick == rti_data.sic );    
+    assert( length(ix_extr) <= 1)
+    
+    sic_summary(i, 2) = sic_pick;
+    if isempty( ix_extr ) 
+        sic_summary(i, 2) = NaN;
+    else
+        sic_summary(i, 2) = rti_data.rti60(ix_extr);
+    end
+    
+    ix_insert = find( ix_map == i );
+    
+    for j=1:length(ix_insert)
+        sic_automix_allyears.rti60(ix_insert(j)) = sic_summary(i, 2);
+    end
+end
+
+
+%% Insert the relative automation index in the table
+sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
+    sic_automix_allyears.patents_use;
+
+
+%% Create CSV file with the full SIC industry year observations
+tic
+fname = './output/sic_automix_allyears.csv';
+writetable(sic_automix_allyears, fname)
+toc
+
+
+%% Get summary statistics for all years
 % for i=1:length(rti_data.sic)
 %     
 %     ix_pick = ( sic_automix_allyears.sic == rti_data.sic(i) );
@@ -306,7 +311,7 @@ sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 %% Prepare conversion table
 % fyr_start = 1976;
 % fyr_end = 2014;
-
+% 
 % fname = 'Naics_co13.csv';
 % lnumber = 203074; % unfortunately hard-code line number
 % tic

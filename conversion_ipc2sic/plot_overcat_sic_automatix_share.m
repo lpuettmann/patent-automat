@@ -37,7 +37,7 @@ for i=1:length(sic_overcategories.letter)
     
     ylabel('Relative automation index')
     
-    ylim([0, 0.65])
+%     ylim([0, 0.65])
     xlim([year_start, year_end-1])
     set(gca, 'XTick', year_start:year_end-1) % Set the x-axis tick labels
     set(gca, 'xticklabel',{}) % turn x-axis labels off

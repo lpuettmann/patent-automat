@@ -1,7 +1,7 @@
 function [aggr_automix, aggr_automix_share] = ...
     get_sic_ocat_automix_data(year_start, year_end, sic_automix_allyears, ...
     sic_overcategories)
-
+% Compile some yearly statistics for aggregate industries.
 
 for ix_year=year_start:year_end
     t = ix_year - year_start + 1;    

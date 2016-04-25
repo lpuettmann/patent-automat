@@ -38,7 +38,7 @@ for j=1:size(sic_overcategories, 1)
         set(gca,'TickDir','out')
         hold on
 
-        ylim([0, 0.65])
+%         ylim([0, 0.65])
         xlim([year_start, year_end-1])
     end
     
