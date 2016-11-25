@@ -13,16 +13,6 @@ year_start = 1976;
 year_end = 2015;
 
 
-%% Get patent texts
-% parent_dname = 'patent_data'; % parent directory name (path to data)
-
-% Download the files from Google Patents (careful, these are 300 GB)
-% download_patent_files(year_start, year_end, parent_dname)
-
-% Unzip all files and delete zipped files
-% unzip_patent_files(year_start, year_end, parent_dname)
-
-
 %% Make patent index
 % for ix_year=year_start:year_end
 %     tic
@@ -257,10 +247,10 @@ sic_automix_allyears.rel_automix = sic_automix_allyears.automix_use ./ ...
 
 
 %% Create CSV file with the full SIC industry year observations
-tic
-fname = './output/sic_automix_allyears.csv';
-writetable(sic_automix_allyears, fname)
-toc
+% tic
+% fname = './output/sic_automix_allyears.csv';
+% writetable(sic_automix_allyears, fname)
+% toc
 
 
 %% Get summary statistics for all years

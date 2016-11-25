@@ -3,7 +3,6 @@ Analyze Patent Grant Texts
 **Katja Mann, Lukas Püttmann**
 
 - [Overview](https://github.com/lpuettmann/patent-automat#overview)
-- [Get data](https://github.com/lpuettmann/patent-automat#get-data)
 - [Before running](https://github.com/lpuettmann/patent-automat#before-running)
 - [To run](https://github.com/lpuettmann/patent-automat#to-run)
 - [Outputs](https://github.com/lpuettmann/patent-automat#outputs)
@@ -18,35 +17,12 @@ This repository holds the codes for our paper. Please let us know if you find an
 
 Get data:
 ---------------------------
-The Matlab function `download_patent_files.m` goes to [Google Patents](http://www.google.com/googlebooks/uspto-patents-grants-text.html) and downloads the Patent Grant Full Texts for all years 1976-2015. 
+Use [these](https://github.com/lpuettmann/get-patents) codes to obtain the patent grant texts.
 
-| Years  | Format | Size (unzipped) | 
-| ------------- | ------------- | ------------- |
-| 1976-2015  | `.txt` | 98 GB |
-| 2002-2015  | `.XML`, `.xml` | 238 GB |
-
-It puts the unzipped data files into subdirectories */[year]*. Adjust the paths to this data in the function `set_data_path.m` in directory */specs*.
-
-So in directory */1976* you should see:
-```
-$ls
-pftaps19760106_wk01.txt
-pftaps19760106_wk02.txt
-pftaps19760106_wk03.txt
-...
-```
-and in directory */2014* you should see:
-```
-$ls
-ipg140107.xml
-ipg140114.xml
-ipg140121.xml
-...
-```
 
 Before running:
 ---------------------------
-In directory */specs* in in `set_data_path.m` specify the absolute paths to the patent text data. Be aware that you still have to do this even if you automatically downloaded the files using the `download_patent_files.m` function. 
+In directory */specs* in in `set_data_path.m` specify the absolute paths to the patent text data. 
 
 Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path. Only then run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
 
