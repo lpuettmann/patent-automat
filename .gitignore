@@ -3,7 +3,7 @@
 *.dtd
 *.ent
 *.m~
-
+.DS_Store
 *.dvi
 *.aux
 *.nav
