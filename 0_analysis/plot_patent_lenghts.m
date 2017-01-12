@@ -7,6 +7,7 @@ year_start = 1976;
 year_end = 2015;
 
 
+
 for ix_year = year_start:year_end
     t = ix_year - year_start + 1;
     
@@ -16,7 +17,7 @@ for ix_year = year_start:year_end
 
     plength = patsearch_results.length_pattext;
     plength_ap = plength(find(patsearch_results.is_nbAutomat));
-       
+
     maxL(t) = max(plength);
     minL(t) = min(plength);
     meanL(t) = mean(plength);
@@ -26,9 +27,8 @@ for ix_year = year_start:year_end
     minL_ap(t) = min(plength_ap);
     meanL_ap(t) = mean(plength_ap);
     medianL_ap(t) = median(plength_ap);
-    
-    fprintf('%d: max = %3.1f, min = %3.1f, mean = %3.1f, median = %3.1f.\n', ...
-        ix_year, maxL(t), minL(t), meanL(t), medianL(t))
+
+    fprintf('Finished year: %d.\n', ix_year)
 end
  
 %%
@@ -68,6 +68,4 @@ line([2003 2003], y1, 'Color', col2);
 line([2004 2004], y1, 'Color', col2);
 line([2005 2005], y1, 'Color', col1);
 line([2006 2006], y1, 'Color', col1);
-
-
-
+ 
