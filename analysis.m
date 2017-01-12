@@ -32,6 +32,9 @@ for ix_year = year_start:year_end
 end
  
 %%
+col1 = [0.1, 0.9, 0.1];
+col2 = [0.9, 0.1, 0.1];
+
 figure
 subplot(2, 1, 1)
 plot(year_start:year_end, meanL, 'b')
@@ -39,8 +42,16 @@ hold on
 plot(year_start:year_end, meanL_ap, 'r')
 title('Mean')
 ylabel('Numbers of lines')
-legend('All', 'Automation patents', 'Location', 'NorthWest')
+legend('All patents', 'Automation patents', 'Location', 'NorthWest')
 hold off
+y1 = get(gca, 'ylim');
+line([2000 2000], y1, 'Color', col1);
+line([2001 2001], y1, 'Color', col1);
+line([2002 2002], y1, 'Color', col2);
+line([2003 2003], y1, 'Color', col2);
+line([2004 2004], y1, 'Color', col2);
+line([2005 2005], y1, 'Color', col1);
+line([2006 2006], y1, 'Color', col1);
 
 subplot(2, 1, 2)
 plot(year_start:year_end, medianL, 'b')
@@ -48,4 +59,15 @@ hold on
 ylabel('Numbers of lines')
 plot(year_start:year_end, medianL_ap, 'r')
 title('Median')
-legend('All', 'Automation patents', 'Location', 'NorthWest')
+legend('All patents', 'Automation patents', 'Location', 'NorthWest')
+y1 = get(gca, 'ylim');
+line([2000 2000], y1, 'Color', col1);
+line([2001 2001], y1, 'Color', col1);
+line([2002 2002], y1, 'Color', col2);
+line([2003 2003], y1, 'Color', col2);
+line([2004 2004], y1, 'Color', col2);
+line([2005 2005], y1, 'Color', col1);
+line([2006 2006], y1, 'Color', col1);
+
+
+
