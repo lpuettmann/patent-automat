@@ -37,7 +37,6 @@ set(gca,'TickDir','out')
 box off
 set(gcf, 'Color', 'white');
 
-
 % Reposition the figure
 % -----------------------------------------------------------------------
 set(gcf, 'Position', [100 200 1000 530]) % in vector: left bottom width height

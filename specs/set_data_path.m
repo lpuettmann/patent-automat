@@ -1,6 +1,9 @@
 function build_data_path = set_data_path(ix_year)
 
-if ispc
+[~, cname] = system('hostname');
+cname = strtrim(cname);
+
+if ispc & strcmp(cname, 'E700-Puettmann')
     build_data_path = horzcat('T:\Puettmann\patent_data_save\', ...
         num2str(ix_year));
 elseif ismac
