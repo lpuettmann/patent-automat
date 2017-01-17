@@ -14,7 +14,7 @@ function testNormal1(testCase)
     art_dataset.overcat = repmat(list, 2, 1);
     art_dataset.automix_use = (1:20)' ./ 10;
     art_dataset.patents_use = [1, 2, 3, 5, 4, 6, 9, 10, 13, 11, 0, 3, ... 
-        4, 2, 6, 4, 7, 8, 11, 8]'
+        4, 2, 6, 4, 7, 8, 11, 8]';
     art_dataset = struct2table(art_dataset);
     art_overcategories.letter = {'B', 'F', 'G', 'H', 'I'};
     [art_automix, art_automix_share] = get_sic_ocat_automix_data(...
@@ -39,7 +39,7 @@ function testNormal2(testCase)
     art_dataset.overcat = repmat(list, 2, 1);
     art_dataset.automix_use = (1:20)' ./ 10;
     art_dataset.patents_use = [1, 2, 3, 5, 4, 6, 9, 10, 13, 11, 0, 3, ... 
-        4, 2, 6, 4, 7, 8, 11, 8]'
+        4, 2, 6, 4, 7, 8, 11, 8]';
     art_dataset = struct2table(art_dataset);
     art_overcategories.letter = {'B', 'F', 'G', 'H', 'I'};
     [art_automix, art_automix_share] = get_sic_ocat_automix_data(...
