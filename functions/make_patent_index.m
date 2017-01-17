@@ -103,12 +103,12 @@ for ix_week = week_start:week_end
     patent_number = extract_patent_number(nr_patents, search_corpus, ...
         ix_pnr, ftset);
 
-    % Test if there are any spaces in WKU numbers
+    % Test if there are any spaces in patent numbers
     test_contains_space = strfind(patent_number, ' ');
     show_ix_contains_space = find(~cellfun(@isempty, ...
         test_contains_space));
     if not(isempty(show_ix_contains_space))
-        warning('There is a space in the patent WKU numbers')
+        warning('There is a space in the patent patent numbers')
         disp(patent_number(show_ix_contains_space))
     end
 
@@ -148,7 +148,7 @@ for ix_week = week_start:week_end
             end 
     end
 
-    % Test number of WKU numbers equal number of index positions
+    % Test number of patent numbers equal number of index positions
     if length(patent_number) ~= length(ix_find)
         warning('Should be the same.')
     end 
