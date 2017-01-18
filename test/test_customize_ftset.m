@@ -78,3 +78,22 @@ function test2001error(testCase)
     expSolution = 1;
     verifyEqual(testCase, actSolution, expSolution)
 end
+
+
+function test2001NoCauseTroubleXML(testCase)
+    
+    ftset = customize_ftset(1976, 'xml');
+    actSolution = +strcmp(ftset.indic_bodyfind, 'BSUM');
+    expSolution = 1;
+    
+    verifyEqual(testCase, actSolution, expSolution)
+end
+
+function test2001NoCauseTroubleTXT(testCase)
+    
+    ftset = customize_ftset(1976, 'txt');
+    actSolution = +strcmp(ftset.indic_bodyfind, 'BSUM');
+    expSolution = 1;
+    
+    verifyEqual(testCase, actSolution, expSolution)
+end

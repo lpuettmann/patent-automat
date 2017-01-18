@@ -1,67 +1,7 @@
-function pat_ix = make_patent_index(ix_year)
+function pat_ix = make_patent_index(ix_year, opt2001)
 
 % Customize file type settings
-if (ix_year < 2002) && (ix_year > 1975)
-    ftset.indic_filetype = 1;
-    ftset.nr_trunc = 4;
-    ftset.patent_findstr = 'PATN'; % patent grant text start
-    ftset.nr_lines4previouspatent = 1;
-    
-    ftset.uspc_nr_findstr = 'OCL'; % United States Patent Classification (USPC)
-    ftset.ipc_nr_findstr = 'ICL '; % International Patent Classification (IPC)
-    
-    ftset.fdate_findstr = 'APD'; % file date
-    ftset.fdate_linestart = 6;
-    ftset.fdate_linestop = 11;
-    
-elseif (ix_year >=2002) && (ix_year < 2005)
-    ftset.indic_filetype = 2;
-    ftset.patent_findstr = '<?xml version="1.0" encoding="UTF-8"?>';
-    ftset.pnr_find_str = '<B110><DNUM><PDAT>';
-    ftset.nr_lines4previouspatent = 2;
-    
-    ftset.uspc_nr_findstr = '<B521><PDAT>';
-    ftset.uspc_nr_linestart = 13;
-    ftset.uspc_nr_linestop = '</PDAT>';
-    
-    % Use a regular expression to search for one or the other
-    ftset.ipc_nr_findstr = '(<B511><PDAT>)|(<B512><PDAT>)';
-    ftset.ipc_nr_linestart = 13;
-    ftset.ipc_nr_linestop = '</PDAT>';
-    
-    ftset.fdate_findstr = '<B220><DATE><PDAT>';
-    ftset.fdate_linestart = 19;
-    ftset.fdate_linestop = 24;
-    
-elseif (ix_year >=2005) && (ix_year < 2016)
-    ftset.indic_filetype = 3;
-    ftset.patent_findstr = '<!DOCTYPE us-patent-grant';
-    ftset.pnr_find_str = '<us-patent-grant lang=';
-    ftset.nr_lines4previouspatent = 1;
-    
-    ftset.uspc_nr_findstr = '<classification-national>';
-    ftset.uspc_nr_linestart = 22;
-    ftset.uspc_nr_linestop = '</main-classification>';
-    
-    if ix_year == 2005
-        ftset.ipc_nr_findstr = '(<main-classification>)|(<further-classification>)';
-        ftset.ipc_nr_start_str = '<classification-ipc>';
-        ftset.ipc_nr_end_str = '</classification-ipc>';
-        ftset.ipc_nr_linestart = 13;
-        ftset.ipc_nr_linestop = '</main-classification>|(</further-classification>)';
-    else
-        ftset.indic_specialcase = 1;        
-        ftset.ipc_nr_findstr = '<classification-ipcr>';
-        ftset.ipc_nr_start_str = '<classifications-ipcr>';
-        ftset.ipc_nr_end_str = '</classifications-ipcr>';
-    end
-    
-    ftset.fdate_linestart = 7;
-    ftset.fdate_linestop = 12;
-    
-else
-    warning('The codes are not designed for year: %d.', ix_year)
-end
+customize_ftset(ix_year, opt2001);
 
 week_start = 1;
 
@@ -69,7 +9,7 @@ week_start = 1;
 week_end = set_weekend(ix_year); 
 
 % Add path to data and get a list with filenames for the year
-filenames = get_filenames(ix_year, week_start, week_end);
+filenames = get_filenames(ix_year, week_start, week_end, opt2001);
 
 
 % Iterate through files of weekly patent grant text data

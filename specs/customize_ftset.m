@@ -28,6 +28,12 @@ if ((ix_year <= 2000) && (ix_year >= 1976)) || ((ix_year == 2001) && ...
     ftset.indic_abstractfind = 'ABST';
     ftset.indic_abstractend = {'BSUM', 'PARN', 'PAC '};
     ftset.indic_bodyfind = 'BSUM';
+    ftset.patent_findstr = 'PATN'; % patent grant text start   
+    ftset.uspc_nr_findstr = 'OCL'; % United States Patent Classification (USPC)
+    ftset.ipc_nr_findstr = 'ICL '; % International Patent Classification (IPC)
+    ftset.fdate_findstr = 'APD'; % file date
+    ftset.fdate_linestart = 6;
+    ftset.fdate_linestop = 11;
     
 elseif (ix_year == 2001) && strcmp(opt2001, 'xml')
     ftset.indic_filetype = 2;
@@ -58,6 +64,23 @@ elseif (ix_year >=2002) && (ix_year <= 2004)
     ftset.indic_abstractend = '/SDOAB>';
     ftset.indic_bodyfind = '<SDODE>';
     
+    ftset.patent_findstr = '<?xml version="1.0" encoding="UTF-8"?>';
+    ftset.pnr_find_str = '<B110><DNUM><PDAT>';
+    
+    ftset.uspc_nr_findstr = '<B521><PDAT>';
+    ftset.uspc_nr_linestart = 13;
+    ftset.uspc_nr_linestop = '</PDAT>';
+    
+    % Use a regular expression to search for one or the other
+    ftset.ipc_nr_findstr = '(<B511><PDAT>)|(<B512><PDAT>)';
+    ftset.ipc_nr_linestart = 13;
+    ftset.ipc_nr_linestop = '</PDAT>';
+    
+    ftset.fdate_findstr = '<B220><DATE><PDAT>';
+    ftset.fdate_linestart = 19;
+    ftset.fdate_linestop = 24;
+    
+    
 elseif (ix_year >=2005) && (ix_year <= 2015)
     ftset.indic_filetype = 3;
     ftset.nr_lines4previouspatent = 1;
@@ -65,6 +88,28 @@ elseif (ix_year >=2005) && (ix_year <= 2015)
     ftset.indic_abstractfind = '<abstract id="abstract">';
     ftset.indic_abstractend = '</abstract>';
     ftset.indic_bodyfind = '<description id="description">';
+    
+    ftset.patent_findstr = '<!DOCTYPE us-patent-grant';
+    ftset.pnr_find_str = '<us-patent-grant lang=';   
+    ftset.uspc_nr_findstr = '<classification-national>';
+    ftset.uspc_nr_linestart = 22;
+    ftset.uspc_nr_linestop = '</main-classification>';
+    
+    if ix_year == 2005
+        ftset.ipc_nr_findstr = '(<main-classification>)|(<further-classification>)';
+        ftset.ipc_nr_start_str = '<classification-ipc>';
+        ftset.ipc_nr_end_str = '</classification-ipc>';
+        ftset.ipc_nr_linestart = 13;
+        ftset.ipc_nr_linestop = '</main-classification>|(</further-classification>)';
+    else
+        ftset.indic_specialcase = 1;        
+        ftset.ipc_nr_findstr = '<classification-ipcr>';
+        ftset.ipc_nr_start_str = '<classifications-ipcr>';
+        ftset.ipc_nr_end_str = '</classifications-ipcr>';
+    end
+    
+    ftset.fdate_linestart = 7;
+    ftset.fdate_linestop = 12;
     
 else
     warning('The codes are not designed for year: %d.', ix_year)

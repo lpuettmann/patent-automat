@@ -1,11 +1,11 @@
 function patent_keyword_appear = analyze_patent_text(ix_year, ...
-    find_dictionary)
+    find_dictionary, opt2001, pat_ix)
 
 % Save dictionary (to keep all information at one place)
 patent_keyword_appear.dictionary = find_dictionary;
 
 % Customize file type settings (ftset)
-ftset = customize_ftset(ix_year);
+customize_ftset(ix_year, opt2001);
    
 % Initalize
 patent_metadata = []; 
@@ -22,14 +22,7 @@ week_start = 1;
 week_end = set_weekend(ix_year); 
 
 % Add path to data and get a list with filenames for the year
-filenames = get_filenames(ix_year, week_start, week_end);
-
-
-% Load patent_index for year
-% -------------------------------------------------------------------
-build_load_filename = horzcat('patent_index_', num2str(ix_year), ...
-    '.mat');
-load(build_load_filename)
+filenames = get_filenames(ix_year, week_start, week_end, opt2001);
 
 
 % Iterate through files of weekly patent grant text data
