@@ -40,6 +40,11 @@ elseif (ix_year == 2001) && strcmp(opt2001, 'xml')
     ftset.patent_findstr = '<!DOCTYPE PATDOC PUBLIC "-//USPTO//DTD ST.32 US PATENT GRANT V2.4 2000-09-20//EN" [';
     ftset.pnr_find_str = '<B110><DNUM><PDAT>';
     ftset.nr_lines4previouspatent = 2;
+    
+    ftset.indic_titlefind = '<B540><STEXT><PDAT>';
+    ftset.indic_abstractfind = '<SDOAB>';
+    ftset.indic_abstractend = '/SDOAB>';
+    ftset.indic_bodyfind = '<SDODE>';
 
     ftset.uspc_nr_findstr = '<B521><PDAT>';
     ftset.uspc_nr_linestart = 13;

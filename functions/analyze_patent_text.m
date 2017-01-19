@@ -5,7 +5,7 @@ function patent_keyword_appear = analyze_patent_text(ix_year, ...
 patent_keyword_appear.dictionary = find_dictionary;
 
 % Customize file type settings (ftset)
-customize_ftset(ix_year, opt2001);
+ftset = customize_ftset(ix_year, opt2001);
    
 % Initalize
 patent_metadata = []; 
@@ -71,12 +71,10 @@ parfor ix_week = week_start:week_end
     weekly_metadata = [weekly_metadata, pat_ix{ix_week, 5}];
 
     % Initialize matrix to count number of keyword appearances
-    matches_title = sparse( zeros(nr_patents, ...
-        length(find_dictionary)) );
+    matches_title = sparse( zeros(nr_patents, length(find_dictionary)) );
     matches_abstract = sparse( zeros(nr_patents, ...
         length(find_dictionary)) );
-    matches_body = sparse( zeros(nr_patents, ...
-        length(find_dictionary)) );
+    matches_body = sparse( zeros(nr_patents, length(find_dictionary)) );
 
     for ix_patent=1:nr_patents
 

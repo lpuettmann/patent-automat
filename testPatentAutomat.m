@@ -31,6 +31,7 @@ run(test_format_classnr_uspc);
 run(test_check_classnr_uspc);
 run(test_get_sic_ocat_automix_data);
 run(test_customize_ftset);
+run(test_strip_patentnr);
 
 % There's a known and unresolved bug here (fails on input ('ies')
 % run(test_porterStemmer); 

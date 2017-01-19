@@ -1,18 +1,7 @@
-function patsearch_results = clean_matches(ix_year)
+function patsearch_results = clean_matches(pat_ix, ...
+    patent_keyword_appear, ix_year, opt2001)
 % Take matches of keywords in patents and delete those with patent numbers
 % starting with a letter. Clean patent numbers.
-
-
-% Load matches
-load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
-load(load_file_name)
-
-
-% Load patent_index for year
-% -------------------------------------------------------------------
-build_load_filename = horzcat('patent_index_', num2str(ix_year), ...
-    '.mat');
-load(build_load_filename)
 
 week_start = 1;
 week_end = set_weekend(ix_year); 
@@ -29,8 +18,8 @@ for ix_week=week_start:week_end
     ix_find = pat_ix{ix_week, 2};
     wly_lenpattext = ix_find(2:end) - ix_find(1:end-1);
     % Assumption: last patent gets average length of weekly file (problem:
-    % I didn't save the length of the weekly file, opening it again here would
-    % take a long time)
+    % I didn't save the length of the weekly file, opening it again here 
+    % would take a long time)
     wly_lenpattext = [wly_lenpattext; round(mean(wly_lenpattext))];
     weekmean_len_pattxt(ix_week) = mean(wly_lenpattext);
     length_pattext = [length_pattext; wly_lenpattext];
@@ -86,4 +75,5 @@ elseif size(patsearch_results.patentnr, 1) ~= size(...
 end
 
 % Delete first (and last [for some]) letter of patent numbers
-patsearch_results.patentnr = strip_patentnr(patsearch_results.patentnr);
+patsearch_results.patentnr = strip_patentnr(patsearch_results.patentnr, ...
+    ix_year, opt2001);

@@ -81,7 +81,18 @@ end
 %% Clean matches
 for ix_year=years
 
-    patsearch_results = clean_matches(ix_year);
+    % Load matches
+    load_file_name = horzcat('patent_keyword_appear_', num2str(ix_year));
+    load(load_file_name)
+
+    % Load patent_index for year
+    % -------------------------------------------------------------------
+    build_load_filename = horzcat('patent_index_', num2str(ix_year), ...
+        '.mat');
+    load(build_load_filename)
+    
+    patsearch_results = clean_matches(pat_ix, patent_keyword_appear, ...
+        ix_year, opt2001);
     
     save_name = horzcat('cleaned_matches/patsearch_results_', ...
         num2str(ix_year), '.mat');
