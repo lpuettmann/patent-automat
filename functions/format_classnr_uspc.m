@@ -9,7 +9,7 @@ function outData = format_classnr_uspc(inData, indicVerbosity)
 %       - indicVerbosity: if set to "verbose" then show a message when
 %       replacing tech numbers.
 %
-%   OU:
+%   OUT:
 %       - outData: vector of doubles with extracted 3 digit technology
 %       numbers.
 
