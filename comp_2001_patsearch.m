@@ -37,45 +37,6 @@ load('./comp_2001/patsearch_results_2001_comp.mat')
 pclean_xml = patsearch_results;
 clear patsearch_results
 
-disp('Finish loading')
-
-% Solve problem with first patent
-pclean_xml.patentnr(1) = [];
-pclean_xml.classnr_uspc(end) = [];
-pclean_xml.week(end) = [];
-pclean_xml.classnr_ipc(end) = [];
-pclean_xml.title_matches(end, :) = [];
-pclean_xml.abstract_matches(end, :) = [];
-pclean_xml.body_matches(end, :) = [];
-pclean_xml.length_pattext(end) = [];
-pclean_xml.is_nbAutomat(end) = [];
-pclean_xml.indic_exclclassnr(end) = [];
-
-% pclean_txt.patentnr(1) = [];
-% pclean_txt.classnr_uspc(1) = [];
-% pclean_txt.week(1) = [];
-% pclean_txt.classnr_ipc(1) = [];
-% pclean_txt.title_matches(1, :) = [];
-% pclean_txt.abstract_matches(1, :) = [];
-% pclean_txt.body_matches(1, :) = [];
-% pclean_txt.length_pattext(1) = [];
-% pclean_txt.is_nbAutomat(1) = [];
-% pclean_txt.indic_exclclassnr(1) = [];
-% 
-% 
-% pclean_txt.dictionary(find(pclean_txt.title_matches(1, :)))
-% pclean_xml.dictionary(find(pclean_xml.title_matches(1, :)))
-% 
-% pclean_txt.patentnr(1)
-% pclean_xml.patentnr(1)
-% 
-% pclean_txt.dictionary(find(pclean_txt.title_matches(2, :)))
-% pclean_xml.dictionary(find(pclean_xml.title_matches(2, :)))
-% 
-% pclean_txt.patentnr(2)
-% pclean_xml.patentnr(2)
-
-break
 
 % Continue
 lclean_txt = length(pclean_txt.patentnr);
@@ -90,7 +51,44 @@ assert(all(strcmp(pclean_txt.dictionary, pclean_xml.dictionary)))
 % Convert strings to numbers (already done for xml)
 pclean_txt.patentnr = cellfun(@str2num, pclean_txt.patentnr);
 
-% Check out differing patents
+% Solve problem with first patent
+pclean_xml.patentnr(1) = [];
+pclean_xml.classnr_uspc(end) = [];
+pclean_xml.week(end) = [];
+pclean_xml.classnr_ipc(end) = [];
+pclean_xml.title_matches(end, :) = [];
+pclean_xml.abstract_matches(end, :) = [];
+pclean_xml.body_matches(end, :) = [];
+pclean_xml.length_pattext(end) = [];
+pclean_xml.is_nbAutomat(end) = [];
+pclean_xml.indic_exclclassnr(end) = [];
+
+pclean_txt.patentnr(1) = [];
+pclean_txt.classnr_uspc(1) = [];
+pclean_txt.week(1) = [];
+pclean_txt.classnr_ipc(1) = [];
+pclean_txt.title_matches(1, :) = [];
+pclean_txt.abstract_matches(1, :) = [];
+pclean_txt.body_matches(1, :) = [];
+pclean_txt.length_pattext(1) = [];
+pclean_txt.is_nbAutomat(1) = [];
+pclean_txt.indic_exclclassnr(1) = [];
+
+
+pclean_txt.dictionary(find(pclean_txt.title_matches(1, :)))
+pclean_xml.dictionary(find(pclean_xml.title_matches(1, :)))
+
+pclean_txt.patentnr(1)
+pclean_xml.patentnr(1)
+
+pclean_txt.dictionary(find(pclean_txt.title_matches(2, :)))
+pclean_xml.dictionary(find(pclean_xml.title_matches(2, :)))
+
+pclean_txt.patentnr(2)
+pclean_xml.patentnr(2)
+
+
+%% Check out differing patents
 pdiff.patentnr = setdiff(pclean_txt.patentnr, pclean_xml.patentnr);
 
 pdiff.ix = find( ismember(pclean_txt.patentnr, pdiff.patentnr) );
@@ -115,23 +113,47 @@ fprintf('Number of missing patents classified as automation patents: %3.1f perce
     sum(pdiff.is_nbAutomat) / ndiff * 100)
 
 
-% Check out patents in both files
-pint.patentnr = intersect(pclean_txt.patentnr, pclean_xml.patentnr);
+%% Delete non-overlapping patents from both
+assert( isempty( find( ismember(pclean_xml.patentnr, pdiff.patentnr) )) )
 
-pint.i_txt = find( ismember(pclean_txt.patentnr, pint.patentnr) );
-pint.i_xml = find( ismember(pclean_xml.patentnr, pint.patentnr) );
+pclean_txt.patentnr(pdiff.ix) = [];
+pclean_txt.classnr_uspc(pdiff.ix) = [];
+pclean_txt.week(pdiff.ix) = [];
+pclean_txt.classnr_ipc(pdiff.ix) = [];
+pclean_txt.title_matches(pdiff.ix, :) = [];
+pclean_txt.abstract_matches(pdiff.ix, :) = [];
+pclean_txt.body_matches(pdiff.ix, :) = [];
+pclean_txt.length_pattext(pdiff.ix) = [];
+pclean_txt.is_nbAutomat(pdiff.ix) = [];
+pclean_txt.indic_exclclassnr(pdiff.ix) = [];
 
-cmp_uspc = strcmp(pclean_txt.classnr_uspc(pint.i_txt), ...
-    pclean_xml.classnr_uspc(pint.i_xml));
+assert(length(pclean_txt.patentnr) == length(pclean_xml.patentnr))
+assert(isequal(pclean_txt.patentnr, pclean_xml.patentnr))
+assert( min(pclean_txt.patentnr == pclean_xml.patentnr) == 1)
 
-pint.is_nbAutomat_txt = pclean_txt.is_nbAutomat(pint.i_txt);
-pint.is_nbAutomat_xml = pclean_xml.is_nbAutomat(pint.i_xml);
+classEqual = (pclean_txt.is_nbAutomat == pclean_xml.is_nbAutomat)
+sum(classEqual)
+sum(classEqual) / length(pclean_txt.patentnr)
+corr(pclean_txt.is_nbAutomat, pclean_xml.is_nbAutomat)
 
-sum(pint.is_nbAutomat_txt)
-sum(pint.is_nbAutomat_xml)
+%%
+clc
 
-nb_agree = (pint.is_nbAutomat_txt == pint.is_nbAutomat_xml);
-sum(nb_agree) / length(pint.patentnr)
+I = 66666;
+
+for i = I:(I+10)
+    disp(i)
+    pclean_txt.dictionary(find(pclean_txt.title_matches(i, :)))
+    pclean_xml.dictionary(find(pclean_xml.title_matches(i, :)))
+    
+    assert(pclean_txt.patentnr(i) == pclean_xml.patentnr(i))
+    
+    disp('___________________')
+    disp('')
+end
+
+
+
 
 
 
