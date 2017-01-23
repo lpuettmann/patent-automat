@@ -137,8 +137,9 @@ fprintf('NB posteriors look fine so far: %d.\n', ix_year)
 is_nbAutomat = +( nb_post.post_yes > nb_post.post_no );
 
 
+patsearch_results.is_nbAutomat = is_nbAutomat;
 
-
+save('comp_2001/patsearch_results_2001_comp.mat', 'patsearch_results');
 
 
 
