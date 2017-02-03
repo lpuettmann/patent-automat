@@ -17,8 +17,7 @@ assert( length(patentnr) == length(indic_year) )
 
 %% Find out which file the patent text belong to the patent number is in
 
-% for j=1:length(patentnr)
- for j=1:20
+for j=1:length(patentnr)
     % Load patent index for year
     load_file_name = horzcat('patent_index_', num2str(indic_year(j)));
     load(load_file_name)

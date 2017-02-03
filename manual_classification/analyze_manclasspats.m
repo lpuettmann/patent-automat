@@ -1,5 +1,5 @@
 function [find_dictionary, patextr] = analyze_manclasspats(fname, ...
-    indicStemmer, stop_words)
+    indicStemmer, stop_words, opt2001)
 % Analyze the manually classified patents.
 
 
@@ -35,7 +35,7 @@ for ix_patent = 1:length(patextr.patentnr)
     extr_patline_end = patextr.line_end(ix_patent);
 
     patparts = extract_specific_patpart(extr_patnr, extr_patyear, ...
-        extr_patweek, extr_patline_start, extr_patline_end);
+        extr_patweek, extr_patline_start, extr_patline_end, opt2001);
 
     patextr.title_str{ix_patent, 1} = patparts.title_str;
     patextr.abstract_str{ix_patent, 1} = patparts.abstract_str;

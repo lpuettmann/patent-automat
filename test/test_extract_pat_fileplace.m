@@ -6,6 +6,7 @@ function testNrPatInFile(testCase)
     
     patentnr = 4100602;
     indic_year = 1978;
+    opt2001 = 'txt';
 
     patfplace = extract_pat_fileplace(patentnr, indic_year);
     

@@ -1,5 +1,5 @@
 function patparts = extract_specific_patpart(extr_patnr, extr_patyear, ...
-    extr_patweek, extr_patline_start, extr_patline_end)
+    extr_patweek, extr_patline_start, extr_patline_end, opt2001)
 
 
 week_start = 1;
@@ -7,7 +7,7 @@ week_start = 1;
 % Determine if there are 52 or 53 weeks in year
 week_end = set_weekend(extr_patyear); 
 
-filenames = get_filenames(extr_patyear, week_start, week_end);
+filenames = get_filenames(extr_patyear, week_start, week_end, opt2001);
 
 % Load the patent text
 choose_file_open = filenames{extr_patweek};
