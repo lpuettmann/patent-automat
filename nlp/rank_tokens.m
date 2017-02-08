@@ -17,13 +17,13 @@ function tokRanking = rank_tokens(feat_incidMat, ...
 %   Only unique tokens go in here, so no two tokens are the same.
 %
 %   OUT:
-%       - meaningfulTok: M times 1 cell array of strings containing the
-%       ranked tokens in descending order. These tokens are a subset of the
-%       original tokens to M is smaller or equal N.
-%       - mutInf_sorted: M times 1 vector containing the value of the
-%       mutual information criterion for the tokens in meaningfulTok.
+%       - tokRanking.meaningfulTok: M times 1 cell array of strings 
+%       containing the ranked tokens in descending order. These tokens are 
+%       a subset of the original tokens to M is smaller or equal N.
+%       - tokRanking. mutInf_sorted: M times 1 vector containing the value 
+%       of the mutual information criterion for the tokens in meaningfulTok.
 % 
-%   NOTE: Returns only those tokens with its value that have a not NaN
+%   NOTE: Returns only those tokens with its value that have a not-NaN
 %   value. So it is possible for meaningfulTok and mutInf_sorted to be
 %   empty.
 

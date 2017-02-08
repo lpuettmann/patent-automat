@@ -22,7 +22,7 @@ open_file_aux = textscan(unique_file_identifier, '%s', ...
 search_corpus = open_file_aux{1,1};
 
 % Customize file type settings (ftset)
-ftset = customize_ftset(extr_patyear);
+ftset = customize_ftset(extr_patyear, opt2001);
 
 % Get start and end of patent text
 % ------------------------------------------------------------

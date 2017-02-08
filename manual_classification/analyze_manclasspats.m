@@ -28,6 +28,7 @@ check_correct_patextr(patextr)
 
 % For all manually classified patents, extract full patent text parts.
 for ix_patent = 1:length(patextr.patentnr)
+for ix_patent = 349:length(patextr.patentnr)
     extr_patnr = patextr.patentnr(ix_patent);
     extr_patyear = patextr.indic_year(ix_patent);
     extr_patweek = patextr.week(ix_patent);
