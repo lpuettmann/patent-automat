@@ -108,26 +108,29 @@ for i=1:length(rti_data.sic)
 end
 
 
-% clear sic_automix_allyears
-
 if sum(rti_data.ix_manufact) ~= 454
     warning('Not correct number of manufacturing industries.')
 end
 
-% %%
-% pos_manufact = find( ix_manufact );
-% pos_other_ind = find( not( ix_manufact ) );
-% 
-% frame_size = [100 200 500 380];
-% set_font_size = 18;
+%% Analyze
+pos_manufact = find( rti_data.ix_manufact );
+pos_other_ind = find( not( rti_data.ix_manufact ) );
 
 
-%% Make scatter plots
+% Correlations
+fprintf('Corr. number automation patents with RTI: %3.3f.\n', ...
+    corr(rti_data.automix_use_sum, rti_data.rti60, 'rows', 'complete'))
+fprintf('Corr. log(automation patents) with RTI: %3.2f.\n', ...
+    corr(rti_data.automix_use_log_sum, rti_data.rti60, 'rows', 'complete'))
+fprintf('Corr. relative automation index with RTI: %3.2f.\n', ...
+    corr(rti_data.rel_automix_mean, rti_data.rti60, 'rows', 'complete'))
+
+% Make scatter plots
 close all
 
 plot_settings_global()
 
-figure
+figure1 = figure;
 
 subplot(2, 2, 1)
 scatter(rti_data.automix_use_sum, rti_data.rti60, ...
@@ -137,28 +140,71 @@ xlabel('Number automation patents')
 ylim([0, 1])
 
 subplot(2, 2, 2)
-scatter(rti_data.automix_use_log_sum, rti_data.rti60, ...
-    'Marker', '.', 'MarkerEdgeColor', color3_pick)
+scatter(rti_data.automix_use_log_sum(pos_manufact), ...
+    rti_data.rti60(pos_manufact), 'Marker', '.', 'MarkerEdgeColor', ...
+    color5_pick)
 hold on
-xpush = [min(rti_data.automix_use_log_sum), max(rti_data.automix_use_log_sum)];
-mdl = fitlm(rti_data.automix_use_log_sum, rti_data.rti60);
+xpush = [min(rti_data.automix_use_log_sum(pos_manufact)), ...
+    max(rti_data.automix_use_log_sum(pos_manufact))];
+mdl = fitlm(rti_data.automix_use_log_sum(pos_manufact), rti_data.rti60(pos_manufact));
 plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
-    'LineWidth', 1, 'Color', color1_pick);
+    'LineWidth', 1, 'Color', color5_pick);
+hold on
+scatter(rti_data.automix_use_log_sum(pos_other_ind), ...
+    rti_data.rti60(pos_other_ind), 'Marker', '.', 'MarkerEdgeColor', ...
+    color4_pick)
+hold on
+xpush = [min(rti_data.automix_use_log_sum(pos_other_ind)), ...
+    max(rti_data.automix_use_log_sum(pos_other_ind))];
+mdl = fitlm(rti_data.automix_use_log_sum(pos_other_ind), rti_data.rti60(pos_other_ind));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color4_pick);
 ylabel('Share of routine labor 1960')
 xlabel('log(automation patents)')
 ylim([0, 1])
 
+subplot(2, 2, 3)
+scatter(rti_data.rel_automix_mean, rti_data.rti60, ...
+    'Marker', '.', 'MarkerEdgeColor', color3_pick)
+hold on
+xpush = [min(rti_data.rel_automix_mean), max(rti_data.rel_automix_mean)];
+mdl = fitlm(rti_data.rel_automix_mean, rti_data.rti60);
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color1_pick);
+ylabel('Share of routine labor 1960')
+xlabel('Mean relative automation index')
+ylim([0, 1])
 
-% plot_automix_vs_rti(rti_data.automix_use_log_sum_pre1998, ...
-%     rti_data.rel_automix_mean_pre1998, rti_data.rti60, ...
-%     rti_data.ix_manufact, 'pre1998')
-% 
-% plot_automix_vs_rti(rti_data.automix_use_log_sum_post1998, ...
-%     rti_data.rel_automix_mean_post1998, rti_data.rti60, ...
-%     rti_data.ix_manufact, 'post1998')
-% 
+subplot(2, 2, 4)
+scatter(rti_data.rel_automix_mean(pos_manufact), rti_data.rti60(pos_manufact), ...
+    'Marker', '.', 'MarkerEdgeColor', color5_pick)
+hold on
+xpush = [min(rti_data.rel_automix_mean(pos_manufact)), max(rti_data.rel_automix_mean(pos_manufact))];
+mdl = fitlm(rti_data.rel_automix_mean(pos_manufact), rti_data.rti60(pos_manufact));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color5_pick);
+hold on
+scatter(rti_data.rel_automix_mean(pos_other_ind), rti_data.rti60(pos_other_ind), ...
+    'Marker', '.', 'MarkerEdgeColor', color4_pick)
+hold on
+xpush = [min(rti_data.rel_automix_mean(pos_other_ind)), max(rti_data.rel_automix_mean(pos_other_ind))];
+mdl = fitlm(rti_data.rel_automix_mean(pos_other_ind), rti_data.rti60(pos_other_ind));
+plot(xpush, mdl.Coefficients{1,1} + xpush * mdl.Coefficients{2,1}, ...
+    'LineWidth', 1, 'Color', color4_pick);
+
+ylabel('Share of routine labor 1960')
+xlabel('Mean relative automation index')
+ylim([0, 1])
 
 
+% Reposition the figure and export to pdf
+set(gcf, 'Position', [100 200 800 500]) % in vector: left bottom width height
+set(figure1, 'Units', 'Inches');
+pos = get(figure1, 'Position');
+set(figure1, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+print_pdf_name = horzcat('output/automix_vs_rti60_comb.pdf');
+print(figure1, 'output/automix_vs_rti60_comb.pdf', '-dpdf', '-r0')
 
 
 
