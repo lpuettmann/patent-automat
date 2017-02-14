@@ -12,7 +12,7 @@ setup_path()
 year_start = 1976;
 year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
-
+break
 
 %% Make patent index
 for ix_year=year_start:year_end
