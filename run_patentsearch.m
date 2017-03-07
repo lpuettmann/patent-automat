@@ -12,34 +12,40 @@ setup_path()
 year_start = 1976;
 year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
-break
+
 
 %% Make patent index
-for ix_year=year_start:year_end
-    tic
- 
-    % Search for keywords in the patent grant texts
-    try
-        pat_ix = make_patent_index(ix_year, opt2001);
-    catch
-        warning('Problem in year: %d. Go to next year.', ix_year)
-        continue
-    end
-    
-    % Print how long the year took
-    print_finish_summary(toc, ix_year)
-    
-    % Save to .mat file
-    save_patix2mat(pat_ix, ix_year)
-end
-
-clear pat_ix
+% for ix_year=year_start:year_end
+%     tic
+%  
+%     % Search for keywords in the patent grant texts
+%     try
+%         pat_ix = make_patent_index(ix_year, opt2001);
+%     catch
+%         warning('Problem in year: %d. Go to next year.', ix_year)
+%         continue
+%     end
+%     
+%     % Print how long the year took
+%     print_finish_summary(toc, ix_year)
+%     
+%     % Save to .mat file
+%     save_patix2mat(pat_ix, ix_year)
+% end
+% 
+% clear pat_ix
 
 
 %% Draw patents to classify manually
-vnum = 15; % give this a version number to refer back to it later
-draw_patents4manclass(vnum, year_start, year_end)
 
+for i = 1:15
+    vnum = 16 + i; % give this a version number to refer back to it later
+    tic
+    draw_patents4manclass(vnum, 1, year_start, year_end)
+    toc
+end
+
+break
 
 %% Use the manual classifications
 fname = 'manclass_consolidated_v10.xlsx';
@@ -173,10 +179,21 @@ sic_overcategories = define_sic_overcategories();
 
 % Sort the series for plotting
 [~, plot_ix] = sort( aggr_automix_share(end, :) );
-plot_ix = 1:10;
+plot_ix = 1:10; % is this ok?
 
 plot_overcat_sic_automatix_subplot(aggr_automix, sic_overcategories, ...
     year_start, year_end, plot_ix)
+
+load('output/nb_stats.mat')
+normFac = 1 ./ (nb_stats.yearstats.nrAllPats ./ ...
+    nb_stats.yearstats.nrAllPats(25));
+clear nb_stats
+
+normMat = repmat(normFac, 1, size(aggr_automix, 2))
+norm_aggr_automix = aggr_automix .* normMat;
+
+plot_overcat_sic_automatix_subplot_normalized(norm_aggr_automix, ...
+    sic_overcategories, year_start, year_end, plot_ix)
 
 plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
     sic_overcategories, year_start, year_end, plot_ix)
