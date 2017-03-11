@@ -13,6 +13,38 @@ year_start = 1976;
 year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
+load('output/patextr.mat')
+
+pdataTest.patentnr = patextr.patentnr;
+pdataTest.indic_year = patextr.indic_year;
+pdataTest.week = patextr.week;
+pdataTest.manAutomat = patextr.manAutomat;
+pdataTest.manCognitive = patextr.manCognitive;
+pdataTest.manManual = patextr.manManual;
+pdataTest.uspc_nr = patextr.uspc_nr;
+% pdataTest.ipc_nr = patextr.ipc_nr;
+pdataTest.title_str = patextr.title_str;
+% pdataTest.abstract_str = patextr.abstract_str;
+save('output/pdataTest.mat', 'pdataTest')
+
+% Bring the struct into a form which allows transferring it to a dataframe
+pdata = patextr;
+delFields = {'unique_titleT', 'unique_abstractT', ...
+    'unique_bodyT', 'incidMat_title', 'incidMat_abstract', ...
+    'incidMat_body', 'title_occurstats', 'abstract_occurstats', ...
+    'body_occurstats', 'tokRanking_title', 'tokRanking_abstract', ...
+    'tokRanking_body', 'title_cond_prob_yes', 'title_cond_prob_no', ...
+    'abstract_cond_prob_yes', 'abstract_cond_prob_no', ...
+    'body_cond_prob_yes', 'body_cond_prob_no', 'prior_automat', ...
+    'prior_notautomat'};
+
+for i = 1:length(delFields)
+    pdata = rmfield(pdata, delFields{i});
+end
+
+save('output/pdata.mat', 'pdata')
+
+break
 
 %% Make patent index
 % for ix_year=year_start:year_end

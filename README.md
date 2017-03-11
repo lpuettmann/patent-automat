@@ -22,7 +22,9 @@ Before running:
 ---------------------------
 In directory */specs* in in `set_data_path.m` specify the absolute paths to the patent text data. 
 
-Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path. Only then run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
+Run `set_up.m` to add the current directory and all underlying directories to Matlab's search path. 
+
+Only then run `testPatentAutomat.m` to use Matlab's xUnit testing framework which checks if the code functions properly. There should be no warnings or error messages here.
 
 To run:
 ---------------------------
