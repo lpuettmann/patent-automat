@@ -15,21 +15,21 @@ opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
 load('output/patextr.mat')
 
-pdataTest.patentnr = patextr.patentnr;
-pdataTest.indic_year = patextr.indic_year;
-pdataTest.week = patextr.week;
-pdataTest.manAutomat = patextr.manAutomat;
-pdataTest.manCognitive = patextr.manCognitive;
-pdataTest.manManual = patextr.manManual;
-pdataTest.uspc_nr = patextr.uspc_nr;
-% pdataTest.ipc_nr = patextr.ipc_nr;
-pdataTest.title_str = patextr.title_str;
-% pdataTest.abstract_str = patextr.abstract_str;
-save('output/pdataTest.mat', 'pdataTest')
-
 % Bring the struct into a form which allows transferring it to a dataframe
 pdata = patextr;
-delFields = {'unique_titleT', 'unique_abstractT', ...
+pdata.abstract_strConc = [];
+pdata.body_strConc = [];
+
+for i = 1:length(patextr.patentnr)
+    abstract_str = patextr.abstract_str(i);
+    body_str = patextr.body_str(i);
+    pdata.abstract_strConc{i, 1} = strjoin(abstract_str{1}');
+    pdata.body_strConc = strjoin(body_str{1}');
+end
+
+delFields = {'abstract_str', 'body_str', 'title_tokens', ...
+    'abstract_tokens', 'body_tokens', 'ipc_nr', ...
+    'unique_titleT', 'unique_abstractT', ...
     'unique_bodyT', 'incidMat_title', 'incidMat_abstract', ...
     'incidMat_body', 'title_occurstats', 'abstract_occurstats', ...
     'body_occurstats', 'tokRanking_title', 'tokRanking_abstract', ...
@@ -42,7 +42,80 @@ for i = 1:length(delFields)
     pdata = rmfield(pdata, delFields{i});
 end
 
+
 save('output/pdata.mat', 'pdata')
+
+% Get index position of the dictionary words
+load('find_dictionary')
+
+dictLen = length(find_dictionary);
+iTitle = zeros(dictLen, 1);
+iAbstract = zeros(dictLen, 1);
+iBody = zeros(dictLen, 1);
+
+for i = 1:dictLen
+    tok = find_dictionary{i};
+    
+    posTitle = find(strcmp(tok, patextr.unique_titleT));
+    posAbstract = find(strcmp(tok, patextr.unique_abstractT));
+    posBody = find(strcmp(tok, patextr.unique_bodyT));
+    
+    if isempty(posTitle)
+        iTitle(i) = 0;
+    else
+        iTitle(i) = posTitle;
+    end
+    
+    if isempty(posAbstract)
+        iAbstract(i) = 0;
+    else
+        iAbstract(i) = posAbstract;
+    end
+    
+    if isempty(posBody)
+        iBody(i) = 0;
+    else
+        iBody(i) = posBody;
+    end
+end
+
+% Extract the right columns from the incidence matrices
+titleDictInc = [];
+abstractDictInc = [];
+bodyDictInc = [];
+
+fprintf('Look up values in incidence matrices ...')
+for i = 1:dictLen
+    ixTitle = iTitle(i);    
+    if ixTitle > 0
+        titleDictInc = [titleDictInc, ... 
+            full(patextr.incidMat_title(:, ixTitle))];
+    end
+    
+    ixAbstract = iAbstract(i);    
+    if ixAbstract > 0
+        abstractDictInc = [abstractDictInc, ... 
+            full(patextr.incidMat_abstract(:, ixAbstract))];
+    end
+    
+    ixBody = iBody(i);    
+    if ixBody > 0
+        bodyDictInc = [bodyDictInc, ... 
+            full(patextr.incidMat_body(:, ixBody))];
+    end
+end
+fprintf(' done.\n')
+
+% Every column should have at least one non-zero value.
+assert(all(sum(titleDictInc) > 0))
+assert(all(sum(abstractDictInc) > 0))
+assert(all(sum(bodyDictInc) > 0))
+
+% Put all in matrix next to each other
+dictInc = [titleDictInc, abstractDictInc, bodyDictInc];
+
+save('output/dictInc.mat', 'dictInc')
+
 
 break
 
