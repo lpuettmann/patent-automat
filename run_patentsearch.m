@@ -84,7 +84,6 @@ titleDictInc = [];
 abstractDictInc = [];
 bodyDictInc = [];
 
-fprintf('Look up values in incidence matrices ...')
 for i = 1:dictLen
     ixTitle = iTitle(i);    
     if ixTitle > 0
@@ -104,7 +103,6 @@ for i = 1:dictLen
             full(patextr.incidMat_body(:, ixBody))];
     end
 end
-fprintf(' done.\n')
 
 % Every column should have at least one non-zero value.
 assert(all(sum(titleDictInc) > 0))
@@ -115,6 +113,11 @@ assert(all(sum(bodyDictInc) > 0))
 dictInc = [titleDictInc, abstractDictInc, bodyDictInc];
 
 save('output/dictInc.mat', 'dictInc')
+
+fileID = fopen('specs/find_dictionary.txt', 'w');
+fprintf(fileID, '%s,', find_dictionary{1:end-1}) ;
+fprintf(fileID, '%s\n', find_dictionary{end}) ;
+fclose(fileID);
 
 
 break

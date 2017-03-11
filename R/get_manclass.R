@@ -15,12 +15,11 @@ if (identical(.Platform$OS.type, "windows") &
 setwd(wdpath)
 
 
-cat('Load Matlab patent data ... ')
+cat('Load Matlab patent meta-data ... ')
 tic = proc.time()[3]
 matlabFile <- readMat('output/pdata.mat')
 toc = proc.time()[3] - tic
 cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
-
 
 datList = matlabFile$pdata
 datList = lapply(datList, unlist, use.names=FALSE)
@@ -38,12 +37,26 @@ pdata$title_str <- as.character(pdata$title_str)
 pdata$abstract <- as.character(pdata$abstract)
 pdata$body <- as.character(pdata$body)
 
-cat('Save patent data ... ')
+
+cat('Load Matlab patent token incidence matrices ... ')
 tic = proc.time()[3]
-savePath <- paste(getwd(), "/output/pdata.RData", sep = "")
-save(pdata, file = savePath)
+matlabFile <- readMat('output/dictInc.mat')
 toc = proc.time()[3] - tic
 cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
+
+cat('Extract and unnest ... ')
+datList = matlabFile$dictInc
+datList = lapply(datList, unlist, use.names=FALSE)
+dictInc <- as.data.frame(datList) # now has correct number of obs and vars
+cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
+
+
+# cat('Save patent data ... ')
+# tic = proc.time()[3]
+# savePath <- paste(getwd(), "/output/pdata.RData", sep = "")
+# save(pdata, file = savePath)
+# toc = proc.time()[3] - tic
+# cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
 
 
 
