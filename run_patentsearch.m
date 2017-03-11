@@ -79,6 +79,16 @@ for i = 1:dictLen
     end
 end
 
+%% ATTENTION: You have to append "t", "a" and "b" here !!!!!
+fDictColNames = [patextr.unique_titleT(iTitle > 0); ...
+    patextr.unique_abstractT(iAbstract > 0);
+    patextr.unique_bodyT(iBody > 0)];
+
+error('bumm')
+
+save('output/fDictColNames', 'fDictColNames')
+
+
 % Extract the right columns from the incidence matrices
 titleDictInc = [];
 abstractDictInc = [];
@@ -114,10 +124,7 @@ dictInc = [titleDictInc, abstractDictInc, bodyDictInc];
 
 save('output/dictInc.mat', 'dictInc')
 
-fileID = fopen('specs/find_dictionary.txt', 'w');
-fprintf(fileID, '%s,', find_dictionary{1:end-1}) ;
-fprintf(fileID, '%s\n', find_dictionary{end}) ;
-fclose(fileID);
+
 
 
 break

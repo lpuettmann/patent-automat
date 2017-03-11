@@ -44,11 +44,27 @@ matlabFile <- readMat('output/dictInc.mat')
 toc = proc.time()[3] - tic
 cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
 
-cat('Extract and unnest ... ')
-datList = matlabFile$dictInc
-datList = lapply(datList, unlist, use.names=FALSE)
-dictInc <- as.data.frame(datList) # now has correct number of obs and vars
-cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
+dictInc = matlabFile$dictInc
+dictInc <- data.frame(dictInc)
+
+# Load the dictionary
+find_dictionary <- read.table('specs/find_dictionary.txt', sep = ",")
+dictLen <- length(find_dictionary)
+
+tNames <- list()
+aNames <- list()
+bNames <- list()
+
+for (i in 1:dictLen) {
+  tNames[i] <- paste('t_', find_dictionary[1, i], sep = "")
+  aNames[i] <- paste('a_', find_dictionary[1, i], sep = "")
+  bNames[i] <- paste('b_', find_dictionary[1, i], sep = "")
+}
+
+fullNames <- rbind(tNames, aNames, bNames)
+
+names(dictInc) <- fullNames
+
 
 
 # cat('Save patent data ... ')
