@@ -25,8 +25,18 @@ cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
 # Outcome variable: manual classification of whether a patent is an 
 # automation patent
 
-trainingDS <- cbind(manAutomat = pdata$manAutomat,
+train <- cbind(manAutomat = pdata$manAutomat,
                     select(pdata, starts_with("t_")),
                     select(pdata, starts_with("a_")),
                     select(pdata, starts_with("b_")))
 
+# as.factor(train$manAutomat)
+
+model <- glm(manAutomat ~ b_automat, family = binomial(link = 'logit'), data = train)
+
+# Estimate on all (not possible, because not enough degrees of freedom and 
+# collinearities)
+# model <- glm(manAutomat ~ ., family = binomial(link = 'logit'), data = train)
+
+
+summary(model)
