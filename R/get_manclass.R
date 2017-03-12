@@ -23,7 +23,7 @@ cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
 
 datList = matlabFile$pdata
 datList = lapply(datList, unlist, use.names=FALSE)
-pdata <- as.data.frame(datList) # now has correct number of obs and vars
+pdata <- as.data.frame(datList)
 
 names(pdata) <- c('patentnr', 'indic_year', 'manAutomat', 'manCognitive', 
                   'manManual', 'indic_NotSure', 'coderID', 'coderDate', 
@@ -48,34 +48,24 @@ dictInc = matlabFile$dictInc
 dictInc <- data.frame(dictInc)
 
 # Load the dictionary
-find_dictionary <- read.table('specs/find_dictionary.txt', sep = ",")
-dictLen <- length(find_dictionary)
+matlabFile <- readMat('output/fDictColNames.mat')
+datList = matlabFile$fDictColNames
+datList = lapply(datList, unlist, use.names=FALSE)
+dictNames <- t(as.data.frame(datList))
 
-tNames <- list()
-aNames <- list()
-bNames <- list()
+# Assign incidence matrix the right variable names
+stopifnot(ncol(dictInc) == length(dictNames))
+names(dictInc) <- dictNames
 
-for (i in 1:dictLen) {
-  tNames[i] <- paste('t_', find_dictionary[1, i], sep = "")
-  aNames[i] <- paste('a_', find_dictionary[1, i], sep = "")
-  bNames[i] <- paste('b_', find_dictionary[1, i], sep = "")
-}
+# Combine meta-data with incidence matrix
+pdata <- cbind(pdata, dictInc)
 
-fullNames <- rbind(tNames, aNames, bNames)
-
-names(dictInc) <- fullNames
-
-
-
-# cat('Save patent data ... ')
-# tic = proc.time()[3]
-# savePath <- paste(getwd(), "/output/pdata.RData", sep = "")
-# save(pdata, file = savePath)
-# toc = proc.time()[3] - tic
-# cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
-
-
-
+cat('Save patent data ... ')
+tic = proc.time()[3]
+savePath <- paste(getwd(), "/output/pdata.RData", sep = "")
+save(pdata, file = savePath)
+toc = proc.time()[3] - tic
+cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
 
 
 
