@@ -126,8 +126,8 @@ break
 
 %% Draw patents to classify manually
 
-for i = 1:15
-    vnum = 16 + i; % give this a version number to refer back to it later
+for i = 1:10
+    vnum = 55 + i; % give this a version number to refer back to it later
     tic
     draw_patents4manclass(vnum, 1, year_start, year_end)
     toc

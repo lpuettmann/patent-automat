@@ -34,6 +34,8 @@ for ix_year=year_start:year_end
     load(load_file_name)
     patentnr = patsearch_results.patentnr;
     
+    % Change random variable generation depending on current time
+    rng('shuffle') 
     draw_patentnr = randsample(patentnr, nr_draw);
     draw_patentnr = cellfun(@str2num, draw_patentnr); 
     
