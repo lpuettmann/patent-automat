@@ -39,19 +39,22 @@ test <- fullData[-ix_train, ]
 model <- glm(manAutomat ~ b_automat, family = binomial(link = 'logit'), data = train)
 summary(model)
 
+trueClass <- factor(ifelse(test$manAutomat == 1, "yes", "no"))
+trueClass <- relevel(trueClass, "yes")
+
 predAutomat <- predict(model, newdata = subset(test, select = c(manAutomat, b_automat)), type='response')
-predAutomat <- ifelse(predAutomat > 0.5, 1,0)
+predClass <- factor(ifelse(predAutomat > 0.5, "yes", "no"))
+predClass <- relevel(predClass, "yes")
 
-cm <- confusionMatrix(predAutomat, test$manAutomat)
-
-precision <- cm$byClass["Precision"]
-recall <- cm$byClass["Recall"]
-
-F1 <- (2 * precision * recall) / (precision + recall
+# Calculate classification statistics
+cm <- confusionMatrix(predClass, trueClass, dnn = c('predicted', 'true'))
+prec <- precision(predClass, trueClass)
+rec <- recall(predClass, trueClass)
+f1 <- F_meas(predClass, trueClass, beta = 1)
 
 # model <- glm(manAutomat ~ b_automat + b_output + b_signal + b_execut + 
 #                b_inform + b_input + b_detect + b_user + b_display + b_sensor +
-#                b_switch + b_r?etriev, 
+#                b_switch + b_retriev, 
 #              family = binomial(link = 'logit'), data = train)
 # summary(model)
 # 
