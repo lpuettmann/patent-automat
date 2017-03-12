@@ -49,9 +49,9 @@ save('output/pdata.mat', 'pdata')
 load('find_dictionary')
 
 dictLen = length(find_dictionary);
-iTitle = zeros(dictLen, 1);
-iAbstract = zeros(dictLen, 1);
-iBody = zeros(dictLen, 1);
+iTitle = [];
+iAbstract = [];
+iBody = [];
 
 for i = 1:dictLen
     tok = find_dictionary{i};
@@ -60,59 +60,33 @@ for i = 1:dictLen
     posAbstract = find(strcmp(tok, patextr.unique_abstractT));
     posBody = find(strcmp(tok, patextr.unique_bodyT));
     
-    if isempty(posTitle)
-        iTitle(i) = 0;
-    else
-        iTitle(i) = posTitle;
+    if ~isempty(posTitle)
+        iTitle = [iTitle; posTitle];
     end
     
-    if isempty(posAbstract)
-        iAbstract(i) = 0;
-    else
-        iAbstract(i) = posAbstract;
+    if ~isempty(posAbstract)
+        iAbstract = [iAbstract; posAbstract];
     end
     
-    if isempty(posBody)
-        iBody(i) = 0;
-    else
-        iBody(i) = posBody;
+    if ~isempty(posBody)
+        iBody = [iBody; posBody];
     end
 end
 
 %% ATTENTION: You have to append "t", "a" and "b" here !!!!!
-fDictColNames = [patextr.unique_titleT(iTitle > 0); ...
-    patextr.unique_abstractT(iAbstract > 0);
-    patextr.unique_bodyT(iBody > 0)];
-
-error('bumm')
-
+fDictColNames = [strcat('t_', patextr.unique_titleT(iTitle)); ...
+    strcat('a_', patextr.unique_abstractT(iAbstract));
+    strcat('b_', patextr.unique_bodyT(iBody))];
+assert(length(fDictColNames) == length(iTitle) + length(iAbstract) + ...
+    length(iBody))
 save('output/fDictColNames', 'fDictColNames')
 
 
 % Extract the right columns from the incidence matrices
-titleDictInc = [];
-abstractDictInc = [];
-bodyDictInc = [];
+titleDictInc = full(patextr.incidMat_title(:, iTitle));
+abstractDictInc = full(patextr.incidMat_abstract(:, iAbstract));
+bodyDictInc = full(patextr.incidMat_body(:, iBody));
 
-for i = 1:dictLen
-    ixTitle = iTitle(i);    
-    if ixTitle > 0
-        titleDictInc = [titleDictInc, ... 
-            full(patextr.incidMat_title(:, ixTitle))];
-    end
-    
-    ixAbstract = iAbstract(i);    
-    if ixAbstract > 0
-        abstractDictInc = [abstractDictInc, ... 
-            full(patextr.incidMat_abstract(:, ixAbstract))];
-    end
-    
-    ixBody = iBody(i);    
-    if ixBody > 0
-        bodyDictInc = [bodyDictInc, ... 
-            full(patextr.incidMat_body(:, ixBody))];
-    end
-end
 
 % Every column should have at least one non-zero value.
 assert(all(sum(titleDictInc) > 0))
@@ -121,7 +95,6 @@ assert(all(sum(bodyDictInc) > 0))
 
 % Put all in matrix next to each other
 dictInc = [titleDictInc, abstractDictInc, bodyDictInc];
-
 save('output/dictInc.mat', 'dictInc')
 
 
