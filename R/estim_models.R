@@ -3,6 +3,7 @@
 rm(list=ls())
 
 library(dplyr)
+library(caret)
 
 # Set working directoyr
 if (identical(.Platform$OS.type, "windows") &
@@ -38,14 +39,16 @@ test <- fullData[-ix_train, ]
 model <- glm(manAutomat ~ b_automat, family = binomial(link = 'logit'), data = train)
 summary(model)
 
-fitted_results <- predict(model, newdata = subset(test, select = c(manAutomat, b_automat)), type='response')
-fitted_results <- ifelse(fitted_results > 0.5, 1,0)
-misClassError <- mean(fitted_results != test$manAutomat)
-print(paste('Accuracy: ', round(1 - misClassError, digits = 3), ".", sep = ""))
+predAutomat <- predict(model, newdata = subset(test, select = c(manAutomat, b_automat)), type='response')
+predAutomat <- ifelse(predAutomat > 0.5, 1,0)
 
+cm <- confusionMatrix(predAutomat, test$manAutomat)
 
+precision <- cm$byClass["Precision"]
+recall <- cm$byClass["Recall"]
 
-# 
+F1 <- (2 * precision * recall) / (precision + recall
+
 # model <- glm(manAutomat ~ b_automat + b_output + b_signal + b_execut + 
 #                b_inform + b_input + b_detect + b_user + b_display + b_sensor +
 #                b_switch + b_r?etriev, 
