@@ -8,9 +8,9 @@ library(glmnet)
 # Set working directoyr
 if (identical(.Platform$OS.type, "windows") &
     identical(Sys.getenv("USERNAME"), "Puettmann")) {
-  # wdpath <- 
+  wdpath <- 'D:/patent-automat'
 } else if (identical(.Platform$OS.type, "unix")) { # Unix includes Mac
-  wdpath <- "/Users/Lukas/Documents/mydocs/econ/projects/PatentSearch_Automation/patent-automat"
+  wdpath <- '/Users/Lukas/Documents/mydocs/econ/projects/PatentSearch_Automation/patent-automat'
 }
 
 setwd(wdpath)
@@ -19,6 +19,7 @@ cat('Load patent data ... '); tic = proc.time()[3]
 loadPath <- paste(getwd(), "/output/pdata.RData", sep = "")
 load(loadPath)
 cat(paste("done. [", round(proc.time()[3] - tic, digits = 1), "s]\n", sep = ""))
+
 
 # Outcome variable: manual classification of whether a patent is an 
 # automation patent
