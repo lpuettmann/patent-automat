@@ -336,7 +336,7 @@ prec <- precision(predClass, trueClass)
 rec <- recall(predClass, trueClass)
 f1 <- F_meas(predClass, trueClass, beta = 1)
 
-cat('__________________\nLog(patent lenght) + b_automat:\n')
+cat('__________________\nLog(patent length) + b_automat:\n')
 cat(paste("[Training] ",
           "F1-measure: ", round(f1, digits = 3), 
           ", Precision: ", round(prec, digits = 2),
