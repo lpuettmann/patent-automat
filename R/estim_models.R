@@ -20,6 +20,8 @@ loadPath <- paste(getwd(), "/output/pdata.RData", sep = "")
 load(loadPath)
 cat(paste("done. [", round(proc.time()[3] - tic, digits = 1), "s]\n", sep = ""))
 
+# Drop all patents with flagged technology numbers (chemical + pharma)
+pdata <- pdata %>% filter(indic_exclclassnr == 0)
 
 # Outcome variable: manual classification of whether a patent is an 
 # automation patent
@@ -54,7 +56,7 @@ prec <- precision(predClass, trueClass)
 rec <- recall(predClass, trueClass)
 f1 <- F_meas(predClass, trueClass, beta = 1)
 
-cat('IPC + b_automat:\n')
+cat('__________________\nIPC + b_automat:\n')
 cat(paste("[Training] ",
           "F1-measure: ", round(f1, digits = 3), 
           ", Precision: ", round(prec, digits = 2),
@@ -105,7 +107,7 @@ prec <- precision(predClass, trueClass)
 rec <- recall(predClass, trueClass)
 f1 <- F_meas(predClass, trueClass, beta = 1)
 
-cat('b_automat:\n')
+cat('__________________\nb_automat:\n')
 cat(paste("[Training] ",
           "F1-measure: ", round(f1, digits = 3), 
           ", Precision: ", round(prec, digits = 2),
@@ -162,7 +164,7 @@ prec <- precision(predClass, trueClass)
 rec <- recall(predClass, trueClass)
 f1 <- F_meas(predClass, trueClass, beta = 1)
 
-cat('Many b_*:\n')
+cat('__________________\nMany b_*:\n')
 cat(paste("[Training] ",
           "F1-measure: ", round(f1, digits = 3), 
           ", Precision: ", round(prec, digits = 2),
@@ -221,7 +223,7 @@ prec <- precision(predClass, trueClass)
 rec <- recall(predClass, trueClass)
 f1 <- F_meas(predClass, trueClass, beta = 1)
 
-cat('IPC + many b_*:\n')
+cat('__________________\nIPC + many b_*:\n')
 cat(paste("[Training] ",
           "F1-measure: ", round(f1, digits = 3), 
           ", Precision: ", round(prec, digits = 2),
