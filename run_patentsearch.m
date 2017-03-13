@@ -15,8 +15,14 @@ opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
 load('output/patextr.mat')
 
+
 % Bring the struct into a form which allows transferring it to a dataframe
 pdata = patextr;
+
+% Get only first IPC entry
+ipc_first = cellfun(@(c) c(1), patextr.ipc_nr);
+pdata.ipc_ocat = cellfun(@(x) x(1), ipc_first, 'un', 0);
+
 pdata.abstract_strConc = [];
 pdata.body_strConc = [];
 
@@ -73,7 +79,7 @@ for i = 1:dictLen
     end
 end
 
-%% ATTENTION: You have to append "t", "a" and "b" here !!!!!
+%% append "t", "a" and "b" to column names
 fDictColNames = [strcat('t_', patextr.unique_titleT(iTitle)); ...
     strcat('a_', patextr.unique_abstractT(iAbstract));
     strcat('b_', patextr.unique_bodyT(iBody))];
@@ -103,25 +109,25 @@ save('output/dictInc.mat', 'dictInc')
 break
 
 %% Make patent index
-% for ix_year=year_start:year_end
-%     tic
-%  
-%     % Search for keywords in the patent grant texts
-%     try
-%         pat_ix = make_patent_index(ix_year, opt2001);
-%     catch
-%         warning('Problem in year: %d. Go to next year.', ix_year)
-%         continue
-%     end
-%     
-%     % Print how long the year took
-%     print_finish_summary(toc, ix_year)
-%     
-%     % Save to .mat file
-%     save_patix2mat(pat_ix, ix_year)
-% end
-% 
-% clear pat_ix
+for ix_year=year_start:year_end
+    tic
+ 
+    % Search for keywords in the patent grant texts
+    try
+        pat_ix = make_patent_index(ix_year, opt2001);
+    catch
+        warning('Problem in year: %d. Go to next year.', ix_year)
+        continue
+    end
+    
+    % Print how long the year took
+    print_finish_summary(toc, ix_year)
+    
+    % Save to .mat file
+    save_patix2mat(pat_ix, ix_year)
+end
+
+clear pat_ix
 
 
 %% Draw patents to classify manually
@@ -311,8 +317,6 @@ for pick_hl=1:size(sic_overcategories, 1) + 1
     pause(1.5)
 end
 
-
-
 %% Prepare conversion table
 fyr_start = 1976;
 fyr_end = 2014;
@@ -331,39 +335,4 @@ save('output/conversion_table', 'conversion_table')
 load('conversion_table')
 pat2ind = conversion_patent2industry(fyr_start, fyr_end, conversion_table);
 save('output/pat2ind', 'pat2ind')
-
-
-%% Industry-level analysis
-load('pat2ind')
-
-max_nr_patlink2ind = max( pat2ind.nr_appear_allyear);
-
-for i=0:max_nr_patlink2ind
-    ix_iter = i + 1;
-    nr_patlink2ind(ix_iter) = sum(pat2ind.nr_appear_allyear == i) ./ ...
-        length(pat2ind.nr_appear_allyear);
-end
-
-
-
-
-
-subplot_industries_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    pat2ind.ind_corresp)
-
-subplot_industries_mean_alg1(fyr_start, fyr_end, pat2ind.industry_sumstats, ...
-    pat2ind.ind_corresp)
-
-
-idata = extract_idata(fyr_start, fyr_end, pat2ind.ind_corresp(:, 1));
-check_idata(idata)
-
-
-make_table_meancorr_laborm_patentm(manufacturing_ind_data)
-
-ix_patentmetric = 3;
-ix_labormvar = 5;
-subplot_patentm_vs_laborm(1976, 2014, manufacturing_ind_data, pat2ind, ...
-    ix_patentmetric, ix_labormvar)
-
 

@@ -1,3 +1,9 @@
+*.Rnw
+*.RData
+*.Rproj.user
+*.Rapp.history
+*.Rhistory
+*.Rhistory
 *.xsl
 *.mod
 *.dtd
