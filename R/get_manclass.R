@@ -4,12 +4,12 @@ rm(list=ls()) # clear all variables from memory
 
 library(R.matlab)
 
-# Set working directoyr
+# Set working directory
 if (identical(.Platform$OS.type, "windows") &
     identical(Sys.getenv("USERNAME"), "Puettmann")) {
   wdpath <- 'D:/patent-automat'
 } else if (identical(.Platform$OS.type, "unix")) { # Unix includes Mac
-  wdpath <- '/Users/Lukas/Documents/mydocs/econ/projects/PatentSearch_Automation/patent-automat'
+  wdpath <- '/Users/Lukas/Documents/mydocs/projects/PatentSearch_Automation/patent-automat'
 }
 
 setwd(wdpath)
@@ -35,7 +35,7 @@ pdata$title_str <- as.character(pdata$title_str)
 pdata$abstract <- as.character(pdata$abstract)
 pdata$body <- as.character(pdata$body)
 pdata$ipc_ocat <- as.factor(pdata$ipc_ocat)
-
+pdata$patLength <- pdata$line_end - pdata$line_start
 
 cat('Load Matlab patent token incidence matrices ... ')
 tic = proc.time()[3]

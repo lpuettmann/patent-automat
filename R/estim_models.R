@@ -5,12 +5,12 @@ rm(list=ls())
 library(dplyr)
 library(caret)
 
-# Set working directoyr
+# Set working directory
 if (identical(.Platform$OS.type, "windows") &
     identical(Sys.getenv("USERNAME"), "Puettmann")) {
   wdpath <- 'D:/patent-automat'
 } else if (identical(.Platform$OS.type, "unix")) { # Unix includes Mac
-  wdpath <- '/Users/Lukas/Documents/mydocs/econ/projects/PatentSearch_Automation/patent-automat'
+  wdpath <- '/Users/Lukas/Documents/mydocs/projects/PatentSearch_Automation/patent-automat'
 }
 
 setwd(wdpath)
@@ -23,7 +23,8 @@ cat(paste("done. [", round(proc.time()[3] - tic, digits = 1), "s]\n", sep = ""))
 # Drop all patents with flagged technology numbers (chemical + pharma)
 pdata <- pdata %>% filter(indic_exclclassnr == 0)
 
-pdata$logPatLen <- log(pdata$line_end - pdata$line_start)
+# Calculate log of patent length
+pdata$logPatLen <- log(pdata$patLength)
 
 # Outcome variable: patent is automation patent
 fullData <- cbind(manAutomat = pdata$manAutomat,
