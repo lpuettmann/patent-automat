@@ -66,7 +66,10 @@ save(pdata, file = savePath)
 toc = proc.time()[3] - tic
 cat(paste("done. [", round(toc, digits = 1), "s]\n", sep = ""))
 
+pdata <- subset(pdata, select=-c(title_str,abstract,body))
 
+library(foreign)
+write.dta(pdata, file = paste(getwd(), "/output/pdata.dat", sep = ""), version = 12)
 
 
 
