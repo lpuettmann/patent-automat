@@ -13,155 +13,39 @@ year_start = 1976;
 year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
+for ix_year = year_start:year_end
+    t = ix_year - year_start + 1;
+    fname = ['patsearch_results_', num2str(ix_year)];
+    load(fname);
 
-load('output/nb_stats.mat');
+    missOvercat = isnan(patsearch_results.overcat_classnr);
+    overcat = patsearch_results.overcat_classnr(not(missOvercat));
+    catStr = cellstr(num2str(overcat(:)));
+    cats = cellfun(@(x) x(1), catStr, 'UniformOutput', false);
+    cats = str2double(cats);
 
-year_end = 2014;
-plottime = year_start:year_end;
-
-plot_series = nb_stats.yearstats.shareAutomat(1:end-1);
-plot_series = nb_stats.yearstats.nrAutomat(1:end-1);
-
-plot_settings_global
-
-figureHandle = figure;
-
-barlines = [0.1:0.1:0.7];
- barlines = [25000:25000:200000];
-for i=1:length(barlines)
-    h_gline = plot(plottime, repmat(barlines(i), ...
-        length(plot_series), 1), 'Color', my_gray , ...
-        'linewidth', 0.5);
-    uistack(h_gline, 'bottom');
-    hold on
+    assert(length(unique(cats)) == 6)
+    
+    for i = 1:6
+        cats_yearstats(t, i) = sum(cats == i);        
+    end
+    
+    cats_yearstats(t, 7) = sum(missOvercat);
+    
+    assert(sum(cats_yearstats(t, :)) == length(patsearch_results.patentnr))
+    
+    fprintf('%d\n', ix_year)
 end
 
-plot(plottime, plot_series, 'Color', 'black', 'Linewidth', 2, ...
-    'Marker', 'o', 'MarkerEdgeColor', 'black', 'MarkerFaceColor', ...
-    'black', 'Markersize', 5)
-% ylim([0, 0.77])
-xlim([year_start, year_end])
-set(gca,'FontSize', 20) % change default font size of axis labels
-set(gca,'TickDir','out')  
-box off
-set(gcf, 'Color', 'w');
-curtick = get(gca, 'YTick');
-set(gca, 'YTickLabel', cellstr(num2str(curtick(:))));
+save('output/cats_yearstats.mat', 'cats_yearstats')
 
+plot(year_start:year_end, cats_yearstats)
 
-% Reposition the figure
-% -----------------------------------------------------------------------
-%set(gcf, 'Position', [100 200 600 420]) % in vector: left bottom width height
-set(gcf, 'Position', [100 200 600 350]) % in vector: left bottom width height
-set(figureHandle, 'Units', 'Inches');
-pos = get(figureHandle, 'Position');
-set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
-    'Inches', 'PaperSize', [pos(3), pos(4)])
-
-
-% Export to pdf
-% -----------------------------------------------------------------------
-print_pdf_name = horzcat('output/nb_autompats_', ...
-    num2str(year_start), '-',  num2str(year_end),'.pdf');
-print(figureHandle, print_pdf_name, '-dpdf', '-r0')
-
+%load('nb_stats')
 
 
 break
-load('output/patextr.mat')
 
-
-% Bring the struct into a form which allows transferring it to a dataframe
-pdata = patextr;
-
-% Get only first IPC entry
-ipc_first = cellfun(@(c) c(1), patextr.ipc_nr);
-pdata.ipc_ocat = cellfun(@(x) x(1), ipc_first, 'un', 0);
-
-pdata.abstract_strConc = [];
-pdata.body_strConc = [];
-
-for i = 1:length(patextr.patentnr)
-    abstract_str = patextr.abstract_str(i);
-    body_str = patextr.body_str(i);
-    pdata.abstract_strConc{i, 1} = strjoin(abstract_str{1}');
-    pdata.body_strConc = strjoin(body_str{1}');plot_nb_overtime
-end
-
-delFields = {'abstract_str', 'body_str', 'title_tokens', ...
-    'abstract_tokens', 'body_tokens', 'ipc_nr', ...
-    'unique_titleT', 'unique_abstractT', ...
-    'unique_bodyT', 'incidMat_title', 'incidMat_abstract', ...
-    'incidMat_body', 'title_occurstats', 'abstract_occurstats', ...
-    'body_occurstats', 'tokRanking_title', 'tokRanking_abstract', ...
-    'tokRanking_body', 'title_cond_prob_yes', 'title_cond_prob_no', ...
-    'abstract_cond_prob_yes', 'abstract_cond_prob_no', ...
-    'body_cond_prob_yes', 'body_cond_prob_no', 'prior_automat', ...
-    'prior_notautomat'};
-
-for i = 1:length(delFields)
-    pdata = rmfield(pdata, delFields{i});
-end
-
-
-save('output/pdata.mat', 'pdata')
-
-% Get index position of the dictionary words
-load('find_dictionary')
-
-dictLen = length(find_dictionary);
-iTitle = [];
-iAbstract = [];
-iBody = [];
-
-for i = 1:dictLen
-    tok = find_dictionary{i};
-    
-    posTitle = find(strcmp(tok, patextr.unique_titleT));
-    posAbstract = find(strcmp(tok, patextr.unique_abstractT));
-    posBody = find(strcmp(tok, patextr.unique_bodyT));
-    
-    if ~isempty(posTitle)
-        iTitle = [iTitle; posTitle];
-    end
-    
-    if ~isempty(posAbstract)
-        iAbstract = [iAbstract; posAbstract];
-    end
-    
-    if ~isempty(posBody)
-        iBody = [iBody; posBody];
-    end
-end
-
-%% append "t", "a" and "b" to column names
-fDictColNames = [strcat('t_', patextr.unique_titleT(iTitle)); ...
-    strcat('a_', patextr.unique_abstractT(iAbstract));
-    strcat('b_', patextr.unique_bodyT(iBody))];
-assert(length(fDictColNames) == length(iTitle) + length(iAbstract) + ...
-    length(iBody))
-save('output/fDictColNames', 'fDictColNames')
-
-
-% Extract the right columns from the incidence matrices
-titleDictInc = full(patextr.incidMat_title(:, iTitle));
-abstractDictInc = full(patextr.incidMat_abstract(:, iAbstract));
-bodyDictInc = full(patextr.incidMat_body(:, iBody));
-
-
-% Every column should have at least one non-zero value.
-assert(all(sum(titleDictInc) > 0))
-assert(all(sum(abstractDictInc) > 0))
-assert(all(sum(bodyDictInc) > 0))
-
-% Put all in matrix next to each other
-dictInc = [titleDictInc, abstractDictInc, bodyDictInc];
-save('output/dictInc.mat', 'dictInc')
-
-
-
-
-break
 
 %% Make patent index
 for ix_year=year_start:year_end
@@ -194,7 +78,6 @@ for i = 1:10
     toc
 end
 
-break
 
 %% Use the manual classifications
 fname = 'manclass_consolidated_v10.xlsx';
@@ -259,6 +142,17 @@ end
 check_cleanedmatches_plausability(year_start, year_end)
 
 
+%% Compile a dataset and save in a format that can be opened in R
+load('output/patextr.mat')
+load('find_dictionary')
+[pdata, fDictColNames, dictInc] = create_R_dataset(patextr, ...
+    find_dictionary);
+save('output/pdata.mat', 'pdata')
+save('output/fDictColNames', 'fDictColNames')
+save('output/dictInc.mat', 'dictInc')
+clear patextr find_dictionary pdata fDictColNames dictInc
+
+
 %% Classify all patents based the manually classified sample
 load('patextr')
 load('find_dictionary')
@@ -286,6 +180,49 @@ for ix_year=year_start:year_end;
         sum(patsearch_results.indic_exclclassnr) ./ ...
         length(patsearch_results.patentnr)*100)
 end
+
+%% Get overcategories for patents
+
+for ix_year = year_start:year_end
+
+    fname = ['patsearch_results_', num2str(ix_year)];
+    load(fname);
+
+    % Extract and clean the USPC technology numbers
+    classnr_uspc = format_classnr_uspc(patsearch_results.classnr_uspc, ...
+        'verbose');
+
+    % Check for correct inputs
+    assert( not( isstr( classnr_uspc ) ) ) % not a string
+    assert( not( iscell( classnr_uspc ) ) ) % not a cell array
+
+    load('crosswalk')
+
+    % Check if tech numbers of manually classified patents is one of those
+    % chosen to be excluded
+    overcat_classnr = nan( size(classnr_uspc) );
+
+    for i=1:size(classnr_uspc,1)   
+        pick_classnr = classnr_uspc(i);    
+        overcat = crosswalk(find(crosswalk(:, 2) == pick_classnr), 1);
+        if isempty(overcat)
+            overcat = NaN;
+        end
+        overcat_classnr(i) = overcat;
+    end
+
+    fprintf('[%d] Missing overcategories: %3.2f.\n', ix_year, ...
+        sum(isnan(overcat_classnr)) / size(classnr_uspc,1))
+
+    assert(all(overcat_classnr(not(isnan(overcat_classnr))) <= 69))
+    assert(all(overcat_classnr(not(isnan(overcat_classnr))) >= 10))
+    
+    % Check which of these to exclude
+    patsearch_results.overcat_classnr = overcat_classnr;
+
+    save(['cleaned_matches/', fname, '.mat'], 'patsearch_results')
+end
+
 
 
 %%
