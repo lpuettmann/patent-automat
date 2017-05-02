@@ -69,8 +69,8 @@ colors = [165,0,38
 colors = flipud(colors);
 
 plot_settings_global()
-
 figureHandle = figure;
+
 H = bar(1976:2014, plotMat, 'stacked');
 
 for k = 1:size(plotMat,2)
@@ -83,6 +83,15 @@ legend('Rest: Other and missing data', 'Rest: Chemical and pharma',  ...
     'Automation patents: Other and missing data', 'Automation patents: Chemical and pharma',  ...
     'Automation patents: Electric and mechanic', 'Automation patents: Computers and Communications', ...
     'Location', 'NorthWest')
+
+barlines = [50000:50000:300000];
+hold on
+for i=1:length(barlines)
+    h_gline = plot(1975:2015, repmat(barlines(i), length(1975:2015), 1),...
+        'Color', my_gray , 'Linewidth', 0.5);
+    uistack(h_gline, 'bottom');
+    hold on
+end
 legend boxoff  
 set(gca,'FontSize', 16) % change default font size of axis labels
 set(gca,'TickDir','out')  
