@@ -13,35 +13,49 @@ year_start = 1976;
 year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
-for ix_year = year_start:year_end
-    t = ix_year - year_start + 1;
-    fname = ['patsearch_results_', num2str(ix_year)];
-    load(fname);
 
-    missOvercat = isnan(patsearch_results.overcat_classnr);
-    overcat = patsearch_results.overcat_classnr(not(missOvercat));
-    catStr = cellstr(num2str(overcat(:)));
-    cats = cellfun(@(x) x(1), catStr, 'UniformOutput', false);
-    cats = str2double(cats);
-
-    assert(length(unique(cats)) == 6)
-    
-    for i = 1:6
-        cats_yearstats(t, i) = sum(cats == i);        
-    end
-    
-    cats_yearstats(t, 7) = sum(missOvercat);
-    
-    assert(sum(cats_yearstats(t, :)) == length(patsearch_results.patentnr))
-    
-    fprintf('%d\n', ix_year)
-end
-
-save('output/cats_yearstats.mat', 'cats_yearstats')
-
-plot(year_start:year_end, cats_yearstats)
+load('output/cats_yearstats.mat')
 
 %load('nb_stats')
+plot_settings_global
+
+figure
+subplot(2,1,1)
+bar(year_start:year_end, cats_yearstats(:,1:7), 'stacked')
+legend('Chemical', 'Computers and Communications', ...
+    'Drugs and Medical', 'Electrical and Electronic', 'Mechanic', ...
+    'Others', 'Missing data', 'Location', 'NorthWest')
+legend boxoff  
+xlim([year_start, year_end])
+set(gca,'FontSize', 16) % change default font size of axis labels
+set(gca,'TickDir','out')  
+box off
+title('All patents')
+
+subplot(2,1,2)
+bar(year_start:year_end, cats_yearstats(:,8:14), 'stacked')
+legend('Chemical', 'Computers and Communications', ...
+    'Drugs and Medical', 'Electrical and Electronic', 'Mechanic', ...
+    'Others', 'Missing data', 'Location', 'NorthWest')
+legend boxoff  
+xlim([year_start, year_end])
+set(gca,'FontSize', 16) % change default font size of axis labels
+set(gca,'TickDir','out')  
+box off
+title('Automation patents')
+
+
+% subplot(3,1,3)
+% bar(year_start:year_end, cats_yearstats(:,8:14) ./ repmat(sum(cats_yearstats(:,1:7), 2), 1, 7), 'stacked')
+% legend('Chemical', 'Computers and Communications', ...
+%     'Drugs and Medical', 'Electrical and Electronic', 'Mechanic', ...
+%     'Others', 'Missing data', 'Location', 'NorthWest')
+% legend boxoff  
+% xlim([year_start, year_end])
+% set(gca,'FontSize', 16) % change default font size of axis labels
+% set(gca,'TickDir','out')  
+% box off
+% title('Automation patents as share of total')
 
 
 break
@@ -182,7 +196,6 @@ for ix_year=year_start:year_end;
 end
 
 %% Get overcategories for patents
-
 for ix_year = year_start:year_end
 
     fname = ['patsearch_results_', num2str(ix_year)];
@@ -222,6 +235,39 @@ for ix_year = year_start:year_end
 
     save(['cleaned_matches/', fname, '.mat'], 'patsearch_results')
 end
+
+
+%% Extract overcategories for all patents and save yearly statistics
+for ix_year = year_start:year_end
+    t = ix_year - year_start + 1;
+    fname = ['patsearch_results_', num2str(ix_year)];
+    load(fname);
+
+    missOvercat = isnan(patsearch_results.overcat_classnr);
+    overcat = patsearch_results.overcat_classnr(not(missOvercat));
+    
+    catStr = cellstr(num2str(overcat(:)));
+    cats = cellfun(@(x) x(1), catStr, 'UniformOutput', false);
+    cats = str2double(cats);
+    assert(length(unique(cats)) == 6)
+    
+    fullCats = nan(length(patsearch_results.patentnr), 1);
+    fullCats(not(missOvercat)) = cats;
+    
+    for i = 1:6
+        cats_yearstats(t, i) = sum(fullCats == i);
+        cats_yearstats(t, i + 7) = sum(fullCats(find( ... 
+            patsearch_results.is_nbAutomat)) == i);
+    end
+    
+    cats_yearstats(t, 7) = sum(missOvercat);
+    cats_yearstats(t, 14) = sum(missOvercat(find( ...
+        patsearch_results.is_nbAutomat)));
+    assert(sum(cats_yearstats(t, 1:7)) == length(patsearch_results.patentnr))
+    fprintf('%d\n', ix_year)
+end
+
+save('output/cats_yearstats.mat', 'cats_yearstats')
 
 
 
