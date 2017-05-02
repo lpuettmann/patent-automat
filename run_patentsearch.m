@@ -68,18 +68,13 @@ colors = [165,0,38
         ] ./ 255;
 colors = flipud(colors);
 
-set(0, 'DefaultTextFontName', 'Helvetica')
-set(0, 'DefaultAxesFontName', 'Helvetica')
-
-% set(0, 'DefaultTextFontName', 'CMU Sans Serif')
-% set(0, 'DefaultAxesFontName', 'CMU Sans Serif')
-
 
 figureHandle = figure;
 H = bar(1976:2014, plotMat, 'stacked');
 
 for k = 1:size(plotMat,2)
   set(H(k), 'FaceColor', colors(k,:))
+  set(H(k), 'EdgeColor', colors(k,:))
 end
 
 legend('Rest: Other and missing data', 'Rest: Chemical and pharma',  ...
@@ -88,18 +83,18 @@ legend('Rest: Other and missing data', 'Rest: Chemical and pharma',  ...
     'Automation patents: Electric and mechanic', 'Automation patents: Computers and Communications', ...
     'Location', 'NorthWest')
 legend boxoff  
-set(gca,'FontSize', 12) % change default font size of axis labels
+set(gca,'FontSize', 16) % change default font size of axis labels
 set(gca,'TickDir','out')  
 box off
 
 annotation(figureHandle,'textarrow',[0.2 0.15084388185654],...
     [0.383720930232558 0.295681063122924],...
     'String',{'Share of automation','patents: 25%'},...
-    'HorizontalAlignment','center');
+    'HorizontalAlignment','center', 'Fontsize', 16);
 annotation(figureHandle,'textarrow',[0.844936708860759 0.880801687763713],...
     [0.883527454242928 0.8369384359401],...
     'String',{'Share of automation','patents: 67%'},...
-    'HorizontalAlignment','center');
+    'HorizontalAlignment','center', 'Fontsize', 16);
 
 
 % Reposition the figure
