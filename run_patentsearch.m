@@ -68,6 +68,7 @@ colors = [165,0,38
         ] ./ 255;
 colors = flipud(colors);
 
+plot_settings_global()
 
 figureHandle = figure;
 H = bar(1976:2014, plotMat, 'stacked');
