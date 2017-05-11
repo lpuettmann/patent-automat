@@ -25,9 +25,14 @@ nameList <- c('Agriculture, Forestry, And Fishing', 'Mining', 'Construction', 'M
               'Transportation, Communications, Electric, Gas, And Sanitary Services', 'Wholesale trade', 'Retail trade', 
               'Finance, Insurance, And Real Estate', 'Services', 'Public Administration')
 
+nameListShort <- c('Agriculture', 'Mining', 'Construction', 'Manufacturing', 
+              'Utilities', 'Wholesale trade', 'Retail trade', 
+              'Finance', 'Services', 'Public Administration')
+
 
 for (i in 1:10) {
   sicData$overcatName[(sicData$overcat == LETTERS[i])] <- nameList[i]
+  sicData$overcatNameShort[(sicData$overcat == LETTERS[i])] <- nameListShort[i]
 }
 
 
@@ -92,5 +97,44 @@ for (i in 1:20) {
 
 ggplot(manuf, aes(x = majorGroupNameShort, y = automix.use)) +
   stat_summary(fun.y = sum, geom = "bar") + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Manufacturing patents, 1976-2014") +
+  xlab('') + ylab("Total number of automation patents")
+ggsave('output/manuf_autom_totals.pdf', width = 10, height = 6)
+
+AA <- manuf %>% 
+  group_by(majorGroupNameShort) %>% 
+  summarize(shareAutom = sum(automix.use) / sum(patents.use))
+
+ggplot(AA, aes(x = majorGroupNameShort, y = shareAutom) ) +
+  geom_bar(stat="identity") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Manufacturing patents, 1976-2014") +
+  xlab('') + ylab("Share of patents classified as automation")
+ggsave('output/manuf_autom_share.pdf', width = 10, height = 6)
+
+
+nonmanuf <- sicData %>% filter(overcat != 'D')
+
+
+ggplot(nonmanuf, aes(x = overcatNameShort, y = automix.use) ) +
+  stat_summary(fun.y = sum, geom = "bar") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Non-manufacturing patents, 1976-2014") +
+  xlab('') + ylab("Total number of automation patents")
+ggsave('output/nonmanuf_autom_totals.pdf', width = 10, height = 6)
+
+BB <- nonmanuf %>% 
+  group_by(overcatNameShort) %>% 
+  summarize(shareAutom = sum(automix.use) / sum(patents.use))
+
+ggplot(BB, aes(x = overcatNameShort, y = shareAutom) ) +
+  geom_bar(stat="identity") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Non-manufacturing patents, 1976-2014") +
+  xlab('') + ylab("Share of patents classified as automation")
+ggsave('output/nonmanuf_autom_share.pdf', width = 10, height = 6)
+
+
+
 
