@@ -3,6 +3,7 @@ rm(list=ls()) # clear all variables from memory
 
 library(dplyr)
 library(readr)
+library(ggplot2)
 
 # Set working directory
 if (identical(.Platform$OS.type, "windows") &
@@ -33,6 +34,7 @@ for (i in 1:10) {
 manuf <- sicData %>% filter(overcat == 'D')
 manuf$majorGroup <- NA
 manuf$majorGroupName <- NA
+manuf$majorGroupNameShort <- NA
 manufMajorGroupList <- c('Food And Kindred Products',
                         'Tobacco Products',
                         'Textile Mill Products',
@@ -54,21 +56,41 @@ manufMajorGroupList <- c('Food And Kindred Products',
                         'Measuring, Analyzing, And Controlling Instruments; Photographic, Medical And Optical Goods; Watches And Clocks',
                         'Miscellaneous Manufacturing Industries')
 
+manufMajorGroupListShort <- c('Food',
+                           'Tobacco',
+                           'Textile mill products',
+                           'Apparel',
+                           'Lumber and wood',
+                           'Furniture and fixtures',
+                           'Paper',
+                           'Printing and publishing',
+                           'Chemicals',
+                           'Petroleum refining',
+                           'Rubbe and plastics',
+                           'Leather',
+                           'Stone, clay, glass, concrete',
+                           'Primary Metal Industries',
+                           'Fabricated metal products',
+                           'Machinery and computers',
+                           'Electronics',
+                           'Transportation equipment',
+                           'Measuring instruments; watches',
+                           'Miscellaneous')
+
+
 stopifnot(length(manufMajorGroupList) == length(20:39))
+stopifnot(length(manufMajorGroupList) == length(manufMajorGroupListShort))
+
 
 for (i in 1:20) {
   st <- (i + 19) * 100
   en <- (i + 20) * 100 - 1
   manuf$majorGroup[((manuf$sic >= st) & (manuf$sic <= en))] <- (i + 19)
   manuf$majorGroupName[((manuf$sic >= st) & (manuf$sic <= en))] <- manufMajorGroupList[i]
+  manuf$majorGroupNameShort[((manuf$sic >= st) & (manuf$sic <= en))] <- manufMajorGroupListShort[i]
 }
 
-
-
-
-
-
-
-
-
+ggplot(manuf, aes(x = majorGroupNameShort, y = automix.use)) +
+  stat_summary(fun.y = sum, geom = "bar") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
