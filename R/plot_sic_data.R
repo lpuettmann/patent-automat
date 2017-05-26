@@ -106,14 +106,16 @@ sum(serv$automix.use) -
 health <- serv %>% 
   filter(majorGroupNameShort == 'Health') %>% 
   group_by(sic) %>% 
-  summarize(sumAutomixUse = sum(automix.use))
+  summarize(sumPatentsUse = sum(patents.use), sumAutomixUse = sum(automix.use))
+health <- health[order(health$sumAutomixUse, decreasing = TRUE),]
+
+sum(serv$patents.use[(serv$majorGroupNameShort == 'Research')])
 
 
 ggplot(health, aes(x = sic, y = automix.use)) +
   stat_summary(fun.y = sum, geom = "bar") + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-health <- health[order(health$sumAutomixUse, decreasing = TRUE),]
 
 
 
@@ -197,17 +199,7 @@ ggsave('output/manuf_autom_share.pdf', width = 10, height = 6)
 
 
 
-myManufSum <- manuf %>%
-  group_by(majorGroupNameShort) %>% 
-  summarize(sumAutomixUse = sum(automix.use))
 
-
-myManufSum <- myManufSum[order(myManufSum$sumAutomixUse, decreasing = TRUE),]
-myManufSum$sumAutomixUse[1] / sum(myManufSum$sumAutomixUse)
-myManufSum$sumAutomixUse[2] / sum(myManufSum$sumAutomixUse)
-myManufSum$sumAutomixUse[3] / sum(myManufSum$sumAutomixUse)
-myManufSum$sumAutomixUse[4] / sum(myManufSum$sumAutomixUse)
-sum(myManufSum$sumAutomixUse[5:nrow(myManufSum)]) / sum(myManufSum$sumAutomixUse)
 
 
 restPats <- sicData %>% 
@@ -216,7 +208,7 @@ restPats <- sicData %>%
 
 myRestPatsSummary <- restPats %>%
   group_by(overcatNameShort) %>% 
-  summarize(sumAutomixUse = sum(automix.use))
+  summarize(sumPatentsUse = sum(patents.use), sumAutomixUse = sum(automix.use))
 myRestPatsSummary <- myRestPatsSummary[order(myRestPatsSummary$sumAutomixUse, decreasing = TRUE),]
 
 
@@ -239,6 +231,25 @@ ggplot(BB, aes(x = overcatNameShort, y = shareAutom) ) +
 ggsave('output/restPats_autom_share.pdf', width = 10, height = 6)
 
 
+
+# Calculate some statistics
+############################################################################################
+
+sum(sicData$patents.use[sicData$overcatNameShort == 'Services'], na.rm = TRUE)
+sum(sicData$patents.use[sicData$overcatNameShort == 'Manufacturing'], na.rm = TRUE)
+sum(sicData$patents.use[((sicData$overcatNameShort != 'Services') & 
+                          (sicData$overcatNameShort != 'Manufacturing'))], na.rm = TRUE)
+
+
+myManufSum <- manuf %>%
+  group_by(majorGroupNameShort) %>% 
+  summarize(sumPatentsUse = sum(patents.use), sumAutomixUse = sum(automix.use))
+
+
+myManufSum <- myManufSum[order(myManufSum$sumAutomixUse, decreasing = TRUE),]
+
+
+
 (sum(restPats$automix.use) + sum(serv$automix.use)) / sum(sicData$automix.use)
 sum(serv$automix.use) / (sum(restPats$automix.use) + sum(serv$automix.use)) 
 
@@ -256,16 +267,17 @@ sum(manuf$automix.use) / sum(sicData$automix.use)
 myMachinesSummary <- manuf %>%
   filter(majorGroupNameShort == 'Machinery and computers') %>% 
   group_by(sic) %>% 
-  summarize(sumAutomixUse = sum(automix.use))
+  summarize(sumPatentsUse = sum(patents.use), sumAutomixUse = sum(automix.use))
 myMachinesSummary <- myMachinesSummary[order(myMachinesSummary$sumAutomixUse, decreasing = TRUE),]
 
 computers <- myMachinesSummary %>% filter(sic %in% 3571:3579)
 sum(computers$sumAutomixUse)
+sum(computers$sumPatentsUse)
 
 myElectronicsSummary <- manuf %>%
   filter(majorGroupNameShort == 'Electronics') %>% 
   group_by(sic) %>% 
-  summarize(sumAutomixUse = sum(automix.use))
+  summarize(sumPatentsUse = sum(patents.use), sumAutomixUse = sum(automix.use))
 myElectronicsSummary <- myElectronicsSummary[order(myElectronicsSummary$sumAutomixUse, decreasing = TRUE),]
 
 
