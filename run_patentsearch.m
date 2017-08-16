@@ -14,8 +14,195 @@ year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
 
-error('stop') 
+%% Choose years 
+year_start = 1976;
+year_end = 2015;
+opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
+
+load('output/cats_yearstats.mat')
+
+% Combine chemical and pharma
+cats_yearstats(:,1) = cats_yearstats(:,1) + cats_yearstats(:,3);
+cats_yearstats(:,3) = nan(size(cats_yearstats,1),1);
+cats_yearstats(:,8) = cats_yearstats(:,8) + cats_yearstats(:,10);
+cats_yearstats(:,10) = nan(size(cats_yearstats,1),1);
+
+% Combine electrical and mechanical
+cats_yearstats(:,4) = cats_yearstats(:,4) + cats_yearstats(:,5);
+cats_yearstats(:,5) = nan(size(cats_yearstats,1),1);
+cats_yearstats(:,11) = cats_yearstats(:,11) + cats_yearstats(:,12);
+cats_yearstats(:,12) = nan(size(cats_yearstats,1),1);
+
+% Combine other and missing
+cats_yearstats(:,6) = cats_yearstats(:,6) + cats_yearstats(:,7);
+cats_yearstats(:,7) = nan(size(cats_yearstats,1),1);
+cats_yearstats(:,13) = cats_yearstats(:,13) + cats_yearstats(:,14);
+cats_yearstats(:,14) = nan(size(cats_yearstats,1),1);
+
+
+tempMat = [cats_yearstats(1:end-1, 1:7) - cats_yearstats(1:end-1, 8:14), ...
+    cats_yearstats(1:end-1, 8:14)];
+
+tempMat(:,14) = [];
+tempMat(:,12) = [];
+tempMat(:,10) = [];
+tempMat(:,7) = [];
+tempMat(:,5) = [];
+tempMat(:,3) = [];
+
+plotMat = tempMat;
+plotMat(:,4) = tempMat(:,2);
+plotMat(:,1) = tempMat(:,4);
+plotMat(:,2) = tempMat(:,1);
+
+plotMat(:,8) = tempMat(:,6);
+plotMat(:,5) = tempMat(:,8);
+plotMat(:,6) = tempMat(:,5);
+
+
+colors = [165,0,38
+        215,48,39
+        244,109,67
+        253,174,97
+        254,224,144
+        224,243,248
+        171,217,233
+        116,173,209
+        69,117,180
+%         49,54,149
+        ] ./ 255;
+colors = flipud(colors);
+
+set(0, 'DefaultTextFontName', 'Palatino') % paper font
+set(0, 'DefaultAxesFontName', 'Palatino')
+
+figureHandle = figure;
+H = bar(1976:2014, plotMat, 'stacked');
+
+for k = 1:size(plotMat,2)
+  set(H(k), 'FaceColor', colors(k,:))
+  set(H(k), 'EdgeColor', colors(k,:))
+end
+
+legend(fliplr(H), ...
+    'Automation patents: Computers and Communications', ...
+    'Automation patents: Electric and mechanic', ...
+    'Automation patents: Chemical and pharma', ...
+    'Automation patents: Other and missing data', ...
+    'Rest: Computers and Communications', ...
+    'Rest: Electric and mechanic', ...
+    'Rest: Chemical and pharma',  ...
+    'Rest: Other and missing data', ...
+    'Location', 'NorthWest')
+legend boxoff  
+set(gca,'FontSize', 16) % change default font size of axis labels
+set(gca,'TickDir','out')  
+box off
+
+annotation(figureHandle,'textarrow',[0.2 0.15084388185654],...
+    [0.383720930232558 0.295681063122924],...
+    'String',{'Share of automation','patents: 25%'},...
+    'HorizontalAlignment','center', 'Fontsize', 16);
+annotation(figureHandle,'textarrow',[0.844936708860759 0.880801687763713],...
+    [0.883527454242928 0.8369384359401],...
+    'String',{'Share of automation','patents: 67%'},...
+    'HorizontalAlignment','center', 'Fontsize', 16);
+
+set(0, 'DefaultTextFontName', 'Palatino')
+set(0, 'DefaultAxesFontName', 'Palatino')
+
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 1000 700]) % in vector: left bottom width height
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print(figureHandle, 'output/patents_types.pdf', '-dpdf', '-r0')
+
+
+%% In addition, make a more coarse figure to be used in shorter 
+% presentations
+
+set(0, 'DefaultTextFontName', 'Helvetica') % better font for presentations
+set(0, 'DefaultAxesFontName', 'Helvetica')
+
+plotMat_coarse = [sum(plotMat(:, 1:4), 2), sum(plotMat(:, 5:end), 2)];
+
+my_gray = [0.806, 0.806, 0.806]; % light gray
+
+figureHandle = figure;
+barlines = [100000:50000:300000];
+for i=1:length(barlines)
+    h_gline = plot(1976:2014, repmat(barlines(i), size(plotMat_coarse, 1), 1), ...
+        'Color', my_gray , 'linewidth', 0.5);
+    uistack(h_gline, 'bottom');
+    hold on
+end
+H = bar(1976:2014, plotMat_coarse, 'stacked');
+
+set(H(1), 'FaceColor', colors(2,:))
+set(H(1), 'EdgeColor', colors(2,:))
+set(H(2), 'FaceColor', colors(8,:))
+set(H(2), 'EdgeColor', colors(8,:))
+
+% legend(fliplr(H), 'Automation patents', 'Rest', 'Location', 'NorthWest')
+% legend boxoff  
+
+set(gca,'FontSize', 16) % change default font size of axis labels
+set(gca,'TickDir','out')  
+box off
+
+annotation(figureHandle,'textarrow',[0.2 0.15084388185654],...
+    [0.383720930232558 0.295681063122924],...
+    'String',{'Share of automation','patents: 25%'},...
+    'HorizontalAlignment','center', 'Fontsize', 16);
+annotation(figureHandle,'textarrow',[0.844936708860759 0.880801687763713],...
+    [0.883527454242928 0.8369384359401],...
+    'String',{'Share of automation','patents: 67%'},...
+    'HorizontalAlignment','center', 'Fontsize', 16);
+
+annotation(figureHandle,'textbox',...
+    [0.62 0.6 0.14 0.075],...
+    'String',{'Automation patents'},...
+    'FontSize', 18,...
+    'FitBoxToText','off',...
+    'FontWeight','bold',...
+    'LineStyle','none',...
+    'Color', colors(8,:));
+
+annotation(figureHandle,'textbox',...
+    [0.91 0.18 0.094 0.1],...
+    'String',{'Rest'},...
+    'FontSize', 18,...
+    'FontWeight','bold',...
+    'FitBoxToText','off',...
+    'LineStyle','none',...
+    'Color', colors(2,:));
+
+
+
+% Reposition the figure
+% -----------------------------------------------------------------------
+set(gcf, 'Position', [100 200 1000 700]) % in vector: left bottom width height
+set(figureHandle, 'Units', 'Inches');
+pos = get(figureHandle, 'Position');
+set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
+    'Inches', 'PaperSize', [pos(3), pos(4)])
+
+% Export to pdf
+% -----------------------------------------------------------------------
+print(figureHandle, 'output/patents_types_coarse.pdf', '-dpdf', '-r0')
+
+
+
+error('stop') 
 
 %% Make patent index
 for ix_year=year_start:year_end
