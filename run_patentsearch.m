@@ -60,6 +60,7 @@ plotMat(:,8) = tempMat(:,6);
 plotMat(:,5) = tempMat(:,8);
 plotMat(:,6) = tempMat(:,5);
 
+plotMat = plotMat ./ 1000;
 
 colors = [165,0,38
         215,48,39
@@ -77,15 +78,29 @@ colors = flipud(colors);
 set(0, 'DefaultTextFontName', 'Palatino') % paper font
 set(0, 'DefaultAxesFontName', 'Palatino')
 
+
+my_gray = [0.806, 0.806, 0.806]; % light gray
+
+
 figureHandle = figure;
-H = bar(1976:2014, plotMat, 'stacked');
+barlines = [50:50:300];
+t = 1975:2015;
+for i=1:length(barlines)
+    h_gline = plot(t, repmat(barlines(i), length(t)), ...
+        'Color', my_gray , 'linewidth', 0.5);
+    uistack(h_gline, 'bottom');
+    hold on
+end
+
+H = bar(1976:2014, plotMat, 'stacked', 'BarWidth', 0.6);
 
 for k = 1:size(plotMat,2)
   set(H(k), 'FaceColor', colors(k,:))
   set(H(k), 'EdgeColor', colors(k,:))
 end
 
-legend(fliplr(H), ...
+set(gca,'FontSize', 16) % change default font size of axis labels
+lgd = legend(fliplr(H), ...
     'Automation patents: Computers and Communications', ...
     'Automation patents: Electric and mechanic', ...
     'Automation patents: Chemical and pharma', ...
@@ -94,9 +109,9 @@ legend(fliplr(H), ...
     'Rest: Electric and mechanic', ...
     'Rest: Chemical and pharma',  ...
     'Rest: Other and missing data', ...
-    'Location', 'NorthWest')
+    'Location', 'NorthWest');
+set(lgd, 'FontSize', 14);
 legend boxoff  
-set(gca,'FontSize', 16) % change default font size of axis labels
 set(gca,'TickDir','out')  
 box off
 
@@ -104,10 +119,18 @@ annotation(figureHandle,'textarrow',[0.2 0.15084388185654],...
     [0.383720930232558 0.295681063122924],...
     'String',{'Share of automation','patents: 25%'},...
     'HorizontalAlignment','center', 'Fontsize', 16);
-annotation(figureHandle,'textarrow',[0.844936708860759 0.880801687763713],...
+annotation(figureHandle,'textarrow',[0.87 0.880801687763713],...
     [0.883527454242928 0.8369384359401],...
     'String',{'Share of automation','patents: 67%'},...
     'HorizontalAlignment','center', 'Fontsize', 16);
+
+annotation(figureHandle,'textbox',...
+    [0.0763 0.911 0.14 0.075],...
+    'FontSize',14,...
+    'String',{'(in 1000s)'},...
+    'FitBoxToText','off',...
+    'LineStyle','none');
+
 
 set(0, 'DefaultTextFontName', 'Palatino')
 set(0, 'DefaultAxesFontName', 'Palatino')
@@ -135,22 +158,23 @@ set(0, 'DefaultAxesFontName', 'Helvetica')
 
 plotMat_coarse = [sum(plotMat(:, 1:4), 2), sum(plotMat(:, 5:end), 2)];
 
-my_gray = [0.806, 0.806, 0.806]; % light gray
-
 figureHandle = figure;
-barlines = [100000:50000:300000];
+
 for i=1:length(barlines)
-    h_gline = plot(1976:2014, repmat(barlines(i), size(plotMat_coarse, 1), 1), ...
+    h_gline = plot(t, repmat(barlines(i), length(t)), ...
         'Color', my_gray , 'linewidth', 0.5);
     uistack(h_gline, 'bottom');
     hold on
 end
-H = bar(1976:2014, plotMat_coarse, 'stacked');
+H = bar(1976:2014, plotMat_coarse, 'stacked', 'BarWidth', 0.6);
 
-set(H(1), 'FaceColor', colors(2,:))
-set(H(1), 'EdgeColor', colors(2,:))
-set(H(2), 'FaceColor', colors(8,:))
-set(H(2), 'EdgeColor', colors(8,:))
+color1 = [44,123,182]./ 255;
+color2 = [215,25,28] ./ 255;
+
+set(H(1), 'FaceColor', color1)
+set(H(1), 'EdgeColor', color1)
+set(H(2), 'FaceColor', color2)
+set(H(2), 'EdgeColor', color2)
 
 % legend(fliplr(H), 'Automation patents', 'Rest', 'Location', 'NorthWest')
 % legend boxoff  
@@ -175,7 +199,7 @@ annotation(figureHandle,'textbox',...
     'FitBoxToText','off',...
     'FontWeight','bold',...
     'LineStyle','none',...
-    'Color', colors(8,:));
+    'Color', color2);
 
 annotation(figureHandle,'textbox',...
     [0.91 0.18 0.094 0.1],...
@@ -184,8 +208,14 @@ annotation(figureHandle,'textbox',...
     'FontWeight','bold',...
     'FitBoxToText','off',...
     'LineStyle','none',...
-    'Color', colors(2,:));
+    'Color', color1);
 
+annotation(figureHandle,'textbox',...
+    [0.0763 0.911 0.14 0.075],...
+    'FontSize',14,...
+    'String',{'(in 1000s)'},...
+    'FitBoxToText','off',...
+    'LineStyle','none');
 
 
 % Reposition the figure
