@@ -1,3 +1,9 @@
+# Unignore the following
+!english_stopwords.txt
+!other_junk_words.txt
+!txt_markup_del_list.txt
+!xml_markup_del_list.txt
+
 *.Rnw
 *.RData
 *.Rproj.user
