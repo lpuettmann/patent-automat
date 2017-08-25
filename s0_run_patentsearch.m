@@ -13,7 +13,9 @@ year_start = 1976;
 year_end = 2015;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
+
 error('stop') 
+
 
 %% Make patent index
 for ix_year=year_start:year_end
@@ -252,88 +254,5 @@ construct_sic_automix(year_start, year_end, ipcsicfinalv5)
 
 %% Compile SIC automatix
 sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
-
-savename = 'output/sic_automix_allyears.mat';
-save(savename, 'sic_automix_allyears')
-fprintf('Saved: %s.\n', savename)
-
-% Also save as struct to use it in R
-sicData = table2struct(sic_automix_allyears, 'ToScalar', true);
-save('output/sicData.mat', 'sicData')
-
-
-%% Analyse SIC automatix table
-load('output/sic_automix_allyears.mat')
-
-sic_overcategories = define_sic_overcategories();
-
-% Get some summary series for over-categories of industries
-[aggr_automix, aggr_automix_share] = ...
-    get_sic_ocat_automix_data(year_start, year_end, ...
-    sic_automix_allyears, sic_overcategories);
-
-% Sort the series for plotting
-[~, plot_ix] = sort( aggr_automix_share(end, :) );
-plot_ix = 1:10; % is this ok?
-
-plot_overcat_sic_automatix_subplot(aggr_automix, sic_overcategories, ...
-    year_start, year_end, plot_ix)
-
-load('output/nb_stats.mat')
-normFac = 1 ./ (nb_stats.yearstats.nrAllPats ./ ...
-    nb_stats.yearstats.nrAllPats(25));
-clear nb_stats
-
-normMat = repmat(normFac, 1, size(aggr_automix, 2))
-norm_aggr_automix = aggr_automix .* normMat;
-
-plot_overcat_sic_automatix_subplot_normalized(norm_aggr_automix, ...
-    sic_overcategories, year_start, year_end, plot_ix)
-
-plot_overcat_sic_automatix_share_subplot_gray(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end, plot_ix)
-
-plot_overcat_sic_automatix_share_subplot(aggr_automix_share, ...
-    sic_overcategories, year_start, year_end, plot_ix)
-
-plot_overcat_sic_automatix_share_subplot_gray_allSubCat(...
-    year_start, year_end, sic_overcategories, sic_automix_allyears, ...
-    aggr_automix_share, plot_ix)
-
-
-for pick_hl=1:size(sic_overcategories, 1) + 1
-    
-    plot_overcat_sic_automatix_share_circles(aggr_automix_share, ...
-        aggr_automix, sic_overcategories, year_start, year_end, pick_hl)
-    
-    plot_overcat_sic_automatix_share(aggr_automix_share, ...
-        sic_overcategories, year_start, year_end, pick_hl)
-    
-    plot_overcat_sic_automatix(aggr_automix, ...
-        sic_overcategories, year_start, year_end, pick_hl)
-    
-    plot_overcat_sic_lautomatix(aggr_automix, ...
-        sic_overcategories, year_start, year_end, pick_hl)    
-    
-    pause(1.5)
-end
-
-%% Prepare conversion table
-fyr_start = 1976;
-fyr_end = 2014;
-
-fname = 'Naics_co13.csv';
-lnumber = 203074; % unfortunately hard-code line number
-tic
-disp('Start preparing conversion table:')
-conversion_table = prepare_conversion_table(fname, lnumber);
-fprintf('Finished preparing conversion table, time = %d minutes.\n', ...
-    round(toc/60))
-save('output/conversion_table', 'conversion_table')
-
-
-%% Link patents to industries
-load('conversion_table')
-pat2ind = conversion_patent2industry(fyr_start, fyr_end, conversion_table);
-save('output/pat2ind', 'pat2ind')
+save('output/sic_automix_allyears.mat', 'sic_automix_allyears')
 

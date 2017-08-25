@@ -24,8 +24,6 @@ for t=1:length(year_start:year_end)
 
     % List with IPC technology classification numbers
     ipc_list = patsearch_results.classnr_ipc;
-    
-    in_cellarray = ipc_list;
     [frac_counts, automPat_flatten] = make_frac_count(ipc_list, automPat);
     
     ipc_flat = flatten_cellarray(ipc_list);    
