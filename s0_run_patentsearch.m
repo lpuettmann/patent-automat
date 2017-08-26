@@ -256,3 +256,7 @@ construct_sic_automix(year_start, year_end, ipcsicfinalv5)
 sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
 save('output/sic_automix_allyears.mat', 'sic_automix_allyears')
 
+% Also save as struct to use it in R
+sicData = table2struct(sic_automix_allyears, 'ToScalar', true);
+save('output/sicData.mat', 'sicData')
+

@@ -25,6 +25,6 @@ datList = lapply(datList, unlist, use.names=FALSE)
 sicData <- as.data.frame(datList)
 names(sicData) <- varNames
 
-sicData <- sicData[-(sicData$overcat == 'not applicable'),]
+sicData$overcat[(sicData$overcat == 'not applicable')] <- NA
 
 write_rds(sicData, './output/sicData.rds', compress = "xz")
