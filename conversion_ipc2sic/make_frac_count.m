@@ -1,4 +1,5 @@
-function [frac_counts, automPat_flatten] = make_frac_count(in_cellarray, automPat)
+function [frac_counts, automPat_flatten, ix_software_flatten, ...
+    ix_robot_flatten] = make_frac_count(in_cellarray, automPat, ix_software, ix_robot)
 
 
 %% Check input format
@@ -27,6 +28,11 @@ for i=1:length(in_cellarray)
 
         % Save for every entry if it belongs to an automation patent
         automPat_flatten(ix_save,1) = automPat(i);
+        
+        % Software, robots
+        ix_software_flatten(ix_save,1) = ix_software(i);
+        ix_robot_flatten(ix_save,1) = ix_robot(i);
+        
         ix_save = ix_save + 1;
     end
 end
