@@ -13,8 +13,9 @@ names(sicData) <- varNames
 
 sicData$overcat[(sicData$overcat == "not applicable")] <- NA
 
+# R likes to replace . with _ in variable names, so revert that
 names(sicData) <- gsub("\\.", "_", names(sicData))
 
 save.dta13(data = sicData, 
            file = "output/sicData.dta",
-           version = 12)
+           version = 13)
