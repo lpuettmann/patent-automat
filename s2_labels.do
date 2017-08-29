@@ -10,6 +10,10 @@ if  "`c(os)'" == "MacOSX" {
 	cd "/Users/Lukas/Documents/mydocs/projects/2015/PatentSearch_Automation/patent-automat"
 }
 
+if "`c(hostname)'" == "E700-Puettmann" {
+	cd D:\patent-automat
+}
+
 * Import data
 use "output/sicData.dta", clear
 
