@@ -2,6 +2,7 @@
 library(tidyverse)
 library(R.matlab)
 
+# Concatenate data on yearly patents --------------------------------------
 df <- list() # Initialize empty data frame
 
 for (tper in 1976:2014) {
@@ -22,7 +23,7 @@ for (tper in 1976:2014) {
   patent_df$year <- tper
   
   # Append
-  df <- bind_rows(df, patent_df) 
+  df <- bind_rows(df, patent_df) t
   
   cat(paste0("done. [", round(proc.time()[3] - tic, digits = 1), "s]\n"))
 }
