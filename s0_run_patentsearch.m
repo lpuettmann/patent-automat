@@ -10,7 +10,7 @@ setup_path()
 
 %% Choose years 
 year_start = 1976;
-year_end = 2015;
+year_end = 2014;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
 
@@ -235,6 +235,27 @@ clear cats_yearstats
 %%
 nb_stats = compile_class_stats(year_start, year_end);
 save('output/nb_stats.mat', 'nb_stats');
+
+
+%% Add citations
+clear all
+
+load('specs/citations.mat')
+citations = struct2table(citations);
+
+ix_year = 1976;
+load_file_name = horzcat('patsearch_results_', num2str(ix_year));
+load(load_file_name)
+
+pats.patentnr = str2double(patsearch_results.patentnr);
+pats.year = repmat(ix_year, length(pats.patentnr), 1);
+pats.is_nbAutomat = patsearch_results.is_nbAutomat;
+pats.indic_exclclassnr = patsearch_results.indic_exclclassnr;
+pats.overcat_classnr = patsearch_results.overcat_classnr;
+
+pats = struct2table(pats);
+
+AA = join(pats, citations, 'Key', 'patentnr')
 
 
 %% Link patents to sector of use using Silverman concordance

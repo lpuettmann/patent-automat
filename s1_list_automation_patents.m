@@ -14,7 +14,6 @@ for ix_year = 1976:2014
     fname = ['patsearch_results_', num2str(ix_year)];
     load(fname);
 
-    
     patsearch_results = rmfield(patsearch_results, 'dictionary');
     patsearch_results = rmfield(patsearch_results, 'title_matches');
     patsearch_results = rmfield(patsearch_results, 'abstract_matches');
