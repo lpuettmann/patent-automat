@@ -1,11 +1,12 @@
 
 library(tidyverse)
 library(R.matlab)
+library(readstata13)
 
 # Concatenate data on yearly patents --------------------------------------
 patent_df <- list() # Initialize empty data frame
 
-for (tper in 1976:2014) {
+for (tper in 1976:2015) {
   
   cat(paste0('Start ', tper, ' ... ')); tic = proc.time()[3]
 
@@ -23,7 +24,7 @@ for (tper in 1976:2014) {
   year_df$year <- tper
   
   # Append
-  patent_df <- bind_rows(patent_df, year_df) t
+  patent_df <- bind_rows(patent_df, year_df)
   
   cat(paste0("done. [", round(proc.time()[3] - tic, digits = 1), "s]\n"))
 }
@@ -46,5 +47,7 @@ patent_df <- patent_df %>%
          uspc_primary = as.character(uspc_primary))
 
 # Save --------------------------------------------------------------------
-write_rds(patent_df, "output/year_df.rds")
-
+write_rds(patent_df, "output/patent_df.rds")
+save.dta13(data = df, 
+           file = "output/patent_data.dta",
+           version = 13)

@@ -10,7 +10,7 @@ setup_path()
 % Extract information on patents and remove some information (word matches)
 % that doesn't fit neatly into a rectangular dataset.
 
-for ix_year = 1976:2014
+for ix_year = 2015:2015
     fname = ['patsearch_results_', num2str(ix_year)];
     load(fname);
 
