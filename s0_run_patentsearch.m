@@ -14,10 +14,6 @@ year_end = 2014;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
 
-
-error('stop') 
-
-
 %% Make patent index
 for ix_year=year_start:year_end
     tic
