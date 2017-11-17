@@ -57,6 +57,9 @@ colors = flipud(colors);
 set(0, 'DefaultTextFontName', 'Palatino') % paper font
 set(0, 'DefaultAxesFontName', 'Palatino')
 
+% set(0, 'DefaultTextFontName', 'Helvetica') % better font for presentations
+% set(0, 'DefaultAxesFontName', 'Helvetica')
+
 
 my_gray = [0.806, 0.806, 0.806]; % light gray
 
@@ -111,11 +114,6 @@ annotation(figureHandle,'textbox',...
     'LineStyle','none');
 
 
-set(0, 'DefaultTextFontName', 'Palatino')
-set(0, 'DefaultAxesFontName', 'Palatino')
-
-
-
 % Reposition the figure
 % -----------------------------------------------------------------------
 set(gcf, 'Position', [100 200 1000 700]) % in vector: left bottom width height
@@ -149,6 +147,8 @@ H = bar(1976:2014, plotMat_coarse, 'stacked', 'BarWidth', 0.6);
 
 color1 = [44,123,182]./ 255;
 color2 = [215,25,28] ./ 255;
+% color1 = [127,188,65] ./ 255;
+% color2 = [222,119,174]./ 255;
 
 set(H(1), 'FaceColor', color1)
 set(H(1), 'EdgeColor', color1)
@@ -205,5 +205,7 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % Export to pdf
 % -----------------------------------------------------------------------
 print(figureHandle, 'output/patents_types_coarse.pdf', '-dpdf', '-r0')
+print(figureHandle, 'output/patents_types_coarse.emf', '-dmeta', '-r0')
+print(figureHandle, 'output/patents_types_coarse.jpg', '-djpeg', '-r0')
 
 
