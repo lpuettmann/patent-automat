@@ -14,8 +14,6 @@ year_end = 2014;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
 
 
-load('output/cats_yearstats.mat')
-plot_patent_types(cats_yearstats)
 
 error('stop') 
 
