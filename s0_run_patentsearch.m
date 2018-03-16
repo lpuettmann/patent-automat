@@ -8,6 +8,8 @@ fclose('all');
 % Set paths to all underlying directories
 setup_path()
 
+break
+
 %% Choose years 
 year_start = 1976;
 year_end = 2014;
