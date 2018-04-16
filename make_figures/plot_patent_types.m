@@ -54,8 +54,8 @@ colors = [165,0,38
         ] ./ 255;
 colors = flipud(colors);
 
-set(0, 'DefaultTextFontName', 'Palatino') % paper font
-set(0, 'DefaultAxesFontName', 'Palatino')
+set(0, 'DefaultTextFontName', 'Times New Roman') % paper font
+set(0, 'DefaultAxesFontName', 'Times New Roman')
 
 % set(0, 'DefaultTextFontName', 'Helvetica') % better font for presentations
 % set(0, 'DefaultAxesFontName', 'Helvetica')

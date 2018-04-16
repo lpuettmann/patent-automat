@@ -8,12 +8,12 @@ fclose('all');
 % Set paths to all underlying directories
 setup_path()
 
-break
-
 %% Choose years 
 year_start = 1976;
 year_end = 2014;
 opt2001 = 'txt'; % which version of 2001 files? ('txt' or 'xml')
+
+break
 
 
 %% Make patent index
@@ -114,7 +114,7 @@ check_cleanedmatches_plausability(year_start, year_end)
 %% Compile a dataset and save in a format that can be opened in R
 load('output/patextr.mat')
 load('find_dictionary')
-[pdata, fDictColNames, dictInc] = create_R_dataset(patextr, ...
+[pdata, fDictColNames, dictInc] = func(patextr, ...
     find_dictionary);
 save('output/pdata.mat', 'pdata')
 save('output/fDictColNames', 'fDictColNames')
@@ -127,6 +127,28 @@ load('patextr')
 load('find_dictionary')
 nb_classify_patents(year_start, year_end, patextr, find_dictionary);
 clear patextr find_dictionary
+
+% Extract posterior probabilities and save in format for R
+nb_stats.year = [];
+nb_stats.patentnr = [];
+nb_stats.post_yes = [];
+nb_stats.post_no = [];
+
+for ix_year=year_start:year_end;
+    ix_iter = ix_year - year_start + 1;
+
+    fname = ['patsearch_results_', num2str(ix_year), '.mat'];
+    load(fname)
+   
+    nb_stats.year = [nb_stats; repmat(ix_year, length(patsearch_results.patentnr))] ;
+
+    repmat(ix_year, length(patsearch_results.patentnr))
+    
+    load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
+    load(load_name)
+    
+    fprintf('Posteriors for year: %d.\n', ix_year)
+end
 
 
 %% Check for all patents which ones to exclude from analysis based on 
@@ -230,53 +252,4 @@ load('output/cats_yearstats.mat')
 plot_patent_types(cats_yearstats)
 clear cats_yearstats
 
-
-%%
-nb_stats = compile_class_stats(year_start, year_end);
-save('output/nb_stats.mat', 'nb_stats');
-
-
-%% Add citations
-clear all
-
-load('specs/citations.mat')
-citations = struct2table(citations);
-
-ix_year = 1976;
-load_file_name = horzcat('patsearch_results_', num2str(ix_year));
-load(load_file_name)
-
-pats.patentnr = str2double(patsearch_results.patentnr);
-pats.year = repmat(ix_year, length(pats.patentnr), 1);
-pats.is_nbAutomat = patsearch_results.is_nbAutomat;
-pats.indic_exclclassnr = patsearch_results.indic_exclclassnr;
-pats.overcat_classnr = patsearch_results.overcat_classnr;
-
-pats = struct2table(pats);
-
-AA = join(pats, citations, 'Key', 'patentnr')
-
-
-%% Link patents to sector of use using Silverman concordance
-ipcsicfinalv5 = readtable('IPCSICFINALv5.txt', 'Delimiter', ' ', ...
-    'ReadVariableNames', false);
-
-% Variables in Silverman concordance table:
-%   - ipc: IPC class and subclass      
-%   - sic: US SIC
-%   - mfgfrq: frequency of patents in IPC assigned to SIC of manufacture
-%   - usefrq: frequency of patents in IPC assigned to SIC of use
-ipcsicfinalv5.Properties.VariableNames = {'ipc', 'sic', 'mfgfrq', ...
-    'usefrq'};
-
-construct_sic_automix(year_start, year_end, ipcsicfinalv5)
-
-
-%% Compile SIC automatix
-sic_automix_allyears = compile_sic_automix_table(year_start, year_end);
-save('output/sic_automix_allyears.mat', 'sic_automix_allyears')
-
-% Also save as struct to use it in R
-sicData = table2struct(sic_automix_allyears, 'ToScalar', true);
-save('output/sicData.mat', 'sicData')
 
