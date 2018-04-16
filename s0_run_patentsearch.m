@@ -128,27 +128,52 @@ load('find_dictionary')
 nb_classify_patents(year_start, year_end, patextr, find_dictionary);
 clear patextr find_dictionary
 
-% Extract posterior probabilities and save in format for R
+
+%% Extract posterior probabilities and save in format for R
 nb_stats.year = [];
 nb_stats.patentnr = [];
 nb_stats.post_yes = [];
 nb_stats.post_no = [];
 
-for ix_year=year_start:year_end;
+for ix_year=1976:2015;
     ix_iter = ix_year - year_start + 1;
 
     fname = ['patsearch_results_', num2str(ix_year), '.mat'];
     load(fname)
    
-    nb_stats.year = [nb_stats; repmat(ix_year, length(patsearch_results.patentnr))] ;
+    nb_stats.year = [nb_stats.year; 
+        repmat(ix_year, length(patsearch_results.patentnr), 1)];
 
-    repmat(ix_year, length(patsearch_results.patentnr))
-    
+    nb_stats.patentnr = [nb_stats.patentnr; patsearch_results.patentnr];
+     
     load_name = horzcat('nb_post_', num2str(ix_year), '.mat');
     load(load_name)
     
+    nb_stats.post_yes = [nb_stats.post_yes; nb_post.post_yes];
+    nb_stats.post_no = [nb_stats.post_no; nb_post.post_no];
+    
     fprintf('Posteriors for year: %d.\n', ix_year)
+    clear patsearch_results nb_post
 end
+
+save('output/nb_stats.mat', 'nb_stats')
+clear np_stats
+
+% Save in smaller chunks
+load('output/nb_stats.mat')
+
+nb_stats_patentnr = nb_stats.patentnr;
+csvwrite('output/nb_stats_patentnr.csv', nb_stats_patentnr)
+
+nb_stats_post_yes = nb_stats.post_yes;
+csvwrite('output/nb_stats_post_yes.csv', nb_stats_post_yes)
+
+nb_stats_post_no = nb_stats.post_no;
+csvwrite('output/nb_stats_post_no.csv', nb_stats_post_no)
+
+nb_stats_year = nb_stats.year;
+csvwrite('output/nb_stats_year.csv', nb_stats_year)
+
 
 
 %% Check for all patents which ones to exclude from analysis based on 

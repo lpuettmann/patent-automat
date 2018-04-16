@@ -9,7 +9,7 @@ patent_df <- list() # Initialize empty data frame
 for (tper in 1976:2015) {
   
   cat(paste0('Start ', tper, ' ... ')); tic = proc.time()[3]
-
+  
   matlabFile <- readMat(paste0("patent_info/patsearch_results_", tper,".mat"))
   
   varNames <- names(matlabFile$patent.info[,,1])
