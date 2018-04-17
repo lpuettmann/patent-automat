@@ -1,12 +1,10 @@
-
 library(tidyverse)
 library(R.matlab)
-library(readstata13)
 
 # Concatenate data on yearly patents --------------------------------------
 patent_df <- list() # Initialize empty data frame
 
-for (tper in 1976:2015) {
+for (tper in 1976:2014) {
   
   cat(paste0('Start ', tper, ' ... ')); tic = proc.time()[3]
   
@@ -37,17 +35,18 @@ patent_df <- patent_df %>%
          excl = indic_exclclassnr, 
          uspc_primary = classnr_uspc, 
          overcat_classnr, 
-         length_pattext) 
-
-patent_df$overcat_classnr[(patent_df$overcat_classnr == "NaN")] <- NA
+         length_pattext) %>% 
+  mutate(overcat_classnr = ifelse(overcat_classnr == "NaN", NA, 
+                                  overcat_classnr)) %>% 
+  as.tibble()
 
 patent_df <- patent_df %>% 
   mutate(overcat_classnr = as.numeric(overcat_classnr),
          patentnr = as.character(patentnr),
          uspc_primary = as.character(uspc_primary))
 
-# Save --------------------------------------------------------------------
-write_rds(patent_df, "output/patent_df.rds")
-save.dta13(data = df, 
-           file = "output/patent_data.dta",
-           version = 13)
+write_rds(patent_df, "output/patent_df.rds", compress = "gz")
+
+
+
+

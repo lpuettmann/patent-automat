@@ -27,4 +27,7 @@ for (tper in 1976:2014) {
   cat(paste0("done. [", round(proc.time()[3] - tic, digits = 1), "s]\n"))
 }
 
-write_rds(ipc_df, "output/ipc_df.rds")
+ipc_df <- ipc_df %>% 
+  as.tibble()
+
+write_rds(ipc_df, "output/ipc_df.rds", compress = "gz")
