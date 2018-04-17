@@ -14,6 +14,7 @@ df %>%
   geom_line(stat="density") +
   facet_wrap(~posterior)
 
+write_rds(df, "output/nb_stats.rds", compress = "gz")
 
 
 
