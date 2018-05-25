@@ -54,8 +54,8 @@ colors = [165,0,38
         ] ./ 255;
 colors = flipud(colors);
 
-set(0, 'DefaultTextFontName', 'Times New Roman') % paper font
-set(0, 'DefaultAxesFontName', 'Times New Roman')
+set(0, 'DefaultTextFontName', 'Chapter') % paper font
+set(0, 'DefaultAxesFontName', 'Chapter')
 
 % set(0, 'DefaultTextFontName', 'Helvetica') % better font for presentations
 % set(0, 'DefaultAxesFontName', 'Helvetica')
@@ -205,7 +205,7 @@ set(figureHandle, 'PaperPositionMode', 'Auto', 'PaperUnits', ...
 % Export to pdf
 % -----------------------------------------------------------------------
 print(figureHandle, 'output/patents_types_coarse.pdf', '-dpdf', '-r0')
-print(figureHandle, 'output/patents_types_coarse.emf', '-dmeta', '-r0')
+%print(figureHandle, 'output/patents_types_coarse.emf', '-dmeta', '-r0')
 print(figureHandle, 'output/patents_types_coarse.jpg', '-djpeg', '-r0')
 
 
